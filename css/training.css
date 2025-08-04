@@ -1,0 +1,26 @@
+/* Training Data Display */
+.training-data {
+    background: rgba(255,255,255,0.95);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    max-width: 600px;
+}
+
+.training-data h4 {
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Feature Function Display */
+.feature-function {
+    text-align: center;
+}
+
+.feature-function h4 {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 16px;
+}

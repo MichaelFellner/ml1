@@ -1,0 +1,41 @@
+/* Main Images */
+.main-image {
+    width: 200px;
+    height: 250px;
+    object-fit: contain;
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+    transition: all 0.3s ease;
+}
+
+.dog-image2 {
+    width: 200px;
+    height: 150px;
+    object-fit: contain;
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+    transition: all 0.3s ease;
+}
+
+/* Witch Container and Effects */
+.witch-container {
+    position: relative;
+    display: inline-block;
+}
+
+.cauldron-brew {
+    position: absolute;
+    width: 80px;
+    height: 20px;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background-color: #654321;
+    opacity: 0.8;
+    transition: background-color 0.3s ease;
+}
+
+.cauldron-brew.multi {
+    width: 100px;
+    height: 25px;
+    bottom: 100px;
+}

@@ -48,12 +48,12 @@ const levels = [
 ];
 
 const images = {
-    robot: "robot.png",
-    robotActive: "robot-active.png", 
-    witch: "witch.png",
-    dog: "dog.png",
-    dogHappy: "dog-happy.png",
-    dogSad: "dog-sad.png",
+    robot: "pictures/robot.png",
+    robotActive: "pictures/robot-active.png", 
+    witch: "pictures/witch.png",
+    dog: "pictures/dog.png",
+    dogHappy: "pictures/dog-happy.png",
+    dogSad: "pictures/dog-sad.png",
 };
 
 // Constants

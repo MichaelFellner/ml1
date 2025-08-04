@@ -1,0 +1,202 @@
+/* Potion Controls Grid */
+.potion-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin: 20px 0;
+    max-width: 500px;
+    width: 100%;
+}
+
+.potion-controls > div {
+    text-align: center;
+}
+
+.potion-controls label {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.potion-controls span {
+    font-weight: bold;
+    color: #667eea;
+    font-size: 14px;
+}
+
+/* Multi-Potion Grid */
+.multi-potion-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.multi-potion-grid > div {
+    text-align: center;
+}
+
+.multi-potion-grid label {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.multi-potion-grid span {
+    font-weight: bold;
+    color: #667eea;
+    font-size: 14px;
+}
+
+/* Level 8 Horizontal Layout */
+.level8-layout {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.level8-controls {
+    flex: 0 0 300px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.level8-controls label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.level8-controls .input-group {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.level8-controls .reset-btn {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s ease;
+}
+
+.level8-controls .reset-btn:hover {
+    background: #ff5252;
+}
+
+.level8-controls input:disabled {
+    background: #f0f0f0;
+    color: #999;
+    cursor: not-allowed;
+    border-color: #ddd;
+}
+
+.level8-controls .action-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.level8-controls .distribution-info {
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #666;
+}
+
+.level8-controls .status {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 6px;
+}
+
+.level8-controls .button-container {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.level8-visual {
+    flex: 0 0 auto;
+}
+
+/* Robot Grid */
+.robot-grid {
+    display: grid;
+    grid-template-columns: repeat(25, 1fr);
+    row-gap: 4px;
+    column-gap: 4px;
+    width: 550px;
+    margin: 0;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.robot-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #ddd;
+    transition: all 0.2s ease;
+    border: 1px solid #bbb;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Removed robot emoji - no more ::before content */
+.robot-dot::before {
+    content: "";
+}
+
+.robot-dot.active {
+    background: #4CAF50;
+    border-color: #45a049;
+}
+
+.robot-dot.inactive {
+    background: #888;
+    border-color: #666;
+}
+
+/* Feature Robots */
+.feature-robots {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin: 15px 0;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+}
+
+.feature-robot {
+    text-align: center;
+    min-width: 70px;
+}
+
+/* Dog Grid (Training Data) */
+.dog-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.dog-item {
+    text-align: center;
+    flex: 1;
+    min-width: 90px;
+    max-width: 120px;
+}

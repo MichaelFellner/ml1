@@ -1,0 +1,168 @@
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+        align-items: flex-start;
+        min-height: 100vh;
+    }
+    
+    #app {
+        padding: 0 10px; /* Reduce horizontal padding on mobile */
+        margin-top: 20px;
+    }
+
+    /* Show navigation buttons in mobile-friendly way */
+    .current-level {
+        padding: 20px 15px 80px 15px; /* Extra bottom padding for buttons */
+    }
+    
+    .prev-btn {
+        position: absolute;
+        left: 15px;
+        bottom: 15px;
+        top: auto;
+        transform: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .next-btn {
+        position: absolute;
+        right: 15px;
+        bottom: 15px;
+        top: auto;
+        transform: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+   
+    .current-level {
+        padding: 20px 15px;
+        margin: 10px 0;
+    }
+    
+    .level-header {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        padding: 10px;
+    }
+    
+    .level-content {
+        flex-direction: column;
+        gap: 30px;
+        justify-content: center;
+    }
+    
+    .visual-section, .controls-section {
+        min-width: auto;
+        max-width: none;
+        width: 100%;
+        flex: none;
+    }
+    
+    .main-image {
+        width: 150px;
+        height: 190px;
+    }
+    
+    .energy-bar {
+        width: 150px;
+    }
+    
+    .potion-controls {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        max-width: none;
+    }
+    
+    .slider-controls {
+        min-width: auto;
+    }
+    
+    input[type="range"] {
+        min-width: 150px;
+    }
+    
+    .multi-potion-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .ai-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .action-btn {
+        width: 100%;
+        max-width: 250px;
+        margin: 5px 0;
+    }
+    
+    .celebration h1 {
+        font-size: 2rem;
+    }
+    
+    .celebration p {
+        font-size: 1rem;
+    }
+    
+    .robot-grid {
+        grid-template-columns: repeat(25, 1fr);
+        max-width: 400px;
+    }
+    
+    .feature-robots {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+        padding: 10px;
+    }
+    
+    .training-data {
+        padding: 15px;
+        margin: 15px 0;
+    }
+    
+    .dog-grid {
+        gap: 10px;
+    }
+    
+    .dog-item {
+        min-width: 70px;
+        max-width: 90px;
+    }
+    
+    .ai-applications {
+        padding: 15px;
+        margin: 15px 0;
+    }
+    
+    .ai-applications p {
+        font-size: 0.9rem;
+    }
+    .robot-prediction-layout {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+    
+    .prediction-controls {
+        width: 100%;
+        max-width: none;
+        min-width: auto;
+    }
+}

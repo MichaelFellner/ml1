@@ -1,0 +1,27 @@
+/* AI Controls */
+.ai-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 15px 0;
+}
+
+/* Prediction Controls Layout */
+.robot-prediction-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.prediction-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    max-width: 350px;
+    min-width: 300px;
+}

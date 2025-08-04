@@ -1,0 +1,39 @@
+/* Celebration Page Styles */
+.celebration h1 {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.celebration p {
+    color: #333;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    max-width: 600px;
+}
+
+
+
+.ai-applications {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+    max-width: 600px;
+}
+
+.ai-applications h3 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.ai-applications p {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    text-align: left;
+}
