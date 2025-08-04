@@ -1,0 +1,330 @@
+/* navigation.css - Hamburger navigation styling */
+
+/* Hamburger Button */
+.hamburger-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.hamburger-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid #333;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.3s ease;
+    z-index: 1001;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(5px);
+}
+
+.hamburger-btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.hamburger-line {
+    width: 25px;
+    height: 3px;
+    background: #333;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.hamburger-btn:hover .hamburger-line {
+    background: #667eea;
+}
+
+/* Navigation Menu */
+.nav-menu {
+    position: fixed;
+    top: 0;
+    left: -400px;
+    width: 380px;
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    transition: left 0.3s ease;
+    z-index: 1002;
+    overflow-y: auto;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.nav-menu.open {
+    left: 0;
+}
+
+/* Navigation Header */
+.nav-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.nav-header h3 {
+    margin: 0;
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+.nav-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2em;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.nav-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+/* Navigation Content */
+.nav-content {
+    padding: 0;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+.nav-section {
+    margin-bottom: 10px;
+}
+
+.nav-section-title {
+    margin: 0;
+    padding: 15px 25px 10px 25px;
+    font-size: 1em;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-section-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 25px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    padding-left: 35px;
+}
+
+.nav-item.current {
+    background: rgba(255, 255, 255, 0.15);
+    border-left: 4px solid #00ff88;
+    font-weight: bold;
+}
+
+.nav-item-text {
+    flex: 1;
+    font-size: 0.95em;
+}
+
+.current-indicator {
+    color: #00ff88;
+    font-size: 1.2em;
+    margin-left: 10px;
+}
+
+/* Navigation Footer */
+.nav-footer {
+    position: sticky;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 20px 25px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.progress-indicator {
+    text-align: center;
+}
+
+.progress-indicator span {
+    font-size: 0.9em;
+    margin-bottom: 10px;
+    display: block;
+    opacity: 0.9;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff88, #00ccff);
+    transition: width 0.5s ease;
+    border-radius: 4px;
+}
+
+/* Navigation Overlay */
+.nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1001;
+    backdrop-filter: blur(2px);
+}
+
+.nav-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-menu {
+        width: 100vw;
+        left: -100vw;
+    }
+    
+    .hamburger-btn {
+        top: 15px;
+        left: 15px;
+        width: 45px;
+        height: 45px;
+    }
+    
+    .hamburger-line {
+        width: 22px;
+        height: 2.5px;
+    }
+    
+    .nav-header {
+        padding: 15px 20px;
+    }
+    
+    .nav-section-title {
+        padding: 12px 20px 8px 20px;
+        font-size: 0.95em;
+    }
+    
+    .nav-item {
+        padding: 10px 20px;
+    }
+    
+    .nav-item:hover {
+        padding-left: 30px;
+    }
+    
+    .nav-footer {
+        padding: 15px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hamburger-btn {
+        top: 10px;
+        left: 10px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .hamburger-line {
+        width: 20px;
+        height: 2px;
+    }
+    
+    .nav-header h3 {
+        font-size: 1.2em;
+    }
+    
+    .nav-section-title {
+        font-size: 0.9em;
+    }
+    
+    .nav-item-text {
+        font-size: 0.9em;
+    }
+}
+
+/* Animation for smooth transitions */
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.nav-menu.open {
+    animation: slideIn 0.3s ease-out;
+}
+
+.nav-overlay.open {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Custom scrollbar for navigation content */
+.nav-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.nav-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+.nav-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}

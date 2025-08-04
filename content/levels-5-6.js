@@ -54,7 +54,7 @@ function setupLevel5() {
     
     // Set up click handler if already completed
     if (levelCompletions.level5) {
-        nextBtn.onclick = () => createLevel7(); // Updated to go to level 7
+        nextBtn.onclick = () => createStoryPart4(); // Updated to go to level 7
     }
     
     // Add hover tooltip for disabled gradient descent button
@@ -208,7 +208,7 @@ function setupLevel5() {
                 }
                 nextBtn.disabled = false;
                 nextBtn.textContent = '✅ Go to Level 7';
-                nextBtn.onclick = () => createLevel7();
+                nextBtn.onclick = () => createStoryPart4();
                 
             } else {
                 // Failed - give another chance

@@ -65,7 +65,7 @@ function setupStoryPart4() {
     
     // Set up continue button
     continueBtn.addEventListener('click', () => {
-        createLevel7(); // Lead to Level 7 as requested
+        createStoryPart5(); // Lead to Level 7 as requested
     });
 }
 
@@ -179,7 +179,7 @@ function setupRobotFleetIntro() {
     
     // Navigation
     startBtn.addEventListener('click', () => {
-        createLevel7();
+        createStoryPart5();
     });
 }
 

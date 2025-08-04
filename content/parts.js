@@ -2,6 +2,7 @@
 // Updated createIntroduction function with debug button
 
 function createIntroduction() {
+    const levelId = 'intro';
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
@@ -11,18 +12,22 @@ function createIntroduction() {
                 what word to write next, almost all A.I. models learn to make better predictions using the same core algorithm: <b>gradient descent</b>. 
                 Through a series of 9 levels, this site will introduce you to what gradient descent is and how it powers A.I. systems!</p>
                 <div class="button-container">
-                    <button class="next-btn" onclick="createPart1()">🚀 Begin Journey</button>
-                    <button class="action-btn debug-btn" onclick="createGradientDescentPart1()">🧪 Test Gradient Descent Demo</button>
-                    <button class="action-btn debug-btn" onclick="createMultivariatePart1()">new shit</button>
-                    <button onclick="createLevel8()">new shit</button>
+                    <button class="next-btn" onclick="createPart1()">Start</button>
+    
 
                     </div>
             </div>
         </div>
     `;
+    
+    // Inject navigation
+    injectNavigation();
+    updateNavigationHighlight(levelId);
+    window.currentPageFunction = 'createIntroduction';
 }
 
 function createPart1() {
+    const levelId = 'part1';
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
@@ -37,9 +42,15 @@ function createPart1() {
             </div>
         </div>
     `;
+    
+    // Inject navigation
+    injectNavigation();
+    updateNavigationHighlight(levelId);
+    window.currentPageFunction = 'createPart1';
 }
 
 function createPart2() {
+    const levelId = 'part2';
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
@@ -54,9 +65,15 @@ function createPart2() {
             </div>
         </div>
     `;
+    
+    // Inject navigation
+    injectNavigation();
+    updateNavigationHighlight(levelId);
+    window.currentPageFunction = 'createPart2';
 }
 
 function createPart3() {
+    const levelId = 'part3';
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
@@ -71,9 +88,15 @@ function createPart3() {
             </div>
         </div>
     `;
+    
+    // Inject navigation
+    injectNavigation();
+    updateNavigationHighlight(levelId);
+    window.currentPageFunction = 'createPart3';
 }
 
 function createPart4() {
+    const levelId = 'part4';
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
@@ -89,4 +112,9 @@ function createPart4() {
             </div>
         </div>
     `;
+    
+    // Inject navigation
+    injectNavigation();
+    updateNavigationHighlight(levelId);
+    window.currentPageFunction = 'createPart4';
 }

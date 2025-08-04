@@ -1,4 +1,5 @@
 function createLevel1() {
+    const levelId = 'level1';
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
@@ -31,6 +32,11 @@ function createLevel1() {
             <button id="nextLevelBtn" class="next-btn" disabled>🔒</button>
         </div>
     `;
+    
+    // Inject navigation
+    injectNavigation();
+    updateNavigationHighlight(levelId);
+    window.currentPageFunction = 'createLevel1';
     
     setupLevel1();
 }
@@ -107,6 +113,7 @@ function updateEnergyDisplay(energy) {
 
 
 function createLevel2() {
+    const levelId = 'level2';
     currentLevel = 2;
     const container = document.getElementById('app');
     
@@ -146,6 +153,11 @@ function createLevel2() {
             </div>
         </div>
     `;
+    
+    // Inject navigation
+    injectNavigation();
+    updateNavigationHighlight(levelId);
+    window.currentPageFunction = 'createLevel2';
     
     setupLevel2();
 }
