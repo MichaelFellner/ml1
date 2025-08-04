@@ -6,7 +6,7 @@ function createLevel5() {
     // Check if level is already completed
     const isCompleted = levelCompletions.level5;
     const nextBtnState = isCompleted ? '' : 'disabled';
-    const nextBtnText = isCompleted ? '✅ Go to Level 6' : '🔒 Complete Level 5 to Continue';
+    const nextBtnText = isCompleted ? '✅ Go to Level 7' : '🔒 Complete Level 5 to Continue';
     
     container.innerHTML = `
         <div class="current-level">
@@ -14,6 +14,9 @@ function createLevel5() {
             <div class="level-content">
                 <div class="visual-section">
                     <h3>Meet Max - He Needs a Bone!</h3>
+                    <div id="trainingDogs" class="training-data" style="display: none;">
+                        <!-- Training data will appear after first bone purchase -->
+                    </div>
                     <img id="dogImg" src="${images.dog}" alt="Max the dog" class="main-image">
                 </div>
                 <div class="controls-section">
@@ -46,9 +49,12 @@ function setupLevel5() {
     const gradientDisabledBtn = document.getElementById('gradientDisabledBtn');
     const nextBtn = document.getElementById('nextLevelBtn');
     
+    let firstBonePurchased = false;
+    let level5Success = false;
+    
     // Set up click handler if already completed
     if (levelCompletions.level5) {
-        nextBtn.onclick = () => createLevel6();
+        nextBtn.onclick = () => createLevel7(); // Updated to go to level 7
     }
     
     // Add hover tooltip for disabled gradient descent button
@@ -109,98 +115,122 @@ function setupLevel5() {
     buyBoneBtn.addEventListener('click', () => {
         if (userMoney < 5) return;
         
-        userFirstGuess = parseInt(boneSizeSlider.value);
+        const userGuess = parseInt(boneSizeSlider.value);
         
-        // Generate Max's true preference (always make it challenging - user should always be >15" off)
-        if (userFirstGuess <= 20) {
-            trueBoneSize = userFirstGuess + Math.floor(Math.random() * 30) + 16;
-        } else if (userFirstGuess >= 80) {
-            trueBoneSize = userFirstGuess - Math.floor(Math.random() * 30) - 16;
-        } else {
-            const goHigher = Math.random() < 0.5;
-            if (goHigher) {
-                trueBoneSize = userFirstGuess + Math.floor(Math.random() * 25) + 16;
+        if (!firstBonePurchased) {
+            // First bone purchase - always wrong, then show training data
+            userFirstGuess = userGuess;
+            
+            // Generate Max's true preference (always make it challenging - user should always be >15" off)
+            if (userFirstGuess <= 20) {
+                trueBoneSize = userFirstGuess + Math.floor(Math.random() * 30) + 16;
+            } else if (userFirstGuess >= 80) {
+                trueBoneSize = userFirstGuess - Math.floor(Math.random() * 30) - 16;
             } else {
-                trueBoneSize = userFirstGuess - Math.floor(Math.random() * 25) - 16;
+                const goHigher = Math.random() < 0.5;
+                if (goHigher) {
+                    trueBoneSize = userFirstGuess + Math.floor(Math.random() * 25) + 16;
+                } else {
+                    trueBoneSize = userFirstGuess - Math.floor(Math.random() * 25) - 16;
+                }
             }
-        }
-        trueBoneSize = Math.max(5, Math.min(95, trueBoneSize));
-        
-        userMoney -= 5;
-        dogBonesPurchased++;
-        
-        // Update feedback (user is always >15" off, so always show sad dog)
-        const difference = Math.abs(userFirstGuess - trueBoneSize);
-        let reaction;
-        if (difference > 30) {
-            reaction = "😞 Max sniffs the bone but walks away sadly. This size is way off!";
+            trueBoneSize = Math.max(5, Math.min(95, trueBoneSize));
+            
+            userMoney -= 5;
+            dogBonesPurchased++;
+            firstBonePurchased = true;
+            
+            // Update feedback (user is always >15" off, so always show sad dog)
+            const difference = Math.abs(userFirstGuess - trueBoneSize);
+            let reaction;
+            if (difference > 30) {
+                reaction = "😞 Max sniffs the bone but walks away sadly. This size is way off!";
+            } else {
+                reaction = "😐 Max tries the bone but seems uninterested. Not quite right...";
+            }
+            document.getElementById('dogImg').src = images.dogSad;
+            
+            // Show training data after first failure
+            document.getElementById('trainingDogs').innerHTML = generateTrainingDogsHTML();
+            document.getElementById('trainingDogs').style.display = 'block';
+            
+            document.getElementById('status').innerHTML = `
+                <strong>Result:</strong><br>
+                ${reaction}<br>
+                <small>You guessed ${userFirstGuess} inches. Max's true preference: ${trueBoneSize} inches (${difference}" off)</small><br>
+                <strong>📊 Training data now available! Use it to make a better guess.</strong>
+            `;
+            document.getElementById('status').style.background = 'rgba(255, 193, 7, 0.1)';
+            
+            document.getElementById('moneyDisplay').textContent = `$${userMoney}`;
+            buyBoneBtn.textContent = '🛒 Buy Better Bone ($5)';
+            
         } else {
-            reaction = "😐 Max tries the bone but seems uninterested. Not quite right...";
+            // Second bone purchase - use training data
+            userMoney -= 5;
+            dogBonesPurchased++;
+            
+            const difference = Math.abs(userGuess - trueBoneSize);
+            let reaction, success = false;
+            
+            if (difference <= 5) {
+                reaction = "🎉 MAX LOVES IT! Perfect size bone - he's wagging his tail like crazy!";
+                success = true;
+                document.getElementById('dogImg').src = images.dogHappy;
+            } else if (difference <= 10) {
+                reaction = "😊 Great choice! Max is happy with this bone and starts chewing right away!";
+                success = true;
+                document.getElementById('dogImg').src = images.dogHappy;
+            } else if (difference <= 15) {
+                reaction = "😐 Max tries the bone but seems uninterested. Not quite right...";
+                document.getElementById('dogImg').src = images.dogSad;
+            } else {
+                reaction = "😞 Max sniffs the bone but walks away sadly. This size is way off!";
+                document.getElementById('dogImg').src = images.dogSad;
+            }
+            
+            if (success) {
+                // Level completed successfully
+                document.getElementById('status').innerHTML = `
+                    <strong>Final Result:</strong><br>
+                    ${reaction}<br>
+                    <small>You guessed ${userGuess} inches. Max's true preference: ${trueBoneSize} inches (${difference}" off)</small><br>
+                    <strong>🏆 SUCCESS! Training data helped you succeed!</strong>
+                `;
+                document.getElementById('status').style.background = 'rgba(45, 213, 115, 0.1)';
+                
+                buyBoneBtn.disabled = true;
+                buyBoneBtn.textContent = '🦴 Perfect Bone Purchased!';
+                
+                level5Success = true;
+                if (!levelCompletions.level5) {
+                    levelCompletions.level5 = true;
+                }
+                nextBtn.disabled = false;
+                nextBtn.textContent = '✅ Go to Level 7';
+                nextBtn.onclick = () => createLevel7();
+                
+            } else {
+                // Failed - give another chance
+                userMoney += 5; // Found another $5!
+                
+                document.getElementById('status').innerHTML = `
+                    <strong>Result:</strong><br>
+                    ${reaction}<br>
+                    <small>You guessed ${userGuess} inches. Max's true preference: ${trueBoneSize} inches (${difference}" off)</small><br>
+                    <small>💰 Wait! You found another $5 in your back pocket! Try again with the training data.</small><br>
+                    <strong>📚 Use the training data more carefully - look at the average preferred size!</strong>
+                `;
+                document.getElementById('status').style.background = 'rgba(255, 193, 7, 0.1)';
+                
+                // Re-enable the button for another attempt
+                buyBoneBtn.disabled = false;
+                buyBoneBtn.textContent = '🛒 Try Another Bone ($5)';
+            }
+            
+            document.getElementById('moneyDisplay').textContent = `$${userMoney}`;
         }
-        document.getElementById('dogImg').src = images.dogSad;
-        
-        document.getElementById('status').innerHTML = `
-            <strong>Result:</strong><br>
-            ${reaction}<br>
-        `;
-        document.getElementById('status').style.background = 'rgba(255, 107, 107, 0.1)';
-        
-        document.getElementById('moneyDisplay').textContent = `${userMoney}`;
-        buyBoneBtn.disabled = true;
-        buyBoneBtn.textContent = '🦴 Bone Purchased';
-        
-        if (!levelCompletions.level5) {
-            levelCompletions.level5 = true;
-        }
-        nextBtn.disabled = false;
-        nextBtn.textContent = '✅ Go to Level 6';
-        nextBtn.onclick = () => createLevel6();
     });
-}
-
-function createLevel6() {
-    currentLevel = 5;
-    // Only reset success flag if level wasn't already completed
-    if (!levelCompletions.level6) {
-        level6Success = false;
-    }
-    const container = document.getElementById('app');
-    
-    // Check if level is already completed
-    const isCompleted = levelCompletions.level6;
-    const nextBtnState = isCompleted ? '' : 'disabled';
-    const nextBtnText = isCompleted ? '✅ Go to Part 4' : '🔒 Complete Level 6 to Continue';
-    
-    container.innerHTML = `
-        <div class="current-level">
-            ${createLevelHeader(5, 6, 9)}
-            <div class="level-content">
-                <div class="visual-section">
-                    <h3>Second Chance with Training Data!</h3>
-                    <div id="trainingDogs" class="training-data">
-                        ${generateTrainingDogsHTML()}
-                    </div>
-                    <img id="dogImg2" src="${images.dog}" alt="Max with training data" class="dog-image2">
-                </div>
-                <div class="controls-section">
-                    <div class="money-display">💰 Money: <span id="moneyDisplay2">$${userMoney}</span></div>
-                    <label for="boneSizeSlider2">🦴 Bone Size (inches):</label>
-                    <input type="range" id="boneSizeSlider2" min="5" max="95" value="50" step="1">
-                    <div class="display">
-                        Size: <span id="boneSizeValue2">50 inches</span>
-                    </div>
-                    <button id="buyBoneBtn2" class="action-btn">🛒 Buy Final Bone ($5)</button>
-                    <div id="status" class="status">🎯 Now you have data! Use the training information to make a better guess for Max.<br><small>📊 Machine learning works best with good training data!</small></div>
-                    <div class="button-container">
-                        <button id="prevLevelBtn" class="prev-btn" onclick="createLevel5()">← Back to Level 5</button>
-                        <button id="nextLevelBtn" class="next-btn" ${nextBtnState}>${nextBtnText}</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    setupLevel6();
 }
 
 function generateTrainingDogsHTML() {
@@ -227,90 +257,7 @@ function generateTrainingDogsHTML() {
     
     html += '</div>';
     
-    const average = trainingData.reduce((sum, val) => sum + val, 0) / trainingData.length;
-    
     return html;
 }
 
-function setupLevel6() {
-    const boneSizeSlider2 = document.getElementById('boneSizeSlider2');
-    const buyBoneBtn2 = document.getElementById('buyBoneBtn2');
-    const nextBtn = document.getElementById('nextLevelBtn');
-    
-    // Set up click handler if already completed
-    if (levelCompletions.level6) {
-        nextBtn.onclick = () => createPart4();
-    }
-    
-    boneSizeSlider2.addEventListener('input', () => {
-        const size = parseInt(boneSizeSlider2.value);
-        document.getElementById('boneSizeValue2').textContent = size + ' inches';
-    });
-    
-    buyBoneBtn2.addEventListener('click', () => {
-        if (userMoney < 5) return;
-        
-        const userGuess2 = parseInt(boneSizeSlider2.value);
-        userMoney -= 5;
-        dogBonesPurchased++;
-        
-        const difference = Math.abs(userGuess2 - trueBoneSize);
-        let reaction, success = false;
-        
-        if (difference <= 5) {
-            reaction = "🎉 MAX LOVES IT! Perfect size bone - he's wagging his tail like crazy!";
-            success = true;
-            document.getElementById('dogImg2').src = images.dogHappy;
-        } else if (difference <= 10) {
-            reaction = "😊 Great choice! Max is happy with this bone and starts chewing right away!";
-            success = true;
-            document.getElementById('dogImg2').src = images.dogHappy;
-        } else if (difference <= 15) {
-            reaction = "😐 Max tries the bone but seems uninterested. Not quite right...";
-            document.getElementById('dogImg2').src = images.dogSad;
-        } else {
-            reaction = "😞 Max sniffs the bone but walks away sadly. This size is way off!";
-            document.getElementById('dogImg2').src = images.dogSad;
-        }
-        
-        if (success) {
-            // Level completed successfully
-            document.getElementById('status').innerHTML = `
-                <strong>Final Result:</strong><br>
-                ${reaction}<br>
-                <small>You guessed ${userGuess2} inches. Max's true preference: ${trueBoneSize} inches (${difference}" off)</small><br>
-                <strong>🏆 SUCCESS! Training data helped you succeed!</strong>
-            `;
-            document.getElementById('status').style.background = 'rgba(45, 213, 115, 0.1)';
-            
-            buyBoneBtn2.disabled = true;
-            buyBoneBtn2.textContent = '🦴 Perfect Bone Purchased!';
-            
-            level6Success = true; // Set success flag
-            if (!levelCompletions.level6) {
-                levelCompletions.level6 = true;
-            }
-            nextBtn.disabled = false;
-            nextBtn.textContent = '✅ Go to Part 4';
-            nextBtn.onclick = () => createPart4();
-        } else {
-            // Failed - give another chance
-            userMoney += 5; // Found another $5!
-            
-            document.getElementById('status').innerHTML = `
-                <strong>Result:</strong><br>
-                ${reaction}<br>
-                <small>You guessed ${userGuess2} inches. Max's true preference: ${trueBoneSize} inches (${difference}" off)</small><br>
-                <small>💰 Wait! You found another $5 in your back pocket! Try again with the training data.</small><br>
-                <strong>📚 Use the training data more carefully - look at the average preferred size!</strong>
-            `;
-            document.getElementById('status').style.background = 'rgba(255, 193, 7, 0.1)';
-            
-            // Re-enable the button for another attempt
-            buyBoneBtn2.disabled = false;
-            buyBoneBtn2.textContent = '🛒 Try Another Bone ($5)';
-        }
-        
-        document.getElementById('moneyDisplay2').textContent = `${userMoney}`;
-    });
-}
+// Remove the old createLevel6 and setupLevel6 functions since they're now combined

@@ -1,41 +1,47 @@
 function createLevel3() {
-    currentLevel = 2;
+    currentLevel = 1;
     const container = document.getElementById('app');
-    
-    // Check if level is already completed
-    const isCompleted = levelCompletions.level3;
-    const nextBtnState = isCompleted ? '' : 'disabled';
-    const nextBtnText = isCompleted ? '✅ Go to Level 4' : '🔒 Complete Level 3 to Continue';
     
     container.innerHTML = `
         <div class="current-level">
-        ${createLevelHeader(2, 3, 9)}
+            ${createLevelHeader(2, 3, 9)}
+
             <div class="level-content">
                 <div class="visual-section">
-                    <h3>AI-Powered RX-7 Robot</h3>
-                    <img id="robotImgAI" src="${images.robot}" alt="AI Robot" class="main-image">
+                    <h3>Sorceress Elara's Brew</h3>
+                    <div class="witch-container">
+                        <img id="witchImg" src="${images.witch}" alt="Witch" class="main-image">
+                        <div id="cauldronBrew" class="cauldron-brew"></div>
+                    </div>
                 </div>
                 <div class="controls-section">
-                    <label for="energySliderAI">Robot Energy Level:</label>
-                    <input type="range" id="energySliderAI" min="0" max="100" value="30" step="1" disabled style="opacity: 0.7;">
-                    <div class="display">
-                        <span>Energy: </span>
-                        <div class="energy-bar">
-                            <div id="energyFillAI" class="energy-fill"></div>
+                    <label>Potion Ingredients:</label>
+                    <div class="potion-controls">
+                        <div>
+                            <label for="yellowSlider">🟡 Yellow Essence:</label>
+                            <div class="slider-controls">
+                                <button id="yellowDown" class="slider-btn">-</button>
+                                <input type="range" id="yellowSlider" min="0" max="100" value="30" step="1">
+                                <button id="yellowUp" class="slider-btn">+</button>
+                            </div>
+                            <span id="yellowValue">30%</span>
                         </div>
-                        <span id="energyValueAI">30%</span>
+                        <div>
+                            <label for="blueSlider">🔵 Blue Essence:</label>
+                            <div class="slider-controls">
+                                <button id="blueDown" class="slider-btn">-</button>
+                                <input type="range" id="blueSlider" min="0" max="100" value="20" step="1">
+                                <button id="blueUp" class="slider-btn">+</button>
+                            </div>
+                            <span id="blueValue">20%</span>
+                        </div>
                     </div>
-                    <div class="ai-controls">
-                        <button id="gradientBtn" class="action-btn">🤖 Gradient Descent Step</button>
-                        <button id="resetBtn" class="action-btn">🔄 Reset</button>
-                    </div>
-                    <div id="status" class="status">🤖 Current Loss: 3600.00<br><small>💡 Only AI can move the slider - use Gradient Descent!</small></div>
-                    <div class="button-container">
-                        <button id="prevLevelBtn" class="prev-btn" onclick="createPart2()">← Back to Part 2</button>
-                        <button id="nextLevelBtn" class="next-btn" ${nextBtnState}>${nextBtnText}</button>
-                    </div>
+                    <div id="status" class="status">🔬 Total Loss: 2500.00<br><small>💡 Lower loss = better brew. Get both ingredients perfect!</small></div>
                 </div>
             </div>
+            
+            <button class="prev-btn" onclick="createLevel1()">‹</button>
+            <button id="nextLevelBtn" class="next-btn" disabled>🔒</button>
         </div>
     `;
     
@@ -43,65 +49,102 @@ function createLevel3() {
 }
 
 function setupLevel3() {
-    const energySliderAI = document.getElementById('energySliderAI');
-    const gradientBtn = document.getElementById('gradientBtn');
-    const resetBtn = document.getElementById('resetBtn');
+    const yellowSlider = document.getElementById('yellowSlider');
+    const blueSlider = document.getElementById('blueSlider');
+    const yellowUpBtn = document.getElementById('yellowUp');
+    const yellowDownBtn = document.getElementById('yellowDown');
+    const blueUpBtn = document.getElementById('blueUp');
+    const blueDownBtn = document.getElementById('blueDown');
     const nextBtn = document.getElementById('nextLevelBtn');
     
-    // Set up click handler if already completed
-    if (levelCompletions.level3) {
-        nextBtn.onclick = () => createLevel4();
-    }
-    
-    function updateEnergyAI() {
-        const energy = parseInt(energySliderAI.value);
-        document.getElementById('energyValueAI').textContent = energy + '%';
-        document.getElementById('energyFillAI').style.width = energy + '%';
+    function updatePotions() {
+        const yellow = parseInt(yellowSlider.value);
+        const blue = parseInt(blueSlider.value);
         
-        const loss = Math.pow(energy - OPTIMAL_ENERGY_AI, 2);
+        document.getElementById('yellowValue').textContent = yellow + '%';
+        document.getElementById('blueValue').textContent = blue + '%';
         
-        if (energy === OPTIMAL_ENERGY_AI) {
-            document.getElementById('status').innerHTML = '🎯 AI FOUND OPTIMAL SOLUTION! 🎯';
+        // Update cauldron color
+        const brewQuality = Math.max(0, 1 - (Math.abs(yellow - OPTIMAL_YELLOW) + Math.abs(blue - OPTIMAL_BLUE)) / 100);
+        const r = Math.round(101 + (50 - 101) * brewQuality);
+        const g = Math.round(67 + (205 - 67) * brewQuality);
+        const b = Math.round(33 + (50 - 33) * brewQuality);
+        document.getElementById('cauldronBrew').style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+        
+        // Calculate total loss (sum of squared errors)
+        const yellowLoss = Math.pow(yellow - OPTIMAL_YELLOW, 2);
+        const blueLoss = Math.pow(blue - OPTIMAL_BLUE, 2);
+        const totalLoss = yellowLoss + blueLoss;
+        
+        if (yellow === OPTIMAL_YELLOW && blue === OPTIMAL_BLUE) {
+            document.getElementById('status').innerHTML = '✨ PERFECT MAGICAL BREW! Loss = 0! ✨';
             document.getElementById('status').style.background = 'rgba(45, 213, 115, 0.2)';
-            document.getElementById('robotImgAI').src = images.robotActive;
             
-            if (!levelCompletions.level3) {
-                levelCompletions.level3 = true;
+            // Mark as completed
+            if (!levelCompletions.level2) {
+                levelCompletions.level2 = true;
             }
+        } else {
+            document.getElementById('status').innerHTML = `🔬 Total Loss: ${totalLoss.toFixed(2)}<br><small>💡 Lower loss = better brew. Get both ingredients perfect!</small>`;
+            document.getElementById('status').style.background = 'rgba(255, 255, 255, 0.8)';
+        }
+        
+        // Update button state - keep unlocked if level was ever completed
+        if (levelCompletions.level2) {
             nextBtn.disabled = false;
-            nextBtn.textContent = '✅ Go to Level 4';
+            nextBtn.textContent = '›';
             nextBtn.onclick = () => createLevel4();
         } else {
-            document.getElementById('status').innerHTML = `🤖 Current Loss: ${loss.toFixed(2)}<br><small>💡 Only AI can move the slider - use Gradient Descent!</small>`;
-            document.getElementById('status').style.background = 'rgba(255, 255, 255, 0.8)';
-            document.getElementById('robotImgAI').src = images.robot;
-            
-            // Only disable if not already completed
-            if (!levelCompletions.level3) {
-                nextBtn.disabled = true;
-                nextBtn.textContent = '🔒 Complete Level 3 to Continue';
-                nextBtn.onclick = null;
-            }
+            nextBtn.disabled = true;
+            nextBtn.textContent = '🔒';
+            nextBtn.onclick = null;
         }
+        
+        // Update button states
+        yellowUpBtn.disabled = yellow >= 100;
+        yellowDownBtn.disabled = yellow <= 0;
+        blueUpBtn.disabled = blue >= 100;
+        blueDownBtn.disabled = blue <= 0;
     }
     
-    // NO manual slider input listener for Level 3 - only AI can move it!
+    // Slider event listeners
+    yellowSlider.addEventListener('input', updatePotions);
+    blueSlider.addEventListener('input', updatePotions);
     
-    gradientBtn.addEventListener('click', () => {
-        const currentEnergy = parseInt(energySliderAI.value);
-        const result = optimizer.optimizationStep([currentEnergy], [OPTIMAL_ENERGY_AI], [{ min: 0, max: 100 }]);
-        
-        energySliderAI.value = result.newVariables[0];
-        updateEnergyAI();
+    // Button event listeners
+    yellowUpBtn.addEventListener('click', () => {
+        const currentValue = parseInt(yellowSlider.value);
+        if (currentValue < 100) {
+            yellowSlider.value = currentValue + 1;
+            updatePotions();
+        }
     });
     
-    resetBtn.addEventListener('click', () => {
-        optimizer.reset();
-        energySliderAI.value = Math.floor(Math.random() * 101);
-        updateEnergyAI();
+    yellowDownBtn.addEventListener('click', () => {
+        const currentValue = parseInt(yellowSlider.value);
+        if (currentValue > 0) {
+            yellowSlider.value = currentValue - 1;
+            updatePotions();
+        }
     });
     
-    updateEnergyAI();
+    blueUpBtn.addEventListener('click', () => {
+        const currentValue = parseInt(blueSlider.value);
+        if (currentValue < 100) {
+            blueSlider.value = currentValue + 1;
+            updatePotions();
+        }
+    });
+    
+    blueDownBtn.addEventListener('click', () => {
+        const currentValue = parseInt(blueSlider.value);
+        if (currentValue > 0) {
+            blueSlider.value = currentValue - 1;
+            updatePotions();
+        }
+    });
+    
+    updatePotions();
 }
 
 function createLevel4() {
@@ -164,7 +207,7 @@ function createLevel4() {
                     </div>
                     <div id="status" class="status">🔬 Total Loss: 8500.0 | Quality: 15.2%</div>
                     <div class="button-container">
-                        <button id="prevLevelBtn" class="prev-btn" onclick="createLevel3()">← Back to Level 3</button>
+                        <button id="prevLevelBtn" class="prev-btn" onclick="createGradientDescentPart3()">← Back to Level 3</button>
                         <button id="nextLevelBtn" class="next-btn" ${nextBtnState}>${nextBtnText}</button>
                     </div>
                 </div>
@@ -200,7 +243,7 @@ function setupLevel4() {
     
     // Set up click handler if already completed
     if (levelCompletions.level4) {
-        nextBtn.onclick = () => createPart3();
+        nextBtn.onclick = () => createMultivariatePart1();
     }
     
     function updateMultiPotions() {
@@ -258,7 +301,7 @@ function setupLevel4() {
             }
             nextBtn.disabled = false;
             nextBtn.textContent = '✅ Go to Part 3';
-            nextBtn.onclick = () => createPart3();
+            nextBtn.onclick = () => createMultivariatePart1();
         } else {
             const totalLoss = Object.keys(levels).reduce((sum, color) => {
                 return sum + Math.pow(levels[color] - optimalValues[color], 2);

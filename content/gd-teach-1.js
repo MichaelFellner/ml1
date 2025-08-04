@@ -320,7 +320,7 @@ function createGradientDescentPart3() {
             </div>
             
             <button class="prev-btn" onclick="createGradientDescentPart2()">‹</button>
-            <button class="next-btn" onclick="createIntroduction()">📚 Back to Start</button>
+            <button class="next-btn" onclick="createLevel3()">📚 Level 3</button>
         </div>
         
         <style>

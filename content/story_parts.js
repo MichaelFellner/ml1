@@ -686,7 +686,7 @@ function setupStoryPart7() {
         if (allComplete) {
             continueBtn.style.display = 'block';
             continueBtn.addEventListener('click', () => {
-                createLevel12(); // Or whatever the next level should be
+                createStoryPart8(); // Or whatever the next level should be
             });
         }
     }

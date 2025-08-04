@@ -222,6 +222,8 @@ function createMultivariatePart2() {
             </div>
             
             <button class="prev-btn" onclick="createMultivariatePart1()">‹ 2 Variables</button>
+            <button class="next-btn" onclick="createLevel5()">Training Data ›</button>
+
         </div>
     `;
     

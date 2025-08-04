@@ -14,7 +14,7 @@ function createIntroduction() {
                     <button class="next-btn" onclick="createPart1()">🚀 Begin Journey</button>
                     <button class="action-btn debug-btn" onclick="createGradientDescentPart1()">🧪 Test Gradient Descent Demo</button>
                     <button class="action-btn debug-btn" onclick="createMultivariatePart1()">new shit</button>
-                    <button onclick="createStoryPart8()">new shit</button>
+                    <button onclick="createLevel8()">new shit</button>
 
                     </div>
             </div>
