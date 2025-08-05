@@ -61,11 +61,12 @@ function createGradientDescentPart1() {
                 </div>
             </div>
             
-            <button class="prev-btn" onclick="createIntroduction()">‹</button>
-            <button class="next-btn" onclick="createGradientDescentPart2()">›</button>
+            ${createStandardNavigation()}
         </div>
     `;
     
+    // Initialize navigation
+    initializeNavigation('gd1', 'createGradientDescentPart1');
     setupGradientPart1();
 }
 
@@ -319,8 +320,7 @@ function createGradientDescentPart3() {
                 </div>
             </div>
             
-            <button class="prev-btn" onclick="createGradientDescentPart2()">‹</button>
-            <button class="next-btn" onclick="createLevel3()">📚 Level 3</button>
+            ${createStandardNavigation()}
         </div>
         
         <style>
@@ -475,6 +475,8 @@ function createGradientDescentPart3() {
         </style>
     `;
     
+    // Initialize navigation
+    initializeNavigation('gd3', 'createGradientDescentPart3');
     setupGradientPart3();
 }
 
@@ -636,11 +638,12 @@ function createGradientDescentPart2() {
                 </div>
             </div>
             
-            <button class="prev-btn" onclick="createGradientDescentPart1()">‹</button>
-            <button class="next-btn" onclick="createGradientDescentPart3()">›</button>
+            ${createStandardNavigation()}
         </div>
     `;
     
+    // Initialize navigation
+    initializeNavigation('gd2', 'createGradientDescentPart2');
     setupGradientPart2();
 }
 

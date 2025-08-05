@@ -1,5 +1,5 @@
 
-// Updated createIntroduction function with debug button
+// Updated createIntroduction function
 
 function createIntroduction() {
     const levelId = 'intro';
@@ -12,18 +12,14 @@ function createIntroduction() {
                 what word to write next, almost all A.I. models learn to make better predictions using the same core algorithm: <b>gradient descent</b>. 
                 Through a series of 9 levels, this site will introduce you to what gradient descent is and how it powers A.I. systems!</p>
                 <div class="button-container">
-                    <button class="next-btn" onclick="createPart1()">Start</button>
-    
-
-                    </div>
+                    ${createStandardNavigation(true, false)}
+                </div>
             </div>
         </div>
     `;
     
-    // Inject navigation
-    injectNavigation();
-    updateNavigationHighlight(levelId);
-    window.currentPageFunction = 'createIntroduction';
+    // Initialize navigation
+    initializeNavigation(levelId, 'createIntroduction');
 }
 
 function createPart1() {
@@ -36,17 +32,14 @@ function createPart1() {
                 <p>Gradient descent is a powerful algorithm that can tune variables to their optimal values. But to really appreciate it, lets first 
                 try tuning things ourselves.</p>
                 <div class="button-container">
-                    <button class="prev-btn" onclick="createIntroduction()">← Back to Introduction</button>
-                    <button class="next-btn" onclick="createLevel1()">✅ Start Level 1</button>
+                    ${createStandardNavigation()}
                 </div>
             </div>
         </div>
     `;
     
-    // Inject navigation
-    injectNavigation();
-    updateNavigationHighlight(levelId);
-    window.currentPageFunction = 'createPart1';
+    // Initialize navigation
+    initializeNavigation(levelId, 'createPart1');
 }
 
 function createPart2() {
@@ -59,17 +52,14 @@ function createPart2() {
                 <p>Gradient descent can do the tuning work all on its own. Gradient descent uses "loss", a measure of how off from the goal it is, in order to tune 
                 variables. Similar to how we saw if we were getting warmer or colder in levels 1 and 2.</p>
                 <div class="button-container">
-                    <button class="prev-btn" onclick="createLevel2()">← Back to Level 2</button>
-                    <button class="next-btn" onclick="createLevel3()">🤖 Start Level 3</button>
+                    ${createStandardNavigation()}
                 </div>
             </div>
         </div>
     `;
     
-    // Inject navigation
-    injectNavigation();
-    updateNavigationHighlight(levelId);
-    window.currentPageFunction = 'createPart2';
+    // Initialize navigation
+    initializeNavigation(levelId, 'createPart2');
 }
 
 function createPart3() {
@@ -82,17 +72,14 @@ function createPart3() {
                 <p>In the next two levels we'll introduce another important concept in A.I., using data to make better predictions. Later 
                 in levels 7-9 we will put everything we learned together.</p>
                 <div class="button-container">
-                    <button class="prev-btn" onclick="createLevel4()">← Back to Level 4</button>
-                    <button class="next-btn" onclick="createLevel5()">🌍 Start Level 5</button>
+                    ${createStandardNavigation()}
                 </div>
             </div>
         </div>
     `;
     
-    // Inject navigation
-    injectNavigation();
-    updateNavigationHighlight(levelId);
-    window.currentPageFunction = 'createPart3';
+    // Initialize navigation
+    initializeNavigation(levelId, 'createPart3');
 }
 
 function createPart4() {
@@ -106,15 +93,12 @@ function createPart4() {
                 used with data to make better predictions. We'll use gradient descent to make a prediction on training data, and then be able to make a better prediction
                 on future data.</p>
                 <div class="button-container">
-                    <button class="prev-btn" onclick="createLevel6()">← Back to Level 6</button>
-                    <button class="next-btn" onclick="createLevel7()">📊 Start Level 7</button>
+                    ${createStandardNavigation()}
                 </div>
             </div>
         </div>
     `;
     
-    // Inject navigation
-    injectNavigation();
-    updateNavigationHighlight(levelId);
-    window.currentPageFunction = 'createPart4';
+    // Initialize navigation
+    initializeNavigation(levelId, 'createPart4');
 }

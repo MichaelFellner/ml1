@@ -3,11 +3,6 @@ function createLevel5() {
     userMoney = 10; // Reset money
     const container = document.getElementById('app');
     
-    // Check if level is already completed
-    const isCompleted = levelCompletions.level5;
-    const nextBtnState = isCompleted ? '' : 'disabled';
-    const nextBtnText = isCompleted ? '✅ Go to Level 7' : '🔒 Complete Level 5 to Continue';
-    
     container.innerHTML = `
         <div class="current-level">
             ${createLevelHeader(4, 5, 9)}
@@ -31,12 +26,10 @@ function createLevel5() {
                         <button id="gradientDisabledBtn" class="action-btn" disabled style="opacity: 0.5; position: relative;">🤖 Gradient Descent</button>
                     </div>
                     <div id="status" class="status">🐕 Max is waiting for his bone! What size do you think he'll like?<br><small>💡 Without knowing his preference, this is just a guess...</small></div>
-                    <div class="button-container">
-                        <button id="prevLevelBtn" class="prev-btn" onclick="createPart3()">← Back to Part 3</button>
-                        <button id="nextLevelBtn" class="next-btn" ${nextBtnState}>${nextBtnText}</button>
-                    </div>
                 </div>
             </div>
+            
+            ${createStandardNavigation()}
         </div>
     `;
     
@@ -47,15 +40,9 @@ function setupLevel5() {
     const boneSizeSlider = document.getElementById('boneSizeSlider');
     const buyBoneBtn = document.getElementById('buyBoneBtn');
     const gradientDisabledBtn = document.getElementById('gradientDisabledBtn');
-    const nextBtn = document.getElementById('nextLevelBtn');
     
     let firstBonePurchased = false;
     let level5Success = false;
-    
-    // Set up click handler if already completed
-    if (levelCompletions.level5) {
-        nextBtn.onclick = () => createStoryPart4(); // Updated to go to level 7
-    }
     
     // Add hover tooltip for disabled gradient descent button
     let tooltip = null;
@@ -203,12 +190,6 @@ function setupLevel5() {
                 buyBoneBtn.textContent = '🦴 Perfect Bone Purchased!';
                 
                 level5Success = true;
-                if (!levelCompletions.level5) {
-                    levelCompletions.level5 = true;
-                }
-                nextBtn.disabled = false;
-                nextBtn.textContent = '✅ Go to Level 7';
-                nextBtn.onclick = () => createStoryPart4();
                 
             } else {
                 // Failed - give another chance
@@ -259,5 +240,3 @@ function generateTrainingDogsHTML() {
     
     return html;
 }
-
-// Remove the old createLevel6 and setupLevel6 functions since they're now combined

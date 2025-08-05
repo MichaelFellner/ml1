@@ -1,4 +1,4 @@
-// config.js - Complete configuration for all 10 levels
+// config.js - Complete configuration for all levels
 
 const levels = [
     {
@@ -33,7 +33,6 @@ const levels = [
     },
     {
         title: "Feature Engineering",
-        
         goal: "Improve the prediction function by using gradient descent on training data."
     },
     {
@@ -71,19 +70,12 @@ const OPTIMAL_ORANGE = 90;
 
 // Application state
 let currentLevel = 0;
-let levelCompletions = {
-    level1: false, level2: false, level3: false, level4: false, level5: false,
-    level6: false, level7: false, level8: false, level9: false, level10: false
-};
 
 // Global variables
 let userMoney = 10;
 let trueBoneSize = null;
 let userFirstGuess = null;
 let dogBonesPurchased = 0;
-let level6Success = false; // Track if Level 6 was completed successfully
-let predictionUsed7 = false;
-let predictionUsed9 = false;
 let featureWeights = { A: 0.5, B: 0.3, C: 0.2 };
 let featureData = [];
 let currentLoss = 0;

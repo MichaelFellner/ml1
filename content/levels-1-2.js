@@ -28,16 +28,12 @@ function createLevel1() {
                 </div>
             </div>
             
-            <button class="prev-btn" onclick="createPart1()">‹</button>
-            <button id="nextLevelBtn" class="next-btn" disabled>🔒</button>
+            ${createStandardNavigation()}
         </div>
     `;
     
-    // Inject navigation
-    injectNavigation();
-    updateNavigationHighlight(levelId);
-    window.currentPageFunction = 'createLevel1';
-    
+    // Initialize navigation
+    initializeNavigation(levelId, 'createLevel1');
     setupLevel1();
 }
 
@@ -45,7 +41,6 @@ function setupLevel1() {
     const energySlider = document.getElementById('energySlider');
     const energyUpBtn = document.getElementById('energyUp');
     const energyDownBtn = document.getElementById('energyDown');
-    const nextBtn = document.getElementById('nextLevelBtn');
     
     function updateLevel1() {
         const energy = parseInt(energySlider.value);
@@ -58,26 +53,10 @@ function setupLevel1() {
             document.getElementById('status').innerHTML = '⚡ OPTIMAL ENERGY REACHED! Loss = 0! ⚡';
             document.getElementById('status').style.background = 'rgba(45, 213, 115, 0.2)';
             document.getElementById('robotImg').src = images.robotActive;
-            
-            // Mark as completed
-            if (!levelCompletions.level1) {
-                levelCompletions.level1 = true;
-            }
         } else {
             document.getElementById('status').innerHTML = `🤖 Current Loss: ${loss.toFixed(2)}<br><small>💡 Lower loss = better performance. Try to get loss to 0!</small>`;
             document.getElementById('status').style.background = 'rgba(255, 255, 255, 0.8)';
             document.getElementById('robotImg').src = images.robot;
-        }
-        
-        // Update button state - keep unlocked if level was ever completed
-        if (levelCompletions.level1) {
-            nextBtn.disabled = false;
-            nextBtn.textContent = '›';
-            nextBtn.onclick = () => createLevel2();
-        } else {
-            nextBtn.disabled = true;
-            nextBtn.textContent = '🔒';
-            nextBtn.onclick = null;
         }
         
         // Update button states
@@ -117,11 +96,6 @@ function createLevel2() {
     currentLevel = 2;
     const container = document.getElementById('app');
     
-    // Check if level is already completed
-    const isCompleted = levelCompletions.level3;
-    const nextBtnState = isCompleted ? '' : 'disabled';
-    const nextBtnText = isCompleted ? '✅ Go to Level 4' : '🔒 Complete Level 3 to Continue';
-    
     container.innerHTML = `
         <div class="current-level">
         ${createLevelHeader(2, 3, 9)}
@@ -145,20 +119,15 @@ function createLevel2() {
                         <button id="resetBtn" class="action-btn">🔄 Reset</button>
                     </div>
                     <div id="status" class="status">🤖 Current Loss: 3600.00<br><small>💡 Only AI can move the slider - use Gradient Descent!</small></div>
-                    <div class="button-container">
-                        <button id="prevLevelBtn" class="prev-btn" onclick="createPart2()">← Back to Part 2</button>
-                        <button id="nextLevelBtn" class="next-btn" ${nextBtnState}>${nextBtnText}</button>
-                    </div>
                 </div>
             </div>
+            
+            ${createStandardNavigation()}
         </div>
     `;
     
-    // Inject navigation
-    injectNavigation();
-    updateNavigationHighlight(levelId);
-    window.currentPageFunction = 'createLevel2';
-    
+    // Initialize navigation
+    initializeNavigation(levelId, 'createLevel2');
     setupLevel2();
 }
 
@@ -166,12 +135,6 @@ function setupLevel2() {
     const energySliderAI = document.getElementById('energySliderAI');
     const gradientBtn = document.getElementById('gradientBtn');
     const resetBtn = document.getElementById('resetBtn');
-    const nextBtn = document.getElementById('nextLevelBtn');
-    
-    // Set up click handler if already completed
-    if (levelCompletions.level3) {
-        nextBtn.onclick = () => createGradientDescentPart1();
-    }
     
     function updateEnergyAI() {
         const energy = parseInt(energySliderAI.value);
@@ -184,28 +147,12 @@ function setupLevel2() {
             document.getElementById('status').innerHTML = '🎯 AI FOUND OPTIMAL SOLUTION! 🎯';
             document.getElementById('status').style.background = 'rgba(45, 213, 115, 0.2)';
             document.getElementById('robotImgAI').src = images.robotActive;
-            
-            if (!levelCompletions.level3) {
-                levelCompletions.level3 = true;
-            }
-            nextBtn.disabled = false;
-            nextBtn.textContent = 'Learn';
-            nextBtn.onclick = () => createGradientDescentPart1();
         } else {
             document.getElementById('status').innerHTML = `🤖 Current Loss: ${loss.toFixed(2)}<br><small>💡 Only AI can move the slider - use Gradient Descent!</small>`;
             document.getElementById('status').style.background = 'rgba(255, 255, 255, 0.8)';
             document.getElementById('robotImgAI').src = images.robot;
-            
-            // Only disable if not already completed
-            if (!levelCompletions.level3) {
-                nextBtn.disabled = true;
-                nextBtn.textContent = '🔒 Complete Level 3 to Continue';
-                nextBtn.onclick = null;
-            }
         }
     }
-    
-    // NO manual slider input listener for Level 3 - only AI can move it!
     
     gradientBtn.addEventListener('click', () => {
         const currentEnergy = parseInt(energySliderAI.value);

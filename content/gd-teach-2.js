@@ -62,10 +62,12 @@ function createMultivariatePart1() {
                 </div>
             </div>
             
-            <button class="next-btn" onclick="createMultivariatePart2()">Next: 5 Variables ›</button>
+            ${createStandardNavigation()}
         </div>
     `;
     
+    // Initialize navigation
+    initializeNavigation('multi1', 'createMultivariatePart1');
     setupMultivariatePart1();
 }
 
@@ -221,12 +223,12 @@ function createMultivariatePart2() {
                 </div>
             </div>
             
-            <button class="prev-btn" onclick="createMultivariatePart1()">‹ 2 Variables</button>
-            <button class="next-btn" onclick="createLevel5()">Training Data ›</button>
-
+            ${createStandardNavigation()}
         </div>
     `;
     
+    // Initialize navigation
+    initializeNavigation('multi2', 'createMultivariatePart2');
     setupMultivariatePart2();
 }
 

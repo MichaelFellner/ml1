@@ -40,8 +40,7 @@ function createLevel3() {
                 </div>
             </div>
             
-            <button class="prev-btn" onclick="createLevel1()">‹</button>
-            <button id="nextLevelBtn" class="next-btn" disabled>🔒</button>
+            ${createStandardNavigation()}
         </div>
     `;
     
@@ -55,7 +54,6 @@ function setupLevel3() {
     const yellowDownBtn = document.getElementById('yellowDown');
     const blueUpBtn = document.getElementById('blueUp');
     const blueDownBtn = document.getElementById('blueDown');
-    const nextBtn = document.getElementById('nextLevelBtn');
     
     function updatePotions() {
         const yellow = parseInt(yellowSlider.value);
@@ -79,25 +77,9 @@ function setupLevel3() {
         if (yellow === OPTIMAL_YELLOW && blue === OPTIMAL_BLUE) {
             document.getElementById('status').innerHTML = '✨ PERFECT MAGICAL BREW! Loss = 0! ✨';
             document.getElementById('status').style.background = 'rgba(45, 213, 115, 0.2)';
-            
-            // Mark as completed
-            if (!levelCompletions.level2) {
-                levelCompletions.level2 = true;
-            }
         } else {
             document.getElementById('status').innerHTML = `🔬 Total Loss: ${totalLoss.toFixed(2)}<br><small>💡 Lower loss = better brew. Get both ingredients perfect!</small>`;
             document.getElementById('status').style.background = 'rgba(255, 255, 255, 0.8)';
-        }
-        
-        // Update button state - keep unlocked if level was ever completed
-        if (levelCompletions.level2) {
-            nextBtn.disabled = false;
-            nextBtn.textContent = '›';
-            nextBtn.onclick = () => createLevel4();
-        } else {
-            nextBtn.disabled = true;
-            nextBtn.textContent = '🔒';
-            nextBtn.onclick = null;
         }
         
         // Update button states
@@ -151,11 +133,6 @@ function createLevel4() {
     currentLevel = 3;
     const container = document.getElementById('app');
     
-    // Check if level is already completed
-    const isCompleted = levelCompletions.level4;
-    const nextBtnState = isCompleted ? '' : 'disabled';
-    const nextBtnText = isCompleted ? '✅ Go to Part 3' : '🔒 Complete Level 4 to Continue';
-    
     container.innerHTML = `
         <div class="current-level">
             ${createLevelHeader(3, 4, 9)}
@@ -206,12 +183,10 @@ function createLevel4() {
                         <button id="resetMultiBtn" class="action-btn">🔄 New Recipe</button>
                     </div>
                     <div id="status" class="status">🔬 Total Loss: 8500.0 | Quality: 15.2%</div>
-                    <div class="button-container">
-                        <button id="prevLevelBtn" class="prev-btn" onclick="createGradientDescentPart3()">← Back to Level 3</button>
-                        <button id="nextLevelBtn" class="next-btn" ${nextBtnState}>${nextBtnText}</button>
-                    </div>
                 </div>
             </div>
+            
+            ${createStandardNavigation()}
         </div>
     `;
     
@@ -225,7 +200,7 @@ function setupLevel4() {
         green: document.getElementById('greenSlider'),
         blue: document.getElementById('blueSliderMulti'),
         purple: document.getElementById('purpleSlider'),
-        orange: document.getElementById('orangeSlider')  // ADD THIS LINE
+        orange: document.getElementById('orangeSlider')
     };
     
     const values = {
@@ -234,17 +209,11 @@ function setupLevel4() {
         green: document.getElementById('greenValue'),
         blue: document.getElementById('blueValueMulti'),
         purple: document.getElementById('purpleValue'),
-        orange: document.getElementById('orangeValue')  // ADD THIS LINE
+        orange: document.getElementById('orangeValue')
     };
     
-    const nextBtn = document.getElementById('nextLevelBtn');
     const gradientBtn = document.getElementById('gradientMultiBtn');
     const resetBtn = document.getElementById('resetMultiBtn');
-    
-    // Set up click handler if already completed
-    if (levelCompletions.level4) {
-        nextBtn.onclick = () => createMultivariatePart1();
-    }
     
     function updateMultiPotions() {
         const levels = {
@@ -295,26 +264,12 @@ function setupLevel4() {
         if (isPerfect) {
             document.getElementById('status').textContent = '✨🌟 PERFECT 6-ESSENCE ELIXIR! 🌟✨';
             document.getElementById('status').style.background = 'rgba(45, 213, 115, 0.2)';
-            
-            if (!levelCompletions.level4) {
-                levelCompletions.level4 = true;
-            }
-            nextBtn.disabled = false;
-            nextBtn.textContent = '✅ Go to Part 3';
-            nextBtn.onclick = () => createMultivariatePart1();
         } else {
             const totalLoss = Object.keys(levels).reduce((sum, color) => {
                 return sum + Math.pow(levels[color] - optimalValues[color], 2);
             }, 0);
             document.getElementById('status').textContent = `🔬 Total Loss: ${totalLoss.toFixed(1)} | Optimal: ${optimalCount}/6`;
             document.getElementById('status').style.background = 'rgba(255, 255, 255, 0.8)';
-            
-            // Only disable if not already completed
-            if (!levelCompletions.level4) {
-                nextBtn.disabled = true;
-                nextBtn.textContent = '🔒 Complete Level 4 to Continue';
-                nextBtn.onclick = null;
-            }
         }
     }
     

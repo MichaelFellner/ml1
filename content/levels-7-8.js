@@ -1,11 +1,24 @@
+function createLevel7() {
+    // Note: This function might be missing from the original file
+    // Adding a placeholder to match the navigation config
+    const container = document.getElementById('app');
+    
+    container.innerHTML = `
+        <div class="current-level">
+            <div class="level-content">
+                <h3>Level 7: Triple Squad</h3>
+                <p>This level appears to be missing from the original implementation.</p>
+                <p>Placeholder content for Level 7.</p>
+                
+                ${createStandardNavigation()}
+            </div>
+        </div>
+    `;
+}
+
 function createLevel8() {
     currentLevel = 7;
     const container = document.getElementById('app');
-    
-    // Check if level is already completed
-    const isCompleted = levelCompletions.level8;
-    const nextBtnState = isCompleted ? '' : 'disabled';
-    const nextBtnText = isCompleted ? '✅ Continue' : '🔒 Complete Level 8 to Continue';
     
     container.innerHTML = `
         <div class="current-level">
@@ -23,10 +36,6 @@ function createLevel8() {
                             Fleet follows normal distribution (mean: 75, variance: moderate)
                         </div>
                         <div id="status" class="status">Enter an energy level to see how many robots match that configuration!</div>
-                        <div class="button-container">
-                            <button id="prevLevelBtn" class="prev-btn" onclick="createLevel5()">← Back to Level 7</button>
-                            <button id="nextLevelBtn" class="next-btn" ${nextBtnState}>${nextBtnText}</button>
-                        </div>
                     </div>
                     <div class="level8-visual">
                         <h3>Robot Fleet Distribution</h3>
@@ -34,6 +43,8 @@ function createLevel8() {
                     </div>
                 </div>
             </div>
+            
+            ${createStandardNavigation()}
         </div>
     `;
     
@@ -46,12 +57,6 @@ function setupLevel8() {
     const activateBtn = document.getElementById('activateBtn');
     const resetBtn = document.getElementById('resetBtn');
     const robotGrid = document.getElementById('robotGrid');
-    const nextBtn = document.getElementById('nextLevelBtn');
-    
-    // Set up click handler if already completed
-    if (levelCompletions.level8) {
-        nextBtn.onclick = () => createStoryPart6(); // Assuming next part
-    }
     
     // Create 625 robot dots (25x25 grid)
     function createRobotGrid() {
@@ -148,14 +153,6 @@ function setupLevel8() {
         activateBtn.disabled = true;
         activateBtn.textContent = 'Activated';
         resetBtn.style.display = 'block';
-        
-        // Mark as completed after first use
-        if (!levelCompletions.level8) {
-            levelCompletions.level8 = true;
-            nextBtn.disabled = false;
-            nextBtn.textContent = '✅ Continue';
-            nextBtn.onclick = () => createStoryPart6(); // Assuming next part exists
-        }
     }
     
     // Event listeners
@@ -171,6 +168,3 @@ function setupLevel8() {
     // Initialize
     createRobotGrid();
 }
-
-
-

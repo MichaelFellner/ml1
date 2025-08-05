@@ -33,11 +33,6 @@ function createLevel9() {
                         </div>
                         
                         <div id="status" class="status">💡 Tip: Larger coefficients mean that feature has more impact on energy level!</div>
-                        
-                        <div class="button-container">
-                            <button id="prevLevelBtn" class="prev-btn" onclick="createLevel8()">← Back to Level 8</button>
-                            <button id="nextLevelBtn" class="next-btn">✅ Continue</button>
-                        </div>
                     </div>
                     <div class="level9-visual">
                         <h3>Robot Fleet Prediction Results</h3>
@@ -55,11 +50,14 @@ function createLevel9() {
                     </div>
                 </div>
             </div>
+            
+            ${createStandardNavigation()}
         </div>
     `;
     
     setupLevel9();
 }
+
 function setupLevel9() {
     const headCoeffInput = document.getElementById('headCoeff');
     const bodyCoeffInput = document.getElementById('bodyCoeff');
@@ -67,15 +65,9 @@ function setupLevel9() {
     const testBtn = document.getElementById('testBtn');
     const resetBtn = document.getElementById('resetBtn');
     const robotGrid = document.getElementById('robotGrid');
-    const nextBtn = document.getElementById('nextLevelBtn');
     
     // Generate the 1000 robots with their characteristics
     const robots = generateRobotFleet();
-    
-    // Always enable next button (no completion condition)
-    nextBtn.disabled = false;
-    nextBtn.textContent = '✅ Continue';
-    nextBtn.onclick = () => createLevel10(); // Or whatever the next level should be
     
     // Create 1000 robot dots (approximate with 625 for visual reasons, representing 1000)
     function createRobotGrid() {
@@ -191,6 +183,7 @@ function setupLevel9() {
     // Initialize
     createRobotGrid();
 }
+
 function generateRobotFleet() {
     const robots = [];
     
@@ -232,11 +225,6 @@ function generateRobotFleet() {
 function createLevel10() {
     currentLevel = 9;
     const container = document.getElementById('app');
-    
-    // Check if level is already completed
-    const isCompleted = levelCompletions.level10;
-    const nextBtnState = isCompleted ? '' : 'disabled';
-    const nextBtnText = isCompleted ? '✅ Continue' : '🔒 Minimize Loss to Continue';
     
     container.innerHTML = `
         <div class="current-level">
@@ -280,11 +268,6 @@ function createLevel10() {
                         </div>
                         
                         <div id="status" class="status">💡 Adjust coefficients to minimize the total loss. Target: &lt; 1000</div>
-                        
-                        <div class="button-container">
-                            <button id="prevLevelBtn" class="prev-btn" onclick="createLevel9()">← Back to Level 9</button>
-                            <button id="nextLevelBtn" class="next-btn" ${nextBtnState}>${nextBtnText}</button>
-                        </div>
                     </div>
                     
                     <div class="level10-visual">
@@ -306,6 +289,8 @@ function createLevel10() {
                     </div>
                 </div>
             </div>
+            
+            ${createStandardNavigation()}
         </div>
     `;
     
@@ -320,15 +305,9 @@ function setupLevel10() {
     const updateBtn = document.getElementById('updateBtn');
     const resetBtn = document.getElementById('resetBtn');
     const spreadsheet = document.getElementById('trainingSpreadsheet');
-    const nextBtn = document.getElementById('nextLevelBtn');
     
     // Generate training data (same 50 robots as in story parts)
     const trainingData = generateLevel10TrainingData();
-    
-    // Set up click handler if already completed
-    if (levelCompletions.level10) {
-        nextBtn.onclick = () => createLevel11(); // Or whatever the next level should be
-    }
     
     function updatePredictions() {
         const headCoeff = parseFloat(headCoeffInput.value) || 0;
@@ -355,18 +334,11 @@ function setupLevel10() {
         // Update spreadsheet
         populateTrainingSpreadsheet(spreadsheet, trainingData);
         
-        // Update status and completion
+        // Update status - no completion conditions, just feedback
         let statusMessage = '';
         if (totalLoss < 1000) {
             statusMessage = `🎉 Excellent! Total loss: ${totalLoss.toFixed(2)} - Your model is well-trained!`;
             document.getElementById('status').style.background = 'rgba(45, 213, 115, 0.2)';
-            
-            if (!levelCompletions.level10) {
-                levelCompletions.level10 = true;
-                nextBtn.disabled = false;
-                nextBtn.textContent = '✅ Continue';
-                nextBtn.onclick = () => createLevel11(); // Or whatever the next level should be
-            }
         } else if (totalLoss < 2000) {
             statusMessage = `👍 Getting closer! Total loss: ${totalLoss.toFixed(2)} - Keep refining the coefficients.`;
             document.getElementById('status').style.background = 'rgba(255, 193, 7, 0.2)';
@@ -454,5 +426,3 @@ function populateTrainingSpreadsheet(container, trainingData) {
         </div>
     `).join('');
 }
-
-

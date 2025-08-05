@@ -2,17 +2,12 @@ function createLevel11() {
     currentLevel = 10;
     const container = document.getElementById('app');
     
-    // Check if level is already completed
-    const isCompleted = levelCompletions.level11;
-    const nextBtnState = isCompleted ? '' : 'disabled';
-    const nextBtnText = isCompleted ? '✅ Continue' : '🔒 Minimize Loss with Gradient Descent';
-    
     container.innerHTML = `
         <div class="current-level">
             <div class="level-header">
-    Level 11/12: Gradient Descent Training
-    <div class="level-description">Use gradient descent to automatically optimize coefficients</div>
-</div>
+                Level 11/12: Gradient Descent Training
+                <div class="level-description">Use gradient descent to automatically optimize coefficients</div>
+            </div>
             <div class="level-content">
                 <div class="level11-layout">
                     <div class="level11-controls">
@@ -37,30 +32,29 @@ function createLevel11() {
                         
                         <div class="gradient-controls">
                             <div class="learning-rate-section">
-    <label>Learning Rate:</label>
-    <div class="learning-rate-options">
-        <label class="radio-option">
-            <input type="radio" name="learningRate" value="1" checked>
-            <span>1.0 (Very Fast)</span>
-        </label>
-        <label class="radio-option">
-            <input type="radio" name="learningRate" value="0.1">
-            <span>0.1 (Fast)</span>
-        </label>
-        <label class="radio-option">
-            <input type="radio" name="learningRate" value="0.01">
-            <span>0.01 (Medium)</span>
-        </label>
-        <label class="radio-option">
-            <input type="radio" name="learningRate" value="0.001">
-            <span>0.001 (Slow)</span>
-        </label>
-        <label class="radio-option">
-            <input type="radio" name="learningRate" value="0.0001">
-            <span>0.0001 (Very Slow)</span>
-        </label>
-    </div>
-</div>
+                                <label>Learning Rate:</label>
+                                <div class="learning-rate-options">
+                                    <label class="radio-option">
+                                        <input type="radio" name="learningRate" value="1" checked>
+                                        <span>1.0 (Very Fast)</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="learningRate" value="0.1">
+                                        <span>0.1 (Fast)</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="learningRate" value="0.01">
+                                        <span>0.01 (Medium)</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="learningRate" value="0.001">
+                                        <span>0.001 (Slow)</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input type="radio" name="learningRate" value="0.0001">
+                                        <span>0.0001 (Very Slow)</span>
+                                    </label>
+                                </div>
                             </div>
                             
                             <div class="step-info">
@@ -85,11 +79,6 @@ function createLevel11() {
                         </div>
                         
                         <div id="status" class="status">🎯 Use gradient descent to minimize loss. Target: &lt; 500</div>
-                        
-                        <div class="button-container">
-                            <button id="prevLevelBtn" class="prev-btn" onclick="createLevel10()">← Back to Level 10</button>
-                            <button id="nextLevelBtn" class="next-btn" ${nextBtnState}>${nextBtnText}</button>
-                        </div>
                     </div>
                     
                     <div class="level11-visual">
@@ -111,9 +100,13 @@ function createLevel11() {
                     </div>
                 </div>
             </div>
+            
+            ${createStandardNavigation()}
         </div>
     `;
     
+    // Initialize navigation explicitly
+    initializeNavigation('level11', 'createLevel11');
     setupLevel11();
 }
 
@@ -121,7 +114,6 @@ function setupLevel11() {
     const gradientStepBtn = document.getElementById('gradientStepBtn');
     const resetBtn = document.getElementById('resetBtn');
     const spreadsheet = document.getElementById('trainingSpreadsheet');
-    const nextBtn = document.getElementById('nextLevelBtn');
     
     // Training data and TensorFlow variables
     let trainingData = [];
@@ -129,11 +121,6 @@ function setupLevel11() {
     let features = null;
     let targets = null;
     let stepCount = 0;
-    
-    // Set up click handler if already completed
-    if (levelCompletions.level11) {
-        nextBtn.onclick = () => createStoryPart7(); // Or whatever the next level should be
-    }
     
     function initializeTensorFlow() {
         // Generate training data
@@ -231,18 +218,11 @@ function setupLevel11() {
         // Update spreadsheet
         populateTrainingSpreadsheet(spreadsheet, trainingData);
         
-        // Update status and completion
+        // Update status - no completion conditions, just feedback
         let statusMessage = '';
         if (totalLoss < 500) {
             statusMessage = `🎉 Excellent! Loss: ${totalLoss.toFixed(2)} in ${stepCount} steps - Gradient descent worked!`;
             document.getElementById('status').style.background = 'rgba(45, 213, 115, 0.2)';
-            
-            if (!levelCompletions.level11) {
-                levelCompletions.level11 = true;
-                nextBtn.disabled = false;
-                nextBtn.textContent = '✅ Continue';
-                nextBtn.onclick = () => createStoryPart7(); // Or whatever the next level should be
-            }
         } else if (totalLoss < 1000) {
             statusMessage = `👍 Progress! Loss: ${totalLoss.toFixed(2)} after ${stepCount} steps - Keep going!`;
             document.getElementById('status').style.background = 'rgba(255, 193, 7, 0.2)';

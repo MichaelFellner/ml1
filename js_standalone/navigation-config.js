@@ -5,23 +5,27 @@ const NAVIGATION_CONFIG = {
         {
             title: "Introduction",
             items: [
-                { id: "intro", name: "Welcome", func: "createIntroduction" }
+                { id: "intro", name: "Welcome", func: "createIntroduction" },
+                { id: "ip1", name: "What You'll Learn", func: "createInstructionPart1" }
             ]
         },
         {
-            title: "Part 1: Manual Tuning",
+            title: "Part 1: Understanding Loss",
             items: [
-                { id: "part1", name: "Story: Manual Tuning", func: "createPart1" },
+                { id: "ip2", name: "Understanding Loss", func: "createInstructionPart2" },
                 { id: "level1", name: "Level 1: Robot Energy", func: "createLevel1" },
+                { id: "ip3", name: "Introducing Gradient Descent", func: "createInstructionPart3" },
                 { id: "level2", name: "Level 2: AI Robot", func: "createLevel2" }
             ]
         },
         {
-            title: "Part 2: Gradient Descent Basics",
+            title: "Part 2: Multiple Variables",
             items: [
-                { id: "part2", name: "Story: Introducing AI", func: "createPart2" },
+                { id: "ip4", name: "Multiple Variables", func: "createInstructionPart4" },
                 { id: "level3", name: "Level 3: Witch's Brew", func: "createLevel3" },
-                { id: "level4", name: "Level 4: Master Alchemist", func: "createLevel4" }
+                { id: "ip5", name: "Gradient Descent + Multiple Variables", func: "createInstructionPart5" },
+                { id: "level4", name: "Level 4: Master Alchemist", func: "createLevel4" },
+                { id: "ip6", name: "How Gradient Descent Really Works", func: "createInstructionPart6" }
             ]
         },
         {
@@ -42,7 +46,7 @@ const NAVIGATION_CONFIG = {
         {
             title: "Part 3: Training Data",
             items: [
-                { id: "part3", name: "Story: Using Data", func: "createPart3" },
+                { id: "ip7", name: "Learning Recap & Training Data Preview", func: "createInstructionPart7" },
                 { id: "level5", name: "Level 5: Max's Bone", func: "createLevel5" }
             ]
         },
@@ -50,7 +54,6 @@ const NAVIGATION_CONFIG = {
             title: "Part 4: Robot Fleet",
             items: [
                 { id: "story4", name: "Story: Robot Awakening", func: "createStoryPart4" },
-                { id: "level7", name: "Level 7: Triple Squad", func: "createLevel7" },
                 { id: "story5", name: "Story: Training Data", func: "createStoryPart5" },
                 { id: "level8", name: "Level 8: Fleet Distribution", func: "createLevel8" },
                 { id: "story6", name: "Story: More Data Needed", func: "createStoryPart6" }

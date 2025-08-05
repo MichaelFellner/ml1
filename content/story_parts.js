@@ -1,5 +1,4 @@
 function createStoryPart4() {
-    currentLevel = 5; // Story parts seem to be between levels
     const container = document.getElementById('app');
     
     container.innerHTML = `
@@ -41,18 +40,17 @@ function createStoryPart4() {
                     </div>
                 </div>
                 
-                <div class="story-navigation">
-                    <button id="continueBtn" class="continue-btn">🚀 Begin Robot Training</button>
-                </div>
+                ${createStandardNavigation()}
             </div>
         </div>
     `;
     
+    // Initialize navigation
+    initializeNavigation('story4', 'createStoryPart4');
     setupStoryPart4();
 }
 
 function setupStoryPart4() {
-    const continueBtn = document.getElementById('continueBtn');
     const robotGrid = document.getElementById('storyRobotGrid');
     
     // Create a visual representation of the robot fleet
@@ -62,11 +60,6 @@ function setupStoryPart4() {
     setTimeout(() => {
         animateRobotGrid();
     }, 500);
-    
-    // Set up continue button
-    continueBtn.addEventListener('click', () => {
-        createStoryPart5(); // Lead to Level 7 as requested
-    });
 }
 
 function createStoryRobotGrid(container) {
@@ -101,7 +94,6 @@ function animateRobotGrid() {
 
 // Alternative function if you want to create the story part that comes before Level 7
 function createRobotFleetIntro() {
-    currentLevel = 5;
     const container = document.getElementById('app');
     
     container.innerHTML = `
@@ -149,21 +141,18 @@ function createRobotFleetIntro() {
                     </div>
                 </div>
                 
-                <div class="story-navigation">
-                    <button id="startTrainingBtn" class="primary-btn">
-                        🎯 Start with Squad Training
-                    </button>
-                </div>
+                ${createStandardNavigation()}
             </div>
         </div>
     `;
     
+    // Initialize navigation
+    initializeNavigation('story4', 'createRobotFleetIntro');
     setupRobotFleetIntro();
 }
 
 function setupRobotFleetIntro() {
     const facilityGrid = document.getElementById('facilityGrid');
-    const startBtn = document.getElementById('startTrainingBtn');
     
     // Create facility grid (smaller representation)
     for (let i = 0; i < 500; i++) { // 500 dots to represent 1000 robots
@@ -176,11 +165,6 @@ function setupRobotFleetIntro() {
     setTimeout(() => {
         addFacilityAnimation();
     }, 1000);
-    
-    // Navigation
-    startBtn.addEventListener('click', () => {
-        createStoryPart5();
-    });
 }
 
 function addFacilityAnimation() {
@@ -200,7 +184,6 @@ function addFacilityAnimation() {
 
 /// Story part 5 - between Level 7 and 8
 function createStoryPart5() {
-    currentLevel = 6.5; // Between levels
     const container = document.getElementById('app');
     
     container.innerHTML = `
@@ -259,18 +242,17 @@ function createStoryPart5() {
                     </div>
                 </div>
                 
-                <div class="story-navigation">
-                    <button id="continueBtn" class="continue-btn">🧠 Use the Pattern!</button>
-                </div>
+                ${createStandardNavigation()}
             </div>
         </div>
     `;
     
+    // Initialize navigation
+    initializeNavigation('story5', 'createStoryPart5');
     setupStoryPart5();
 }
 
 function setupStoryPart5() {
-    const continueBtn = document.getElementById('continueBtn');
     const spreadsheet = document.getElementById('robotSpreadsheet');
     
     // Generate robot training data
@@ -282,10 +264,6 @@ function setupStoryPart5() {
     // Calculate and display actual average
     const actualAverage = Math.round(robotData.reduce((sum, robot) => sum + robot.energy, 0) / robotData.length);
     document.getElementById('averageDisplay').textContent = actualAverage;
-    
-    continueBtn.addEventListener('click', () => {
-        createLevel8(); // Lead to existing Level 8
-    });
 }
 
 function generateTrainingData() {
@@ -360,7 +338,6 @@ function populateSpreadsheet(container, robotData) {
 
 // Story part 6 - after Level 8
 function createStoryPart6() {
-    currentLevel = 7.5; // After Level 8
     const container = document.getElementById('app');
     
     container.innerHTML = `
@@ -425,18 +402,17 @@ function createStoryPart6() {
                     </div>
                 </div>
                 
-                <div class="story-navigation">
-                    <button id="continueBtn" class="continue-btn">🔬 Analyze the Patterns!</button>
-                </div>
+                ${createStandardNavigation()}
             </div>
         </div>
     `;
     
+    // Initialize navigation
+    initializeNavigation('story6', 'createStoryPart6');
     setupStoryPart6();
 }
 
 function setupStoryPart6() {
-    const continueBtn = document.getElementById('continueBtn');
     const spreadsheet = document.getElementById('expandedRobotSpreadsheet');
     
     // Generate expanded robot training data
@@ -448,11 +424,6 @@ function setupStoryPart6() {
     // Calculate and display actual average
     const actualAverage = Math.round(robotData.reduce((sum, robot) => sum + robot.energy, 0) / robotData.length);
     document.getElementById('expandedAverageDisplay').textContent = actualAverage;
-    
-    continueBtn.addEventListener('click', () => {
-        // Lead to next level or part
-        createLevel9(); // Or whatever the next level should be
-    });
 }
 
 function generateExpandedTrainingData() {
@@ -531,7 +502,6 @@ function populateExpandedSpreadsheet(container, robotData) {
 
 // Story part 7 - after Level 11
 function createStoryPart7() {
-    currentLevel = 10.5; // After Level 11
     const container = document.getElementById('app');
     
     container.innerHTML = `
@@ -612,19 +582,19 @@ function createStoryPart7() {
                     </div>
                 </div>
                 
-                <div class="story-navigation">
-                    <button id="continueBtn" class="continue-btn" style="display: none;">🚀 You're Ready for Real AI!</button>
+                <div id="storyNavigation">
+                    ${createStandardNavigation()}
                 </div>
             </div>
         </div>
     `;
     
+    // Initialize navigation
+    initializeNavigation('story7', 'createStoryPart7');
     setupStoryPart7();
 }
 
 function setupStoryPart7() {
-    const continueBtn = document.getElementById('continueBtn');
-    
     // Training progressions for each AI example
     const progressions = {
         chatgpt: [
@@ -672,33 +642,14 @@ function setupStoryPart7() {
                 } else {
                     e.target.textContent = `📉 Gradient Descent Step (${currentStep}/3)`;
                 }
-                
-                // Show continue button when all examples are complete
-                checkAllComplete();
             }
         });
     });
-    
-    function checkAllComplete() {
-        const allButtons = document.querySelectorAll('.gradient-btn');
-        const allComplete = Array.from(allButtons).every(btn => btn.disabled);
-        
-        if (allComplete) {
-            continueBtn.style.display = 'block';
-            continueBtn.addEventListener('click', () => {
-                createStoryPart8(); // Or whatever the next level should be
-            });
-        }
-    }
 }
-
-
-
 
 
 // Story part 8 - immediately after Story Part 7
 function createStoryPart8() {
-    currentLevel = 10.7; // After Story Part 7
     const container = document.getElementById('app');
     
     container.innerHTML = `
@@ -807,23 +758,13 @@ function createStoryPart8() {
                     </div>
                 </div>
                 
-                <div class="story-navigation">
-                    <button id="continueBtn" class="continue-btn">🚀 Complete Your AI Journey!</button>
-                </div>
+                ${createStandardNavigation()}
             </div>
         </div>
     `;
     
-    setupStoryPart8();
-}
-
-function setupStoryPart8() {
-    const continueBtn = document.getElementById('continueBtn');
-    
-    continueBtn.addEventListener('click', () => {
-        // This could lead to a final completion screen or next section
-        createFinalCompletion(); // Or whatever the final screen should be
-    });
+    // Initialize navigation
+    initializeNavigation('story8', 'createStoryPart8');
 }
 
 // Optional: Create a final completion screen
@@ -847,7 +788,12 @@ function createFinalCompletion() {
                     </ul>
                     <p><strong>You're ready to explore the world of AI with confidence!</strong></p>
                 </div>
+                
+                ${createStandardNavigation(false, true)}
             </div>
         </div>
     `;
+    
+    // Initialize navigation
+    initializeNavigation('final', 'createFinalCompletion');
 }
