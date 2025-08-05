@@ -86,7 +86,7 @@ function injectNavigationButtons(first = false, last = false) {
     if (!first && canGoPrev()) {
         const prevBtn = document.createElement('button');
         prevBtn.className = 'prev-btn';
-        prevBtn.textContent = '‹ Previous';
+        prevBtn.textContent = '‹ Back';
         prevBtn.onclick = navigatePrev;
         appContainer.appendChild(prevBtn);
     }
@@ -128,6 +128,11 @@ function initializeNavigation(pageId, functionName, first = false, last = false)
     
     // Inject navigation buttons into app container
     injectNavigationButtons(first, last);
+    
+    // Initialize custom scrollbar wrapper
+    if (window.initializeCustomScrollbar) {
+        initializeCustomScrollbar();
+    }
     
     // Scroll to top of app container
     scrollAppToTop();

@@ -7,7 +7,7 @@ function createIntroduction() {
     container.innerHTML = `
         <div class="current-level">
             <div class="level-content celebration">
-                <h1>How A.I. Works for Beginners</h1>
+                <h1>Introduction</h1>
                 <p>From A.I. models predicting the weather to Chat-GPT predicting 
                 what word to write next, almost all A.I. models learn to make better predictions using the same core algorithm: <b>gradient descent</b>. 
                 Through a series of 9 levels, this site will introduce you to what gradient descent is and how it powers A.I. systems!</p>

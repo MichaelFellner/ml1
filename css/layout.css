@@ -14,85 +14,83 @@
     position: relative;
     
     /* Fixed size */
-    height: calc(100vh - 80px);
+    height: calc(100vh - 150px); /* Account for body padding and margins */
     max-height: 800px;
     min-height: 600px;
     
-    /* Critical fix: Use a wrapper approach for proper clipping */
-    /* Remove overflow from here - we'll handle it with inner content */
+    /* Keep rounded corners intact */
     overflow: hidden; /* This clips content to border-radius */
 }
 
-/* Inner scrollable container - this is the key fix! */
-.current-level::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: transparent;
-    border-radius: inherit;
-    pointer-events: none;
-    z-index: 1;
-}
-
-/* Clean approach - content wrapper handles all scrolling */
-.current-level {
-    /* Container maintains shape and clipping */
-    contain: layout;
-    transform: translateZ(0); /* Force GPU acceleration for smoother scrolling */
-}
-
-/* ROBUST FIX: Wrapper-based approach for perfect rounded corners with scrolling */
+/* Scrollable wrapper inside current-level */
 .level-wrapper {
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
     scroll-behavior: smooth;
-    padding: 30px 80px;
+    padding: 30px 60px 30px 80px; /* Less right padding for scrollbar space */
+    position: relative;
     
-    /* Firefox scrollbar */
+    /* Firefox scrollbar - blue with rounded ends */
     scrollbar-width: thin;
-    scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+    scrollbar-color: #4285f4 transparent;
     scrollbar-gutter: stable;
 }
 
-/* Elegant minimal scrollbar for wrapper */
+/* Webkit/Chrome blue scrollbar with spacing and rounded ends */
 .level-wrapper::-webkit-scrollbar {
-    width: 6px;
+    width: 14px; /* Total width including spacing */
 }
 
 .level-wrapper::-webkit-scrollbar-track {
     background: transparent;
-    margin: 20px 0; /* Important: Keep scrollbar away from rounded corners */
+    /* Create vertical spacing for rounded ends to show */
+    margin: 20px 0;
 }
 
 .level-wrapper::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.12);
-    border-radius: 3px;
-    transition: all 0.3s ease;
+    /* Blue scrollbar like the hamburger menu */
+    background: #4285f4;
+    border-radius: 10px; /* Fully rounded ends */
+    
+    /* CRITICAL: This creates space from the right edge */
+    border: 3px solid transparent; /* Transparent border all around */
+    border-right: 4px solid transparent; /* Extra space on the right */
+    background-clip: padding-box; /* Makes the border transparent, creating gap */
+    
+    min-height: 40px; /* Minimum visible size */
+    transition: background 0.3s ease;
 }
 
 .level-wrapper::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.2);
-    width: 8px; /* Slightly expand on hover */
+    background: #3367d6; /* Darker blue on hover */
+    background-clip: padding-box;
 }
 
 .level-wrapper::-webkit-scrollbar-thumb:active {
-    background: rgba(0, 0, 0, 0.3);
+    background: #2451b8; /* Even darker when dragging */
+    background-clip: padding-box;
 }
 
-/* Alternative: Overlay scrollbar that doesn't take space */
-.level-wrapper.overlay-scroll {
-    overflow-y: overlay; /* Webkit only - scrollbar overlays content */
+/* REMOVE ALL ARROW BUTTONS - comprehensive selectors */
+.level-wrapper::-webkit-scrollbar-button:start:decrement,
+.level-wrapper::-webkit-scrollbar-button:end:increment,
+.level-wrapper::-webkit-scrollbar-button:single-button:vertical:decrement,
+.level-wrapper::-webkit-scrollbar-button:single-button:vertical:increment,
+.level-wrapper::-webkit-scrollbar-button:double-button:vertical:decrement,
+.level-wrapper::-webkit-scrollbar-button:double-button:vertical:increment,
+.level-wrapper::-webkit-scrollbar-button {
+    display: none !important;
+    height: 0 !important;
+    width: 0 !important;
+    background: transparent !important;
+    border: none !important;
 }
 
-/* For browsers that don't support overlay */
-@supports not (overflow: overlay) {
-    .level-wrapper.overlay-scroll {
-        padding-right: 74px; /* Slightly less padding to compensate for scrollbar */
-    }
+/* No corner where scrollbars meet */
+.level-wrapper::-webkit-scrollbar-corner {
+    display: none;
+    background: transparent;
 }
 
 /* Subtle fade edges for smooth scroll indication */
@@ -141,7 +139,7 @@
     align-items: flex-start;
     flex-wrap: wrap;
     justify-content: space-around;
-    padding-bottom: 20px; /* Extra space at bottom */
+    /* Removed padding since .current-level now handles padding */
 }
 
 .level-content.celebration {

@@ -14,7 +14,7 @@ html, body {
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #fb401adb 0%, #f3960a 100%);
-    padding: 20px;
+    padding: 90px 20px 20px 20px; /* Top padding for progress bar */
     margin: 0;
     position: relative;
     display: flex;

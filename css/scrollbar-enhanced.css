@@ -1,0 +1,165 @@
+/* Advanced Scrollbar Styles - Optimized for rounded corners and spacing */
+
+/* Option 1: Perfect rounded scrollbar with edge spacing (DEFAULT) */
+.level-wrapper {
+    /* This is the default style - already in layout.css */
+}
+
+/* Option 2: macOS-style overlay scrollbar (minimal, auto-hiding) */
+.level-wrapper.macos-style {
+    padding-right: 80px; /* Normal padding since scrollbar overlays */
+}
+
+.level-wrapper.macos-style::-webkit-scrollbar {
+    width: 15px;
+    background-color: transparent;
+}
+
+.level-wrapper.macos-style::-webkit-scrollbar-track {
+    background-color: transparent;
+    margin: 30px 0; /* Large margins for rounded effect */
+}
+
+.level-wrapper.macos-style::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 100px;
+    border: 5px solid transparent;
+    border-right: 6px solid transparent;
+    background-clip: padding-box;
+    transition: background-color 0.5s;
+}
+
+.level-wrapper.macos-style:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+.level-wrapper.macos-style::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Option 3: Pill-shaped scrollbar with perfect rounding */
+.level-wrapper.pill-scrollbar {
+    padding-right: 65px;
+}
+
+.level-wrapper.pill-scrollbar::-webkit-scrollbar {
+    width: 20px;
+}
+
+.level-wrapper.pill-scrollbar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 100px;
+    margin: 30px 8px; /* Margin from top/bottom AND right side */
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.level-wrapper.pill-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, 
+        rgba(100, 100, 100, 0.3) 0%, 
+        rgba(100, 100, 100, 0.4) 50%, 
+        rgba(100, 100, 100, 0.3) 100%);
+    border-radius: 100px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.level-wrapper.pill-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, 
+        rgba(80, 80, 80, 0.4) 0%, 
+        rgba(80, 80, 80, 0.5) 50%, 
+        rgba(80, 80, 80, 0.4) 100%);
+}
+
+/* Option 4: Floating capsule scrollbar */
+.level-wrapper.floating-scrollbar {
+    padding-right: 65px;
+    position: relative;
+}
+
+.level-wrapper.floating-scrollbar::-webkit-scrollbar {
+    width: 18px;
+}
+
+.level-wrapper.floating-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 35px 0;
+}
+
+.level-wrapper.floating-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 50px; /* Capsule shape */
+    border: 3px solid rgba(255, 255, 255, 0);
+    border-right: 7px solid rgba(255, 255, 255, 0);
+    background-clip: padding-box;
+    min-height: 40px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.level-wrapper.floating-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.35);
+    background-clip: padding-box;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Fix for ensuring NO arrow buttons appear in any style */
+.level-wrapper::-webkit-scrollbar-button:start:decrement,
+.level-wrapper::-webkit-scrollbar-button:end:increment,
+.level-wrapper::-webkit-scrollbar-button:horizontal:start:decrement,
+.level-wrapper::-webkit-scrollbar-button:horizontal:end:increment,
+.level-wrapper::-webkit-scrollbar-button:vertical:start:decrement,
+.level-wrapper::-webkit-scrollbar-button:vertical:end:increment,
+.level-wrapper::-webkit-scrollbar-button:single-button,
+.level-wrapper::-webkit-scrollbar-button {
+    display: none !important;
+    background: transparent !important;
+    border: none !important;
+    height: 0 !important;
+    width: 0 !important;
+}
+
+/* Ensure Firefox gets a nice scrollbar too */
+@supports (scrollbar-width: thin) {
+    .level-wrapper {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.05);
+    }
+    
+    .level-wrapper.macos-style {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+    }
+    
+    .level-wrapper.pill-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(100, 100, 100, 0.4) rgba(0, 0, 0, 0.05);
+    }
+    
+    .level-wrapper.floating-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+    }
+}
+
+/* Enhanced scroll behavior for all styles */
+.level-wrapper {
+    /* Smooth scrolling with momentum on touch devices */
+    -webkit-overflow-scrolling: touch;
+    
+    /* Better scroll performance */
+    will-change: scroll-position;
+}
+
+/* Debug helper - uncomment to visualize scrollbar spacing */
+/*
+.level-wrapper.debug-scrollbar::-webkit-scrollbar {
+    background: rgba(255, 0, 0, 0.1);
+}
+
+.level-wrapper.debug-scrollbar::-webkit-scrollbar-track {
+    background: rgba(0, 255, 0, 0.1);
+}
+
+.level-wrapper.debug-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 255, 0.5) !important;
+    border-color: rgba(255, 255, 0, 0.3) !important;
+}
+*/

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrollbar Test - MLTEACH</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/scrollbar-enhanced.css">
+    <style>
+        /* Test styles */
+        .test-container {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #fb401adb 0%, #f3960a 100%);
+            min-height: 100vh;
+        }
+        
+        .test-box {
+            flex: 1;
+            max-width: 400px;
+        }
+        
+        .test-content {
+            padding: 20px;
+        }
+        
+        .test-content h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .test-content p {
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 15px;
+        }
+        
+        .spacer {
+            height: 200px;
+            background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, transparent 100%);
+            margin: 20px 0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+        
+        .style-label {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background: rgba(0,0,0,0.1);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            color: #666;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <!-- Default Style -->
+        <div class="test-box">
+            <div class="current-level" style="position: relative;">
+                <span class="style-label">Default (with spacing & rounded)</span>
+                <div class="level-wrapper">
+                    <div class="test-content">
+                        <h3>Default Scrollbar Style</h3>
+                        <p>This is the default scrollbar with proper spacing from the edge and fully rounded ends.</p>
+                        <div class="spacer">Scroll Area 1</div>
+                        <p>The scrollbar should have:</p>
+                        <ul>
+                            <li>Space from the right edge</li>
+                            <li>Rounded top and bottom</li>
+                            <li>No arrow buttons</li>
+                            <li>Smooth hover effects</li>
+                        </ul>
+                        <div class="spacer">Scroll Area 2</div>
+                        <p>Keep scrolling to see the rounded bottom of the scrollbar...</p>
+                        <div class="spacer">Scroll Area 3</div>
+                        <p>Notice how the scrollbar maintains its rounded shape at both ends.</p>
+                        <div class="spacer">Scroll Area 4</div>
+                        <p>The end of the content. Check the bottom rounding!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- macOS Style -->
+        <div class="test-box">
+            <div class="current-level" style="position: relative;">
+                <span class="style-label">macOS Style (auto-hiding)</span>
+                <div class="level-wrapper macos-style">
+                    <div class="test-content">
+                        <h3>macOS-Style Scrollbar</h3>
+                        <p>This scrollbar auto-hides and appears on hover, similar to macOS behavior.</p>
+                        <div class="spacer">Scroll Area 1</div>
+                        <p>Features:</p>
+                        <ul>
+                            <li>Auto-hiding when not in use</li>
+                            <li>Appears on hover</li>
+                            <li>Overlay style (doesn't take space)</li>
+                            <li>Fully rounded capsule shape</li>
+                        </ul>
+                        <div class="spacer">Scroll Area 2</div>
+                        <p>Hover over this area to see the scrollbar appear...</p>
+                        <div class="spacer">Scroll Area 3</div>
+                        <p>The scrollbar fades in and out smoothly.</p>
+                        <div class="spacer">Scroll Area 4</div>
+                        <p>End of content with macOS-style scrollbar.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pill Style -->
+        <div class="test-box">
+            <div class="current-level" style="position: relative;">
+                <span class="style-label">Pill Style (with track)</span>
+                <div class="level-wrapper pill-scrollbar">
+                    <div class="test-content">
+                        <h3>Pill-Shaped Scrollbar</h3>
+                        <p>This style shows a visible track with a pill-shaped thumb.</p>
+                        <div class="spacer">Scroll Area 1</div>
+                        <p>Features:</p>
+                        <ul>
+                            <li>Visible track background</li>
+                            <li>Perfectly rounded pill shape</li>
+                            <li>Gradient effect on thumb</li>
+                            <li>Inset shadow for depth</li>
+                        </ul>
+                        <div class="spacer">Scroll Area 2</div>
+                        <p>The track provides visual feedback about scroll position...</p>
+                        <div class="spacer">Scroll Area 3</div>
+                        <p>Notice the subtle gradient on the scrollbar thumb.</p>
+                        <div class="spacer">Scroll Area 4</div>
+                        <p>End of pill-style scrollbar demo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Log scrollbar detection
+        console.log('Testing scrollbar styles...');
+        
+        // Check if scrollbars are properly styled
+        document.querySelectorAll('.level-wrapper').forEach((wrapper, index) => {
+            const hasScroll = wrapper.scrollHeight > wrapper.clientHeight;
+            console.log(`Wrapper ${index + 1}: ${hasScroll ? 'Has scrollbar' : 'No scrollbar needed'}`);
+        });
+        
+        // Test for arrow buttons (they should not exist)
+        const testWrapper = document.querySelector('.level-wrapper');
+        if (testWrapper) {
+            const computed = window.getComputedStyle(testWrapper, '::-webkit-scrollbar-button');
+            console.log('Arrow buttons display:', computed.display || 'Successfully hidden');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+/* DEFINITIVE SCROLLBAR FIX - Blue, rounded, spaced from edge, no arrows */
+
+/* Force these styles to override everything else */
+.level-wrapper {
+    overflow-y: auto !important;
+    padding-right: 60px !important; /* Space for scrollbar */
+}
+
+/* Chrome, Edge, Safari - Main scrollbar styling */
+.level-wrapper::-webkit-scrollbar {
+    width: 10px !important;
+}
+
+.level-wrapper::-webkit-scrollbar-track {
+    background: transparent !important;
+    margin: 20px 0 !important; /* Creates space for rounded ends */
+}
+
+.level-wrapper::-webkit-scrollbar-thumb {
+    background-color: #4285f4 !important; /* Blue like hamburger menu */
+    border-radius: 10px !important; /* Rounded ends */
+    border: 2px solid rgba(255, 255, 255, 0.95) !important; /* White border = spacing from edge */
+    background-clip: content-box !important; /* Keep border transparent */
+}
+
+.level-wrapper::-webkit-scrollbar-thumb:hover {
+    background-color: #3367d6 !important;
+}
+
+.level-wrapper::-webkit-scrollbar-thumb:active {
+    background-color: #2451b8 !important;
+}
+
+/* REMOVE ALL ARROW BUTTONS - Every possible selector */
+.level-wrapper::-webkit-scrollbar-button:start:decrement,
+.level-wrapper::-webkit-scrollbar-button:end:increment,
+.level-wrapper::-webkit-scrollbar-button:start,
+.level-wrapper::-webkit-scrollbar-button:end,
+.level-wrapper::-webkit-scrollbar-button:single-button,
+.level-wrapper::-webkit-scrollbar-button:double-button,
+.level-wrapper::-webkit-scrollbar-button:horizontal:start:decrement,
+.level-wrapper::-webkit-scrollbar-button:horizontal:end:increment,
+.level-wrapper::-webkit-scrollbar-button:vertical:start:decrement,
+.level-wrapper::-webkit-scrollbar-button:vertical:end:increment,
+.level-wrapper::-webkit-scrollbar-button:horizontal:decrement,
+.level-wrapper::-webkit-scrollbar-button:horizontal:increment,
+.level-wrapper::-webkit-scrollbar-button:vertical:decrement,
+.level-wrapper::-webkit-scrollbar-button:vertical:increment,
+.level-wrapper::-webkit-scrollbar-button {
+    display: none !important;
+    height: 0 !important;
+    width: 0 !important;
+}
+
+/* Firefox - Blue scrollbar */
+.level-wrapper {
+    scrollbar-width: thin !important;
+    scrollbar-color: #4285f4 transparent !important;
+}
+
+/* Hide scrollbar corner */
+.level-wrapper::-webkit-scrollbar-corner {
+    display: none !important;
+}
