@@ -1,58 +1,57 @@
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
+    /* Override fixed height behavior on mobile */
+    html, body {
+        height: auto;
+        overflow: auto;
+        min-height: 100vh;
+    }
+    
     body {
         padding: 10px;
         align-items: flex-start;
-        min-height: 100vh;
     }
     
     #app {
         padding: 0 10px; /* Reduce horizontal padding on mobile */
         margin-top: 20px;
     }
-
-    /* Show navigation buttons in mobile-friendly way */
+    
+    /* Mobile: Allow natural height for content box */
     .current-level {
+        height: auto; /* Override fixed height on mobile */
+        min-height: auto; /* Override min-height on mobile */
+        max-height: none; /* Override max-height on mobile */
+        overflow: visible; /* Allow normal mobile scrolling */
         padding: 20px 15px 80px 15px; /* Extra bottom padding for buttons */
     }
     
+    /* Hide custom scrollbars on mobile */
+    .current-level::-webkit-scrollbar {
+        display: none;
+    }
+    
+    /* Override navigation button positioning for mobile */
     .prev-btn {
-        position: absolute;
+        position: fixed;
         left: 15px;
         bottom: 15px;
         top: auto;
         transform: none;
         width: 50px;
         height: 50px;
-        border-radius: 50%;
         font-size: 14px;
-        font-weight: bold;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
     }
     
     .next-btn {
-        position: absolute;
+        position: fixed;
         right: 15px;
         bottom: 15px;
         top: auto;
         transform: none;
         width: 50px;
         height: 50px;
-        border-radius: 50%;
         font-size: 14px;
-        font-weight: bold;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-   
-    .current-level {
-        padding: 20px 15px;
-        margin: 10px 0;
     }
     
     .level-header {
@@ -164,5 +163,27 @@
         width: 100%;
         max-width: none;
         min-width: auto;
+    }
+}
+
+/* Tablet Responsive Styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+    #app {
+        padding: 15px 80px; /* Reduced padding for tablets */
+    }
+    
+    .current-level {
+        padding: 25px 60px; /* Reduced padding for tablets */
+        height: calc(100vh - 60px); /* Adjust for reduced margins */
+        max-height: 750px; /* Slightly smaller max height for tablets */
+    }
+}
+
+/* Large Desktop Styles */
+@media (min-width: 1400px) {
+    #app {
+        /* Maintain max-width constraint on very large screens */
+        width: 1400px;
+        padding: 20px 120px;
     }
 }

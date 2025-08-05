@@ -2,16 +2,136 @@
     max-width: 1400px;
     width: 100%;
     padding: 0 100px; /* Increased padding to accommodate circular buttons */
+    position: relative; /* Allow absolute positioning of nav buttons relative to app */
 }
 
-/* Level Card Container */
+/* Level Card Container - Fixed rounded corners with scrolling */
 .current-level {
     background: rgba(255, 255, 255, 0.95);
     border-radius: 20px;
-    padding: 30px 80px; /* Extra horizontal padding for button space */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     margin: 20px 0;
-    position: relative; /* For absolute positioning of nav buttons */
+    position: relative;
+    
+    /* Fixed size */
+    height: calc(100vh - 80px);
+    max-height: 800px;
+    min-height: 600px;
+    
+    /* Critical fix: Use a wrapper approach for proper clipping */
+    /* Remove overflow from here - we'll handle it with inner content */
+    overflow: hidden; /* This clips content to border-radius */
+}
+
+/* Inner scrollable container - this is the key fix! */
+.current-level::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: transparent;
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Clean approach - content wrapper handles all scrolling */
+.current-level {
+    /* Container maintains shape and clipping */
+    contain: layout;
+    transform: translateZ(0); /* Force GPU acceleration for smoother scrolling */
+}
+
+/* ROBUST FIX: Wrapper-based approach for perfect rounded corners with scrolling */
+.level-wrapper {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    padding: 30px 80px;
+    
+    /* Firefox scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+    scrollbar-gutter: stable;
+}
+
+/* Elegant minimal scrollbar for wrapper */
+.level-wrapper::-webkit-scrollbar {
+    width: 6px;
+}
+
+.level-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 20px 0; /* Important: Keep scrollbar away from rounded corners */
+}
+
+.level-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.12);
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.level-wrapper::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.2);
+    width: 8px; /* Slightly expand on hover */
+}
+
+.level-wrapper::-webkit-scrollbar-thumb:active {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Alternative: Overlay scrollbar that doesn't take space */
+.level-wrapper.overlay-scroll {
+    overflow-y: overlay; /* Webkit only - scrollbar overlays content */
+}
+
+/* For browsers that don't support overlay */
+@supports not (overflow: overlay) {
+    .level-wrapper.overlay-scroll {
+        padding-right: 74px; /* Slightly less padding to compensate for scrollbar */
+    }
+}
+
+/* Subtle fade edges for smooth scroll indication */
+.current-level.with-fade::before,
+.current-level.with-fade::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 20px;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.current-level.with-fade::before {
+    top: 0;
+    background: linear-gradient(to bottom, 
+        rgba(255, 255, 255, 0.95) 0%,
+        rgba(255, 255, 255, 0.5) 70%,
+        transparent 100%);
+    border-radius: 20px 20px 0 0;
+}
+
+.current-level.with-fade::after {
+    bottom: 0;
+    background: linear-gradient(to top, 
+        rgba(255, 255, 255, 0.95) 0%,
+        rgba(255, 255, 255, 0.5) 70%,
+        transparent 100%);
+    border-radius: 0 0 20px 20px;
+}
+
+/* Ensure smooth edges without fade by default */
+.current-level {
+    /* Subtle inset shadow for depth without interfering with corners */
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.05);
 }
 
 /* Level Content Layout */
@@ -21,6 +141,7 @@
     align-items: flex-start;
     flex-wrap: wrap;
     justify-content: space-around;
+    padding-bottom: 20px; /* Extra space at bottom */
 }
 
 .level-content.celebration {

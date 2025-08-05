@@ -4,11 +4,16 @@
     box-sizing: border-box;
 }
 
+/* Prevent page scrolling on desktop only when needed */
+html, body {
+    height: 100vh;
+    overflow: hidden;
+}
+
 /* Base Body Styles */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #fb401adb 0%, #f3960a 100%);
-    min-height: 100vh;
     padding: 20px;
     margin: 0;
     position: relative;

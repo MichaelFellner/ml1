@@ -22,11 +22,11 @@
     filter: brightness(1.1);
 }
 
-/* Navigation Button Overrides */
+/* Navigation Button Overrides - Positioned in app padding, outside white box */
 .prev-btn {
     position: absolute;
-    left: -80px; /* Position further outside the left edge */
-    top: 50%;
+    left: 20px; /* Within the 100px left padding of #app */
+    top: calc(50% + 10px); /* Slightly offset to center with white box */
     transform: translateY(-50%);
     width: 60px;
     height: 60px;
@@ -38,12 +38,13 @@
     justify-content: center;
     font-size: 16px;
     font-weight: bold;
+    z-index: 10; /* Ensure buttons appear above other content */
 }
 
 .next-btn {
     position: absolute;
-    right: -80px; /* Position further outside the right edge */
-    top: 50%;
+    right: 20px; /* Within the 100px right padding of #app */
+    top: calc(50% + 10px); /* Slightly offset to center with white box */
     transform: translateY(-50%);
     width: 60px;
     height: 60px;
@@ -55,6 +56,7 @@
     justify-content: center;
     font-size: 16px;
     font-weight: bold;
+    z-index: 10; /* Ensure buttons appear above other content */
 }
 
 .next-btn:disabled {

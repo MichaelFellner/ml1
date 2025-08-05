@@ -1,0 +1,188 @@
+/* Advanced Scrollbar Styles - Alternative Options */
+
+/* Option 1: Floating Scrollbar (appears on hover) */
+.current-level.floating-scroll {
+    scrollbar-width: none; /* Hide Firefox scrollbar initially */
+}
+
+.current-level.floating-scroll::-webkit-scrollbar {
+    width: 8px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.current-level.floating-scroll:hover::-webkit-scrollbar {
+    opacity: 1;
+}
+
+.current-level.floating-scroll::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    margin: 20px 2px;
+}
+
+.current-level.floating-scroll::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.current-level.floating-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+/* Option 2: Minimal Scrollbar */
+.current-level.minimal-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
+}
+
+.current-level.minimal-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.current-level.minimal-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.current-level.minimal-scroll::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+}
+
+.current-level.minimal-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+/* Option 3: macOS-style Scrollbar */
+.current-level.macos-scroll {
+    scrollbar-width: none; /* Firefox */
+}
+
+.current-level.macos-scroll::-webkit-scrollbar {
+    width: 15px;
+    background-color: transparent;
+}
+
+.current-level.macos-scroll::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.current-level.macos-scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    border: 4px solid transparent;
+    background-clip: content-box;
+}
+
+.current-level.macos-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Option 4: Gradient Scrollbar */
+.current-level.gradient-scroll::-webkit-scrollbar {
+    width: 12px;
+}
+
+.current-level.gradient-scroll::-webkit-scrollbar-track {
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 0, 0, 0.05) 20%,
+        rgba(0, 0, 0, 0.05) 80%,
+        transparent 100%
+    );
+    border-radius: 6px;
+    margin: 20px 0;
+}
+
+.current-level.gradient-scroll::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+        135deg,
+        #667eea 0%,
+        #764ba2 100%
+    );
+    border-radius: 6px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+.current-level.gradient-scroll::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+        135deg,
+        #764ba2 0%,
+        #667eea 100%
+    );
+}
+
+/* Option 5: Invisible until scroll (auto-hide) */
+.current-level.autohide-scroll {
+    overflow-y: overlay; /* Webkit-specific overlay scrollbar */
+}
+
+.current-level.autohide-scroll::-webkit-scrollbar {
+    width: 10px;
+    background: transparent;
+}
+
+.current-level.autohide-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.current-level.autohide-scroll::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0);
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.current-level.autohide-scroll:hover::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.current-level.autohide-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+/* Option 6: Custom themed scrollbar matching your orange gradient */
+.current-level.themed-scroll::-webkit-scrollbar {
+    width: 11px;
+}
+
+.current-level.themed-scroll::-webkit-scrollbar-track {
+    background: rgba(251, 64, 26, 0.05);
+    border-radius: 10px;
+    margin: 18px 0;
+}
+
+.current-level.themed-scroll::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+        to bottom,
+        rgba(251, 64, 26, 0.3),
+        rgba(243, 150, 10, 0.3)
+    );
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+.current-level.themed-scroll::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+        to bottom,
+        rgba(251, 64, 26, 0.5),
+        rgba(243, 150, 10, 0.5)
+    );
+    background-clip: padding-box;
+}
+
+/* Firefox fallback for all custom styles */
+@supports (scrollbar-width: thin) {
+    .current-level {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+    }
+    
+    .current-level.themed-scroll {
+        scrollbar-color: rgba(251, 64, 26, 0.3) rgba(251, 64, 26, 0.05);
+    }
+}
