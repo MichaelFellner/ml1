@@ -5,48 +5,241 @@ function createLevel9() {
     container.innerHTML = `
         <div class="current-level">
             ${createLevelHeader ? createLevelHeader(8, 9, 10) : '<div class="level-header"><h2>Level 9: Coefficient Experimentation</h2></div>'}
-            <div class="level-content">
-                <div class="level9-layout">
-                    <div class="level9-controls">
-                        <h3>🧮 Energy Prediction Model</h3>
-                        <p>Experiment with different coefficients to see how they affect predictions!</p>
-                        <div class="formula-display">
-                            <strong>Energy = </strong>
-                            <span class="formula-part">
-                                <input type="number" id="headCoeff" step="0.1" value="0.5" class="coeff-input"> × Head Size
-                            </span>
-                            <span class="formula-part">
-                                + <input type="number" id="bodyCoeff" step="0.1" value="0.3" class="coeff-input"> × Body Size
-                            </span>
-                            <span class="formula-part">
-                                + <input type="number" id="legCoeff" step="0.1" value="0.2" class="coeff-input"> × Leg Size
-                            </span>
+            <div class="level-content" style="padding: 20px;">
+                <div style="display: flex; gap: 20px; align-items: flex-start; justify-content: center;">
+                    <!-- Left: Controls -->
+                    <div style="width: 320px; flex-shrink: 0;">
+                        <div style="
+                            background: linear-gradient(135deg, rgba(118,75,162,0.1), rgba(147,51,234,0.05));
+                            border-radius: 12px;
+                            padding: 18px;
+                            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                        ">
+                            <h3 style="margin: 0 0 12px 0; color: #333; font-size: 1rem; display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.3rem;">🧮</span> Energy Prediction Model
+                            </h3>
+                            
+                            <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Experiment with coefficients to predict robot energy!</p>
+                            
+                            <div style="
+                                background: linear-gradient(135deg, #764ba2, #667eea);
+                                border-radius: 10px;
+                                padding: 12px;
+                                color: white;
+                                margin-bottom: 15px;
+                            ">
+                                <div style="font-size: 0.9rem; margin-bottom: 10px; font-weight: 500;">Energy = </div>
+                                <div style="display: flex; flex-direction: column; gap: 6px;">
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <input type="number" id="headCoeff" step="0.1" value="0.5" style="
+                                            width: 60px;
+                                            padding: 6px;
+                                            border: 2px solid rgba(255,255,255,0.3);
+                                            border-radius: 4px;
+                                            background: rgba(255,255,255,0.2);
+                                            color: white;
+                                            font-weight: bold;
+                                            text-align: center;
+                                        ">
+                                        <span style="flex: 1;">× Head Size</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <span style="width: 15px; text-align: center;">+</span>
+                                        <input type="number" id="bodyCoeff" step="0.1" value="0.3" style="
+                                            width: 60px;
+                                            padding: 6px;
+                                            border: 2px solid rgba(255,255,255,0.3);
+                                            border-radius: 4px;
+                                            background: rgba(255,255,255,0.2);
+                                            color: white;
+                                            font-weight: bold;
+                                            text-align: center;
+                                        ">
+                                        <span style="flex: 1;">× Body Size</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <span style="width: 15px; text-align: center;">+</span>
+                                        <input type="number" id="legCoeff" step="0.1" value="0.2" style="
+                                            width: 60px;
+                                            padding: 6px;
+                                            border: 2px solid rgba(255,255,255,0.3);
+                                            border-radius: 4px;
+                                            background: rgba(255,255,255,0.2);
+                                            color: white;
+                                            font-weight: bold;
+                                            text-align: center;
+                                        ">
+                                        <span style="flex: 1;">× Leg Size</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                                <button id="testBtn" style="
+                                    flex: 1;
+                                    background: linear-gradient(135deg, #667eea, #764ba2);
+                                    color: white;
+                                    border: none;
+                                    border-radius: 6px;
+                                    padding: 8px;
+                                    font-weight: bold;
+                                    cursor: pointer;
+                                    transition: all 0.3s ease;
+                                    font-size: 0.9rem;
+                                ">🧪 Test Model</button>
+                                <button id="resetBtn" style="
+                                    flex: 1;
+                                    background: linear-gradient(135deg, #ff6b6b, #ff8787);
+                                    color: white;
+                                    border: none;
+                                    border-radius: 6px;
+                                    padding: 8px;
+                                    font-weight: bold;
+                                    cursor: pointer;
+                                    transition: all 0.3s ease;
+                                    font-size: 0.9rem;
+                                ">🔄 Reset</button>
+                            </div>
+                            
+                            <div style="
+                                background: rgba(255,255,255,0.5);
+                                border-radius: 8px;
+                                padding: 10px;
+                                margin-bottom: 12px;
+                            ">
+                                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+                                    <span style="font-size: 1rem;">💡</span>
+                                    <strong style="color: #333; font-size: 0.85rem;">Coefficient Tips</strong>
+                                </div>
+                                <div style="font-size: 0.8rem; color: #666; line-height: 1.3;">
+                                    <div>• Larger values = more impact</div>
+                                    <div>• Body usually matters most</div>
+                                    <div>• Try values between 0-1</div>
+                                </div>
+                            </div>
+                            
+                            <div id="status" style="
+                                background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+                                border: 2px solid #e0e0e0;
+                                border-radius: 8px;
+                                padding: 10px;
+                                text-align: center;
+                                font-size: 0.9rem;
+                                color: #555;
+                                min-height: 50px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                flex-direction: column;
+                            ">
+                                <div>🎯 Test your model on 1000 robots!</div>
+                                <div style="font-size: 0.8rem; color: #888; margin-top: 3px;">Find the best coefficients</div>
+                            </div>
                         </div>
-                        
-                        <div class="input-group">
-                            <button id="testBtn" class="action-btn">🧪 Test Coefficients</button>
-                            <button id="resetBtn" class="reset-btn">🔄 Reset & Try Again</button>
-                        </div>
-                        
-                        <div id="modelInfo" class="model-info">
-                            Enter coefficients to see how many robots your model predicts correctly!
-                        </div>
-                        
-                        <div id="status" class="status">💡 Tip: Larger coefficients mean that feature has more impact on energy level!</div>
                     </div>
-                    <div class="level9-visual">
-                        <h3>Robot Fleet Prediction Results</h3>
-                        <div class="prediction-stats" id="predictionStats" style="display: none;">
-                            <div class="stat-box">
-                                <span class="stat-number" id="correctPredictions">0</span>
-                                <span class="stat-label">Accurate Predictions</span>
+                    
+                    <!-- Right: Robot Grid -->
+                    <div style="width: 380px; flex-shrink: 0;">
+                        <div style="
+                            background: linear-gradient(135deg, #1a1a2e, #16213e);
+                            border-radius: 12px;
+                            padding: 18px;
+                            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+                        ">
+                            <h3 style="
+                                margin: 0 0 12px 0;
+                                color: white;
+                                font-size: 1rem;
+                                text-align: center;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                gap: 8px;
+                            ">
+                                <span style="font-size: 1.2rem;">🤖</span>
+                                Fleet Prediction Results
+                                <span style="font-size: 1.2rem;">🤖</span>
+                            </h3>
+                            
+                            <!-- Accuracy display -->
+                            <div id="predictionStats" style="
+                                display: none;
+                                justify-content: space-around;
+                                margin-bottom: 12px;
+                                gap: 12px;
+                            ">
+                                <div style="
+                                    background: rgba(255,255,255,0.1);
+                                    border-radius: 8px;
+                                    padding: 8px;
+                                    text-align: center;
+                                    flex: 1;
+                                ">
+                                    <div id="correctPredictions" style="
+                                        font-size: 1.5rem;
+                                        font-weight: bold;
+                                        color: #ffd93d;
+                                    ">0</div>
+                                    <div style="font-size: 0.75rem; color: #aaa;">Correct</div>
+                                </div>
+                                <div style="
+                                    background: rgba(255,255,255,0.1);
+                                    border-radius: 8px;
+                                    padding: 8px;
+                                    text-align: center;
+                                    flex: 1;
+                                ">
+                                    <div id="accuracy" style="
+                                        font-size: 1.5rem;
+                                        font-weight: bold;
+                                        color: #6bcf7f;
+                                    ">0%</div>
+                                    <div style="font-size: 0.75rem; color: #aaa;">Accuracy</div>
+                                </div>
                             </div>
-                            <div class="stat-box">
-                                <span class="stat-number" id="accuracy">0%</span>
-                                <span class="stat-label">Accuracy</span>
+                            
+                            <div id="robotGrid" style="
+                                display: grid;
+                                grid-template-columns: repeat(25, 1fr);
+                                gap: 3px;
+                                padding: 8px;
+                                background: rgba(0,0,0,0.3);
+                                border-radius: 8px;
+                                min-height: 280px;
+                            "></div>
+                            
+                            <div id="gridLegend" style="
+                                margin-top: 12px;
+                                padding: 8px;
+                                background: rgba(255,255,255,0.05);
+                                border-radius: 6px;
+                                display: none;
+                            ">
+                                <div style="font-size: 0.8rem; color: #aaa; text-align: center; margin-bottom: 6px;">Prediction Quality</div>
+                                <div style="display: flex; justify-content: space-around; align-items: center;">
+                                    <div style="text-align: center;">
+                                        <div style="
+                                            width: 20px;
+                                            height: 20px;
+                                            background: radial-gradient(circle, rgba(45, 213, 115, 1), rgba(45, 213, 115, 0.6));
+                                            border-radius: 50%;
+                                            margin: 0 auto 4px;
+                                        "></div>
+                                        <div style="font-size: 0.75rem; color: #6bcf7f;">Correct</div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <div style="
+                                            width: 20px;
+                                            height: 20px;
+                                            background: radial-gradient(circle, rgba(60, 60, 80, 0.4), rgba(40, 40, 60, 0.3));
+                                            border-radius: 50%;
+                                            margin: 0 auto 4px;
+                                        "></div>
+                                        <div style="font-size: 0.75rem; color: #666;">Incorrect</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div id="robotGrid" class="robot-grid"></div>
                     </div>
                 </div>
             </div>
@@ -65,25 +258,61 @@ function setupLevel9() {
     const testBtn = document.getElementById('testBtn');
     const resetBtn = document.getElementById('resetBtn');
     const robotGrid = document.getElementById('robotGrid');
+    const predictionStats = document.getElementById('predictionStats');
+    const gridLegend = document.getElementById('gridLegend');
     
     // Generate the 1000 robots with their characteristics
     const robots = generateRobotFleet();
     
-    // Create 1000 robot dots (approximate with 625 for visual reasons, representing 1000)
+    // Create 625 robot dots with better styling (representing 1000 robots)
     function createRobotGrid() {
         robotGrid.innerHTML = '';
         for (let i = 0; i < 625; i++) {
             const dot = document.createElement('div');
+            dot.style.cssText = `
+                width: 100%;
+                aspect-ratio: 1;
+                background: radial-gradient(circle, rgba(100, 100, 120, 0.8), rgba(60, 60, 80, 0.6));
+                border-radius: 50%;
+                transition: all 0.5s ease;
+                transform: scale(0.8);
+            `;
             dot.className = 'robot-dot';
+            dot.dataset.index = i;
             robotGrid.appendChild(dot);
         }
     }
     
+    // Add hover effects for buttons
+    testBtn.addEventListener('mouseenter', () => {
+        if (!testBtn.disabled) {
+            testBtn.style.transform = 'scale(1.05)';
+            testBtn.style.boxShadow = '0 4px 15px rgba(102, 126, 234, 0.3)';
+        }
+    });
+    testBtn.addEventListener('mouseleave', () => {
+        testBtn.style.transform = 'scale(1)';
+        testBtn.style.boxShadow = 'none';
+    });
+    
+    resetBtn.addEventListener('mouseenter', () => {
+        resetBtn.style.transform = 'scale(1.05)';
+        resetBtn.style.boxShadow = '0 4px 15px rgba(255, 107, 107, 0.3)';
+    });
+    resetBtn.addEventListener('mouseleave', () => {
+        resetBtn.style.transform = 'scale(1)';
+        resetBtn.style.boxShadow = 'none';
+    });
+    
     function resetRobots() {
-        // Reset all dots to default state
+        // Reset all dots with animation
         const dots = robotGrid.querySelectorAll('.robot-dot');
-        dots.forEach(dot => {
-            dot.className = 'robot-dot';
+        dots.forEach((dot, index) => {
+            setTimeout(() => {
+                dot.style.background = 'radial-gradient(circle, rgba(100, 100, 120, 0.8), rgba(60, 60, 80, 0.6))';
+                dot.style.transform = 'scale(0.8)';
+                dot.style.boxShadow = 'none';
+            }, index * 0.5);
         });
         
         // Re-enable inputs and test button
@@ -91,14 +320,20 @@ function setupLevel9() {
         bodyCoeffInput.disabled = false;
         legCoeffInput.disabled = false;
         testBtn.disabled = false;
-        testBtn.textContent = '🧪 Test Coefficients';
+        testBtn.textContent = '🧪 Test Model';
+        testBtn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
         
-        // Hide stats but keep reset button visible
-        document.getElementById('predictionStats').style.display = 'none';
+        // Hide stats and legend
+        predictionStats.style.display = 'none';
+        gridLegend.style.display = 'none';
         
         // Reset status
-        document.getElementById('status').innerHTML = '💡 Tip: Larger coefficients mean that feature has more impact on energy level!';
-        document.getElementById('status').style.background = 'rgba(255, 255, 255, 0.8)';
+        document.getElementById('status').innerHTML = `
+            <div>🎯 Test your model on 1000 robots!</div>
+            <div style="font-size: 0.8rem; color: #888; margin-top: 3px;">Find the best coefficients</div>
+        `;
+        document.getElementById('status').style.background = 'linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7))';
+        document.getElementById('status').style.borderColor = '#e0e0e0';
         
         // Reset coefficient values to defaults
         headCoeffInput.value = '0.5';
@@ -124,14 +359,15 @@ function setupLevel9() {
         
         const accuracy = Math.round((correctPredictions / robots.length) * 100);
         
-        // Reset all dots to inactive
+        // First, set all dots to inactive with subtle effect
         const dots = robotGrid.querySelectorAll('.robot-dot');
         dots.forEach(dot => {
-            dot.className = 'robot-dot inactive';
+            dot.style.background = 'radial-gradient(circle, rgba(60, 60, 80, 0.4), rgba(40, 40, 60, 0.3))';
+            dot.style.transform = 'scale(0.6)';
+            dot.style.boxShadow = 'none';
         });
         
-        // Light up robots with correct predictions
-        // Map 1000 robots to 625 dots proportionally
+        // Map correct predictions to dots
         const correctIndices = [];
         robots.forEach((robot, index) => {
             if (robot.isCorrect) {
@@ -140,40 +376,87 @@ function setupLevel9() {
             }
         });
         
-        // Remove duplicates and light up dots
+        // Remove duplicates and animate correct predictions
         const uniqueIndices = [...new Set(correctIndices)];
-        uniqueIndices.forEach(index => {
+        uniqueIndices.forEach((index, i) => {
             if (dots[index]) {
-                dots[index].className = 'robot-dot active';
+                setTimeout(() => {
+                    const dot = dots[index];
+                    
+                    // Color based on accuracy level
+                    let gradientColor;
+                    if (accuracy >= 80) {
+                        gradientColor = 'radial-gradient(circle, rgba(45, 213, 115, 1), rgba(45, 213, 115, 0.6))';
+                    } else if (accuracy >= 60) {
+                        gradientColor = 'radial-gradient(circle, rgba(255, 217, 61, 1), rgba(243, 150, 10, 0.6))';
+                    } else {
+                        gradientColor = 'radial-gradient(circle, rgba(102, 126, 234, 1), rgba(118, 75, 162, 0.6))';
+                    }
+                    
+                    dot.style.background = gradientColor;
+                    dot.style.transform = 'scale(1.1)';
+                    dot.style.boxShadow = '0 0 15px rgba(45, 213, 115, 0.5)';
+                }, i * 2); // Stagger animations
             }
         });
         
-        // Update stats
-        document.getElementById('correctPredictions').textContent = correctPredictions;
-        document.getElementById('accuracy').textContent = accuracy + '%';
-        document.getElementById('predictionStats').style.display = 'flex';
+        // Update stats with animation
+        setTimeout(() => {
+            predictionStats.style.display = 'flex';
+            gridLegend.style.display = 'block';
+            
+            // Animate numbers
+            animateNumber('correctPredictions', 0, correctPredictions, 1000);
+            animateNumber('accuracy', 0, accuracy, 1000, '%');
+        }, 200);
         
-        // Update status - no completion conditions, just feedback
-        let statusMessage = '';
+        // Update status with color coding
+        let statusMessage, statusColor, borderColor;
         if (accuracy >= 80) {
-            statusMessage = `🎉 Excellent! ${accuracy}% accuracy - Great model performance!`;
-            document.getElementById('status').style.background = 'rgba(45, 213, 115, 0.2)';
+            statusMessage = `🎆 Excellent! ${accuracy}% accuracy!`;
+            statusColor = 'linear-gradient(135deg, rgba(45,213,115,0.2), rgba(45,213,115,0.1))';
+            borderColor = '#2dd573';
         } else if (accuracy >= 60) {
-            statusMessage = `👍 Good work! ${accuracy}% accuracy - Try adjusting coefficients for even better results.`;
-            document.getElementById('status').style.background = 'rgba(255, 193, 7, 0.2)';
+            statusMessage = `👍 Good work! ${accuracy}% accuracy`;
+            statusColor = 'linear-gradient(135deg, rgba(243,150,10,0.2), rgba(243,150,10,0.1))';
+            borderColor = '#f3960a';
         } else {
-            statusMessage = `🔄 ${accuracy}% accuracy - Experiment with different coefficient values!`;
-            document.getElementById('status').style.background = 'rgba(244, 67, 54, 0.2)';
+            statusMessage = `🔄 ${accuracy}% accuracy - Keep experimenting!`;
+            statusColor = 'linear-gradient(135deg, rgba(147,51,234,0.2), rgba(147,51,234,0.1))';
+            borderColor = '#9333ea';
         }
         
-        document.getElementById('status').innerHTML = statusMessage;
+        document.getElementById('status').innerHTML = `
+            <div style="font-size: 1rem; font-weight: bold; color: #333;">${statusMessage}</div>
+            <div style="font-size: 0.8rem; color: #666; margin-top: 3px;">Try adjusting coefficients for better results</div>
+        `;
+        document.getElementById('status').style.background = statusColor;
+        document.getElementById('status').style.borderColor = borderColor;
         
         // Disable inputs temporarily but keep reset button available
         headCoeffInput.disabled = true;
         bodyCoeffInput.disabled = true;
         legCoeffInput.disabled = true;
         testBtn.disabled = true;
-        testBtn.textContent = 'Tested';
+        testBtn.textContent = '✅ Tested';
+        testBtn.style.background = 'linear-gradient(135deg, #2dd573, #45d88a)';
+    }
+    
+    // Animate number counting
+    function animateNumber(elementId, start, end, duration, suffix = '') {
+        const element = document.getElementById(elementId);
+        const range = end - start;
+        const increment = range / (duration / 16); // 60fps
+        let current = start;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= end) {
+                current = end;
+                clearInterval(timer);
+            }
+            element.textContent = Math.round(current) + suffix;
+        }, 16);
     }
     
     // Event listeners

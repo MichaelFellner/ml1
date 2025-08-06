@@ -6,16 +6,34 @@ function createLevel5() {
     container.innerHTML = `
         <div class="current-level">
             ${createLevelHeader(4, 5, 9)}
-            <div class="level-content">
-                <div class="visual-section">
-                    <h3>Meet Max - He Needs a Bone!</h3>
-                    <div id="trainingDogs" class="training-data" style="display: none;">
-                        <!-- Training data will appear after first bone purchase -->
+            <div class="level-content" style="gap: 40px;">
+                <div class="visual-section" style="display: flex; flex-direction: column; align-items: center; max-width: 500px;">
+                    <h3 style="margin-bottom: 15px;">Meet Max - He Needs a Bone!</h3>
+                    
+                    <!-- Compact layout with Max and training data side by side -->
+                    <div style="display: flex; align-items: center; gap: 30px; width: 100%;">
+                        <div style="flex: 1; text-align: center;">
+                            <img id="dogImg" src="${images.dog}" alt="Max the dog" class="main-image" style="width: 180px; height: 220px;">
+                        </div>
+                        
+                        <!-- Training data appears to the right of Max -->
+                        <div id="trainingDogs" class="training-data" style="
+                            display: none;
+                            flex: 1;
+                            background: rgba(240,248,255,0.95);
+                            border-radius: 10px;
+                            padding: 12px;
+                            margin: 0;
+                            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+                            max-width: 250px;
+                        ">
+                            <!-- Training data will appear after first bone purchase -->
+                        </div>
                     </div>
-                    <img id="dogImg" src="${images.dog}" alt="Max the dog" class="main-image">
                 </div>
-                <div class="controls-section">
-                    <div class="money-display">💰 Money: <span id="moneyDisplay">$${userMoney}</span></div>
+                
+                <div class="controls-section" style="max-width: 500px;">
+                    <div class="money-display">💰 Money: <span id="moneyDisplay">${userMoney}</span></div>
                     <label for="boneSizeSlider">🦴 Bone Size (inches):</label>
                     <input type="range" id="boneSizeSlider" min="5" max="95" value="50" step="1">
                     <div class="display">
@@ -137,9 +155,15 @@ function setupLevel5() {
             }
             document.getElementById('dogImg').src = images.dogSad;
             
-            // Show training data after first failure
-            document.getElementById('trainingDogs').innerHTML = generateTrainingDogsHTML();
-            document.getElementById('trainingDogs').style.display = 'block';
+            // Show training data after first failure with smooth animation
+            const trainingDogsEl = document.getElementById('trainingDogs');
+            trainingDogsEl.innerHTML = generateTrainingDogsHTML();
+            trainingDogsEl.style.display = 'block';
+            trainingDogsEl.style.opacity = '0';
+            setTimeout(() => {
+                trainingDogsEl.style.transition = 'opacity 0.5s ease';
+                trainingDogsEl.style.opacity = '1';
+            }, 100);
             
             document.getElementById('status').innerHTML = `
                 <strong>Result:</strong><br>
@@ -218,7 +242,9 @@ function generateTrainingDogsHTML() {
     if (!trueBoneSize) return '<div>No training data available yet.</div>';
     
     const dogNames = ['Buddy', 'Luna', 'Charlie', 'Bella'];
-    let html = '<h4>🐕 Training Data: Other Dogs\' Preferences</h4><div class="dog-grid">';
+    let html = '<h4 style="margin: 0 0 10px 0; font-size: 14px; color: #333;">📊 Training Data</h4>';
+    html += '<div style="font-size: 11px; color: #666; margin-bottom: 8px;">Other dogs\' preferences:</div>';
+    html += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">';
     
     const trainingData = [];
     for (let i = 0; i < 4; i++) {
@@ -228,15 +254,36 @@ function generateTrainingDogsHTML() {
         trainingData.push(dogBoneSize);
         
         html += `
-            <div class="dog-item">
-                <img src="${images.dog}" alt="${dogNames[i]}" style="width: 60px; height: 60px; object-fit: contain;">
-                <div style="font-weight: bold; font-size: 12px; margin-top: 5px;">${dogNames[i]}</div>
-                <div style="font-size: 11px; color: #666; margin-top: 2px;">Likes ${dogBoneSize}" bones</div>
+            <div style="
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                background: white;
+                padding: 6px;
+                border-radius: 6px;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            ">
+                <img src="${images.dog}" alt="${dogNames[i]}" style="width: 35px; height: 35px; object-fit: contain;">
+                <div>
+                    <div style="font-weight: bold; font-size: 11px;">${dogNames[i]}</div>
+                    <div style="font-size: 10px; color: #666;">${dogBoneSize}" bone</div>
+                </div>
             </div>
         `;
     }
     
     html += '</div>';
+    
+    // Add average hint
+    const avgSize = Math.round(trainingData.reduce((a, b) => a + b, 0) / trainingData.length);
+    html += `<div style="
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid #e0e0e0;
+        font-size: 11px;
+        color: #333;
+        text-align: center;
+    ">💡 Average: ~${avgSize}"</div>`;
     
     return html;
 }

@@ -46,8 +46,9 @@ const NAVIGATION_CONFIG = {
         {
             title: "Part 3: Training Data",
             items: [
-                { id: "ip7", name: "Learning Recap & Training Data Preview", func: "createInstructionPart7" },
-                { id: "level5", name: "Level 5: Max's Bone", func: "createLevel5" }
+                { id: "ip8", name: "Introduction to Training Data", func: "createInstructionPart8" },
+                { id: "level5", name: "Level 5: Max's Bone", func: "createLevel5" },
+                { id: "ip7", name: "Learning Recap & Training Data", func: "createInstructionPart7" }
             ]
         },
         {

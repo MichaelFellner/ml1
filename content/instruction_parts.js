@@ -4,55 +4,69 @@ function createInstructionPart1() {
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
-            <div class="level-content celebration">
-                <h1>🎯 What You'll Learn</h1>
-                <p>This website will teach you the core concepts that power all modern AI systems. By the end, you'll understand these key terms:</p>
+            <div class="level-content celebration" style="padding: 20px; max-width: 1200px; margin: 0 auto;">
+                <h1 style="font-size: 2.3rem; margin-bottom: 20px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🎯 What You'll Learn</h1>
                 
-                <div class="learning-objectives">
-                    <div class="objective-item">
-                        <div class="objective-icon">📉</div>
-                        <div class="objective-content">
-                            <h3>Loss</h3>
-                            <p>A measure of how wrong your AI's predictions are</p>
+                <div class="learning-objectives" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 30px 0;">
+                    <div id="concept1" class="objective-item" style="background: linear-gradient(135deg, rgba(255,99,71,0.1), rgba(255,99,71,0.05)); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="objective-icon" style="font-size: 2.5rem;">📉</div>
+                            <div class="objective-content">
+                                <h3 style="margin: 0; font-size: 1.2rem; color: #333;">Loss</h3>
+                                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666; line-height: 1.4;">A measure of how wrong your AI's predictions are</p>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="objective-item">
-                        <div class="objective-icon">⚡</div>
-                        <div class="objective-content">
-                            <h3>Gradient Descent</h3>
-                            <p>The algorithm that automatically improves AI predictions</p>
+                    <div id="concept2" class="objective-item" style="background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(102,126,234,0.05)); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="objective-icon" style="font-size: 2.5rem;">⚡</div>
+                            <div class="objective-content">
+                                <h3 style="margin: 0; font-size: 1.2rem; color: #333;">Gradient Descent</h3>
+                                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666; line-height: 1.4;">The algorithm that automatically improves AI predictions</p>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="objective-item">
-                        <div class="objective-icon">👣</div>
-                        <div class="objective-content">
-                            <h3>Step Sizes & Learning Rate</h3>
-                            <p>How big steps the AI takes when learning</p>
+                    <div id="concept3" class="objective-item" style="background: linear-gradient(135deg, rgba(118,75,162,0.1), rgba(118,75,162,0.05)); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="objective-icon" style="font-size: 2.5rem;">👣</div>
+                            <div class="objective-content">
+                                <h3 style="margin: 0; font-size: 1.2rem; color: #333;">Step Sizes & Learning Rate</h3>
+                                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666; line-height: 1.4;">How big steps the AI takes when learning</p>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="objective-item">
-                        <div class="objective-icon">📊</div>
-                        <div class="objective-content">
-                            <h3>Training Data</h3>
-                            <p>Examples that teach the AI what's correct</p>
+                    <div id="concept4" class="objective-item" style="background: linear-gradient(135deg, rgba(45,213,115,0.1), rgba(45,213,115,0.05)); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="objective-icon" style="font-size: 2.5rem;">📊</div>
+                            <div class="objective-content">
+                                <h3 style="margin: 0; font-size: 1.2rem; color: #333;">Training Data</h3>
+                                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666; line-height: 1.4;">Examples that teach the AI what's correct</p>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="objective-item">
-                        <div class="objective-icon">🔍</div>
-                        <div class="objective-content">
-                            <h3>Training Features</h3>
-                            <p>The specific details AI looks at to make predictions</p>
+                    <div id="concept5" class="objective-item" style="background: linear-gradient(135deg, rgba(243,150,10,0.1), rgba(243,150,10,0.05)); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="objective-icon" style="font-size: 2.5rem;">🔍</div>
+                            <div class="objective-content">
+                                <h3 style="margin: 0; font-size: 1.2rem; color: #333;">Training Features</h3>
+                                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666; line-height: 1.4;">The specific details AI looks at to make predictions</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="final-goal">
-                    <h3>🚀 The Big Picture</h3>
-                    <p>At the end, we'll put it all together: <strong>using gradient descent with training data and training features to create a real machine learning model!</strong></p>
+                    
+                    <div id="concept6" class="objective-item" style="background: linear-gradient(135deg, rgba(147,51,234,0.1), rgba(147,51,234,0.05)); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="objective-icon" style="font-size: 2.5rem;">🚀</div>
+                            <div class="objective-content">
+                                <h3 style="margin: 0; font-size: 1.2rem; color: #333;">Putting It All Together</h3>
+                                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666; line-height: 1.4;">Using gradient descent with training data and features to create a real ML model</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
                 ${createStandardNavigation()}
@@ -62,51 +76,104 @@ function createInstructionPart1() {
     
     // Initialize navigation
     initializeNavigation('ip1', 'createInstructionPart1');
+    
+    // Add interactivity
+    setTimeout(() => {
+        // Hover effects for concept cards
+        const concepts = document.querySelectorAll('.objective-item');
+        concepts.forEach((concept, index) => {
+            concept.addEventListener('mouseenter', () => {
+                concept.style.transform = 'translateY(-5px)';
+                concept.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+                concept.style.borderColor = ['#ff6347', '#667eea', '#764ba2', '#2dd573', '#f3960a', '#9333ea'][index];
+            });
+            concept.addEventListener('mouseleave', () => {
+                concept.style.transform = 'translateY(0)';
+                concept.style.boxShadow = 'none';
+                concept.style.borderColor = 'transparent';
+            });
+        });
+    }, 100);
 }
 
 function createInstructionPart2() {
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
-            <div class="level-content celebration">
-                <h1>📉 Understanding Loss</h1>
-                <p><strong>Loss</strong> is one of the most important concepts in AI. It's a number that tells us how wrong our predictions are.</p>
+            <div class="level-content celebration" style="padding: 20px; max-width: 1200px; margin: 0 auto;">
+                <h1 style="font-size: 2.3rem; margin-bottom: 20px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">📉 Understanding Loss</h1>
                 
-                <div class="concept-explanation">
-                    <div class="concept-visual">
-                        <div class="loss-example">
-                            <h3>🎯 Think of it like target practice:</h3>
-                            <ul class="target-list">
-                                <li><strong>Perfect shot (bullseye)</strong> → Loss = 0</li>
-                                <li><strong>Close to center</strong> → Low loss</li>
-                                <li><strong>Far from center</strong> → High loss</li>
-                                <li><strong>Complete miss</strong> → Very high loss</li>
-                            </ul>
+                <!-- Reusing concept1 div styling for familiarity -->
+                <div style="background: linear-gradient(135deg, rgba(255,99,71,0.1), rgba(255,99,71,0.05)); border-radius: 12px; padding: 25px; margin: 20px auto; max-width: 800px; border: 2px solid #ff6347;">
+                    <div style="display: flex; align-items: flex-start; gap: 20px;">
+                        <div class="objective-icon" style="font-size: 3rem;">📉</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0 0 15px 0; font-size: 1.4rem; color: #333;">Loss: How Wrong Your AI Is</h3>
+                            <p style="font-size: 1.05rem; color: #555; line-height: 1.6; margin-bottom: 15px;"><strong>Loss</strong> is the most important concept in AI. It's simply a number that tells us how wrong our predictions are.</p>
+                            <p style="font-size: 1rem; color: #666; line-height: 1.5;">The goal of AI is always the same: <strong style="color: #ff6347;">minimize the loss</strong> to make better predictions!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
+                    <div style="background: rgba(255,255,255,0.5); border-radius: 12px; padding: 20px; text-align: center;">
+                        <h3 style="color: #333; margin-bottom: 15px;">🎯 Think: Target Practice</h3>
+                        <div style="display: flex; flex-direction: column; gap: 10px; text-align: left;">
+                            <div style="display: flex; align-items: center; gap: 10px; padding: 8px; background: rgba(45,213,115,0.1); border-radius: 8px;">
+                                <span style="font-size: 1.5rem;">🎯</span>
+                                <div>
+                                    <strong style="color: #2dd573;">Bullseye!</strong>
+                                    <div style="font-size: 0.9rem; color: #666;">Loss = 0 (Perfect!)</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px; padding: 8px; background: rgba(243,150,10,0.1); border-radius: 8px;">
+                                <span style="font-size: 1.5rem;">⭕</span>
+                                <div>
+                                    <strong style="color: #f3960a;">Near center</strong>
+                                    <div style="font-size: 0.9rem; color: #666;">Loss = Small number</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px; padding: 8px; background: rgba(255,99,71,0.1); border-radius: 8px;">
+                                <span style="font-size: 1.5rem;">❌</span>
+                                <div>
+                                    <strong style="color: #ff6347;">Missed completely</strong>
+                                    <div style="font-size: 0.9rem; color: #666;">Loss = Big number!</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="concept-content">
-                        <h3>In AI terms:</h3>
-                        <div class="ai-loss-explanation">
-                            <div class="loss-item good">
-                                <span class="loss-icon">✅</span>
-                                <span class="loss-text"><strong>AI predicts 75, actual is 75</strong> → Loss = 0 (Perfect!)</span>
+                    <div style="background: rgba(255,255,255,0.5); border-radius: 12px; padding: 20px; text-align: center;">
+                        <h3 style="color: #333; margin-bottom: 15px;">🤖 In AI Terms</h3>
+                        <div style="display: flex; flex-direction: column; gap: 10px; text-align: left;">
+                            <div style="display: flex; align-items: center; gap: 10px; padding: 8px; background: rgba(45,213,115,0.1); border-radius: 8px;">
+                                <span style="font-size: 1.5rem;">✅</span>
+                                <div>
+                                    <strong style="color: #2dd573;">Predict: 75, Actual: 75</strong>
+                                    <div style="font-size: 0.9rem; color: #666;">Loss = 0 (Nailed it!)</div>
+                                </div>
                             </div>
-                            <div class="loss-item okay">
-                                <span class="loss-icon">⚠️</span>
-                                <span class="loss-text"><strong>AI predicts 70, actual is 75</strong> → Loss = 25 (Pretty good)</span>
+                            <div style="display: flex; align-items: center; gap: 10px; padding: 8px; background: rgba(243,150,10,0.1); border-radius: 8px;">
+                                <span style="font-size: 1.5rem;">⚠️</span>
+                                <div>
+                                    <strong style="color: #f3960a;">Predict: 70, Actual: 75</strong>
+                                    <div style="font-size: 0.9rem; color: #666;">Loss = 25 (Pretty close)</div>
+                                </div>
                             </div>
-                            <div class="loss-item bad">
-                                <span class="loss-icon">❌</span>
-                                <span class="loss-text"><strong>AI predicts 50, actual is 75</strong> → Loss = 625 (Way off!)</span>
+                            <div style="display: flex; align-items: center; gap: 10px; padding: 8px; background: rgba(255,99,71,0.1); border-radius: 8px;">
+                                <span style="font-size: 1.5rem;">❌</span>
+                                <div>
+                                    <strong style="color: #ff6347;">Predict: 50, Actual: 75</strong>
+                                    <div style="font-size: 0.9rem; color: #666;">Loss = 625 (Way off!)</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="next-preview">
-                    <h3>🤖 Coming up: Level 1</h3>
-                    <p>You'll help a robot find its optimal energy level by minimizing loss. The goal: get that loss down to zero!</p>
+                <div style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; padding: 20px; color: white; text-align: center; margin: 20px 0;">
+                    <h3 style="margin: 0 0 10px 0; font-size: 1.2rem;">🎮 Coming up: Level 1 - Robot Energy Challenge</h3>
+                    <p style="margin: 0; font-size: 1rem;">You'll help a robot find its optimal energy level by minimizing loss. Can you get the loss down to zero?</p>
                 </div>
                 
                 ${createStandardNavigation()}
@@ -122,45 +189,77 @@ function createInstructionPart3() {
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
-            <div class="level-content celebration">
-                <h1>⚡ Introducing Gradient Descent</h1>
-                <p>Great job! You just learned how <strong>loss</strong> works by manually finding the optimal energy level.</p>
+            <div class="level-content celebration" style="padding: 20px; max-width: 1200px; margin: 0 auto;">
+                <h1 style="font-size: 2.3rem; margin-bottom: 20px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">⚡ Introducing Gradient Descent</h1>
                 
-                <div class="key-insight">
-                    <div class="insight-icon">💡</div>
-                    <div class="insight-text">
-                        <strong>But what if the AI could do this automatically?</strong><br>
-                        That's exactly what <strong>gradient descent</strong> does!
+                <!-- Reusing concept2 div styling for familiarity -->
+                <div style="background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(102,126,234,0.05)); border-radius: 12px; padding: 25px; margin: 20px auto; max-width: 800px; border: 2px solid #667eea;">
+                    <div style="display: flex; align-items: flex-start; gap: 20px;">
+                        <div class="objective-icon" style="font-size: 3rem;">⚡</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0 0 15px 0; font-size: 1.4rem; color: #333;">Gradient Descent: AI's Automatic Optimizer</h3>
+                            <p style="font-size: 1.05rem; color: #555; line-height: 1.6; margin-bottom: 15px;">Great job manually finding the optimal energy! But what if <strong>AI could do this automatically?</strong></p>
+                            <p style="font-size: 1rem; color: #666; line-height: 1.5;">That's exactly what <strong style="color: #667eea;">gradient descent</strong> does - it's an algorithm that automatically finds the values that minimize loss!</p>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="gradient-preview">
-                    <h3>🎯 Gradient Descent Preview</h3>
-                    <p>Instead of you manually adjusting the energy level, <strong>gradient descent</strong> is an algorithm that:</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
+                    <div style="background: rgba(255,255,255,0.5); border-radius: 12px; padding: 20px;">
+                        <h3 style="color: #333; margin-bottom: 15px; text-align: center;">🔄 How It Works</h3>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div style="display: flex; align-items: center; gap: 15px; padding: 10px; background: rgba(102,126,234,0.1); border-radius: 8px;">
+                                <span style="background: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">1</span>
+                                <div style="flex: 1;">
+                                    <strong style="color: #333;">Check the loss</strong>
+                                    <div style="font-size: 0.85rem; color: #666;">How wrong are we?</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 15px; padding: 10px; background: rgba(102,126,234,0.1); border-radius: 8px;">
+                                <span style="background: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">2</span>
+                                <div style="flex: 1;">
+                                    <strong style="color: #333;">Calculate direction</strong>
+                                    <div style="font-size: 0.85rem; color: #666;">Should we go up or down?</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 15px; padding: 10px; background: rgba(102,126,234,0.1); border-radius: 8px;">
+                                <span style="background: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">3</span>
+                                <div style="flex: 1;">
+                                    <strong style="color: #333;">Take a step</strong>
+                                    <div style="font-size: 0.85rem; color: #666;">Move to reduce loss</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 15px; padding: 10px; background: rgba(102,126,234,0.1); border-radius: 8px;">
+                                <span style="background: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">4</span>
+                                <div style="flex: 1;">
+                                    <strong style="color: #333;">Repeat until optimal</strong>
+                                    <div style="font-size: 0.85rem; color: #666;">Keep going until loss = 0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     
-                    <div class="gd-steps">
-                        <div class="gd-step">
-                            <span class="step-number">1</span>
-                            <span class="step-text">Looks at the current loss</span>
-                        </div>
-                        <div class="gd-step">
-                            <span class="step-number">2</span>
-                            <span class="step-text">Figures out which direction to move</span>
-                        </div>
-                        <div class="gd-step">
-                            <span class="step-number">3</span>
-                            <span class="step-text">Takes a step to reduce the loss</span>
-                        </div>
-                        <div class="gd-step">
-                            <span class="step-number">4</span>
-                            <span class="step-text">Repeats until loss is minimized</span>
+                    <div style="background: rgba(255,255,255,0.5); border-radius: 12px; padding: 20px;">
+                        <h3 style="color: #333; margin-bottom: 15px; text-align: center;">🎯 Manual vs Automatic</h3>
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+                            <div style="padding: 15px; background: rgba(255,99,71,0.1); border-radius: 8px; border-left: 4px solid #ff6347;">
+                                <strong style="color: #ff6347;">👨‍💻 Level 1: Manual</strong>
+                                <div style="font-size: 0.9rem; color: #666; margin-top: 5px;">You moved the slider by hand</div>
+                                <div style="font-size: 0.85rem; color: #888; margin-top: 3px;">Trial and error, using hints</div>
+                            </div>
+                            <div style="text-align: center; font-size: 1.5rem; color: #667eea;">↓</div>
+                            <div style="padding: 15px; background: rgba(102,126,234,0.1); border-radius: 8px; border-left: 4px solid #667eea;">
+                                <strong style="color: #667eea;">🤖 Level 2: Gradient Descent</strong>
+                                <div style="font-size: 0.9rem; color: #666; margin-top: 5px;">AI moves the slider itself</div>
+                                <div style="font-size: 0.85rem; color: #888; margin-top: 3px;">Mathematical optimization, no hints needed!</div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="next-preview">
-                    <h3>🤖 Coming up: Level 2</h3>
-                    <p>You'll see gradient descent in action! Watch it automatically find the optimal solution without any manual tuning.</p>
+                <div style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; padding: 20px; color: white; text-align: center; margin: 20px 0;">
+                    <h3 style="margin: 0 0 10px 0; font-size: 1.2rem;">🎮 Coming up: Level 2 - Watch AI in Action!</h3>
+                    <p style="margin: 0; font-size: 1rem;">See gradient descent automatically find the optimal solution. No manual tuning required!</p>
                 </div>
                 
                 ${createStandardNavigation()}
@@ -170,57 +269,84 @@ function createInstructionPart3() {
     
     // Initialize navigation
     initializeNavigation('ip3', 'createInstructionPart3');
+    
+    // Add subtle animations
+    setTimeout(() => {
+        const steps = document.querySelectorAll('[style*="background: #667eea"]');
+        steps.forEach((step, index) => {
+            setTimeout(() => {
+                step.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    step.style.transform = 'scale(1)';
+                }, 200);
+            }, index * 300);
+        });
+    }, 500);
 }
 
 function createInstructionPart4() {
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
-            <div class="level-content celebration">
-                <h1>🔢 Multiple Variables</h1>
-                <p>Excellent! You've seen gradient descent automatically minimize loss for one variable. But real AI problems are more complex...</p>
+            <div class="level-content celebration" style="padding: 12px; max-width: 1100px; margin: 0 auto;">
+                <h1 style="font-size: 1.8rem; margin-bottom: 12px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🔢 Multiple Variables</h1>
                 
-                <div class="complexity-progression">
-                    <div class="complexity-level">
-                        <h3>✅ What you've learned so far:</h3>
-                        <div class="simple-equation">
-                            <strong>1 Variable:</strong> Energy Level → Loss
-                        </div>
-                        <p>Just one dial to turn, one thing to optimize.</p>
-                    </div>
-                    
-                    <div class="complexity-arrow">↓</div>
-                    
-                    <div class="complexity-level">
-                        <h3>🎯 What's next:</h3>
-                        <div class="complex-equation">
-                            <strong>Multiple Variables:</strong> Yellow + Blue → Loss
-                        </div>
-                        <p>Multiple dials to turn, all affecting the same loss!</p>
-                    </div>
-                </div>
-                
-                <div class="real-world-examples">
-                    <h3>🌍 Why this matters in real AI:</h3>
-                    <div class="example-grid">
-                        <div class="example-item">
-                            <strong>🖼️ Image Recognition:</strong><br>
-                            Millions of pixel values → "Is this a cat?"
-                        </div>
-                        <div class="example-item">
-                            <strong>💬 ChatGPT:</strong><br>
-                            Billions of parameters → "What word comes next?"
-                        </div>
-                        <div class="example-item">
-                            <strong>🚗 Self-driving cars:</strong><br>
-                            Sensor data + camera feeds → "Should I brake?"
+                <!-- Main concept card -->
+                <div style="background: linear-gradient(135deg, rgba(118,75,162,0.1), rgba(118,75,162,0.05)); border-radius: 10px; padding: 15px; margin: 12px auto; max-width: 750px; border: 2px solid #764ba2;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div class="objective-icon" style="font-size: 2rem;">🎯</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0 0 8px 0; font-size: 1.1rem; color: #333;">Real AI Uses Many Variables</h3>
+                            <p style="font-size: 0.9rem; color: #555; line-height: 1.4; margin: 0;">You've mastered <strong>one variable</strong>. But real AI has <strong style="color: #764ba2;">millions</strong> of variables!</p>
                         </div>
                     </div>
                 </div>
                 
-                <div class="next-preview">
-                    <h3>🧙‍♀️ Coming up: Level 3</h3>
-                    <p>Help a witch brew the perfect potion by balancing TWO ingredients. You'll see how multiple variables can affect the same loss function!</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0;">
+                    <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 12px;">
+                        <h3 style="color: #333; margin: 0 0 8px 0; text-align: center; font-size: 1rem;">🌐 Real Examples</h3>
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <div style="padding: 6px; background: rgba(102,126,234,0.1); border-radius: 5px; display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.2rem;">🖼️</span>
+                                <div style="flex: 1;">
+                                    <strong style="color: #667eea; font-size: 0.85rem;">Images</strong>
+                                    <div style="font-size: 0.7rem; color: #666;">1M pixels = 1M vars</div>
+                                </div>
+                            </div>
+                            <div style="padding: 6px; background: rgba(118,75,162,0.1); border-radius: 5px; display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.2rem;">💬</span>
+                                <div style="flex: 1;">
+                                    <strong style="color: #764ba2; font-size: 0.85rem;">ChatGPT</strong>
+                                    <div style="font-size: 0.7rem; color: #666;">175B parameters!</div>
+                                </div>
+                            </div>
+                            <div style="padding: 6px; background: rgba(243,150,10,0.1); border-radius: 5px; display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 1.2rem;">🚗</span>
+                                <div style="flex: 1;">
+                                    <strong style="color: #f3960a; font-size: 0.85rem;">Self-Driving</strong>
+                                    <div style="font-size: 0.7rem; color: #666;">Speed, steering, braking</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 12px;">
+                        <h3 style="color: #333; margin: 0 0 8px 0; text-align: center; font-size: 1rem;">🧙‍♀️ Next: 2 Variables</h3>
+                        <div style="text-align: center; padding: 10px;">
+                            <div style="font-size: 2rem; margin-bottom: 5px;">🧪</div>
+                            <h4 style="color: #764ba2; margin: 5px 0; font-size: 0.9rem;">Magic Potion</h4>
+                            <p style="color: #666; font-size: 0.8rem; margin: 5px 0;">Balance <strong>TWO</strong> ingredients!</p>
+                            <div style="margin-top: 10px; display: flex; justify-content: center; gap: 12px; align-items: center;">
+                                <div style="background: #ffd700; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem;">Y</div>
+                                <div style="font-size: 1rem;">+</div>
+                                <div style="background: #4169e1; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 0.8rem;">B</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 8px; padding: 12px; color: white; text-align: center; margin: 12px 0;">
+                    <p style="margin: 0; font-size: 0.85rem;"><strong>The magic:</strong> Gradient descent optimizes ALL variables at once!</p>
                 </div>
                 
                 ${createStandardNavigation()}
@@ -236,57 +362,43 @@ function createInstructionPart5() {
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
-            <div class="level-content celebration">
-                <h1>⚡ Gradient Descent + Multiple Variables</h1>
-                <p>Amazing work! You manually balanced multiple ingredients to minimize loss. Now here's the magic...</p>
+            <div class="level-content celebration" style="padding: 20px; max-width: 1200px; margin: 0 auto;">
+                <h1 style="font-size: 2.3rem; margin-bottom: 20px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">⚡ Gradient Descent Scales Up!</h1>
                 
-                <div class="key-revelation">
-                    <div class="revelation-icon">🤯</div>
-                    <div class="revelation-text">
-                        <strong>Gradient descent works on multiple variables too!</strong><br>
-                        It can optimize ALL the variables simultaneously.
+                <!-- Main insight card -->
+                <div style="background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(102,126,234,0.05)); border-radius: 12px; padding: 25px; margin: 20px auto; max-width: 800px; border: 2px solid #667eea;">
+                    <div style="display: flex; align-items: flex-start; gap: 20px;">
+                        <div class="objective-icon" style="font-size: 3rem;">🤯</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0 0 15px 0; font-size: 1.4rem; color: #333;">The Same Algorithm Works Everywhere!</h3>
+                            <p style="font-size: 1.05rem; color: #555; line-height: 1.6;">Amazing news: <strong style="color: #667eea;">Gradient descent works on multiple variables too!</strong> Whether it's 1 variable or 1 billion, the same algorithm can optimize them all simultaneously.</p>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="multivariable-explanation">
-                    <h3>🎯 How it works with multiple variables:</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin: 30px 0;">
+                    <div style="background: rgba(255,255,255,0.5); border-radius: 12px; padding: 20px; text-align: center;">
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">🤖</div>
+                        <h4 style="color: #333; margin: 10px 0;">1 Variable</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Energy → Loss<br><em>What you just did</em></p>
+                    </div>
                     
-                    <div class="gd-comparison">
-                        <div class="gd-single">
-                            <h4>Single Variable (Level 2):</h4>
-                            <div class="variable-visual">
-                                <span class="variable">Energy</span>
-                                <span class="arrow">→</span>
-                                <span class="loss">Loss</span>
-                            </div>
-                            <p>One step in one direction</p>
-                        </div>
-                        
-                        <div class="gd-multi">
-                            <h4>Multiple Variables (Level 4):</h4>
-                            <div class="variable-visual">
-                                <span class="variable">Yellow</span>
-                                <span class="variable">Blue</span>
-                                <span class="variable">Red</span>
-                                <span class="variable">Green</span>
-                                <span class="variable">Purple</span>
-                                <span class="variable">Orange</span>
-                                <span class="arrow">→</span>
-                                <span class="loss">Loss</span>
-                            </div>
-                            <p>Steps in multiple directions simultaneously!</p>
-                        </div>
+                    <div style="background: rgba(255,255,255,0.5); border-radius: 12px; padding: 20px; text-align: center;">
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">🧪</div>
+                        <h4 style="color: #667eea; margin: 10px 0;">6 Variables</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Six ingredients → Loss<br><em>Coming up next!</em></p>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.5); border-radius: 12px; padding: 20px; text-align: center;">
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">💬</div>
+                        <h4 style="color: #764ba2; margin: 10px 0;">175B Variables</h4>
+                        <p style="color: #666; font-size: 0.9rem;">ChatGPT's parameters<br><em>Same algorithm!</em></p>
                     </div>
                 </div>
                 
-                <div class="gradient-power">
-                    <h3>💪 The Power of Gradient Descent</h3>
-                    <p>Whether it's 1 variable or 1 million variables, gradient descent can handle it. This is why it powers everything from simple robots to ChatGPT!</p>
-                </div>
-                
-                <div class="next-preview">
-                    <h3>🧙‍♀️ Coming up: Level 4</h3>
-                    <p>Watch gradient descent automatically balance SIX potion ingredients at once. No manual tuning required!</p>
+                <div style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; padding: 20px; color: white; text-align: center; margin: 20px 0;">
+                    <h3 style="margin: 0 0 10px 0; font-size: 1.2rem;">🎮 Level 4: Watch the Magic</h3>
+                    <p style="margin: 0; font-size: 1rem;">See gradient descent automatically balance SIX potion ingredients at once!</p>
                 </div>
                 
                 ${createStandardNavigation()}
@@ -302,60 +414,93 @@ function createInstructionPart6() {
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
-            <div class="level-content celebration">
-                <h1>🔬 How Gradient Descent Really Works</h1>
-                <p>You've seen gradient descent in action, but how does it actually work? Let's peek under the hood!</p>
+            <div class="level-content celebration" style="padding: 15px; max-width: 1200px; margin: 0 auto;">
+                <h1 style="font-size: 2rem; margin-bottom: 15px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🔬 How Gradient Descent Works</h1>
                 
-                <div class="gradient-deep-dive">
-                    <h3>🎯 The Secret: Mathematical Slopes</h3>
-                    <p>Gradient descent works by calculating the <strong>slope</strong> (gradient) of the loss function, then moving in the opposite direction.</p>
-                    
-                    <div class="slope-explanation">
-                        <div class="slope-visual">
-                            <h4>📈 Think of a hill:</h4>
-                            <ul class="hill-analogy">
-                                <li><strong>Upward slope</strong> → Move left (decrease value)</li>
-                                <li><strong>Downward slope</strong> → Move right (increase value)</li>
-                                <li><strong>Flat (no slope)</strong> → You've found the minimum!</li>
-                            </ul>
+                <!-- Reusing concept2 div styling for consistency -->
+                <div id="concept2" style="background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(102,126,234,0.05)); border-radius: 12px; padding: 20px; margin: 15px auto; max-width: 800px; border: 2px solid #667eea;">
+                    <div style="display: flex; align-items: flex-start; gap: 15px;">
+                        <div class="objective-icon" style="font-size: 2.5rem;">⚡</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0 0 10px 0; font-size: 1.2rem; color: #333;">The Algorithm Behind the Magic</h3>
+                            <p style="font-size: 0.95rem; color: #555; line-height: 1.5;">We've seen that <strong>gradient descent is a tool for minimizing loss</strong>, but how does it work more specifically? It uses <strong style="color: #667eea;">mathematical slopes</strong> to find the fastest path downhill!</p>
                         </div>
-                        
-                        <div class="math-intuition">
-                            <h4>🧮 In math terms:</h4>
-                            <div class="formula-explanation">
-                                <div class="formula">
-                                    <strong>New Value = Old Value - (Learning Rate × Gradient)</strong>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+                    <!-- Hill Climbing Analogy -->
+                    <div style="background: rgba(255,255,255,0.5); border-radius: 10px; padding: 15px;">
+                        <h3 style="color: #333; margin: 0 0 10px 0; font-size: 1.1rem; text-align: center;">⛰️ Like Rolling Downhill</h3>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div style="display: flex; align-items: center; gap: 10px; padding: 8px; background: rgba(255,99,71,0.1); border-radius: 6px;">
+                                <span style="font-size: 1.3rem;">↗️</span>
+                                <div>
+                                    <strong style="color: #ff6347; font-size: 0.9rem;">Upward slope</strong>
+                                    <div style="font-size: 0.8rem; color: #666;">Go left ← (decrease)</div>
                                 </div>
-                                <div class="formula-breakdown">
-                                    <p><strong>Learning Rate:</strong> How big steps to take</p>
-                                    <p><strong>Gradient:</strong> Which direction to go</p>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px; padding: 8px; background: rgba(102,126,234,0.1); border-radius: 6px;">
+                                <span style="font-size: 1.3rem;">↘️</span>
+                                <div>
+                                    <strong style="color: #667eea; font-size: 0.9rem;">Downward slope</strong>
+                                    <div style="font-size: 0.8rem; color: #666;">Go right → (increase)</div>
                                 </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px; padding: 8px; background: rgba(45,213,115,0.1); border-radius: 6px;">
+                                <span style="font-size: 1.3rem;">➡️</span>
+                                <div>
+                                    <strong style="color: #2dd573; font-size: 0.9rem;">Flat (no slope)</strong>
+                                    <div style="font-size: 0.8rem; color: #666;">Found minimum! ✓</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- The Formula -->
+                    <div style="background: rgba(255,255,255,0.5); border-radius: 10px; padding: 15px;">
+                        <h3 style="color: #333; margin: 0 0 10px 0; font-size: 1.1rem; text-align: center;">🧮 The Math Formula</h3>
+                        <div style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 8px; padding: 12px; color: white; text-align: center; margin-bottom: 10px;">
+                            <div style="font-size: 0.95rem; font-weight: bold;">New = Old - (LR × Gradient)</div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <div style="padding: 8px; background: rgba(102,126,234,0.05); border-radius: 6px; border-left: 3px solid #667eea;">
+                                <strong style="color: #667eea; font-size: 0.85rem;">Gradient</strong>
+                                <div style="font-size: 0.8rem; color: #666;">The slope (which way)</div>
+                            </div>
+                            <div style="padding: 8px; background: rgba(118,75,162,0.05); border-radius: 6px; border-left: 3px solid #764ba2;">
+                                <strong style="color: #764ba2; font-size: 0.85rem;">Learning Rate (LR)</strong>
+                                <div style="font-size: 0.8rem; color: #666;">Step size (how far)</div>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="learning-rate-preview">
-                    <h3>⚡ Step Sizes & Learning Rates</h3>
-                    <div class="step-size-grid">
-                        <div class="step-example">
-                            <strong>🐌 Small steps (0.01):</strong><br>
-                            Safe but slow
+                <!-- Learning Rate Preview -->
+                <div style="background: rgba(255,255,255,0.5); border-radius: 10px; padding: 15px; margin: 15px 0;">
+                    <h3 style="color: #333; margin: 0 0 10px 0; font-size: 1.1rem; text-align: center;">👣 Step Size Matters!</h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                        <div style="text-align: center; padding: 10px; background: rgba(255,99,71,0.1); border-radius: 8px;">
+                            <div style="font-size: 1.8rem;">🐌</div>
+                            <strong style="color: #ff6347; font-size: 0.9rem;">Tiny (0.01)</strong>
+                            <div style="font-size: 0.75rem; color: #666; margin-top: 3px;">Safe but slooow</div>
                         </div>
-                        <div class="step-example">
-                            <strong>🚶 Medium steps (0.1):</strong><br>
-                            Good balance
+                        <div style="text-align: center; padding: 10px; background: rgba(102,126,234,0.1); border-radius: 8px;">
+                            <div style="font-size: 1.8rem;">🚶</div>
+                            <strong style="color: #667eea; font-size: 0.9rem;">Medium (0.1)</strong>
+                            <div style="font-size: 0.75rem; color: #666; margin-top: 3px;">Just right!</div>
                         </div>
-                        <div class="step-example">
-                            <strong>🏃 Large steps (1.0):</strong><br>
-                            Fast but might overshoot
+                        <div style="text-align: center; padding: 10px; background: rgba(118,75,162,0.1); border-radius: 8px;">
+                            <div style="font-size: 1.8rem;">🏃</div>
+                            <strong style="color: #764ba2; font-size: 0.9rem;">Large (1.0)</strong>
+                            <div style="font-size: 0.75rem; color: #666; margin-top: 3px;">Fast but risky</div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="next-preview">
-                    <h3>📈 Coming up: Deep Dive</h3>
-                    <p>Now you'll get hands-on experience with the math! You'll manually explore functions, see gradients in action, and experiment with different learning rates.</p>
+                <div style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 10px; padding: 15px; color: white; text-align: center; margin: 15px 0;">
+                    <h3 style="margin: 0 0 8px 0; font-size: 1.1rem;">📈 Coming up: Interactive Deep Dive!</h3>
+                    <p style="margin: 0; font-size: 0.9rem;">Get hands-on with functions, see gradients in action, and experiment with different learning rates!</p>
                 </div>
                 
                 ${createStandardNavigation()}
@@ -365,99 +510,285 @@ function createInstructionPart6() {
     
     // Initialize navigation
     initializeNavigation('ip6', 'createInstructionPart6');
+    
+    // Add subtle hover animation for the formula
+    setTimeout(() => {
+        const formulaBox = document.querySelector('[style*="New = Old"]')?.parentElement;
+        if (formulaBox) {
+            formulaBox.addEventListener('mouseenter', () => {
+                formulaBox.style.transform = 'scale(1.05)';
+                formulaBox.style.transition = 'transform 0.2s ease';
+            });
+            formulaBox.addEventListener('mouseleave', () => {
+                formulaBox.style.transform = 'scale(1)';
+            });
+        }
+    }, 100);
+}
+
+function createInstructionPart8() {
+    const container = document.getElementById('app');
+    container.innerHTML = `
+        <div class="current-level">
+            <div class="level-content celebration" style="padding: 20px; max-width: 1200px; margin: 0 auto;">
+                <h1 style="font-size: 2.3rem; margin-bottom: 20px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">📊 Introduction to Training Data</h1>
+                
+                <!-- Main concept card -->
+                <div style="background: linear-gradient(135deg, rgba(45,213,115,0.1), rgba(45,213,115,0.05)); border-radius: 12px; padding: 25px; margin: 20px auto; max-width: 800px; border: 2px solid #2dd573;">
+                    <div style="display: flex; align-items: flex-start; gap: 20px;">
+                        <div class="objective-icon" style="font-size: 3rem;">💡</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0 0 15px 0; font-size: 1.4rem; color: #333;">The Missing Piece: Examples!</h3>
+                            <p style="font-size: 1.05rem; color: #555; line-height: 1.6; margin-bottom: 15px;">You've learned how gradient descent finds optimal values, but <strong>how does AI know what the right answer should be?</strong></p>
+                            <p style="font-size: 1rem; color: #666; line-height: 1.5;">That's where <strong style="color: #2dd573;">training data</strong> comes in - real examples that show the AI what correct looks like!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
+                    <!-- Without Training Data -->
+                    <div style="background: rgba(255,255,255,0.5); border-radius: 12px; padding: 20px;">
+                        <h3 style="color: #ff6347; margin-bottom: 15px; text-align: center;">❌ Without Training Data</h3>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div style="display: flex; align-items: center; gap: 15px; padding: 10px; background: rgba(255,99,71,0.1); border-radius: 8px;">
+                                <span style="font-size: 1.5rem;">🤷</span>
+                                <div style="flex: 1;">
+                                    <strong style="color: #333;">Just Guessing</strong>
+                                    <div style="font-size: 0.85rem; color: #666;">No idea what's right</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 15px; padding: 10px; background: rgba(255,99,71,0.1); border-radius: 8px;">
+                                <span style="font-size: 1.5rem;">🎲</span>
+                                <div style="flex: 1;">
+                                    <strong style="color: #333;">Random Attempts</strong>
+                                    <div style="font-size: 0.85rem; color: #666;">Hope to get lucky</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 15px; padding: 10px; background: rgba(255,99,71,0.1); border-radius: 8px;">
+                                <span style="font-size: 1.5rem;">😕</span>
+                                <div style="flex: 1;">
+                                    <strong style="color: #333;">No Learning</strong>
+                                    <div style="font-size: 0.85rem; color: #666;">Can't improve systematically</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- With Training Data -->
+                    <div style="background: rgba(255,255,255,0.5); border-radius: 12px; padding: 20px;">
+                        <h3 style="color: #2dd573; margin-bottom: 15px; text-align: center;">✅ With Training Data</h3>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div style="display: flex; align-items: center; gap: 15px; padding: 10px; background: rgba(45,213,115,0.1); border-radius: 8px;">
+                                <span style="font-size: 1.5rem;">📚</span>
+                                <div style="flex: 1;">
+                                    <strong style="color: #333;">Learn from Examples</strong>
+                                    <div style="font-size: 0.85rem; color: #666;">See what worked before</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 15px; padding: 10px; background: rgba(45,213,115,0.1); border-radius: 8px;">
+                                <span style="font-size: 1.5rem;">🎯</span>
+                                <div style="flex: 1;">
+                                    <strong style="color: #333;">Find Patterns</strong>
+                                    <div style="font-size: 0.85rem; color: #666;">Discover what matters</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 15px; padding: 10px; background: rgba(45,213,115,0.1); border-radius: 8px;">
+                                <span style="font-size: 1.5rem;">📈</span>
+                                <div style="flex: 1;">
+                                    <strong style="color: #333;">Make Predictions</strong>
+                                    <div style="font-size: 0.85rem; color: #666;">Apply learned patterns</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Real World Examples -->
+                <div style="background: rgba(255,255,255,0.5); border-radius: 12px; padding: 20px; margin: 20px 0;">
+                    <h3 style="color: #333; margin-bottom: 15px; text-align: center; font-size: 1.2rem;">🌍 Real-World Training Data</h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                        <div style="text-align: center; padding: 15px; background: rgba(102,126,234,0.1); border-radius: 8px;">
+                            <div style="font-size: 2rem; margin-bottom: 8px;">📧</div>
+                            <strong style="color: #667eea; font-size: 0.95rem;">Spam Detection</strong>
+                            <div style="font-size: 0.8rem; color: #666; margin-top: 5px;">1000s of labeled emails<br>(spam vs not spam)</div>
+                        </div>
+                        <div style="text-align: center; padding: 15px; background: rgba(118,75,162,0.1); border-radius: 8px;">
+                            <div style="font-size: 2rem; margin-bottom: 8px;">🖼️</div>
+                            <strong style="color: #764ba2; font-size: 0.95rem;">Image Recognition</strong>
+                            <div style="font-size: 0.8rem; color: #666; margin-top: 5px;">Millions of photos<br>(cat, dog, car, etc.)</div>
+                        </div>
+                        <div style="text-align: center; padding: 15px; background: rgba(243,150,10,0.1); border-radius: 8px;">
+                            <div style="font-size: 2rem; margin-bottom: 8px;">🎬</div>
+                            <strong style="color: #f3960a; font-size: 0.95rem;">Netflix Recommendations</strong>
+                            <div style="font-size: 0.8rem; color: #666; margin-top: 5px;">Your watch history<br>(likes & dislikes)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Coming Up Next -->
+                <div style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; padding: 20px; color: white; text-align: center; margin: 20px 0;">
+                    <h3 style="margin: 0 0 10px 0; font-size: 1.2rem;">🐕 Coming up: Max Needs Your Help!</h3>
+                    <p style="margin: 0 0 10px 0; font-size: 1rem;">You'll help a dog named Max find his perfect bone size.</p>
+                    <div style="display: flex; justify-content: center; gap: 30px; align-items: center; margin-top: 15px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.8rem; margin-bottom: 5px;">🤔</div>
+                            <div style="font-size: 0.9rem;">First: Guess blindly</div>
+                        </div>
+                        <div style="font-size: 1.5rem;">→</div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.8rem; margin-bottom: 5px;">📊</div>
+                            <div style="font-size: 0.9rem;">Then: Use training data!</div>
+                        </div>
+                        <div style="font-size: 1.5rem;">→</div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.8rem; margin-bottom: 5px;">🎯</div>
+                            <div style="font-size: 0.9rem;">Success!</div>
+                        </div>
+                    </div>
+                </div>
+                
+                ${createStandardNavigation()}
+            </div>
+        </div>
+    `;
+    
+    // Initialize navigation
+    initializeNavigation('ip8', 'createInstructionPart8');
+    
+    // Add subtle animations
+    setTimeout(() => {
+        const cards = document.querySelectorAll('[style*="background: rgba"]');
+        cards.forEach((card, index) => {
+            card.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-3px)';
+                card.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+                card.style.boxShadow = 'none';
+            });
+        });
+    }, 100);
 }
 
 function createInstructionPart7() {
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
-            <div class="level-content celebration">
-                <h1>🎯 Learning Recap & What's Next</h1>
-                <p>Congratulations! You've mastered the fundamental building blocks of AI. Let's recap your journey and preview what's coming next.</p>
+            <div class="level-content celebration" style="padding: 20px; max-width: 1200px; margin: 0 auto;">
+                <h1 style="font-size: 2.3rem; margin-bottom: 20px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🎯 Progress Check & What's Next</h1>
                 
-                <div class="learning-recap">
-                    <h3>✅ What You've Mastered</h3>
-                    <div class="recap-grid">
-                        <div class="recap-item completed">
-                            <div class="recap-icon">📉</div>
-                            <div class="recap-content">
-                                <h4>Loss Functions</h4>
-                                <p>You understand how to measure prediction errors</p>
-                            </div>
+                <div class="learning-objectives" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 30px 0;">
+                    <!-- Completed concepts with checkmarks -->
+                    <div id="concept1" class="objective-item completed" style="background: linear-gradient(135deg, rgba(45,213,115,0.1), rgba(45,213,115,0.05)); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s ease; border: 2px solid #2dd573; position: relative;">
+                        <div style="position: absolute; top: 10px; right: 10px; background: #2dd573; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-weight: bold;">✓</span>
                         </div>
-                        
-                        <div class="recap-item completed">
-                            <div class="recap-icon">⚡</div>
-                            <div class="recap-content">
-                                <h4>Gradient Descent</h4>
-                                <p>You've seen the algorithm that automatically optimizes AI models</p>
-                            </div>
-                        </div>
-                        
-                        <div class="recap-item completed">
-                            <div class="recap-icon">🔢</div>
-                            <div class="recap-content">
-                                <h4>Multiple Variables</h4>
-                                <p>You can handle complex problems with many moving parts</p>
-                            </div>
-                        </div>
-                        
-                        <div class="recap-item completed">
-                            <div class="recap-icon">🧮</div>
-                            <div class="recap-content">
-                                <h4>Mathematical Intuition</h4>
-                                <p>You understand slopes, step sizes, and optimization</p>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="objective-icon" style="font-size: 2.5rem;">📉</div>
+                            <div class="objective-content">
+                                <h3 style="margin: 0; font-size: 1.2rem; color: #333;">Loss ✅</h3>
+                                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666; line-height: 1.4;">You mastered measuring how wrong predictions are</p>
                             </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="whats-next">
-                    <h3>🚀 What You'll Learn Next</h3>
-                    <p>Now we'll put these concepts together to build a complete machine learning system:</p>
                     
-                    <div class="upcoming-concepts">
-                        <div class="concept-item next">
-                            <div class="concept-icon">📊</div>
-                            <div class="concept-content">
-                                <h4>Training Data</h4>
-                                <p>Real examples that teach AI what's correct</p>
+                    <!-- Gradient Descent - partially complete (yellowish) -->
+                    <div id="concept2" class="objective-item in-progress" style="background: linear-gradient(135deg, rgba(243,150,10,0.1), rgba(243,150,10,0.05)); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s ease; border: 2px solid #f3960a; position: relative;">
+                        <div style="position: absolute; top: 10px; right: 10px; background: #f3960a; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-weight: bold;">~</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="objective-icon" style="font-size: 2.5rem;">⚡</div>
+                            <div class="objective-content">
+                                <h3 style="margin: 0; font-size: 1.2rem; color: #333;">Gradient Descent <span style="color: #f3960a;">⚡</span></h3>
+                                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666; line-height: 1.4;">Good progress! Still more to learn about optimization</p>
                             </div>
                         </div>
-                        
-                        <div class="concept-item next">
-                            <div class="concept-icon">👣</div>
-                            <div class="concept-content">
-                                <h4>Learning Rates & Step Sizes</h4>
-                                <p>Fine-tuning how fast your AI learns</p>
+                    </div>
+                    
+                    <div id="concept3" class="objective-item completed" style="background: linear-gradient(135deg, rgba(45,213,115,0.1), rgba(45,213,115,0.05)); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s ease; border: 2px solid #2dd573; position: relative;">
+                        <div style="position: absolute; top: 10px; right: 10px; background: #2dd573; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-weight: bold;">✓</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="objective-icon" style="font-size: 2.5rem;">👣</div>
+                            <div class="objective-content">
+                                <h3 style="margin: 0; font-size: 1.2rem; color: #333;">Step Sizes & Learning Rate ✅</h3>
+                                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666; line-height: 1.4;">You experimented with different learning speeds</p>
                             </div>
                         </div>
-                        
-                        <div class="concept-item next">
-                            <div class="concept-icon">🔍</div>
-                            <div class="concept-content">
-                                <h4>Training Features</h4>
-                                <p>The specific inputs AI uses to make predictions</p>
+                    </div>
+                    
+                    <!-- Training Data - now completed! -->
+                    <div id="concept4" class="objective-item completed" style="background: linear-gradient(135deg, rgba(45,213,115,0.1), rgba(45,213,115,0.05)); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s ease; border: 2px solid #2dd573; position: relative;">
+                        <div style="position: absolute; top: 10px; right: 10px; background: #2dd573; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">
+                            <span style="color: white; font-weight: bold;">✓</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="objective-icon" style="font-size: 2.5rem;">📊</div>
+                            <div class="objective-content">
+                                <h3 style="margin: 0; font-size: 1.2rem; color: #333;">Training Data ✅</h3>
+                                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666; line-height: 1.4;">You used examples to make better predictions!</p>
                             </div>
                         </div>
-                        
-                        <div class="concept-item final">
-                            <div class="concept-icon">🤖</div>
-                            <div class="concept-content">
-                                <h4>Complete ML Model</h4>
-                                <p>Using gradient descent with training data and features to create a real machine learning model</p>
+                    </div>
+                    
+                    <!-- Upcoming concepts -->
+                    <div id="concept5" class="objective-item upcoming" style="background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(102,126,234,0.05)); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="objective-icon" style="font-size: 2.5rem; opacity: 0.7;">🔍</div>
+                            <div class="objective-content">
+                                <h3 style="margin: 0; font-size: 1.2rem; color: #667eea;">Training Features <span style="color: #f3960a;">→ Next!</span></h3>
+                                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666; line-height: 1.4;">The inputs AI uses to make predictions</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="concept6" class="objective-item upcoming" style="background: linear-gradient(135deg, rgba(147,51,234,0.05), rgba(147,51,234,0.02)); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent; opacity: 0.8;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="objective-icon" style="font-size: 2.5rem; opacity: 0.6;">🚀</div>
+                            <div class="objective-content">
+                                <h3 style="margin: 0; font-size: 1.2rem; color: #888;">Complete ML Model</h3>
+                                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #888; line-height: 1.4;">Combining everything into a real AI system</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="immediate-next">
-                    <h3>🎯 Up Next: Training Data</h3>
-                    <div class="next-concept-preview">
-                        <div class="preview-icon">📚</div>
-                        <div class="preview-text">
-                            <p><strong>First, we'll quickly learn what training data is.</strong></p>
-                            <p>You'll help Max the dog find his perfect bone size, but this time you'll have examples from other dogs to guide your decision. This is exactly how real AI systems learn from data!</p>
+                <!-- Progress summary -->
+                <div style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; padding: 20px; color: white; text-align: center; margin: 20px 0;">
+                    <h3 style="margin: 0 0 10px 0; font-size: 1.2rem;">🎓 You're Making Great Progress!</h3>
+                    <div style="display: flex; align-items: center; gap: 10px; justify-content: center; margin: 15px 0;">
+                        <div style="background: white; height: 10px; border-radius: 5px; flex: 1; max-width: 400px;">
+                            <div style="background: linear-gradient(to right, #2dd573 0%, #2dd573 55%, #f3960a 55%, #f3960a 65%, #ddd 65%); height: 100%; border-radius: 5px;"></div>
+                        </div>
+                        <span style="font-size: 1rem;">4.5 of 6 concepts learned</span>
+                    </div>
+                    <p style="margin: 10px 0 0 0; font-size: 1rem;">Excellent! You've learned the core concepts and are ready for advanced topics.</p>
+                </div>
+                
+                <!-- Note about gradient descent -->
+                <div style="background: linear-gradient(135deg, rgba(243,150,10,0.1), rgba(243,150,10,0.05)); border-radius: 12px; padding: 20px; margin: 20px auto; max-width: 800px; border: 2px solid #f3960a;">
+                    <div style="display: flex; align-items: flex-start; gap: 20px;">
+                        <div style="font-size: 2.5rem;">⚡</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0 0 10px 0; font-size: 1.2rem; color: #333;">A Note on Gradient Descent</h3>
+                            <p style="font-size: 1rem; color: #555; line-height: 1.5; margin-bottom: 8px;">You've got a solid understanding of how gradient descent works, but there's still more to explore!</p>
+                            <p style="font-size: 0.95rem; color: #666; line-height: 1.4;">Coming up, you'll see how gradient descent combines with training data and features to create powerful AI models that can learn complex patterns.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- What's immediately next -->
+                <div style="background: rgba(255,255,255,0.5); border-radius: 12px; padding: 25px; margin: 20px auto; max-width: 800px; border: 2px solid #667eea;">
+                    <div style="display: flex; align-items: flex-start; gap: 20px;">
+                        <div style="font-size: 3rem;">🔍</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0 0 15px 0; font-size: 1.4rem; color: #333;">Up Next: Training Features</h3>
+                            <p style="font-size: 1.05rem; color: #555; line-height: 1.6; margin-bottom: 10px;"><strong>Great job helping Max find his perfect bone!</strong></p>
+                            <p style="font-size: 1rem; color: #666; line-height: 1.5;">Now you'll learn how AI identifies what features to look at in the data. This is crucial for making accurate predictions in complex real-world scenarios!</p>
                         </div>
                     </div>
                 </div>
@@ -469,4 +800,42 @@ function createInstructionPart7() {
     
     // Initialize navigation
     initializeNavigation('ip7', 'createInstructionPart7');
+    
+    // Add interactivity
+    setTimeout(() => {
+        // Hover effects for concept cards
+        const concepts = document.querySelectorAll('.objective-item');
+        concepts.forEach((concept) => {
+            if (concept.classList.contains('completed')) {
+                concept.addEventListener('mouseenter', () => {
+                    concept.style.transform = 'translateY(-5px)';
+                    concept.style.boxShadow = '0 5px 15px rgba(45,213,115,0.2)';
+                });
+                concept.addEventListener('mouseleave', () => {
+                    concept.style.transform = 'translateY(0)';
+                    concept.style.boxShadow = 'none';
+                });
+            } else if (concept.classList.contains('in-progress')) {
+                concept.addEventListener('mouseenter', () => {
+                    concept.style.transform = 'translateY(-5px)';
+                    concept.style.boxShadow = '0 5px 15px rgba(243,150,10,0.2)';
+                });
+                concept.addEventListener('mouseleave', () => {
+                    concept.style.transform = 'translateY(0)';
+                    concept.style.boxShadow = 'none';
+                });
+            } else if (concept.id === 'concept5') {
+                concept.addEventListener('mouseenter', () => {
+                    concept.style.transform = 'translateY(-5px)';
+                    concept.style.boxShadow = '0 5px 15px rgba(102,126,234,0.2)';
+                    concept.style.borderColor = '#667eea';
+                });
+                concept.addEventListener('mouseleave', () => {
+                    concept.style.transform = 'translateY(0)';
+                    concept.style.boxShadow = 'none';
+                    concept.style.borderColor = 'transparent';
+                });
+            }
+        });
+    }, 100);
 }

@@ -14,49 +14,49 @@ function createMultivariatePart1() {
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
-            <div class="level-header">Multivariable Gradient Descent - Part 1: Two Variables</div>
-            <div class="level-content multivariate-demo">
-                <div class="demo-explanation">
-                    <h3>Minimize f(x₁,x₂) = (x₁-3)² + (x₂-2)²</h3>
-                    <p>The minimum is at (3, 2) where f(3,2) = 0.</p>
+            <div class="level-header" style="padding: 8px; font-size: 1.1rem;">Multivariable GD - Part 1: Two Variables</div>
+            <div class="level-content multivariate-demo" style="padding: 10px;">
+                <div class="demo-explanation" style="margin-bottom: 10px; text-align: center;">
+                    <h3 style="font-size: 1rem; margin: 5px 0;">Minimize f(x₁,x₂) = (x₁-3)² + (x₂-2)²</h3>
+                    <p style="font-size: 0.85rem; margin: 3px 0; color: #666;">Minimum at (3, 2) where f = 0</p>
                 </div>
                 
                 <div class="demo-container">
-                    <div class="value-display">
-                        <div class="current-values">
-                            <div>x₁ = <span id="var0">0.0</span></div>
-                            <div>x₂ = <span id="var1">0.0</span></div>
+                    <div class="value-display" style="text-align: center; margin: 10px 0; padding: 12px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 10px; color: white;">
+                        <div class="current-values" style="display: flex; justify-content: center; gap: 15px; margin-bottom: 8px;">
+                            <div style="font-size: 1.1rem; font-weight: bold;">x₁ = <span id="var0">0.0</span></div>
+                            <div style="font-size: 1.1rem; font-weight: bold;">x₂ = <span id="var1">0.0</span></div>
                         </div>
-                        <div class="current-loss">Loss: <span id="lossValue">13.0</span></div>
-                        <div class="restart-area">
-                            <button id="resetBtn" class="reset-btn">🔄 Random Start</button>
+                        <div class="current-loss" style="font-size: 1.8rem; font-weight: bold; margin: 8px 0;">Loss: <span id="lossValue">13.0</span></div>
+                        <div class="restart-area" style="margin-top: 8px;">
+                            <button id="resetBtn" class="reset-btn" style="background: rgba(255, 255, 255, 0.2); color: white; border: 2px solid rgba(255, 255, 255, 0.5); padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 0.85rem; font-weight: bold;">🔄 Random</button>
                         </div>
                     </div>
                     
-                    <div class="controls-wrapper">
-                        <div class="manual-section">
-                            <h4>Manual Guessing</h4>
-                            <div class="guess-controls">
-                                <label for="guess1">x₁:</label>
-                                <input type="number" id="guess1" placeholder="Enter x₁" step="0.1">
-                                <label for="guess2">x₂:</label>
-                                <input type="number" id="guess2" placeholder="Enter x₂" step="0.1">
-                                <button id="submitGuessBtn" class="action-btn">📍 Test Guess</button>
+                    <div class="controls-wrapper" style="display: flex; flex-direction: column; gap: 12px; margin: 15px 0;">
+                        <div class="manual-section" style="background: #f8f9fa; padding: 12px; border-radius: 8px; border: 2px solid #e9ecef;">
+                            <h4 style="font-size: 0.95rem; margin: 0 0 8px 0;">Manual Guessing</h4>
+                            <div class="guess-controls" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                                <label style="font-size: 0.85rem; font-weight: bold; color: #495057;">x₁:</label>
+                                <input type="number" id="guess1" placeholder="x₁" step="0.1" style="width: 60px; padding: 4px; border: 2px solid #ddd; border-radius: 4px; font-size: 0.85rem;">
+                                <label style="font-size: 0.85rem; font-weight: bold; color: #495057;">x₂:</label>
+                                <input type="number" id="guess2" placeholder="x₂" step="0.1" style="width: 60px; padding: 4px; border: 2px solid #ddd; border-radius: 4px; font-size: 0.85rem;">
+                                <button id="submitGuessBtn" class="action-btn" style="background: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: bold;">📍 Test</button>
                             </div>
                         </div>
                         
-                        <div class="gradient-section">
-                            <h4>Gradient Descent</h4>
-                            <div class="gradient-info">
+                        <div class="gradient-section" style="background: #f8f9fa; padding: 12px; border-radius: 8px; border: 2px solid #e9ecef;">
+                            <h4 style="font-size: 0.95rem; margin: 0 0 8px 0;">Gradient Descent</h4>
+                            <div class="gradient-info" style="margin: 8px 0; font-size: 0.85rem; font-weight: bold; color: #495057; display: flex; gap: 15px;">
                                 <div>∂f/∂x₁ = <span id="grad0">-6.0</span></div>
                                 <div>∂f/∂x₂ = <span id="grad1">-4.0</span></div>
                             </div>
-                            <div class="lr-button-group">
-                                <button class="lr-btn" data-lr="1">1</button>
-                                <button class="lr-btn" data-lr="0.1">0.1</button>
-                                <button class="lr-btn" data-lr="0.001">0.001</button>
+                            <div class="lr-button-group" style="display: flex; gap: 5px; margin: 8px 0;">
+                                <button class="lr-btn" data-lr="1" style="flex: 1; padding: 5px; border: 2px solid #6c757d; background: white; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: bold;">1</button>
+                                <button class="lr-btn" data-lr="0.1" style="flex: 1; padding: 5px; border: 2px solid #6c757d; background: white; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: bold;">0.1</button>
+                                <button class="lr-btn" data-lr="0.001" style="flex: 1; padding: 5px; border: 2px solid #6c757d; background: white; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: bold;">0.001</button>
                             </div>
-                            <button id="takeStepBtn" class="action-btn" disabled>🎯 Take Gradient Step</button>
+                            <button id="takeStepBtn" class="action-btn" disabled style="background: #28a745; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: bold; width: 100%; margin-top: 5px;">🎯 Take Gradient Step</button>
                         </div>
                     </div>
                 </div>
@@ -163,61 +163,56 @@ function createMultivariatePart2() {
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
-            <div class="level-header">Multivariable Gradient Descent - Part 2: Five Variables</div>
-            <div class="level-content multivariate-demo">
-                <div class="demo-explanation">
-                    <h3>Minimize f(x₁,x₂,x₃,x₄,x₅) = (x₁-1)² + (x₂+2)² + (x₃-0)² + (x₄-4)² + (x₅+1)²</h3>
-                    <p>The minimum is at (1, -2, 0, 4, -1) where f = 0.</p>
+            <div class="level-header" style="padding: 8px; font-size: 1.1rem;">Multivariable GD - Part 2: Five Variables</div>
+            <div class="level-content multivariate-demo" style="padding: 10px;">
+                <div class="demo-explanation" style="margin-bottom: 10px; text-align: center;">
+                    <h3 style="font-size: 1rem; margin: 5px 0;">Minimize f(x₁,...,x₅) = Σ(xᵢ-targetᵢ)²</h3>
+                    <p style="font-size: 0.85rem; margin: 3px 0; color: #666;">Target: (1, -2, 0, 4, -1)</p>
                 </div>
                 
                 <div class="demo-container">
-                    <div class="value-display">
-                        <div class="current-values">
-                            <div>x₁ = <span id="var0">0.0</span></div>
-                            <div>x₂ = <span id="var1">0.0</span></div>
-                            <div>x₃ = <span id="var2">0.0</span></div>
-                            <div>x₄ = <span id="var3">0.0</span></div>
-                            <div>x₅ = <span id="var4">0.0</span></div>
+                    <div class="value-display" style="text-align: center; margin: 10px 0; padding: 12px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 10px; color: white;">
+                        <div class="current-values" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;">
+                            <div style="font-size: 0.95rem; font-weight: bold;">x₁=<span id="var0">0.0</span></div>
+                            <div style="font-size: 0.95rem; font-weight: bold;">x₂=<span id="var1">0.0</span></div>
+                            <div style="font-size: 0.95rem; font-weight: bold;">x₃=<span id="var2">0.0</span></div>
+                            <div style="font-size: 0.95rem; font-weight: bold;">x₄=<span id="var3">0.0</span></div>
+                            <div style="font-size: 0.95rem; font-weight: bold;">x₅=<span id="var4">0.0</span></div>
                         </div>
-                        <div class="current-loss">Loss: <span id="lossValue">22.0</span></div>
-                        <div class="restart-area">
-                            <button id="resetBtn" class="reset-btn">🔄 Random Start</button>
+                        <div class="current-loss" style="font-size: 1.8rem; font-weight: bold; margin: 8px 0;">Loss: <span id="lossValue">22.0</span></div>
+                        <div class="restart-area" style="margin-top: 8px;">
+                            <button id="resetBtn" class="reset-btn" style="background: rgba(255, 255, 255, 0.2); color: white; border: 2px solid rgba(255, 255, 255, 0.5); padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 0.85rem; font-weight: bold;">🔄 Random</button>
                         </div>
                     </div>
                     
-                    <div class="controls-wrapper">
-                        <div class="manual-section">
-                            <h4>Manual Guessing</h4>
-                            <div class="guess-controls">
-                                <label for="guess1">x₁:</label>
-                                <input type="number" id="guess1" placeholder="x₁" step="0.1">
-                                <label for="guess2">x₂:</label>
-                                <input type="number" id="guess2" placeholder="x₂" step="0.1">
-                                <label for="guess3">x₃:</label>
-                                <input type="number" id="guess3" placeholder="x₃" step="0.1">
-                                <label for="guess4">x₄:</label>
-                                <input type="number" id="guess4" placeholder="x₄" step="0.1">
-                                <label for="guess5">x₅:</label>
-                                <input type="number" id="guess5" placeholder="x₅" step="0.1">
-                                <button id="submitGuessBtn" class="action-btn">📍 Test Guess</button>
+                    <div class="controls-wrapper" style="display: flex; flex-direction: column; gap: 12px; margin: 15px 0;">
+                        <div class="manual-section" style="background: #f8f9fa; padding: 12px; border-radius: 8px; border: 2px solid #e9ecef;">
+                            <h4 style="font-size: 0.95rem; margin: 0 0 8px 0;">Manual Guessing</h4>
+                            <div class="guess-controls" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px;">
+                                <input type="number" id="guess1" placeholder="x₁" step="0.1" style="padding: 4px; border: 2px solid #ddd; border-radius: 4px; font-size: 0.8rem;">
+                                <input type="number" id="guess2" placeholder="x₂" step="0.1" style="padding: 4px; border: 2px solid #ddd; border-radius: 4px; font-size: 0.8rem;">
+                                <input type="number" id="guess3" placeholder="x₃" step="0.1" style="padding: 4px; border: 2px solid #ddd; border-radius: 4px; font-size: 0.8rem;">
+                                <input type="number" id="guess4" placeholder="x₄" step="0.1" style="padding: 4px; border: 2px solid #ddd; border-radius: 4px; font-size: 0.8rem;">
+                                <input type="number" id="guess5" placeholder="x₅" step="0.1" style="padding: 4px; border: 2px solid #ddd; border-radius: 4px; font-size: 0.8rem;">
                             </div>
+                            <button id="submitGuessBtn" class="action-btn" style="background: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: bold; width: 100%; margin-top: 8px;">📍 Test All Values</button>
                         </div>
                         
-                        <div class="gradient-section">
-                            <h4>Gradient Descent</h4>
-                            <div class="gradient-info">
-                                <div>∂f/∂x₁ = <span id="grad0">-2.0</span></div>
-                                <div>∂f/∂x₂ = <span id="grad1">4.0</span></div>
-                                <div>∂f/∂x₃ = <span id="grad2">0.0</span></div>
-                                <div>∂f/∂x₄ = <span id="grad3">-8.0</span></div>
-                                <div>∂f/∂x₅ = <span id="grad4">2.0</span></div>
+                        <div class="gradient-section" style="background: #f8f9fa; padding: 12px; border-radius: 8px; border: 2px solid #e9ecef;">
+                            <h4 style="font-size: 0.95rem; margin: 0 0 8px 0;">Gradient Descent</h4>
+                            <div class="gradient-info" style="margin: 8px 0; font-size: 0.75rem; font-weight: bold; color: #495057; display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px;">
+                                <div>∂f/∂x₁=<span id="grad0">-2</span></div>
+                                <div>∂f/∂x₂=<span id="grad1">4</span></div>
+                                <div>∂f/∂x₃=<span id="grad2">0</span></div>
+                                <div>∂f/∂x₄=<span id="grad3">-8</span></div>
+                                <div>∂f/∂x₅=<span id="grad4">2</span></div>
                             </div>
-                            <div class="lr-button-group">
-                                <button class="lr-btn" data-lr="1">1</button>
-                                <button class="lr-btn" data-lr="0.1">0.1</button>
-                                <button class="lr-btn" data-lr="0.001">0.001</button>
+                            <div class="lr-button-group" style="display: flex; gap: 5px; margin: 8px 0;">
+                                <button class="lr-btn" data-lr="1" style="flex: 1; padding: 5px; border: 2px solid #6c757d; background: white; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: bold;">1</button>
+                                <button class="lr-btn" data-lr="0.1" style="flex: 1; padding: 5px; border: 2px solid #6c757d; background: white; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: bold;">0.1</button>
+                                <button class="lr-btn" data-lr="0.001" style="flex: 1; padding: 5px; border: 2px solid #6c757d; background: white; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: bold;">0.001</button>
                             </div>
-                            <button id="takeStepBtn" class="action-btn" disabled>🎯 Take Gradient Step</button>
+                            <button id="takeStepBtn" class="action-btn" disabled style="background: #28a745; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: bold; width: 100%; margin-top: 5px;">🎯 Take Gradient Step (All 5)</button>
                         </div>
                     </div>
                 </div>

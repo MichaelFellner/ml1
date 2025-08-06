@@ -1,42 +1,86 @@
 function createLevel3() {
-    currentLevel = 1;
+    currentLevel = 3;
     const container = document.getElementById('app');
     
     container.innerHTML = `
         <div class="current-level">
             ${createLevelHeader(2, 3, 9)}
 
-            <div class="level-content">
-                <div class="visual-section">
-                    <h3>Sorceress Elara's Brew</h3>
-                    <div class="witch-container">
-                        <img id="witchImg" src="${images.witch}" alt="Witch" class="main-image">
-                        <div id="cauldronBrew" class="cauldron-brew"></div>
+            <div class="level-content" style="display: flex; gap: 30px; align-items: flex-start; padding: 15px; justify-content: space-between;">
+                <div class="visual-section" style="flex: 1; text-align: center; max-width: 300px;">
+                    <div style="background: rgba(255,255,255,0.5); border-radius: 12px; padding: 15px; box-shadow: 0 3px 5px rgba(0,0,0,0.1);">
+                        <h3 style="margin: 0 0 10px 0; color: #333; font-size: 1.1rem;">🧙‍♀️ Sorceress Elara's Brew</h3>
+                        <div style="position: relative; display: inline-block;">
+                            <img id="witchImg" src="${images.witch}" alt="Witch" style="width: 150px; height: 150px; object-fit: contain;">
+                            <div id="cauldronBrew" style="position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); width: 45px; height: 45px; border-radius: 50%; background: rgb(101, 67, 33); transition: all 0.3s ease; box-shadow: 0 0 15px rgba(0,0,0,0.3);"></div>
+                        </div>
+                        <div id="potionStatus" style="margin-top: 10px; font-size: 0.95rem; color: #666; min-height: 25px;">Mix the perfect potion...</div>
                     </div>
                 </div>
-                <div class="controls-section">
-                    <label>Potion Ingredients:</label>
-                    <div class="potion-controls">
-                        <div>
-                            <label for="yellowSlider">🟡 Yellow Essence:</label>
-                            <div class="slider-controls">
-                                <button id="yellowDown" class="slider-btn">-</button>
-                                <input type="range" id="yellowSlider" min="0" max="100" value="30" step="1">
-                                <button id="yellowUp" class="slider-btn">+</button>
+                
+                <div class="controls-section" style="flex: 2; max-width: 550px;">
+                    <div style="background: linear-gradient(135deg, rgba(118,75,162,0.1), rgba(118,75,162,0.05)); border-radius: 12px; padding: 18px; border: 2px solid transparent; transition: border-color 0.3s ease;" id="controlPanel3">
+                        <h3 style="margin: 0 0 12px 0; color: #333; font-size: 1.1rem;">🧪 Mix Two Ingredients</h3>
+                        
+                        <!-- Loss Display -->
+                        <div id="lossDisplay3" style="background: white; border-radius: 8px; padding: 10px; margin-bottom: 12px; text-align: center; box-shadow: 0 2px 3px rgba(0,0,0,0.1);">
+                            <div style="display: flex; justify-content: space-around; align-items: center;">
+                                <div>
+                                    <div style="font-size: 0.8rem; color: #666;">Total Loss</div>
+                                    <div id="lossValue3" style="font-size: 1.6rem; font-weight: bold; color: #764ba2;">90</div>
+                                </div>
+                                <div id="potionIndicator" style="font-size: 2.2rem;">🧪</div>
+                                <div>
+                                    <div style="font-size: 0.8rem; color: #666;">Perfect Mix</div>
+                                    <div id="perfectCount" style="font-size: 1.6rem; font-weight: bold; color: #666;">0/2</div>
+                                </div>
                             </div>
-                            <span id="yellowValue">30%</span>
+                            <div id="mixHint" style="margin-top: 6px; font-size: 0.85rem; color: #666; font-style: italic;">Adjust both ingredients to find the perfect balance!</div>
                         </div>
-                        <div>
-                            <label for="blueSlider">🔵 Blue Essence:</label>
-                            <div class="slider-controls">
-                                <button id="blueDown" class="slider-btn">-</button>
-                                <input type="range" id="blueSlider" min="0" max="100" value="20" step="1">
-                                <button id="blueUp" class="slider-btn">+</button>
+                        
+                        <!-- Ingredient Controls -->
+                        <div style="display: flex; flex-direction: column; gap: 8px; margin: 10px 0;">
+                            <!-- Yellow Ingredient -->
+                            <div style="background: rgba(255,215,0,0.1); border-radius: 8px; padding: 6px 8px;">
+                                <div style="display: flex; align-items: center; gap: 8px; height: 28px;">
+                                    <span style="font-size: 1rem;">🟡</span>
+                                    <label style="color: #555; font-weight: 500; min-width: 45px; font-size: 0.9rem;">Yellow</label>
+                                    <button id="yellowDown" style="width: 24px; height: 24px; border-radius: 50%; background: #ffd700; border: none; cursor: pointer; font-weight: bold; font-size: 0.9rem;">-</button>
+                                    <input type="range" id="yellowSlider" min="0" max="100" value="30" step="1" style="flex: 1; height: 20px;">
+                                    <button id="yellowUp" style="width: 24px; height: 24px; border-radius: 50%; background: #ffd700; border: none; cursor: pointer; font-weight: bold; font-size: 0.9rem;">+</button>
+                                    <span id="yellowValue" style="font-size: 0.9rem; font-weight: bold; color: #d4af37; min-width: 35px; text-align: right;">30%</span>
+                                </div>
                             </div>
-                            <span id="blueValue">20%</span>
+                            
+                            <!-- Blue Ingredient -->
+                            <div style="background: rgba(65,105,225,0.1); border-radius: 8px; padding: 6px 8px;">
+                                <div style="display: flex; align-items: center; gap: 8px; height: 28px;">
+                                    <span style="font-size: 1rem;">🔵</span>
+                                    <label style="color: #555; font-weight: 500; min-width: 45px; font-size: 0.9rem;">Blue</label>
+                                    <button id="blueDown" style="width: 24px; height: 24px; border-radius: 50%; background: #4169e1; border: none; cursor: pointer; font-weight: bold; color: white; font-size: 0.9rem;">-</button>
+                                    <input type="range" id="blueSlider" min="0" max="100" value="20" step="1" style="flex: 1; height: 20px;">
+                                    <button id="blueUp" style="width: 24px; height: 24px; border-radius: 50%; background: #4169e1; border: none; cursor: pointer; font-weight: bold; color: white; font-size: 0.9rem;">+</button>
+                                    <span id="blueValue" style="font-size: 0.9rem; font-weight: bold; color: #4169e1; min-width: 35px; text-align: right;">20%</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Combined Progress Bar -->
+                        <div style="margin-top: 12px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                <span style="color: #666; font-size: 0.85rem;">Potion Quality</span>
+                                <span id="qualityPercent" style="font-size: 1rem; font-weight: bold; color: #764ba2;">0%</span>
+                            </div>
+                            <div style="background: #ddd; border-radius: 8px; height: 22px; overflow: hidden; box-shadow: inset 0 2px 3px rgba(0,0,0,0.1);">
+                                <div id="qualityFill" style="height: 100%; width: 0%; transition: all 0.3s ease; background: linear-gradient(90deg, #764ba2, #9333ea);"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Goal Reminder -->
+                        <div style="margin-top: 12px; padding: 8px; background: rgba(118,75,162,0.1); border-radius: 6px; text-align: center;">
+                            <div style="font-size: 0.85rem; color: #764ba2;">💡 <strong>Goal:</strong> Find the perfect balance (Loss = 0)</div>
                         </div>
                     </div>
-                    <div id="status" class="status">🔬 Total Loss: 2500.00<br><small>💡 Lower loss = better brew. Get both ingredients perfect!</small></div>
                 </div>
             </div>
             
@@ -54,6 +98,7 @@ function setupLevel3() {
     const yellowDownBtn = document.getElementById('yellowDown');
     const blueUpBtn = document.getElementById('blueUp');
     const blueDownBtn = document.getElementById('blueDown');
+    const controlPanel3 = document.getElementById('controlPanel3');
     
     function updatePotions() {
         const yellow = parseInt(yellowSlider.value);
@@ -62,24 +107,83 @@ function setupLevel3() {
         document.getElementById('yellowValue').textContent = yellow + '%';
         document.getElementById('blueValue').textContent = blue + '%';
         
-        // Update cauldron color
-        const brewQuality = Math.max(0, 1 - (Math.abs(yellow - OPTIMAL_YELLOW) + Math.abs(blue - OPTIMAL_BLUE)) / 100);
+        // Calculate individual and total loss (linear)
+        const yellowLoss = Math.abs(yellow - OPTIMAL_YELLOW);
+        const blueLoss = Math.abs(blue - OPTIMAL_BLUE);
+        const totalLoss = yellowLoss + blueLoss;
+        
+        // Calculate perfect count
+        let perfectCount = 0;
+        if (yellow === OPTIMAL_YELLOW) perfectCount++;
+        if (blue === OPTIMAL_BLUE) perfectCount++;
+        
+        // Update loss display
+        document.getElementById('lossValue3').textContent = totalLoss.toFixed(0);
+        document.getElementById('perfectCount').textContent = perfectCount + '/2';
+        
+        // Calculate quality percentage (inverse of normalized loss)
+        const maxLoss = 100 * 2; // Maximum possible linear loss (100 per ingredient)
+        const quality = Math.max(0, Math.min(100, 100 * (1 - totalLoss / maxLoss)));
+        document.getElementById('qualityPercent').textContent = Math.round(quality) + '%';
+        document.getElementById('qualityFill').style.width = quality + '%';
+        
+        // Update cauldron color based on quality
+        const brewQuality = quality / 100;
         const r = Math.round(101 + (50 - 101) * brewQuality);
         const g = Math.round(67 + (205 - 67) * brewQuality);
         const b = Math.round(33 + (50 - 33) * brewQuality);
         document.getElementById('cauldronBrew').style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
         
-        // Calculate total loss (sum of squared errors)
-        const yellowLoss = Math.pow(yellow - OPTIMAL_YELLOW, 2);
-        const blueLoss = Math.pow(blue - OPTIMAL_BLUE, 2);
-        const totalLoss = yellowLoss + blueLoss;
+        // Update visual indicators
+        const potionIndicator = document.getElementById('potionIndicator');
+        const mixHint = document.getElementById('mixHint');
+        const potionStatus = document.getElementById('potionStatus');
+        const lossDisplay3 = document.getElementById('lossDisplay3');
         
-        if (yellow === OPTIMAL_YELLOW && blue === OPTIMAL_BLUE) {
-            document.getElementById('status').innerHTML = '✨ PERFECT MAGICAL BREW! Loss = 0! ✨';
-            document.getElementById('status').style.background = 'rgba(45, 213, 115, 0.2)';
+        if (perfectCount === 2) {
+            // Perfect!
+            potionIndicator.textContent = '✨';
+            mixHint.innerHTML = '<strong style="color: #2dd573;">PERFECT MAGICAL BREW!</strong> 🎉';
+            potionStatus.textContent = '✨ Magical elixir achieved! ✨';
+            potionStatus.style.color = '#2dd573';
+            lossDisplay3.style.background = 'linear-gradient(135deg, rgba(45,213,115,0.2), rgba(45,213,115,0.1))';
+            controlPanel3.style.borderColor = '#2dd573';
+            document.getElementById('lossValue3').style.color = '#2dd573';
+            document.getElementById('perfectCount').style.color = '#2dd573';
+            document.getElementById('cauldronBrew').style.boxShadow = '0 0 30px rgba(45,213,115,0.8)';
+        } else if (perfectCount === 1) {
+            // One perfect
+            potionIndicator.textContent = '⚗️';
+            mixHint.textContent = 'One ingredient perfect! Adjust the other...';
+            potionStatus.textContent = 'Getting closer...';
+            potionStatus.style.color = '#f3960a';
+            lossDisplay3.style.background = 'white';
+            controlPanel3.style.borderColor = '#f3960a';
+            document.getElementById('lossValue3').style.color = '#f3960a';
+            document.getElementById('perfectCount').style.color = '#f3960a';
+            document.getElementById('cauldronBrew').style.boxShadow = '0 0 20px rgba(243,150,10,0.5)';
+        } else if (quality > 70) {
+            // Close
+            potionIndicator.textContent = '🧪';
+            mixHint.textContent = 'Good mix! Keep fine-tuning...';
+            potionStatus.textContent = 'Potion is bubbling nicely...';
+            potionStatus.style.color = '#764ba2';
+            lossDisplay3.style.background = 'white';
+            controlPanel3.style.borderColor = 'transparent';
+            document.getElementById('lossValue3').style.color = '#764ba2';
+            document.getElementById('perfectCount').style.color = '#666';
+            document.getElementById('cauldronBrew').style.boxShadow = '0 0 20px rgba(0,0,0,0.3)';
         } else {
-            document.getElementById('status').innerHTML = `🔬 Total Loss: ${totalLoss.toFixed(2)}<br><small>💡 Lower loss = better brew. Get both ingredients perfect!</small>`;
-            document.getElementById('status').style.background = 'rgba(255, 255, 255, 0.8)';
+            // Far
+            potionIndicator.textContent = '🧪';
+            mixHint.textContent = 'Adjust both ingredients to find the perfect balance!';
+            potionStatus.textContent = 'Mix the perfect potion...';
+            potionStatus.style.color = '#666';
+            lossDisplay3.style.background = 'white';
+            controlPanel3.style.borderColor = 'transparent';
+            document.getElementById('lossValue3').style.color = '#764ba2';
+            document.getElementById('perfectCount').style.color = '#666';
+            document.getElementById('cauldronBrew').style.boxShadow = '0 0 20px rgba(0,0,0,0.3)';
         }
         
         // Update button states
@@ -87,6 +191,12 @@ function setupLevel3() {
         yellowDownBtn.disabled = yellow <= 0;
         blueUpBtn.disabled = blue >= 100;
         blueDownBtn.disabled = blue <= 0;
+        
+        // Style disabled buttons
+        yellowUpBtn.style.opacity = yellow >= 100 ? '0.5' : '1';
+        yellowDownBtn.style.opacity = yellow <= 0 ? '0.5' : '1';
+        blueUpBtn.style.opacity = blue >= 100 ? '0.5' : '1';
+        blueDownBtn.style.opacity = blue <= 0 ? '0.5' : '1';
     }
     
     // Slider event listeners
@@ -130,59 +240,117 @@ function setupLevel3() {
 }
 
 function createLevel4() {
-    currentLevel = 3;
+    currentLevel = 4;
     const container = document.getElementById('app');
     
     container.innerHTML = `
         <div class="current-level">
             ${createLevelHeader(3, 4, 9)}
-            <div class="level-content">
-                <div class="visual-section">
-                    <h3>Master Alchemist Elara</h3>
-                    <div class="witch-container">
-                        <img id="witchImgMulti" src="${images.witch}" alt="Master Alchemist" class="main-image">
-                        <div id="cauldronBrewMulti" class="cauldron-brew multi"></div>
+            
+            <div class="level-content" style="display: flex; gap: 40px; align-items: center; padding: 20px; justify-content: space-between;">
+                <div class="visual-section" style="flex: 1; text-align: center; max-width: 350px;">
+                    <div style="background: rgba(255,255,255,0.5); border-radius: 15px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <h3 style="margin: 0 0 15px 0; color: #333; font-size: 1.3rem;">🧙‍♀️ Master Alchemist Elara</h3>
+                        <div style="position: relative; display: inline-block;">
+                            <img id="witchImgMulti" src="${images.witch}" alt="Master Alchemist" style="width: 200px; height: 200px; object-fit: contain;">
+                            <div id="cauldronBrewMulti" style="position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); width: 60px; height: 60px; border-radius: 50%; background: rgb(101, 67, 33); transition: all 0.5s ease; box-shadow: 0 0 20px rgba(0,0,0,0.3);"></div>
+                        </div>
+                        <div id="potionStatusMulti" style="margin-top: 15px; font-size: 1.1rem; color: #666; min-height: 30px;">AI will mix 6 ingredients...</div>
                     </div>
                 </div>
-                <div class="controls-section">
-                    <label>Master Alchemist's 6 Essential Ingredients:</label>
-                    <div class="multi-potion-grid">
-                        <div>
-                            <label for="redSlider">🔴 Crimson:</label>
-                            <input type="range" id="redSlider" min="0" max="100" value="50" step="1">
-                            <span id="redValue">50%</span>
+                
+                <div class="controls-section" style="flex: 2; max-width: 600px;">
+                    <div style="background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(102,126,234,0.05)); border-radius: 15px; padding: 25px; border: 2px solid transparent; transition: border-color 0.3s ease;" id="controlPanel4">
+                        <h3 style="margin: 0 0 20px 0; color: #333; font-size: 1.2rem;">⚡ AI Controls 6 Ingredients</h3>
+                        
+                        <!-- Loss Display -->
+                        <div id="lossDisplay4" style="background: white; border-radius: 10px; padding: 15px; margin-bottom: 20px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                            <div style="display: flex; justify-content: space-around; align-items: center;">
+                                <div>
+                                    <div style="font-size: 0.9rem; color: #666;">Total Loss</div>
+                                    <div id="lossValue4" style="font-size: 2rem; font-weight: bold; color: #667eea;">150</div>
+                                </div>
+                                <div id="potionIndicatorMulti" style="font-size: 3rem;">🤖</div>
+                                <div>
+                                    <div style="font-size: 0.9rem; color: #666;">Perfect</div>
+                                    <div id="perfectCountMulti" style="font-size: 2rem; font-weight: bold; color: #666;">0/6</div>
+                                </div>
+                            </div>
+                            <div id="aiStatusMulti" style="margin-top: 10px; font-size: 0.95rem; color: #667eea; font-weight: 500;">AI will optimize all 6 ingredients simultaneously</div>
                         </div>
-                        <div>
-                            <label for="yellowSliderMulti">🟡 Golden:</label>
-                            <input type="range" id="yellowSliderMulti" min="0" max="100" value="50" step="1">
-                            <span id="yellowValueMulti">50%</span>
+                        
+                        <!-- 6 Ingredient Grid (Compact) -->
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 20px 0;">
+                            <div style="background: rgba(255,0,0,0.1); border-radius: 8px; padding: 10px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 1.2rem;">🔴</span>
+                                    <input type="range" id="redSlider" min="0" max="100" value="50" disabled style="flex: 1; opacity: 0.7;">
+                                    <span id="redValue" style="font-size: 0.9rem; font-weight: bold; min-width: 35px;">50%</span>
+                                </div>
+                            </div>
+                            <div style="background: rgba(255,215,0,0.1); border-radius: 8px; padding: 10px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 1.2rem;">🟡</span>
+                                    <input type="range" id="yellowSliderMulti" min="0" max="100" value="50" disabled style="flex: 1; opacity: 0.7;">
+                                    <span id="yellowValueMulti" style="font-size: 0.9rem; font-weight: bold; min-width: 35px;">50%</span>
+                                </div>
+                            </div>
+                            <div style="background: rgba(0,255,0,0.1); border-radius: 8px; padding: 10px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 1.2rem;">🟢</span>
+                                    <input type="range" id="greenSlider" min="0" max="100" value="50" disabled style="flex: 1; opacity: 0.7;">
+                                    <span id="greenValue" style="font-size: 0.9rem; font-weight: bold; min-width: 35px;">50%</span>
+                                </div>
+                            </div>
+                            <div style="background: rgba(65,105,225,0.1); border-radius: 8px; padding: 10px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 1.2rem;">🔵</span>
+                                    <input type="range" id="blueSliderMulti" min="0" max="100" value="50" disabled style="flex: 1; opacity: 0.7;">
+                                    <span id="blueValueMulti" style="font-size: 0.9rem; font-weight: bold; min-width: 35px;">50%</span>
+                                </div>
+                            </div>
+                            <div style="background: rgba(128,0,128,0.1); border-radius: 8px; padding: 10px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 1.2rem;">🟣</span>
+                                    <input type="range" id="purpleSlider" min="0" max="100" value="50" disabled style="flex: 1; opacity: 0.7;">
+                                    <span id="purpleValue" style="font-size: 0.9rem; font-weight: bold; min-width: 35px;">50%</span>
+                                </div>
+                            </div>
+                            <div style="background: rgba(255,165,0,0.1); border-radius: 8px; padding: 10px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 1.2rem;">🟠</span>
+                                    <input type="range" id="orangeSlider" min="0" max="100" value="50" disabled style="flex: 1; opacity: 0.7;">
+                                    <span id="orangeValue" style="font-size: 0.9rem; font-weight: bold; min-width: 35px;">50%</span>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <label for="greenSlider">🟢 Emerald:</label>
-                            <input type="range" id="greenSlider" min="0" max="100" value="50" step="1">
-                            <span id="greenValue">50%</span>
+                        
+                        <!-- Quality Bar -->
+                        <div style="margin-top: 15px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <span style="color: #666; font-size: 0.95rem;">Potion Quality</span>
+                                <span id="qualityPercentMulti" style="font-size: 1.2rem; font-weight: bold; color: #667eea;">0%</span>
+                            </div>
+                            <div style="background: #ddd; border-radius: 10px; height: 30px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
+                                <div id="qualityFillMulti" style="height: 100%; width: 0%; transition: all 0.5s ease; background: linear-gradient(90deg, #667eea, #764ba2);"></div>
+                            </div>
                         </div>
-                        <div>
-                            <label for="blueSliderMulti">🔵 Sapphire:</label>
-                            <input type="range" id="blueSliderMulti" min="0" max="100" value="50" step="1">
-                            <span id="blueValueMulti">50%</span>
+                        
+                        <!-- AI Control Buttons -->
+                        <div style="display: flex; gap: 15px; margin-top: 20px;">
+                            <button id="gradientMultiBtn" style="flex: 1; padding: 12px 20px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(102,126,234,0.3);">
+                                🤖 Run Gradient Descent
+                            </button>
+                            <button id="resetMultiBtn" style="padding: 12px 20px; background: #f3960a; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease;">
+                                🔄 Reset
+                            </button>
                         </div>
-                        <div>
-                            <label for="purpleSlider">🟣 Violet:</label>
-                            <input type="range" id="purpleSlider" min="0" max="100" value="50" step="1">
-                            <span id="purpleValue">50%</span>
-                        </div>
-                        <div>
-                            <label for="orangeSlider">🟠 Orange:</label>
-                            <input type="range" id="orangeSlider" min="0" max="100" value="50" step="1">
-                            <span id="orangeValue">50%</span>
+                        
+                        <!-- Step Counter -->
+                        <div id="stepCounterMulti" style="margin-top: 15px; padding: 10px; background: rgba(102,126,234,0.05); border-radius: 8px; text-align: center; display: none;">
+                            <span style="color: #667eea; font-size: 0.9rem;">Steps taken: <strong id="stepCountMulti">0</strong></span>
                         </div>
                     </div>
-                    <div class="ai-controls">
-                        <button id="gradientMultiBtn" class="action-btn">Use Gradient Descent</button>
-                        <button id="resetMultiBtn" class="action-btn">🔄 New Recipe</button>
-                    </div>
-                    <div id="status" class="status">🔬 Total Loss: 8500.0 | Quality: 15.2%</div>
                 </div>
             </div>
             
@@ -214,6 +382,10 @@ function setupLevel4() {
     
     const gradientBtn = document.getElementById('gradientMultiBtn');
     const resetBtn = document.getElementById('resetMultiBtn');
+    const controlPanel4 = document.getElementById('controlPanel4');
+    const stepCounterMulti = document.getElementById('stepCounterMulti');
+    const stepCountMulti = document.getElementById('stepCountMulti');
+    let steps = 0;
     
     function updateMultiPotions() {
         const levels = {
@@ -239,63 +411,158 @@ function setupLevel4() {
             values[color].textContent = levels[color] + '%';
         });
         
-        // Calculate brew quality
-        let totalOptimality = 0;
+        // Calculate perfect count and total loss (linear)
+        let perfectCount = 0;
+        let totalLoss = 0;
         Object.keys(levels).forEach(color => {
-            const distance = Math.abs(levels[color] - optimalValues[color]);
-            const optimality = Math.max(0, 1 - (distance / 50));
-            totalOptimality += optimality;
+            const loss = Math.abs(levels[color] - optimalValues[color]);
+            totalLoss += loss;
+            if (levels[color] === optimalValues[color]) perfectCount++;
         });
         
-        const brewQuality = totalOptimality / 6;
+        // Update loss display
+        document.getElementById('lossValue4').textContent = totalLoss.toFixed(0);
+        document.getElementById('perfectCountMulti').textContent = perfectCount + '/6';
+        
+        // Calculate quality percentage
+        const maxLoss = 100 * 6; // Maximum possible linear loss (100 per ingredient)
+        const quality = Math.max(0, Math.min(100, 100 * (1 - totalLoss / maxLoss)));
+        document.getElementById('qualityPercentMulti').textContent = Math.round(quality) + '%';
+        document.getElementById('qualityFillMulti').style.width = quality + '%';
         
         // Update cauldron color
-        const brownR = 101, brownG = 67, brownB = 33;
-        const magicR = 50, magicG = 255, magicB = 150;
-        const r = Math.round(brownR + (magicR - brownR) * brewQuality);
-        const g = Math.round(brownG + (magicG - brownG) * brewQuality);
-        const b = Math.round(brownB + (magicB - brownB) * brewQuality);
+        const brewQuality = quality / 100;
+        const r = Math.round(101 + (50 - 101) * brewQuality);
+        const g = Math.round(67 + (255 - 67) * brewQuality);
+        const b = Math.round(33 + (150 - 33) * brewQuality);
         document.getElementById('cauldronBrewMulti').style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
         
-        // Check completion
-        const isPerfect = Object.keys(levels).every(color => levels[color] === optimalValues[color]);
-        const optimalCount = Object.keys(levels).filter(color => levels[color] === optimalValues[color]).length;
+        // Update visual indicators
+        const potionIndicatorMulti = document.getElementById('potionIndicatorMulti');
+        const aiStatusMulti = document.getElementById('aiStatusMulti');
+        const potionStatusMulti = document.getElementById('potionStatusMulti');
+        const lossDisplay4 = document.getElementById('lossDisplay4');
         
-        if (isPerfect) {
-            document.getElementById('status').textContent = '✨🌟 PERFECT 6-ESSENCE ELIXIR! 🌟✨';
-            document.getElementById('status').style.background = 'rgba(45, 213, 115, 0.2)';
+        if (perfectCount === 6) {
+            // Perfect!
+            potionIndicatorMulti.textContent = '🌟';
+            aiStatusMulti.innerHTML = '<strong style="color: #2dd573;">AI MASTERED THE 6-ESSENCE ELIXIR!</strong> 🎉';
+            potionStatusMulti.textContent = '✨ Legendary potion created! ✨';
+            potionStatusMulti.style.color = '#2dd573';
+            lossDisplay4.style.background = 'linear-gradient(135deg, rgba(45,213,115,0.2), rgba(45,213,115,0.1))';
+            controlPanel4.style.borderColor = '#2dd573';
+            document.getElementById('lossValue4').style.color = '#2dd573';
+            document.getElementById('perfectCountMulti').style.color = '#2dd573';
+            document.getElementById('cauldronBrewMulti').style.boxShadow = '0 0 40px rgba(45,213,115,0.8)';
+            gradientBtn.disabled = true;
+            gradientBtn.style.opacity = '0.5';
+            gradientBtn.textContent = '✅ Perfect Mix Achieved!';
+        } else if (perfectCount >= 4) {
+            // Very close
+            potionIndicatorMulti.textContent = '✨';
+            aiStatusMulti.textContent = `AI is very close! ${perfectCount}/6 perfect`;
+            potionStatusMulti.textContent = 'Almost legendary...';
+            potionStatusMulti.style.color = '#f3960a';
+            lossDisplay4.style.background = 'white';
+            controlPanel4.style.borderColor = '#f3960a';
+            document.getElementById('lossValue4').style.color = '#f3960a';
+            document.getElementById('perfectCountMulti').style.color = '#f3960a';
+            document.getElementById('cauldronBrewMulti').style.boxShadow = '0 0 30px rgba(243,150,10,0.6)';
+        } else if (perfectCount >= 2) {
+            // Making progress
+            potionIndicatorMulti.textContent = '⚗️';
+            aiStatusMulti.textContent = `AI is making progress... ${perfectCount}/6 perfect`;
+            potionStatusMulti.textContent = 'Potion improving...';
+            potionStatusMulti.style.color = '#667eea';
+            lossDisplay4.style.background = 'white';
+            controlPanel4.style.borderColor = 'transparent';
+            document.getElementById('lossValue4').style.color = '#667eea';
+            document.getElementById('perfectCountMulti').style.color = '#667eea';
+            document.getElementById('cauldronBrewMulti').style.boxShadow = '0 0 20px rgba(102,126,234,0.4)';
         } else {
-            const totalLoss = Object.keys(levels).reduce((sum, color) => {
-                return sum + Math.pow(levels[color] - optimalValues[color], 2);
-            }, 0);
-            document.getElementById('status').textContent = `🔬 Total Loss: ${totalLoss.toFixed(1)} | Optimal: ${optimalCount}/6`;
-            document.getElementById('status').style.background = 'rgba(255, 255, 255, 0.8)';
+            // Far from optimal
+            potionIndicatorMulti.textContent = '🤖';
+            aiStatusMulti.textContent = 'AI is calculating optimal mix...';
+            potionStatusMulti.textContent = 'AI will mix 6 ingredients...';
+            potionStatusMulti.style.color = '#666';
+            lossDisplay4.style.background = 'white';
+            controlPanel4.style.borderColor = 'transparent';
+            document.getElementById('lossValue4').style.color = '#667eea';
+            document.getElementById('perfectCountMulti').style.color = '#666';
+            document.getElementById('cauldronBrewMulti').style.boxShadow = '0 0 20px rgba(0,0,0,0.3)';
         }
     }
     
-    // Add event listeners
-    Object.values(sliders).forEach(slider => {
-        slider.addEventListener('input', updateMultiPotions);
-    });
-    
     gradientBtn.addEventListener('click', () => {
+        if (gradientBtn.disabled) return;
+        
         const currentValues = Object.values(sliders).map(s => parseInt(s.value));
         const targetValues = [OPTIMAL_RED, OPTIMAL_YELLOW_MULTI, OPTIMAL_GREEN, OPTIMAL_BLUE_MULTI, OPTIMAL_PURPLE, OPTIMAL_ORANGE];
         const result = optimizer.optimizationStep(currentValues, targetValues, Array(6).fill({ min: 0, max: 100 }));
         
-        Object.keys(sliders).forEach((color, i) => {
-            sliders[color].value = result.newVariables[i];
-        });
+        // Animate all sliders
+        const startValues = currentValues;
+        const endValues = result.newVariables;
+        const duration = 600;
+        const startTime = Date.now();
         
-        updateMultiPotions();
+        function animateSliders() {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easeProgress = 1 - Math.pow(1 - progress, 3);
+            
+            Object.keys(sliders).forEach((color, i) => {
+                const currentValue = Math.round(startValues[i] + (endValues[i] - startValues[i]) * easeProgress);
+                sliders[color].value = currentValue;
+            });
+            
+            updateMultiPotions();
+            
+            if (progress < 1) {
+                requestAnimationFrame(animateSliders);
+            } else {
+                steps++;
+                stepCountMulti.textContent = steps;
+                stepCounterMulti.style.display = 'block';
+            }
+        }
+        
+        animateSliders();
     });
     
     resetBtn.addEventListener('click', () => {
         optimizer.reset();
+        steps = 0;
+        stepCountMulti.textContent = '0';
+        stepCounterMulti.style.display = 'none';
         Object.values(sliders).forEach(slider => {
             slider.value = Math.floor(Math.random() * 101);
         });
         updateMultiPotions();
+        gradientBtn.disabled = false;
+        gradientBtn.style.opacity = '1';
+        gradientBtn.textContent = '🤖 Run Gradient Descent';
+    });
+    
+    // Add hover effects
+    gradientBtn.addEventListener('mouseenter', () => {
+        if (!gradientBtn.disabled) {
+            gradientBtn.style.transform = 'translateY(-2px)';
+            gradientBtn.style.boxShadow = '0 6px 12px rgba(102,126,234,0.4)';
+        }
+    });
+    gradientBtn.addEventListener('mouseleave', () => {
+        gradientBtn.style.transform = 'translateY(0)';
+        gradientBtn.style.boxShadow = '0 4px 6px rgba(102,126,234,0.3)';
+    });
+    
+    resetBtn.addEventListener('mouseenter', () => {
+        resetBtn.style.transform = 'translateY(-2px)';
+        resetBtn.style.boxShadow = '0 6px 12px rgba(243,150,10,0.4)';
+    });
+    resetBtn.addEventListener('mouseleave', () => {
+        resetBtn.style.transform = 'translateY(0)';
+        resetBtn.style.boxShadow = 'none';
     });
     
     updateMultiPotions();

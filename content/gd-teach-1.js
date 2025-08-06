@@ -24,36 +24,35 @@ function createGradientDescentPart1() {
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
-            <div class="level-header">Understanding Functions - Part 1: Finding the Minimum</div>
-            <div class="level-content gradient-descent-demo">
-                <div class="demo-explanation">
-                    <h3>Goal: Reach the Minimum of the Parabola</h3>
-                    <p>Your goal is to reach the minimum of the function <strong>f(x) = (x - 5)²</strong>. 
-                    Take steps left or right to get your dot as close as possible to the bottom of the curve!</p>
+            <div class="level-header" style="padding: 8px; font-size: 1.1rem;">Understanding Functions - Part 1: Finding the Minimum</div>
+            <div class="level-content gradient-descent-demo" style="padding: 10px;">
+                <div class="demo-explanation" style="margin-bottom: 10px;">
+                    <h3 style="font-size: 1rem; margin: 5px 0;">Goal: Reach the Minimum of the Parabola</h3>
+                    <p style="font-size: 0.9rem; margin: 5px 0;">Find the minimum of <strong>f(x) = (x - 5)²</strong>. Move left or right to reach the bottom!</p>
                 </div>
                 
                 <div class="demo-container">
                     <div class="graph-section">
-                        <div class="function-display">
-                            <div class="current-values">
-                                <div>Current x: <span id="currentX">0.0</span></div>
-                                <div>Function value: <span id="functionValue">25.0</span></div>
+                        <div class="function-display" style="margin-bottom: 8px;">
+                            <div class="current-values" style="font-size: 0.9rem;">
+                                <div style="display: inline-block; margin-right: 15px;">x: <span id="currentX" style="font-weight: bold;">0.0</span></div>
+                                <div style="display: inline-block;">f(x): <span id="functionValue" style="font-weight: bold;">25.0</span></div>
                             </div>
                         </div>
                         
-                        <canvas id="gradientCanvas" width="500" height="300"></canvas>
+                        <canvas id="gradientCanvas" width="450" height="250"></canvas>
                         
                         
                     </div>
                     
-                    <div class="controls-section">
-                        <div class="step-section">
-                            <h4>Move Along the Function</h4>
+                    <div class="controls-section" style="margin-top: 10px;">
+                        <div class="step-section" style="padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                            <h4 style="font-size: 0.95rem; margin: 0 0 8px 0;">Move Along the Function</h4>
                             <div class="step-controls">
-                                <label for="stepInput">Step size (+ moves right, - moves left):</label>
-                                <div class="step-input-row">
-                                    <input type="number" id="stepInput" placeholder="0" step="0.1" value="0">
-                                    <button id="takeStepBtn" class="action-btn" disabled>→ Take Step</button>
+                                <label for="stepInput" style="font-size: 0.85rem;">Step size (+ right, - left):</label>
+                                <div class="step-input-row" style="display: flex; gap: 8px; margin-top: 5px;">
+                                    <input type="number" id="stepInput" placeholder="0" step="0.1" value="0" style="flex: 1; padding: 5px;">
+                                    <button id="takeStepBtn" class="action-btn" disabled style="padding: 5px 12px; font-size: 0.9rem;">→ Take Step</button>
                                 </div>
                             </div>
                         </div>
@@ -274,45 +273,41 @@ function createGradientDescentPart3() {
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
-            <div class="level-header">Advanced Challenge - Part 3: Finding the Deep Minimum</div>
-            <div class="level-content gradient-descent-demo">
-                <div class="demo-explanation">
-                    <h3>Find the Global Minimum of a Complex Function</h3>
-                   
-                </div>
+            <div class="level-header" style="padding: 8px; font-size: 1.1rem;">Challenge - Part 3: Finding the Deep Minimum</div>
+            <div class="level-content gradient-descent-demo" style="padding: 10px;">
                 
                 <div class="demo-container complex-function">
-                    <div class="value-display">
-                        <div class="current-x">x = <span id="currentX">0.0</span></div>
-                        <div class="current-loss">Loss: <span id="functionValue">236.8M</span></div>
-                        <div class="restart-area">
-                            <button id="resetBtn" class="reset-btn">🔄 Random Start</button>
+                    <div class="value-display" style="padding: 15px; margin: 15px 0;">
+                        <div class="current-x" style="font-size: 1.8em;">x = <span id="currentX">0.0</span></div>
+                        <div class="current-loss" style="font-size: 2.5em;">Loss: <span id="functionValue">236.8M</span></div>
+                        <div class="restart-area" style="margin-top: 10px;">
+                            <button id="resetBtn" class="reset-btn" style="padding: 8px 16px; font-size: 0.9rem;">🔄 Random Start</button>
                         </div>
                     </div>
                     
-                    <div class="controls-wrapper">
-                        <div class="manual-section">
-                            <h4>Manual Guessing</h4>
+                    <div class="controls-wrapper" style="gap: 15px; margin: 20px 0;">
+                        <div class="manual-section" style="padding: 15px;">
+                            <h4 style="font-size: 0.95rem; margin: 0 0 8px 0;">Manual Guessing</h4>
                             <div class="guess-controls">
-                                <label for="guessInput">Guess an x value:</label>
-                                <div class="guess-input-row">
-                                    <input type="number" id="guessInput" placeholder="Enter x value" step="0.1">
-                                    <button id="submitGuessBtn" class="action-btn">📍 Test Guess</button>
+                                <label for="guessInput" style="font-size: 0.85rem;">Guess x:</label>
+                                <div class="guess-input-row" style="margin-top: 5px;">
+                                    <input type="number" id="guessInput" placeholder="Enter x" step="0.1" style="padding: 8px; font-size: 0.9rem;">
+                                    <button id="submitGuessBtn" class="action-btn" style="padding: 8px 12px; font-size: 0.9rem;">📍 Test</button>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="gradient-section">
-                            <h4>Gradient Descent</h4>
-                            <div class="gradient-info">
-                                <div>Current Gradient: <span id="currentGradient">-30778</span></div>
+                        <div class="gradient-section" style="padding: 15px;">
+                            <h4 style="font-size: 0.95rem; margin: 0 0 8px 0;">Gradient Descent</h4>
+                            <div class="gradient-info" style="margin: 8px 0; font-size: 0.9rem;">
+                                <div>Gradient: <span id="currentGradient" style="font-weight: bold;">-30778</span></div>
                             </div>
-                            <div class="lr-button-group">
-                                <button class="lr-btn" data-lr="1.0">1.0 (Large Steps)</button>
-                                <button class="lr-btn" data-lr="0.1">0.1 (Medium Steps)</button>
-                                <button class="lr-btn" data-lr="0.01">0.01 (Small Steps)</button>
+                            <div class="lr-button-group" style="gap: 5px; margin: 10px 0;">
+                                <button class="lr-btn" data-lr="1.0" style="padding: 6px; font-size: 0.85rem;">1.0</button>
+                                <button class="lr-btn" data-lr="0.1" style="padding: 6px; font-size: 0.85rem;">0.1</button>
+                                <button class="lr-btn" data-lr="0.01" style="padding: 6px; font-size: 0.85rem;">0.01</button>
                             </div>
-                            <button id="takeStepBtn" class="action-btn" disabled>🎯 Take Gradient Step</button>
+                            <button id="takeStepBtn" class="action-btn" disabled style="padding: 8px 12px; font-size: 0.9rem;">🎯 Take Step</button>
                         </div>
                         
                    
@@ -331,40 +326,17 @@ function createGradientDescentPart3() {
             
             .value-display {
                 text-align: center;
-                margin: 30px 0;
-                padding: 30px;
                 background: linear-gradient(135deg, #667eea, #764ba2);
-                border-radius: 15px;
+                border-radius: 10px;
                 color: white;
-            }
-            
-            .current-x {
-                font-size: 2.5em;
-                font-weight: bold;
-                margin-bottom: 15px;
-                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            }
-            
-            .current-loss {
-                font-size: 4em;
-                font-weight: bold;
-                text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
-                margin-bottom: 20px;
-            }
-            
-            .restart-area {
-                margin-top: 20px;
-                text-align: center;
             }
             
             .reset-btn {
                 background: rgba(255, 255, 255, 0.2);
                 color: white;
                 border: 2px solid rgba(255, 255, 255, 0.5);
-                padding: 12px 24px;
-                border-radius: 8px;
+                border-radius: 6px;
                 cursor: pointer;
-                font-size: 16px;
                 font-weight: bold;
                 transition: all 0.2s;
                 backdrop-filter: blur(5px);
@@ -379,55 +351,43 @@ function createGradientDescentPart3() {
             .controls-wrapper {
                 display: flex;
                 flex-direction: column;
-                gap: 20px;
-                margin: 30px 0;
             }
             
             .manual-section, .gradient-section {
                 background: #f8f9fa;
-                padding: 25px;
-                border-radius: 10px;
+                border-radius: 8px;
                 border: 2px solid #e9ecef;
             }
             
             .guess-input-row {
                 display: flex;
-                gap: 10px;
-                margin-top: 10px;
+                gap: 8px;
             }
             
             .guess-input-row input {
                 flex: 1;
-                padding: 12px;
                 border: 2px solid #ddd;
-                border-radius: 6px;
-                font-size: 16px;
+                border-radius: 5px;
             }
             
             .gradient-info {
-                margin: 15px 0;
-                font-size: 16px;
                 font-weight: bold;
                 color: #495057;
             }
             
             .lr-button-group {
                 display: flex;
-                gap: 10px;
-                margin: 15px 0;
                 flex-wrap: wrap;
             }
             
             .lr-btn {
                 flex: 1;
-                min-width: 120px;
-                padding: 10px;
+                min-width: 50px;
                 border: 2px solid #6c757d;
                 background: white;
-                border-radius: 6px;
+                border-radius: 5px;
                 cursor: pointer;
                 transition: all 0.2s;
-                font-size: 14px;
             }
             
             .lr-btn:hover {
@@ -444,13 +404,10 @@ function createGradientDescentPart3() {
                 background: #28a745;
                 color: white;
                 border: none;
-                padding: 12px 20px;
-                border-radius: 6px;
+                border-radius: 5px;
                 cursor: pointer;
-                font-size: 16px;
                 font-weight: bold;
                 transition: background 0.2s;
-                margin: 5px;
             }
             
             .action-btn:hover:not(:disabled) {
@@ -597,42 +554,40 @@ function createGradientDescentPart2() {
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
-            <div class="level-header">Understanding Gradient Descent - Part 2: Automatic Minimum Finding</div>
-            <div class="level-content gradient-descent-demo">
-                <div class="demo-explanation">
-                    <h3>Gradient Descent Finds the Minimum Automatically</h3>
-                    <p>Now instead of choosing your own steps, let gradient descent automatically calculate 
-                    how to reach the minimum of <strong>f(x) = (x - 5)²</strong>! Try different learning rates to see how they affect convergence.</p>
+            <div class="level-header" style="padding: 8px; font-size: 1.1rem;">Gradient Descent - Part 2: Automatic Finding</div>
+            <div class="level-content gradient-descent-demo" style="padding: 10px;">
+                <div class="demo-explanation" style="margin-bottom: 10px;">
+                    <h3 style="font-size: 1rem; margin: 5px 0;">Automatic Minimum Finding</h3>
+                    <p style="font-size: 0.9rem; margin: 5px 0;">Let gradient descent automatically find the minimum of <strong>f(x) = (x - 5)²</strong>!</p>
                 </div>
                 
                 <div class="demo-container">
                     <div class="graph-section">
-                        <div class="function-display">
-                            <div class="current-values">
-                                <div>Current x: <span id="currentX">0.0</span></div>
-                                <div>Function value: <span id="functionValue">25.0</span></div>
-                                <div>Gradient: <span id="currentGradient">-10.0</span></div>
+                        <div class="function-display" style="margin-bottom: 8px;">
+                            <div class="current-values" style="font-size: 0.85rem;">
+                                <div style="display: inline-block; margin-right: 12px;">x: <span id="currentX" style="font-weight: bold;">0.0</span></div>
+                                <div style="display: inline-block; margin-right: 12px;">f(x): <span id="functionValue" style="font-weight: bold;">25.0</span></div>
+                                <div style="display: inline-block;">∇: <span id="currentGradient" style="font-weight: bold;">-10.0</span></div>
                             </div>
                         </div>
                         
-                        <canvas id="gradientCanvas" width="500" height="300"></canvas>
+                        <canvas id="gradientCanvas" width="450" height="250"></canvas>
                         
                     </div>
                     
-                    <div class="controls-section">
-                        <div class="lr-section">
-                            <h4>Choose learning rate for gradient descent</h4>
-                            <div class="lr-button-group">
-                                <button class="lr-btn" data-lr="1.0">1.0 (Large Steps)</button>
-                                <button class="lr-btn" data-lr="0.1">0.1 (Medium Steps)</button>
-                                <button class="lr-btn" data-lr="0.01">0.01 (Small Steps)</button>
+                    <div class="controls-section" style="margin-top: 10px;">
+                        <div class="lr-section" style="padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                            <h4 style="font-size: 0.95rem; margin: 0 0 8px 0;">Learning Rate</h4>
+                            <div class="lr-button-group" style="display: flex; gap: 5px; margin-bottom: 8px;">
+                                <button class="lr-btn" data-lr="1.0" style="flex: 1; padding: 5px; font-size: 0.85rem;">1.0</button>
+                                <button class="lr-btn" data-lr="0.1" style="flex: 1; padding: 5px; font-size: 0.85rem;">0.1</button>
+                                <button class="lr-btn" data-lr="0.01" style="flex: 1; padding: 5px; font-size: 0.85rem;">0.01</button>
                             </div>
-                            <div id="stepCalculation" class="step-calculation"></div>
-                            <button id="takeStepBtn" class="action-btn" disabled>→ Take Step</button>
-                        </div>
-                        
-                        <div class="reset-controls">
-                            <button id="resetBtn" class="action-btn">🔄 Reset Position</button>
+                            <div id="stepCalculation" class="step-calculation" style="font-size: 0.8rem; margin: 8px 0; min-height: 60px;"></div>
+                            <div style="display: flex; gap: 8px;">
+                                <button id="takeStepBtn" class="action-btn" disabled style="flex: 1; padding: 5px 12px; font-size: 0.9rem;">→ Take Step</button>
+                                <button id="resetBtn" class="action-btn" style="padding: 5px 12px; font-size: 0.9rem;">🔄 Reset</button>
+                            </div>
                         </div>
                     </div>
                 </div>

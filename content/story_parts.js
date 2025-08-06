@@ -358,12 +358,12 @@ function createStoryPart6() {
                         
                         <p>Let's examine our training data more carefully. What if each robot's optimal energy level depends on their <strong>physical characteristics</strong> too?</p>
                         
-                        <div class="data-insight">
-                            <div class="insight-box">
-                                <div class="insight-icon">🧩</div>
-                                <div class="insight-text">
-                                    <strong>More Features = Better Predictions</strong><br>
-                                    Physical characteristics might be the missing piece of the puzzle!
+                        <div id="concept5" class="objective-item" style="background: linear-gradient(135deg, rgba(243,150,10,0.1), rgba(243,150,10,0.05)); border-radius: 12px; padding: 20px; margin: 20px 0; border: 2px solid #f3960a;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div class="objective-icon" style="font-size: 2.5rem;">🔍</div>
+                                <div class="objective-content">
+                                    <h3 style="margin: 0; font-size: 1.2rem; color: #333;">Training Features: The Missing Piece!</h3>
+                                    <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666; line-height: 1.4;">Physical characteristics (head, body, leg sizes) are the <strong>features</strong> that help AI make better predictions. More relevant features = more accurate AI!</p>
                                 </div>
                             </div>
                         </div>
@@ -477,15 +477,12 @@ function populateExpandedSpreadsheet(container, robotData) {
             <div class="data-cell robot-name">${robot.name}</div>
             <div class="data-cell size-cell">
                 <span class="size-value">${robot.headSize}</span>
-                <span class="size-unit">in³</span>
             </div>
             <div class="data-cell size-cell">
                 <span class="size-value">${robot.bodySize}</span>
-                <span class="size-unit">in³</span>
             </div>
             <div class="data-cell size-cell">
                 <span class="size-value">${robot.legSize}</span>
-                <span class="size-unit">in³</span>
             </div>
             <div class="data-cell energy-cell">
                 <div class="energy-bar-mini">
