@@ -1,65 +1,6 @@
 // directions-template.js - Reusable directions/instructions template
 
-function createDirectionsBeforeLevel5() {
-    const container = document.getElementById('app');
-    
-    container.innerHTML = `
-        <div class="current-level">
-            <div class="directions-header">
-                <h2>🧭 Directions: Getting Started</h2>
-                <div class="directions-subtitle">Quick instructions before you begin</div>
-            </div>
-            <div class="level-content">
-                <div class="directions-content">
-                    <div class="directions-main">
-                        <h3>What You'll Learn</h3>
-                        <p>In the next few levels, you'll discover how gradient descent works by:</p>
-                        <ul class="directions-list">
-                            <li>🎯 Adjusting parameters to minimize loss</li>
-                            <li>📊 Understanding how training data helps make predictions</li>
-                            <li>🤖 Seeing how AI systems learn automatically</li>
-                        </ul>
-                        
-                        <h3>How to Navigate</h3>
-                        <p>Use the <strong>Previous</strong> and <strong>Next</strong> buttons to move between levels. You can also click the hamburger menu (☰) in the top corner to jump to any level.</p>
-                        
-                        <div class="directions-tips">
-                            <div class="tip-box">
-                                <h4>💡 Pro Tip</h4>
-                                <p>Don't worry if you don't get everything perfect right away. The goal is to understand the concepts, and you can always go back and try again!</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="directions-visual">
-                        <div class="preview-box">
-                            <h4>🔍 What's Coming Up</h4>
-                            <div class="preview-items">
-                                <div class="preview-item">
-                                    <span class="preview-icon">🤖</span>
-                                    <span class="preview-text">Robot Energy Tuning</span>
-                                </div>
-                                <div class="preview-item">
-                                    <span class="preview-icon">🧙‍♀️</span>
-                                    <span class="preview-text">Potion Brewing</span>
-                                </div>
-                                <div class="preview-item">
-                                    <span class="preview-icon">📈</span>
-                                    <span class="preview-text">Gradient Descent</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                ${createStandardNavigation()}
-            </div>
-        </div>
-    `;
-    
-    // Initialize navigation - CHANGE THESE VALUES FOR EACH DIRECTIONS PAGE
-    initializeNavigation('directions-level5', 'createDirectionsBeforeLevel5');
-}
+// Unused function removed - template kept for potential future use
 
 // CSS for directions pages (add this once to your CSS files)
 const directionsStyles = `

@@ -17,6 +17,7 @@ const NAVIGATION_CONFIG = {
                 { id: "ip2a", name: "Behind the Scenes: Simple View", func: "createBehindTheScenesSimple" },
                 { id: "ip2b", name: "Behind the Scenes: The Math", func: "createBehindTheScenesLevel1" },
                 { id: "ip2c", name: "Check Your Understanding", func: "createLossQuizPart" },
+                { id: "ip2c-congrats", name: "Quiz Complete!", func: "createLossQuizCongrats" },
                 { id: "ip3", name: "Introducing Gradient Descent", func: "createInstructionPart3" },
                 { id: "level2", name: "Level 2: AI Robot", func: "createLevel2" }
             ]

@@ -266,7 +266,7 @@ function createLevel2() {
                                     <div style="font-size: 0.9rem; color: #666;">Current Loss</div>
                                     <div id="lossValueAI" style="font-size: 2rem; font-weight: bold; color: #ff6347;">45</div>
                                 </div>
-                                
+                                <div id="lossIndicatorAI" style="font-size: 3rem;">🤖</div>
                             </div>
                             <div id="aiStatus" style="margin-top: 10px; font-size: 0.95rem; color: #667eea; font-weight: 500;">AI will automatically find the optimal value</div>
                         </div>
