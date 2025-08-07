@@ -3,7 +3,7 @@ function createLevel1() {
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
-            ${createLevelHeader(0, 1, 9)}
+            ${createLevelHeader(0, 1, 12)}
 
             <div class="level-content" style="display: flex; gap: 40px; align-items: center; padding: 20px; justify-content: space-between;">
                 <div class="visual-section" style="flex: 1; text-align: center; max-width: 350px;">
@@ -26,10 +26,7 @@ function createLevel1() {
                                     <div id="lossValue" style="font-size: 2rem; font-weight: bold; color: #ff6347;">25</div>
                                 </div>
                                 <div id="lossIndicator" style="font-size: 3rem;">🔥</div>
-                                <div>
-                                    <div style="font-size: 0.9rem; color: #666;">Target</div>
-                                    <div style="font-size: 2rem; font-weight: bold; color: #2dd573;">0</div>
-                                </div>
+                                
                             </div>
                             <div id="hintText" style="margin-top: 10px; font-size: 0.95rem; color: #666; font-style: italic;">You're getting colder... 🥶</div>
                         </div>
@@ -247,7 +244,7 @@ function createLevel2() {
     
     container.innerHTML = `
         <div class="current-level">
-            ${createLevelHeader(1, 2, 9)}
+            ${createLevelHeader(1, 2, 12)}
             
             <div class="level-content" style="display: flex; gap: 40px; align-items: center; padding: 20px; justify-content: space-between;">
                 <div class="visual-section" style="flex: 1; text-align: center; max-width: 350px;">
@@ -269,11 +266,7 @@ function createLevel2() {
                                     <div style="font-size: 0.9rem; color: #666;">Current Loss</div>
                                     <div id="lossValueAI" style="font-size: 2rem; font-weight: bold; color: #ff6347;">45</div>
                                 </div>
-                                <div id="lossIndicatorAI" style="font-size: 3rem;">🤖</div>
-                                <div>
-                                    <div style="font-size: 0.9rem; color: #666;">Target</div>
-                                    <div style="font-size: 2rem; font-weight: bold; color: #2dd573;">0</div>
-                                </div>
+                                
                             </div>
                             <div id="aiStatus" style="margin-top: 10px; font-size: 0.95rem; color: #667eea; font-weight: 500;">AI will automatically find the optimal value</div>
                         </div>

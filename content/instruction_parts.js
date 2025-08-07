@@ -185,6 +185,489 @@ function createInstructionPart2() {
     initializeNavigation('ip2', 'createInstructionPart2');
 }
 
+function createBehindTheScenesSimple() {
+    const container = document.getElementById('app');
+    container.innerHTML = `
+        <div class="current-level" style="background: linear-gradient(to bottom, #000000, #1a1a1a); min-height: 100vh;">
+            <div class="level-content" style="padding: 20px; max-width: 1200px; margin: 0 auto;">
+                <h1 style="font-size: 2.5rem; margin-bottom: 20px; text-align: center; color: white;">Behind the Scenes: What the Computer Sees</h1>
+                
+                <div style="display: grid; grid-template-columns: 3fr 2fr; gap: 30px; margin: 30px 0;">
+                    <!-- Left side: Line Visualization instead of Robot -->
+                    <div style="background: rgba(0,0,0,0.5); border-radius: 12px; padding: 30px; border: 1px solid rgba(255,255,255,0.2); text-align: center;">
+                        <h2 style="margin-bottom: 20px; color: white;">Energy Visualization</h2>
+                        
+                        <!-- Line visualization container -->
+                        <div style="position: relative; height: 300px; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 40px; margin-bottom: 20px;">
+                            <!-- The horizontal line -->
+                            <div style="position: absolute; left: 7%; right: 7%; top: 50%; height: 4px; background: rgba(255,255,255,0.3); transform: translateY(-50%);">
+                            </div>
+                            
+                            <!-- Scale markers -->
+                            <div style="position: absolute; left: 7%; top: 52%; transform: translateY(-50%);">
+                                <div style="width: 2px; height: 20px; background: rgba(255,255,255,0.5); margin: 0 auto;"></div>
+                                <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-top: 5px;">0</div>
+                            </div>
+                            <div style="position: absolute; left: 50%; top: 52%; transform: translate(-50%, -50%);">
+                                <div style="width: 2px; height: 20px; background: rgba(255,255,255,0.5); margin: 0 auto;"></div>
+                                <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-top: 5px;">50</div>
+                            </div>
+                            <div style="position: absolute; left: 93%; top: 52%; transform: translateY(-50%);">
+                                <div style="width: 2px; height: 20px; background: rgba(255,255,255,0.5); margin: 0 auto;"></div>
+                                <div style="color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-top: 5px;">100</div>
+                            </div>
+                            
+                            <!-- Target marker at 75 -->
+                            <div id="target-marker" style="position: absolute; left: 71.5%; top: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; border-radius: 50%; background: #2dd573; border: 3px solid rgba(255,255,255,0.3); box-shadow: 0 0 15px rgba(45,213,115,0.6); z-index: 1;">
+                                <div style="position: absolute; top: -30px; left: 50%; transform: translateX(-50%); color: #2dd573; font-weight: bold; font-size: 0.9rem; white-space: nowrap;">Target: 75</div>
+                            </div>
+                            
+                            <!-- Moving dot -->
+                            <div id="energy-dot" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; background: #ff6347; border-radius: 50%; transition: all 0.3s ease; box-shadow: 0 0 12px rgba(255,99,71,0.6); z-index: 2;">
+                                <div id="energy-label" style="position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%); color: white; font-weight: bold; font-size: 0.9rem; white-space: nowrap;">Energy: 50</div>
+                            </div>
+                        </div>
+                        
+                        <div style="font-size: 1rem; color: #aaa; margin-top: 10px;">The computer doesn't see a robot - it sees a point on a line!</div>
+                    </div>
+                    
+                    <!-- Right side: Controls and Info (same as Level 1) -->
+                    <div style="background: rgba(0,0,0,0.5); border-radius: 12px; padding: 30px; border: 1px solid rgba(255,255,255,0.2);">
+                        <h2 style="margin-bottom: 20px; color: white;">Control Panel</h2>
+                        
+                        <!-- Energy Control -->
+                        <div style="margin-bottom: 30px;">
+                            <label style="font-weight: bold; color: #ccc; display: block; margin-bottom: 10px;">
+                                Energy Level: <span id="energy-value" style="color: #667eea; font-size: 1.2rem;">50</span>
+                            </label>
+                            <input type="range" id="energy-slider" min="0" max="100" value="50" style="width: 100%; height: 8px; border-radius: 4px; background: #333; outline: none; cursor: pointer; -webkit-appearance: none;"/>
+                            <style>
+                                #energy-slider::-webkit-slider-thumb {
+                                    -webkit-appearance: none;
+                                    appearance: none;
+                                    width: 20px;
+                                    height: 20px;
+                                    background: #667eea;
+                                    border-radius: 50%;
+                                    cursor: pointer;
+                                    box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+                                }
+                                #energy-slider::-moz-range-thumb {
+                                    width: 20px;
+                                    height: 20px;
+                                    background: #667eea;
+                                    border-radius: 50%;
+                                    cursor: pointer;
+                                    box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+                                    border: none;
+                                }
+                            </style>
+                        </div>
+                        
+                        <!-- Status Display -->
+                        <div style="display: grid; gap: 15px;">
+                            <div style="padding: 15px; background: rgba(102,126,234,0.1); border-radius: 8px; border: 1px solid rgba(102,126,234,0.3);">
+                                <div style="font-weight: bold; color: #667eea; margin-bottom: 5px;">Current Energy</div>
+                                <div id="current-energy-display" style="font-size: 1.5rem; color: white;">50</div>
+                            </div>
+                            
+                            <div id="loss-display" style="padding: 15px; background: rgba(255,99,71,0.1); border-radius: 8px; border: 1px solid rgba(255,99,71,0.3);">
+                                <div style="font-weight: bold; color: #ff6347; margin-bottom: 5px;">Loss (Distance from Target)</div>
+                                <div id="loss-value" style="font-size: 1.5rem; color: white;">625</div>
+                                <div style="font-size: 0.9rem; color: #aaa; margin-top: 5px;">(50 - 75)² = 625</div>
+                            </div>
+                            
+                            <div style="padding: 15px; background: rgba(45,213,115,0.1); border-radius: 8px; border: 1px solid rgba(45,213,115,0.3);">
+                                <div style="font-weight: bold; color: #2dd573; margin-bottom: 5px;">Target Energy</div>
+                                <div style="font-size: 1.5rem; color: white;">75</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Hints -->
+                        <div id="hint-box" style="margin-top: 20px; padding: 15px; background: rgba(243,150,10,0.1); border-radius: 8px; border: 1px solid rgba(243,150,10,0.3);">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 1.5rem;">💡</span>
+                                <div>
+                                    <strong style="color: #f3960a;">Hint:</strong>
+                                    <span id="hint-text" style="color: #ccc;">Move the slider to find the energy level where loss = 0!</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Message -->
+                <div style="background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1)); border-radius: 12px; padding: 20px; border: 1px solid rgba(255,255,255,0.2); text-align: center; margin: 20px 0;">
+                    <p style="margin: 0; font-size: 1.05rem; color: white;">This is the same problem as Level 1, but now you see it as the computer does - finding the right position on a line!</p>
+                </div>
+                
+                ${createStandardNavigation()}
+            </div>
+        </div>
+    `;
+    
+    // Initialize navigation
+    initializeNavigation('ip2a', 'createBehindTheScenesSimple');
+    
+    // Add functionality
+    setTimeout(() => {
+        const slider = document.getElementById('energy-slider');
+        const energyValue = document.getElementById('energy-value');
+        const currentEnergyDisplay = document.getElementById('current-energy-display');
+        const lossValue = document.getElementById('loss-value');
+        const lossDisplay = document.getElementById('loss-display');
+        const hintText = document.getElementById('hint-text');
+        const energyDot = document.getElementById('energy-dot');
+        const energyLabel = document.getElementById('energy-label');
+        
+        function updateDisplay(energy) {
+            const loss = Math.pow(energy - 75, 2);
+            
+            // Update text displays
+            if (energyValue) energyValue.textContent = energy;
+            if (currentEnergyDisplay) currentEnergyDisplay.textContent = energy;
+            if (lossValue) {
+                lossValue.textContent = loss.toFixed(0);
+                const lossExplanation = lossValue.nextElementSibling;
+                if (lossExplanation) {
+                    lossExplanation.textContent = `(${energy} - 75)² = ${loss.toFixed(0)}`;
+                }
+            }
+            
+            // Update dot position
+            if (energyDot) {
+                // Map 0-100 to the line's position (accounting for 40px padding on each side)
+                // Line goes from 40px to (width - 40px), which in percentage is approximately 7% to 93%
+                const leftPos = 7 + (energy * 0.86); // Maps 0-100 to 7%-93%
+                energyDot.style.left = `${leftPos}%`;
+                
+            // Update dot color based on loss
+            if (currentPoint) {
+                if (loss === 0) {
+                    currentPoint.style.background = '#2dd573';
+                    currentPoint.style.boxShadow = '0 0 20px rgba(45,213,115,0.8)';
+                } else if (loss < 100) {
+                    currentPoint.style.background = '#f3960a';
+                    currentPoint.style.boxShadow = '0 0 15px rgba(243,150,10,0.8)';
+                } else {
+                    currentPoint.style.background = '#ff6347';
+                    currentPoint.style.boxShadow = '0 0 12px rgba(255,99,71,0.6)';
+                }
+            }
+            }
+            
+            // Update energy label
+            if (energyLabel) {
+                energyLabel.textContent = `Energy: ${energy}`;
+            }
+            
+            // Update loss display background
+            if (lossDisplay) {
+                if (loss === 0) {
+                    lossDisplay.style.background = '#f0fdf4';
+                    lossDisplay.style.borderLeftColor = '#22c55e';
+                } else if (loss < 100) {
+                    lossDisplay.style.background = '#fef3c7';
+                    lossDisplay.style.borderLeftColor = '#f59e0b';
+                } else {
+                    lossDisplay.style.background = '#fef2f2';
+                    lossDisplay.style.borderLeftColor = '#ef4444';
+                }
+            }
+            
+            // Update hints
+            if (hintText) {
+                if (loss === 0) {
+                    hintText.textContent = 'Perfect! You found the optimal energy level!';
+                } else if (energy < 75) {
+                    hintText.textContent = 'Too low! Try increasing the energy.';
+                } else {
+                    hintText.textContent = 'Too high! Try decreasing the energy.';
+                }
+            }
+        }
+        
+        // Initialize
+        updateDisplay(50);
+        
+        // Add slider event listener
+        if (slider) {
+            slider.addEventListener('input', (e) => {
+                updateDisplay(parseInt(e.target.value));
+            });
+        }
+    }, 100);
+}
+
+function createBehindTheScenesLevel1() {
+    const container = document.getElementById('app');
+    container.innerHTML = `
+        <div class="current-level" style="background: linear-gradient(to bottom, #000000, #1a1a1a); min-height: 100vh;">
+            <div class="level-content" style="padding: 20px; max-width: 1200px; margin: 0 auto;">
+                <h1 style="font-size: 2.3rem; margin-bottom: 20px; color: white; text-align: center;">🔬 Behind the Scenes: The Mathematical View</h1>
+                
+                <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1);">
+                    <p style="color: #ccc; font-size: 1.05rem; line-height: 1.6; margin: 0;">This is what the computer "sees" - not a robot, but a <strong style="color: #667eea;">mathematical function</strong>. The loss creates a parabola (U-shaped curve) with the minimum at energy = 75.</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px; margin: 30px 0;">
+                    <!-- Left side: Graph Visualization -->
+                    <div style="background: rgba(0,0,0,0.5); border-radius: 12px; padding: 20px; border: 1px solid rgba(255,255,255,0.2);">
+                        <h3 style="color: white; margin-bottom: 15px; text-align: center;">Loss Function: (Energy - 75)²</h3>
+                        <div style="position: relative; height: 400px; background: rgba(0,0,0,0.3); border-radius: 8px; overflow: hidden;">
+                            <!-- Canvas for the graph -->
+                            <canvas id="loss-graph" width="600" height="400" style="width: 100%; height: 100%;"></canvas>
+                            <!-- Current point indicator -->
+                            <div id="current-point" style="position: absolute; width: 12px; height: 12px; background: #ff6347; border-radius: 50%; transform: translate(-50%, -50%); transition: all 0.3s ease; box-shadow: 0 0 10px rgba(255,99,71,0.8);"></div>
+                        </div>
+                        
+                        <!-- Energy slider -->
+                        <div style="margin-top: 20px;">
+                            <label style="color: white; font-weight: bold; display: block; margin-bottom: 10px;">
+                                Energy Level: <span id="energy-value" style="color: #667eea; font-size: 1.2rem;">50</span>
+                            </label>
+                            <input type="range" id="energy-slider" min="0" max="100" value="50" 
+                                   style="width: 100%; height: 8px; border-radius: 4px; background: #333; outline: none; cursor: pointer; -webkit-appearance: none;"/>
+                            <style>
+                                #energy-slider::-webkit-slider-thumb {
+                                    -webkit-appearance: none;
+                                    appearance: none;
+                                    width: 20px;
+                                    height: 20px;
+                                    background: #667eea;
+                                    border-radius: 50%;
+                                    cursor: pointer;
+                                    box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+                                }
+                                #energy-slider::-moz-range-thumb {
+                                    width: 20px;
+                                    height: 20px;
+                                    background: #667eea;
+                                    border-radius: 50%;
+                                    cursor: pointer;
+                                    box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+                                    border: none;
+                                }
+                            </style>
+                        </div>
+                    </div>
+                    
+                    <!-- Right side: Info Panel -->
+                    <div style="background: rgba(0,0,0,0.5); border-radius: 12px; padding: 20px; border: 1px solid rgba(255,255,255,0.2);">
+                        <h3 style="color: white; margin-bottom: 20px;">📊 Mathematical Details</h3>
+                        
+                        <div style="margin-bottom: 20px; padding: 15px; background: rgba(102,126,234,0.1); border-radius: 8px; border: 1px solid rgba(102,126,234,0.3);">
+                            <div style="color: #667eea; font-weight: bold; margin-bottom: 5px;">Current Energy:</div>
+                            <div id="current-energy" style="color: white; font-size: 1.8rem;">50</div>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px; padding: 15px; background: rgba(255,99,71,0.1); border-radius: 8px; border: 1px solid rgba(255,99,71,0.3);">
+                            <div style="color: #ff6347; font-weight: bold; margin-bottom: 5px;">Current Loss:</div>
+                            <div id="current-loss" style="color: white; font-size: 1.8rem;">625</div>
+                            <div style="color: #aaa; font-size: 0.9rem; margin-top: 5px;">(50 - 75)² = 625</div>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px; padding: 15px; background: rgba(45,213,115,0.1); border-radius: 8px; border: 1px solid rgba(45,213,115,0.3);">
+                            <div style="color: #2dd573; font-weight: bold; margin-bottom: 5px;">Target Energy:</div>
+                            <div style="color: white; font-size: 1.8rem;">75</div>
+                            <div style="color: #aaa; font-size: 0.9rem; margin-top: 5px;">Loss = 0 at this point</div>
+                        </div>
+                        
+                        <div style="margin-top: 20px; padding: 15px; background: rgba(118,75,162,0.1); border-radius: 8px; border: 1px solid rgba(118,75,162,0.3);">
+                            <div style="color: #764ba2; font-weight: bold; margin-bottom: 10px;">🎯 Key Insight:</div>
+                            <p style="color: #ccc; font-size: 0.95rem; line-height: 1.5; margin: 0;">The parabola shape means there's exactly <strong>one minimum point</strong>. This makes optimization easy - just follow the curve downward!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Explanation -->
+                <div style="background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1)); border-radius: 12px; padding: 20px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.2);">
+                    <h3 style="color: white; margin-bottom: 10px;">💡 What You're Seeing:</h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                        <div style="text-align: center; padding: 10px;">
+                            <div style="font-size: 2rem; margin-bottom: 5px;">📈</div>
+                            <div style="color: #667eea; font-weight: bold;">The Curve</div>
+                            <div style="color: #aaa; font-size: 0.85rem;">Loss function (Energy - 75)²</div>
+                        </div>
+                        <div style="text-align: center; padding: 10px;">
+                            <div style="font-size: 2rem; margin-bottom: 5px;">🔴</div>
+                            <div style="color: #ff6347; font-weight: bold;">Red Dot</div>
+                            <div style="color: #aaa; font-size: 0.85rem;">Your current position</div>
+                        </div>
+                        <div style="text-align: center; padding: 10px;">
+                            <div style="font-size: 2rem; margin-bottom: 5px;">🎯</div>
+                            <div style="color: #2dd573; font-weight: bold;">The Valley</div>
+                            <div style="color: #aaa; font-size: 0.85rem;">Minimum at x = 75</div>
+                        </div>
+                    </div>
+                </div>
+                
+                ${createStandardNavigation()}
+            </div>
+        </div>
+    `;
+    
+    // Initialize navigation
+    initializeNavigation('ip2b', 'createBehindTheScenesLevel1');
+    
+    // Add graph functionality
+    setTimeout(() => {
+        const canvas = document.getElementById('loss-graph');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        const slider = document.getElementById('energy-slider');
+        const energyValue = document.getElementById('energy-value');
+        const currentEnergy = document.getElementById('current-energy');
+        const currentLoss = document.getElementById('current-loss');
+        const currentPoint = document.getElementById('current-point');
+        
+        // Set canvas size
+        canvas.width = canvas.offsetWidth;
+        canvas.height = 400;
+        
+        function drawGraph(energy) {
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 40;
+            
+            // Clear canvas
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.fillRect(0, 0, width, height);
+            
+            // Draw axes
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(padding, height - padding);
+            ctx.lineTo(width - padding, height - padding); // X axis
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, height - padding); // Y axis
+            ctx.stroke();
+            
+            // Draw labels
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.font = '12px Arial';
+            ctx.fillText('0', padding - 20, height - padding + 5);
+            ctx.fillText('100', width - padding - 10, height - padding + 20);
+            ctx.fillText('Energy', width / 2 - 20, height - 10);
+            ctx.fillText('Loss', 5, 20);
+            
+            // Draw the parabola
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            
+            const xScale = (width - 2 * padding) / 100;
+            const maxLoss = Math.pow(75, 2); // Maximum loss at x=0 or x=100
+            const yScale = (height - 2 * padding) / maxLoss;
+            
+            for (let x = 0; x <= 100; x += 0.5) {
+                const loss = Math.pow(x - 75, 2);
+                const xPos = padding + x * xScale;
+                const yPos = height - padding - loss * yScale;
+                
+                if (x === 0) {
+                    ctx.moveTo(xPos, yPos);
+                } else {
+                    ctx.lineTo(xPos, yPos);
+                }
+            }
+            ctx.stroke();
+            
+            // Draw minimum point marker
+            const minX = padding + 75 * xScale;
+            const minY = height - padding;
+            ctx.fillStyle = '#2dd573';
+            ctx.beginPath();
+            ctx.arc(minX, minY, 5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Draw vertical line at x=75
+            ctx.strokeStyle = 'rgba(45, 213, 115, 0.3)';
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(minX, padding);
+            ctx.lineTo(minX, height - padding);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Update current point position
+            const currentX = padding + energy * xScale;
+            const currentY = height - padding - Math.pow(energy - 75, 2) * yScale;
+            if (currentPoint) {
+                currentPoint.style.left = currentX + 'px';
+                currentPoint.style.top = currentY + 'px';
+            }
+            
+            // Draw line from current point to bottom
+            ctx.strokeStyle = 'rgba(255, 99, 71, 0.5)';
+            ctx.setLineDash([3, 3]);
+            ctx.beginPath();
+            ctx.moveTo(currentX, currentY);
+            ctx.lineTo(currentX, height - padding);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+        
+        function updateValues(energy) {
+            const loss = Math.pow(energy - 75, 2);
+            
+            if (energyValue) energyValue.textContent = energy;
+            if (currentEnergy) currentEnergy.textContent = energy;
+            if (currentLoss) {
+                currentLoss.textContent = loss.toFixed(0);
+                const lossExplanation = currentLoss.nextElementSibling;
+                if (lossExplanation) {
+                    lossExplanation.textContent = `(${energy} - 75)² = ${loss.toFixed(0)}`;
+                }
+            }
+            
+            drawGraph(energy);
+            
+            // Change dot color based on loss
+            if (currentPoint) {
+                if (loss === 0) {
+                    currentPoint.style.background = '#2dd573';
+                    currentPoint.style.boxShadow = '0 0 20px rgba(45,213,115,0.8)';
+                } else if (loss < 100) {
+                    currentPoint.style.background = '#f3960a';
+                    currentPoint.style.boxShadow = '0 0 15px rgba(243,150,10,0.8)';
+                } else {
+                    currentPoint.style.background = '#ff6347';
+                    currentPoint.style.boxShadow = '0 0 10px rgba(255,99,71,0.8)';
+                }
+            }
+        }
+        
+        // Initialize
+        updateValues(50);
+        
+        // Add slider event listener
+        if (slider) {
+            slider.addEventListener('input', (e) => {
+                updateValues(parseInt(e.target.value));
+            });
+        }
+        
+        // Animate to show the concept
+        setTimeout(() => {
+            if (slider) {
+                let value = 50;
+                const animateInterval = setInterval(() => {
+                    value += 2;
+                    if (value >= 75) {
+                        value = 75;
+                        clearInterval(animateInterval);
+                    }
+                    slider.value = value;
+                    updateValues(value);
+                }, 50);
+            }
+        }, 1000);
+    }, 100);
+}
+
 function createLossQuizPart() {
     const container = document.getElementById('app');
     container.innerHTML = `
@@ -274,7 +757,7 @@ function createLossQuizPart() {
     `;
     
     // Initialize navigation
-    initializeNavigation('ip2b', 'createLossQuizPart');
+    initializeNavigation('ip2c', 'createLossQuizPart');
     
     // Add quiz functionality
     setTimeout(() => {

@@ -3,15 +3,15 @@
 const levels = [
     {
         title: "Energy Control",
-        goal: "Tune the energy level to the right amount to turn the robot on."
+        goal: "Minimize the loss by tuning the robot to its optimal energy level."
     },
     {
-        title: "Potion Brewing", 
-        goal: "Help the witch create the perfect magical brew by balancing yellow and blue potions.",
+        title: "Gradient Descent 1", 
+        goal: "Keep pressing the gradient descent button to automatically find the optimal energy level!",
     },
     {
-        title: "AI Optimization",
-        goal: "Keep pressing the gradient descent button to automatically find the optimal energy level!"
+        title: "Two Loss Terms",
+        goal: "Help the witch create the perfect magical brew by balancing yellow and blue potions."
     },
     {
         title: "Multi-Potion Mastery",
