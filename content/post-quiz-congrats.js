@@ -17,10 +17,10 @@ function createLossQuizCongrats() {
                         <div style="text-align: center;">
                             <h2 style="margin: 0 0 15px 0; font-size: 1.8rem; color: #2dd573;">Perfect Score!</h2>
                             <p style="font-size: 1.2rem; color: #333; margin: 0 0 10px 0;">
-                                You've mastered the concept of <strong>Loss Functions</strong>!
+                                You've mastered <strong>Loss Functions</strong> and <strong>Multiple Variables</strong>!
                             </p>
                             <p style="font-size: 1rem; color: #666;">
-                                You correctly calculated all three types of loss functions.
+                                You correctly calculated all four types of loss problems.
                             </p>
                         </div>
                     </div>
@@ -53,6 +53,13 @@ function createLossQuizCongrats() {
                                 <span style="color: #555;"> Can be designed for specific needs and applications</span>
                             </div>
                         </div>
+                        <div style="display: flex; align-items: flex-start; gap: 15px;">
+                            <div style="font-size: 1.2rem; color: #2dd573;">✓</div>
+                            <div>
+                                <strong style="color: #9333ea;">Multiple Variables:</strong>
+                                <span style="color: #555;"> Total loss is the sum of individual losses for each variable</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -62,7 +69,7 @@ function createLossQuizCongrats() {
                         <span style="font-size: 1.5rem;">🚀</span> Ready for the Next Challenge?
                     </h3>
                     <p style="font-size: 1.05rem; color: #555; line-height: 1.6; margin-bottom: 20px;">
-                        Now that you understand how loss functions measure errors, you're ready to learn about 
+                        Now that you understand how loss functions work with multiple variables, you're ready to learn about 
                         <strong style="color: #667eea;">Gradient Descent</strong> - the algorithm that uses these 
                         loss measurements to automatically improve AI predictions!
                     </p>

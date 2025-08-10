@@ -129,10 +129,9 @@ function initializeNavigation(pageId, functionName, first = false, last = false)
     // Inject navigation buttons into app container
     injectNavigationButtons(first, last);
     
-    // Initialize custom scrollbar wrapper
-    if (window.initializeCustomScrollbar) {
-        initializeCustomScrollbar();
-    }
+    // UNUSED: Custom scrollbar initialization was removed
+    // Previously checked for window.initializeCustomScrollbar function
+    // which no longer exists in the codebase
     
     // Scroll to top of app container
     scrollAppToTop();

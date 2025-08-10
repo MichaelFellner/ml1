@@ -237,9 +237,9 @@ function updateEnergyDisplay(energy) {
 }
 
 
-function createLevel2() {
-    const levelId = 'level2';
-    currentLevel = 2;
+function createLevel3() {
+    const levelId = 'level3';
+    currentLevel = 3;
     const container = document.getElementById('app');
     
     container.innerHTML = `
@@ -323,7 +323,10 @@ function createLevel2() {
                         <!-- AI Control Buttons -->
                         <div style="display: flex; gap: 15px; margin-top: 25px;">
                             <button id="gradientBtn" style="flex: 1; padding: 12px 20px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(102,126,234,0.3);">
-                                🤖 Run Gradient Descent Step
+                                🤖 Run Step
+                            </button>
+                            <button id="autoRunBtn" style="flex: 1; padding: 12px 20px; background: linear-gradient(135deg, #48bb78, #38a169); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(72,187,120,0.3);">
+                                ▶️ Auto Run
                             </button>
                             <button id="resetBtn" style="padding: 12px 20px; background: #f3960a; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease;">
                                 🔄 Reset
@@ -343,19 +346,22 @@ function createLevel2() {
     `;
     
     // Initialize navigation
-    initializeNavigation(levelId, 'createLevel2');
-    setupLevel2();
+    initializeNavigation(levelId, 'createLevel3');
+    setupLevel3();
 }
 
-function setupLevel2() {
+function setupLevel3() {
     const energySliderAI = document.getElementById('energySliderAI');
     const gradientBtn = document.getElementById('gradientBtn');
+    const autoRunBtn = document.getElementById('autoRunBtn');
     const resetBtn = document.getElementById('resetBtn');
     const lossDisplayAI = document.getElementById('lossDisplayAI');
     const controlPanelAI = document.getElementById('controlPanelAI');
     const stepCounter = document.getElementById('stepCounter');
     const stepCount = document.getElementById('stepCount');
     let steps = 0;
+    let isAutoRunning = false;
+    let autoRunInterval = null;
     
     function updateEnergyAI() {
         const energy = parseInt(energySliderAI.value);
@@ -389,6 +395,12 @@ function setupLevel2() {
             gradientBtn.style.opacity = '0.5';
             gradientBtn.style.cursor = 'not-allowed';
             gradientBtn.textContent = '✅ Optimization Complete!';
+            // Stop auto-run if active
+            if (isAutoRunning) {
+                stopAutoRun();
+            }
+            autoRunBtn.disabled = true;
+            autoRunBtn.style.opacity = '0.5';
         } else if (distance <= 5) {
             // Very close!
             lossIndicatorAI.textContent = '🔥';
@@ -425,40 +437,110 @@ function setupLevel2() {
         }
     }
     
-    gradientBtn.addEventListener('click', () => {
-        if (gradientBtn.disabled) return;
-        
-        const currentEnergy = parseInt(energySliderAI.value);
-        const result = optimizer.optimizationStep([currentEnergy], [OPTIMAL_ENERGY_AI], [{ min: 0, max: 100 }]);
-        
-        // Animate the slider movement
-        const startValue = currentEnergy;
-        const endValue = result.newVariables[0];
-        const duration = 500;
-        const startTime = Date.now();
-        
-        function animateSlider() {
-            const elapsed = Date.now() - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
-            
-            const currentValue = Math.round(startValue + (endValue - startValue) * easeProgress);
-            energySliderAI.value = currentValue;
-            updateEnergyAI();
-            
-            if (progress < 1) {
-                requestAnimationFrame(animateSlider);
-            } else {
-                steps++;
-                stepCount.textContent = steps;
-                stepCounter.style.display = 'block';
+    // Function to run a single gradient descent step
+    function runGradientStep(duration = 500) {
+        return new Promise((resolve) => {
+            if (gradientBtn.disabled && !isAutoRunning) {
+                resolve(false);
+                return;
             }
+            
+            const currentEnergy = parseInt(energySliderAI.value);
+            
+            // Check if already perfect
+            if (currentEnergy === OPTIMAL_ENERGY_AI) {
+                resolve(false);
+                return;
+            }
+            
+            const result = optimizer.optimizationStep([currentEnergy], [OPTIMAL_ENERGY_AI], [{ min: 0, max: 100 }]);
+            
+            // Animate the slider movement
+            const startValue = currentEnergy;
+            const endValue = result.newVariables[0];
+            const startTime = Date.now();
+            
+            function animateSlider() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
+                
+                const currentValue = Math.round(startValue + (endValue - startValue) * easeProgress);
+                energySliderAI.value = currentValue;
+                updateEnergyAI();
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animateSlider);
+                } else {
+                    steps++;
+                    stepCount.textContent = steps;
+                    stepCounter.style.display = 'block';
+                    resolve(true);
+                }
+            }
+            
+            animateSlider();
+        });
+    }
+    
+    // Function to stop auto-run
+    function stopAutoRun() {
+        isAutoRunning = false;
+        if (autoRunInterval) {
+            clearInterval(autoRunInterval);
+            autoRunInterval = null;
         }
+        autoRunBtn.textContent = '▶️ Auto Run';
+        autoRunBtn.style.background = 'linear-gradient(135deg, #48bb78, #38a169)';
+        gradientBtn.disabled = false;
+        gradientBtn.style.opacity = '1';
+        gradientBtn.style.cursor = 'pointer';
+    }
+    
+    // Manual gradient descent button
+    gradientBtn.addEventListener('click', () => {
+        if (!isAutoRunning) {
+            runGradientStep();
+        }
+    });
+    
+    // Auto-run button
+    autoRunBtn.addEventListener('click', async () => {
+        if (autoRunBtn.disabled) return;
         
-        animateSlider();
+        if (isAutoRunning) {
+            // Stop auto-run
+            stopAutoRun();
+        } else {
+            // Start auto-run
+            isAutoRunning = true;
+            autoRunBtn.textContent = '⏸ Stop';
+            autoRunBtn.style.background = 'linear-gradient(135deg, #e53e3e, #c53030)';
+            gradientBtn.disabled = true;
+            gradientBtn.style.opacity = '0.5';
+            gradientBtn.style.cursor = 'not-allowed';
+            
+            // Run steps with shorter duration for auto-run
+            async function autoRun() {
+                if (isAutoRunning) {
+                    const continueRunning = await runGradientStep(300); // Faster animation for auto-run
+                    if (continueRunning && isAutoRunning) {
+                        setTimeout(autoRun, 350); // Small delay between steps
+                    } else {
+                        stopAutoRun();
+                    }
+                }
+            }
+            
+            autoRun();
+        }
     });
     
     resetBtn.addEventListener('click', () => {
+        // Stop auto-run if active
+        if (isAutoRunning) {
+            stopAutoRun();
+        }
         optimizer.reset();
         steps = 0;
         stepCount.textContent = '0';
@@ -468,7 +550,9 @@ function setupLevel2() {
         gradientBtn.disabled = false;
         gradientBtn.style.opacity = '1';
         gradientBtn.style.cursor = 'pointer';
-        gradientBtn.textContent = '🤖 Run Gradient Descent Step';
+        gradientBtn.textContent = '🤖 Run Step';
+        autoRunBtn.disabled = false;
+        autoRunBtn.style.opacity = '1';
     });
     
     // Add hover effects
@@ -490,6 +574,25 @@ function setupLevel2() {
     resetBtn.addEventListener('mouseleave', () => {
         resetBtn.style.transform = 'translateY(0)';
         resetBtn.style.boxShadow = 'none';
+    });
+    
+    autoRunBtn.addEventListener('mouseenter', () => {
+        if (!autoRunBtn.disabled) {
+            autoRunBtn.style.transform = 'translateY(-2px)';
+            if (isAutoRunning) {
+                autoRunBtn.style.boxShadow = '0 6px 12px rgba(229,62,62,0.4)';
+            } else {
+                autoRunBtn.style.boxShadow = '0 6px 12px rgba(72,187,120,0.4)';
+            }
+        }
+    });
+    autoRunBtn.addEventListener('mouseleave', () => {
+        autoRunBtn.style.transform = 'translateY(0)';
+        if (isAutoRunning) {
+            autoRunBtn.style.boxShadow = '0 4px 6px rgba(229,62,62,0.3)';
+        } else {
+            autoRunBtn.style.boxShadow = '0 4px 6px rgba(72,187,120,0.3)';
+        }
     });
     
     updateEnergyAI();

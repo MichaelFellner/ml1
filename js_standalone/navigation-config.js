@@ -6,7 +6,8 @@ const NAVIGATION_CONFIG = {
             title: "Introduction",
             items: [
                 { id: "intro", name: "Welcome", func: "createIntroduction" },
-                { id: "ip1", name: "What You'll Learn", func: "createInstructionPart1" }
+                { id: "ip1", name: "What You'll Learn", func: "createInstructionPart1" },
+                { id: "prerequisites", name: "Prerequisites & AI Fundamentals", func: "createPrerequisites" }
             ]
         },
         {
@@ -16,27 +17,32 @@ const NAVIGATION_CONFIG = {
                 { id: "level1", name: "Level 1: Robot Energy", func: "createLevel1" },
                 { id: "ip2a", name: "Behind the Scenes: Simple View", func: "createBehindTheScenesSimple" },
                 { id: "ip2b", name: "Behind the Scenes: The Math", func: "createBehindTheScenesLevel1" },
-                { id: "ip2c", name: "Check Your Understanding", func: "createLossQuizPart" },
-                { id: "ip2c-congrats", name: "Quiz Complete!", func: "createLossQuizCongrats" },
-                { id: "ip3", name: "Introducing Gradient Descent", func: "createInstructionPart3" },
-                { id: "level2", name: "Level 2: AI Robot", func: "createLevel2" }
-            ]
-        },
-        {
-            title: "Part 2: Multiple Variables",
-            items: [
+
                 { id: "ip4", name: "Multiple Variables", func: "createInstructionPart4" },
-                { id: "level3", name: "Level 3: Witch's Brew", func: "createLevel3" },
-                { id: "ip5", name: "Gradient Descent + Multiple Variables", func: "createInstructionPart5" },
-                { id: "level4", name: "Level 4: Master Alchemist", func: "createLevel4" },
-                { id: "ip6", name: "How Gradient Descent Really Works", func: "createInstructionPart6" }
+                { id: "level2", name: "Level 2: Witch's Brew", func: "createLevel2" },
+                { id: "ip2c", name: "Check Your Understanding", func: "createLossQuizPart" },
+                { id: "ip2c-congrats", name: "Quiz Complete!", func: "createLossQuizCongrats" }
+            ]
+        },
+
+        {
+            title: "Part 3: Gradient Descent Part 1",
+            items: [
+               
+                { id: "gd1", name: "⚡ Gradient Descent Part 1/3", func: "createGradientDescentPart1" },
+                { id: "balloon-level", name: "🎈 Balloon Inflation Challenge", func: "createBalloonInflationLevel" },
+                { id: "balloon-gd", name: "🤖 AI Balloon Optimizer", func: "createBalloonGradientDescent" },
+                { id: "gd1b", name: "⚡ Adding Complexity: The Bias Term", func: "createGradientDescentPart1b" },
+                { id: "bunny-level", name: "🐰 Bunny Feeding Challenge", func: "createBunnyFeedingLevel" },
+                { id: "bunny-gd", name: "🤖🐰 AI Bunny Feeder - The Real Power", func: "createBunnyGradientDescent" },
+                { id: "balloon-bts", name: "Behind the Scenes: Balloon Function Movement", func: "createBehindTheScenesBalloon" },
+                { id: "bunny-bts", name: "Behind the Scenes: Bunny Feeder Function", func: "createBehindTheScenesBunny" }
             ]
         },
         {
-            title: "Gradient Descent Deep Dive",
+            title: "Gradient Descent Part 2",
             items: [
-                { id: "gd1", name: "Manual Function Exploration", func: "createGradientDescentPart1" },
-                { id: "gd2", name: "Automatic Gradient Descent", func: "createGradientDescentPart2" },
+                { id: "gd2", name: "Finding the Minimum", func: "createGradientDescentPart2" },
                 { id: "gd3", name: "Complex Function Challenge", func: "createGradientDescentPart3" }
             ]
         },

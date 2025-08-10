@@ -1,10 +1,11 @@
-function createLevel3() {
-    currentLevel = 3;
+function createLevel2() {
+    const levelId = 'level2';
+    currentLevel = 2;
     const container = document.getElementById('app');
     
     container.innerHTML = `
         <div class="current-level">
-            ${createLevelHeader(2, 3, 9)}
+            ${createLevelHeader(2, 3, 12)}
 
             <div class="level-content" style="display: flex; gap: 30px; align-items: flex-start; padding: 15px; justify-content: space-between;">
                 <div class="visual-section" style="flex: 1; text-align: center; max-width: 300px;">
@@ -88,10 +89,12 @@ function createLevel3() {
         </div>
     `;
     
-    setupLevel3();
+    // Initialize navigation
+    initializeNavigation(levelId, 'createLevel2');
+    setupLevel2();
 }
 
-function setupLevel3() {
+function setupLevel2() {
     const yellowSlider = document.getElementById('yellowSlider');
     const blueSlider = document.getElementById('blueSlider');
     const yellowUpBtn = document.getElementById('yellowUp');
@@ -245,7 +248,7 @@ function createLevel4() {
     
     container.innerHTML = `
         <div class="current-level">
-            ${createLevelHeader(3, 4, 9)}
+            ${createLevelHeader(3, 4, 12)}
             
             <div class="level-content" style="display: flex; gap: 40px; align-items: center; padding: 20px; justify-content: space-between;">
                 <div class="visual-section" style="flex: 1; text-align: center; max-width: 350px;">
@@ -339,7 +342,10 @@ function createLevel4() {
                         <!-- AI Control Buttons -->
                         <div style="display: flex; gap: 15px; margin-top: 20px;">
                             <button id="gradientMultiBtn" style="flex: 1; padding: 12px 20px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(102,126,234,0.3);">
-                                🤖 Run Gradient Descent
+                                🤖 Run Step
+                            </button>
+                            <button id="autoRunBtn" style="flex: 1; padding: 12px 20px; background: linear-gradient(135deg, #48bb78, #38a169); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(72,187,120,0.3);">
+                                ▶️ Auto Run
                             </button>
                             <button id="resetMultiBtn" style="padding: 12px 20px; background: #f3960a; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease;">
                                 🔄 Reset
@@ -381,11 +387,14 @@ function setupLevel4() {
     };
     
     const gradientBtn = document.getElementById('gradientMultiBtn');
+    const autoRunBtn = document.getElementById('autoRunBtn');
     const resetBtn = document.getElementById('resetMultiBtn');
     const controlPanel4 = document.getElementById('controlPanel4');
     const stepCounterMulti = document.getElementById('stepCounterMulti');
     const stepCountMulti = document.getElementById('stepCountMulti');
     let steps = 0;
+    let isAutoRunning = false;
+    let autoRunInterval = null;
     
     function updateMultiPotions() {
         const levels = {
@@ -457,6 +466,12 @@ function setupLevel4() {
             gradientBtn.disabled = true;
             gradientBtn.style.opacity = '0.5';
             gradientBtn.textContent = '✅ Perfect Mix Achieved!';
+            // Stop auto-run if active
+            if (isAutoRunning) {
+                stopAutoRun();
+            }
+            autoRunBtn.disabled = true;
+            autoRunBtn.style.opacity = '0.5';
         } else if (perfectCount >= 4) {
             // Very close
             potionIndicatorMulti.textContent = '✨';
@@ -493,44 +508,113 @@ function setupLevel4() {
         }
     }
     
-    gradientBtn.addEventListener('click', () => {
-        if (gradientBtn.disabled) return;
-        
-        const currentValues = Object.values(sliders).map(s => parseInt(s.value));
-        const targetValues = [OPTIMAL_RED, OPTIMAL_YELLOW_MULTI, OPTIMAL_GREEN, OPTIMAL_BLUE_MULTI, OPTIMAL_PURPLE, OPTIMAL_ORANGE];
-        const result = optimizer.optimizationStep(currentValues, targetValues, Array(6).fill({ min: 0, max: 100 }));
-        
-        // Animate all sliders
-        const startValues = currentValues;
-        const endValues = result.newVariables;
-        const duration = 600;
-        const startTime = Date.now();
-        
-        function animateSliders() {
-            const elapsed = Date.now() - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const easeProgress = 1 - Math.pow(1 - progress, 3);
-            
-            Object.keys(sliders).forEach((color, i) => {
-                const currentValue = Math.round(startValues[i] + (endValues[i] - startValues[i]) * easeProgress);
-                sliders[color].value = currentValue;
-            });
-            
-            updateMultiPotions();
-            
-            if (progress < 1) {
-                requestAnimationFrame(animateSliders);
-            } else {
-                steps++;
-                stepCountMulti.textContent = steps;
-                stepCounterMulti.style.display = 'block';
+    // Function to run a single gradient descent step
+    function runGradientStep(duration = 600) {
+        return new Promise((resolve) => {
+            if (gradientBtn.disabled && !isAutoRunning) {
+                resolve(false);
+                return;
             }
+            
+            const currentValues = Object.values(sliders).map(s => parseInt(s.value));
+            const targetValues = [OPTIMAL_RED, OPTIMAL_YELLOW_MULTI, OPTIMAL_GREEN, OPTIMAL_BLUE_MULTI, OPTIMAL_PURPLE, OPTIMAL_ORANGE];
+            
+            // Check if already perfect
+            const perfectCount = currentValues.reduce((count, val, i) => count + (val === targetValues[i] ? 1 : 0), 0);
+            if (perfectCount === 6) {
+                resolve(false);
+                return;
+            }
+            
+            const result = optimizer.optimizationStep(currentValues, targetValues, Array(6).fill({ min: 0, max: 100 }));
+            
+            // Animate all sliders
+            const startValues = currentValues;
+            const endValues = result.newVariables;
+            const startTime = Date.now();
+            
+            function animateSliders() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeProgress = 1 - Math.pow(1 - progress, 3);
+                
+                Object.keys(sliders).forEach((color, i) => {
+                    const currentValue = Math.round(startValues[i] + (endValues[i] - startValues[i]) * easeProgress);
+                    sliders[color].value = currentValue;
+                });
+                
+                updateMultiPotions();
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animateSliders);
+                } else {
+                    steps++;
+                    stepCountMulti.textContent = steps;
+                    stepCounterMulti.style.display = 'block';
+                    resolve(true);
+                }
+            }
+            
+            animateSliders();
+        });
+    }
+    
+    // Function to stop auto-run
+    function stopAutoRun() {
+        isAutoRunning = false;
+        if (autoRunInterval) {
+            clearInterval(autoRunInterval);
+            autoRunInterval = null;
         }
+        autoRunBtn.textContent = '▶️ Auto Run';
+        autoRunBtn.style.background = 'linear-gradient(135deg, #48bb78, #38a169)';
+        gradientBtn.disabled = false;
+        gradientBtn.style.opacity = '1';
+    }
+    
+    // Manual gradient descent button
+    gradientBtn.addEventListener('click', () => {
+        if (!isAutoRunning) {
+            runGradientStep();
+        }
+    });
+    
+    // Auto-run button
+    autoRunBtn.addEventListener('click', async () => {
+        if (autoRunBtn.disabled) return;
         
-        animateSliders();
+        if (isAutoRunning) {
+            // Stop auto-run
+            stopAutoRun();
+        } else {
+            // Start auto-run
+            isAutoRunning = true;
+            autoRunBtn.textContent = '⏸ Stop';
+            autoRunBtn.style.background = 'linear-gradient(135deg, #e53e3e, #c53030)';
+            gradientBtn.disabled = true;
+            gradientBtn.style.opacity = '0.5';
+            
+            // Run steps with shorter duration for auto-run
+            async function autoRun() {
+                if (isAutoRunning) {
+                    const continueRunning = await runGradientStep(300); // Faster animation for auto-run
+                    if (continueRunning && isAutoRunning) {
+                        setTimeout(autoRun, 350); // Small delay between steps
+                    } else {
+                        stopAutoRun();
+                    }
+                }
+            }
+            
+            autoRun();
+        }
     });
     
     resetBtn.addEventListener('click', () => {
+        // Stop auto-run if active
+        if (isAutoRunning) {
+            stopAutoRun();
+        }
         optimizer.reset();
         steps = 0;
         stepCountMulti.textContent = '0';
@@ -541,7 +625,9 @@ function setupLevel4() {
         updateMultiPotions();
         gradientBtn.disabled = false;
         gradientBtn.style.opacity = '1';
-        gradientBtn.textContent = '🤖 Run Gradient Descent';
+        gradientBtn.textContent = '🤖 Run Step';
+        autoRunBtn.disabled = false;
+        autoRunBtn.style.opacity = '1';
     });
     
     // Add hover effects
@@ -563,6 +649,25 @@ function setupLevel4() {
     resetBtn.addEventListener('mouseleave', () => {
         resetBtn.style.transform = 'translateY(0)';
         resetBtn.style.boxShadow = 'none';
+    });
+    
+    autoRunBtn.addEventListener('mouseenter', () => {
+        if (!autoRunBtn.disabled) {
+            autoRunBtn.style.transform = 'translateY(-2px)';
+            if (isAutoRunning) {
+                autoRunBtn.style.boxShadow = '0 6px 12px rgba(229,62,62,0.4)';
+            } else {
+                autoRunBtn.style.boxShadow = '0 6px 12px rgba(72,187,120,0.4)';
+            }
+        }
+    });
+    autoRunBtn.addEventListener('mouseleave', () => {
+        autoRunBtn.style.transform = 'translateY(0)';
+        if (isAutoRunning) {
+            autoRunBtn.style.boxShadow = '0 4px 6px rgba(229,62,62,0.3)';
+        } else {
+            autoRunBtn.style.boxShadow = '0 4px 6px rgba(72,187,120,0.3)';
+        }
     });
     
     updateMultiPotions();

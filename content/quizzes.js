@@ -4,15 +4,15 @@ function createLossQuizPart() {
     container.innerHTML = `
         <div class="current-level">
             <div class="level-content celebration" style="padding: 20px; max-width: 1200px; margin: 0 auto;">
-                <h1 style="font-size: 2.3rem; margin-bottom: 20px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">✏️ Check Your Understanding: Loss Functions</h1>
+                <h1 style="font-size: 2.3rem; margin-bottom: 20px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">✏️ Check Your Understanding: Loss Functions & Multiple Variables</h1>
                 
                 <div style="background: linear-gradient(135deg, rgba(255,99,71,0.1), rgba(255,99,71,0.05)); border-radius: 12px; padding: 25px; margin: 20px auto; max-width: 800px; border: 2px solid #ff6347;">
                     <div style="display: flex; align-items: flex-start; gap: 20px;">
                         <div class="objective-icon" style="font-size: 3rem;">🧮</div>
                         <div style="flex: 1;">
                             <h3 style="margin: 0 0 15px 0; font-size: 1.4rem; color: #333;">Quick Quiz: Calculate the Loss!</h3>
-                            <p style="font-size: 1.05rem; color: #555; line-height: 1.6;">Different loss functions measure error in different ways.</p>
-                            <p style="font-size: 0.95rem; color: #666; line-height: 1.5;">Test your understanding by calculating the loss for these scenarios:</p>
+                            <p style="font-size: 1.05rem; color: #555; line-height: 1.6;">Now that you've learned about single and multiple variables, test your understanding!</p>
+                            <p style="font-size: 0.95rem; color: #666; line-height: 1.5;">Calculate the loss for these different scenarios:</p>
                         </div>
                     </div>
                 </div>
@@ -69,6 +69,27 @@ function createLossQuizPart() {
                         </div>
                         <div class="quiz-feedback" style="margin-top: 10px; padding: 10px; border-radius: 8px; display: none;"></div>
                     </div>
+                    
+                    <!-- Question 4: Multiple Variables -->
+                    <div class="quiz-question" data-question="4" style="background: rgba(255,255,255,0.5); border-radius: 12px; padding: 20px; border: 2px solid #ddd; transition: all 0.3s ease;">
+                        <h3 style="color: #333; margin: 0 0 10px 0; font-size: 1.1rem;">Question 4: Multiple Variables Loss</h3>
+                        <div style="background: rgba(147,51,234,0.1); padding: 10px; border-radius: 6px; margin-bottom: 15px;">
+                            <code style="color: #9333ea; font-weight: bold;">Total Loss = Sum of squared errors for each variable</code>
+                        </div>
+                        <p style="font-size: 1rem; color: #555; margin-bottom: 10px;">The witch's potion recipe has 2 ingredients:</p>
+                        <ul style="font-size: 0.95rem; color: #555; margin: 10px 0 15px 20px; line-height: 1.6;">
+                            <li>Yellow Essence: Predicted = <strong>30</strong>, Actual = <strong>40</strong></li>
+                            <li>Blue Essence: Predicted = <strong>60</strong>, Actual = <strong>55</strong></li>
+                        </ul>
+                        <p style="font-size: 0.95rem; color: #666; margin-bottom: 10px;">What is the total loss? (Hint: (30-40)² + (60-55)²)</p>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                            <button class="quiz-option" data-value="15" style="padding: 10px; border-radius: 8px; border: 2px solid #ddd; background: white; cursor: pointer; transition: all 0.2s ease;">15</button>
+                            <button class="quiz-option" data-value="105" style="padding: 10px; border-radius: 8px; border: 2px solid #ddd; background: white; cursor: pointer; transition: all 0.2s ease;">105</button>
+                            <button class="quiz-option" data-value="125" data-correct="true" style="padding: 10px; border-radius: 8px; border: 2px solid #ddd; background: white; cursor: pointer; transition: all 0.2s ease;">125</button>
+                            <button class="quiz-option" data-value="225" style="padding: 10px; border-radius: 8px; border: 2px solid #ddd; background: white; cursor: pointer; transition: all 0.2s ease;">225</button>
+                        </div>
+                        <div class="quiz-feedback" style="margin-top: 10px; padding: 10px; border-radius: 8px; display: none;"></div>
+                    </div>
                 </div>
                 
                 <!-- Completion Status -->
@@ -77,7 +98,7 @@ function createLossQuizPart() {
                         <div id="completion-checkmark" style="display: none; font-size: 3rem; color: #2dd573;">✅</div>
                         <div style="text-align: center;">
                             <h3 id="completion-title" style="margin: 0; font-size: 1.2rem; color: #333;">Practice calculating different loss functions</h3>
-                            <p id="completion-message" style="margin: 5px 0 0 0; font-size: 0.95rem; color: #666;">Score: <span id="correct-count">0</span> / 3 correct</p>
+                            <p id="completion-message" style="margin: 5px 0 0 0; font-size: 0.95rem; color: #666;">Score: <span id="correct-count">0</span> / 4 correct</p>
                         </div>
                     </div>
                 </div>
@@ -98,7 +119,7 @@ function createLossQuizPart() {
             return; // Page has changed, don't initialize quiz
         }
         
-        let correctAnswers = [false, false, false];
+        let correctAnswers = [false, false, false, false];
         
         // Initialize the display
         const initialCount = document.getElementById('correct-count');
@@ -119,21 +140,21 @@ function createLossQuizPart() {
             if (!countElement) {
                 // Try to update the entire message if we can't find the span
                 if (message) {
-                    message.innerHTML = `Score: <span id="correct-count">${correctCount}</span> / 3 correct`;
+                    message.innerHTML = `Score: <span id="correct-count">${correctCount}</span> / 4 correct`;
                 }
                 return;
             }
             
             countElement.textContent = correctCount;
             
-            if (correctCount === 3) {
+            if (correctCount === 4) {
                 if (concept1Div) {
                     concept1Div.style.background = 'linear-gradient(135deg, rgba(45,213,115,0.1), rgba(45,213,115,0.05))';
                     concept1Div.style.borderColor = '#2dd573';
                 }
                 if (checkmark) checkmark.style.display = 'block';
-                if (title) title.textContent = 'Perfect! You understand different loss functions!';
-                if (message) message.innerHTML = 'All 3 questions correct! Great job!';
+                if (title) title.textContent = 'Perfect! You understand loss functions & multiple variables!';
+                if (message) message.innerHTML = 'All 4 questions correct! Outstanding work!';
                 
                 // Auto-navigate to congratulations page after a short delay
                 setTimeout(() => {
@@ -141,14 +162,22 @@ function createLossQuizPart() {
                         createLossQuizCongrats();
                     }
                 }, 2000); // 2 second delay to let user see the success
-            } else if (correctCount === 2) {
+            } else if (correctCount === 3) {
                 if (concept1Div) {
                     concept1Div.style.background = 'linear-gradient(135deg, rgba(243,150,10,0.1), rgba(243,150,10,0.05))';
                     concept1Div.style.borderColor = '#f3960a';
                 }
                 if (checkmark) checkmark.style.display = 'none';
-                if (title) title.textContent = 'Good work!';
-                if (message) message.innerHTML = `Score: <span id="correct-count">${correctCount}</span> / 3 correct`;
+                if (title) title.textContent = 'Great work! Almost perfect!';
+                if (message) message.innerHTML = `Score: <span id="correct-count">${correctCount}</span> / 4 correct`;
+            } else if (correctCount === 2) {
+                if (concept1Div) {
+                    concept1Div.style.background = 'linear-gradient(135deg, rgba(102,126,234,0.1), rgba(102,126,234,0.05))';
+                    concept1Div.style.borderColor = '#667eea';
+                }
+                if (checkmark) checkmark.style.display = 'none';
+                if (title) title.textContent = 'Good progress!';
+                if (message) message.innerHTML = `Score: <span id="correct-count">${correctCount}</span> / 4 correct`;
             } else if (correctCount === 1) {
                 if (concept1Div) {
                     concept1Div.style.background = 'linear-gradient(135deg, rgba(102,126,234,0.1), rgba(102,126,234,0.05))';
@@ -156,7 +185,7 @@ function createLossQuizPart() {
                 }
                 if (checkmark) checkmark.style.display = 'none';
                 if (title) title.textContent = 'Keep practicing!';
-                if (message) message.innerHTML = `Score: <span id="correct-count">${correctCount}</span> / 3 correct`;
+                if (message) message.innerHTML = `Score: <span id="correct-count">${correctCount}</span> / 4 correct`;
             } else {
                 if (concept1Div) {
                     concept1Div.style.background = 'linear-gradient(135deg, rgba(102,126,234,0.1), rgba(102,126,234,0.05))';
@@ -164,7 +193,7 @@ function createLossQuizPart() {
                 }
                 if (checkmark) checkmark.style.display = 'none';
                 if (title) title.textContent = 'Practice calculating different loss functions';
-                if (message) message.innerHTML = `Score: <span id="correct-count">${correctCount}</span> / 3 correct`;
+                if (message) message.innerHTML = `Score: <span id="correct-count">${correctCount}</span> / 4 correct`;
             }
         }
         
@@ -244,6 +273,10 @@ function createLossQuizPart() {
                 3: {
                     correct: 'Loss = 2 × |45 - 50| = 2 × 5 = 10',
                     incorrect: 'Apply the formula: Loss = 2 × |45 - 50| = 2 × |-5| = 2 × 5 = 10'
+                },
+                4: {
+                    correct: 'Loss = (30-40)² + (60-55)² = 100 + 25 = 125',
+                    incorrect: 'Sum the squared errors: Loss = (30-40)² + (60-55)² = (-10)² + (5)² = 100 + 25 = 125'
                 }
             };
             return explanations[questionNum][isCorrect ? 'correct' : 'incorrect'];

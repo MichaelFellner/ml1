@@ -19,9 +19,10 @@ document.addEventListener('DOMContentLoaded', function() {
             // Store the original function
             originalFunctions[functionName] = window[functionName];
             
-            // Get the navigation ID from the config
-            const navItem = findNavItemByFunction(functionName);
-            const navId = navItem ? navItem.item.id : functionName.toLowerCase().replace('create', '');
+            // UNUSED: findNavItemByFunction is not defined in the codebase
+            // Previously tried to get navigation ID from config
+            // Now using a simplified approach
+            const navId = functionName.toLowerCase().replace('create', '');
             
             // Create wrapped version
             window[functionName] = function() {
@@ -43,12 +44,13 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 Navigation wrapper initialized for', Object.keys(originalFunctions).length, 'functions');
 });
 
-// Helper function to ensure navigation is added to any function call
-function ensureNavigation() {
-    // Small delay to ensure content is loaded
-    setTimeout(() => {
-        if (!document.querySelector('.hamburger-nav')) {
-            injectNavigation();
-        }
-    }, 50);
-}
+// UNUSED: ensureNavigation function was defined but never called
+// Previously intended to ensure navigation was added to function calls
+// function ensureNavigation() {
+//     // Small delay to ensure content is loaded
+//     setTimeout(() => {
+//         if (!document.querySelector('.hamburger-nav')) {
+//             injectNavigation();
+//         }
+//     }, 50);
+// }

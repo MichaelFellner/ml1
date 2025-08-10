@@ -4,7 +4,7 @@ function createInstructionPart5() {
     container.innerHTML = `
         <div class="current-level">
             <div class="level-content celebration" style="padding: 20px; max-width: 1200px; margin: 0 auto;">
-                <h1 style="font-size: 2.3rem; margin-bottom: 20px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">⚡ Gradient Descent Scales Up!</h1>
+                <h1 style="font-size: 2.3rem; margin-bottom: 20px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">⚡ Gradient Descent Part 2/3: Scaling Up</h1>
                 
                 <!-- Main insight card -->
                 <div style="background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(102,126,234,0.05)); border-radius: 12px; padding: 25px; margin: 20px auto; max-width: 800px; border: 2px solid #667eea;">
@@ -56,15 +56,15 @@ function createInstructionPart6() {
     container.innerHTML = `
         <div class="current-level">
             <div class="level-content celebration" style="padding: 15px; max-width: 1200px; margin: 0 auto;">
-                <h1 style="font-size: 2rem; margin-bottom: 15px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🔬 How Gradient Descent Works</h1>
+                <h1 style="font-size: 2rem; margin-bottom: 15px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">🔬 Gradient Descent Part 3/3: The Math</h1>
                 
                 <!-- Reusing concept2 div styling for consistency -->
                 <div id="concept2" style="background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(102,126,234,0.05)); border-radius: 12px; padding: 20px; margin: 15px auto; max-width: 800px; border: 2px solid #667eea;">
                     <div style="display: flex; align-items: flex-start; gap: 15px;">
                         <div class="objective-icon" style="font-size: 2.5rem;">⚡</div>
                         <div style="flex: 1;">
-                            <h3 style="margin: 0 0 10px 0; font-size: 1.2rem; color: #333;">The Algorithm Behind the Magic</h3>
-                            <p style="font-size: 0.95rem; color: #555; line-height: 1.5;">We've seen that <strong>gradient descent is a tool for minimizing loss</strong>, but how does it work more specifically? It uses <strong style="color: #667eea;">mathematical slopes</strong> to find the fastest path downhill!</p>
+                            <h3 style="margin: 0 0 10px 0; font-size: 1.2rem; color: #333;">Understanding the Math Behind the Magic</h3>
+                            <p style="font-size: 0.95rem; color: #555; line-height: 1.5;">You've seen gradient descent in action (Part 1) and how it scales (Part 2). Now let's understand <strong>HOW it mathematically improves functions</strong> by using <strong style="color: #667eea;">gradients (slopes)</strong> to minimize loss!</p>
                         </div>
                     </div>
                 </div>
@@ -140,8 +140,9 @@ function createInstructionPart6() {
                 </div>
                 
                 <div style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 10px; padding: 15px; color: white; text-align: center; margin: 15px 0;">
-                    <h3 style="margin: 0 0 8px 0; font-size: 1.1rem;">📈 Coming up: Interactive Deep Dive!</h3>
-                    <p style="margin: 0; font-size: 0.9rem;">Get hands-on with functions, see gradients in action, and experiment with different learning rates!</p>
+                    <h3 style="margin: 0 0 8px 0; font-size: 1.1rem;">🎆 Gradient Descent Complete!</h3>
+                    <p style="margin: 0 0 8px 0; font-size: 0.9rem;">You now understand all three parts: seeing it work, scaling up, and the math!</p>
+                    <p style="margin: 0; font-size: 0.85rem; opacity: 0.9;">Next: Interactive experiments with functions and learning rates!</p>
                 </div>
                 
                 ${createStandardNavigation()}
