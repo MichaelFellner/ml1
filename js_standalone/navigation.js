@@ -1,6 +1,13 @@
-// navigation.js - Centralized navigation system
+/**
+ * @fileoverview Centralized navigation system for the MLTEACH application.
+ * Handles page navigation, button states, and navigation flow.
+ */
 
-// Flatten the nested navigation config into a linear sequence
+/**
+ * Flattens the nested navigation configuration into a linear sequence
+ * @function getFlattenedNavigation
+ * @returns {Object[]} Array of navigation items in linear order
+ */
 function getFlattenedNavigation() {
     const flattened = [];
     NAVIGATION_CONFIG.sections.forEach(section => {
@@ -11,14 +18,23 @@ function getFlattenedNavigation() {
     return flattened;
 }
 
-// Get current page index in the linear sequence
+/**
+ * Gets the current page index in the linear navigation sequence
+ * @function getCurrentPageIndex
+ * @returns {number} Current page index or -1 if not found
+ */
 function getCurrentPageIndex() {
     const flattened = getFlattenedNavigation();
     const currentFunc = window.currentPageFunction || 'createIntroduction';
     return flattened.findIndex(item => item.func === currentFunc);
 }
 
-// Utility function to scroll content box to top
+/**
+ * Scrolls the content box to the top
+ * @function scrollAppToTop
+ * @description Utility function to ensure content starts at top when navigating
+ * @returns {void}
+ */
 function scrollAppToTop() {
     // Small delay to ensure content is rendered first
     setTimeout(() => {
@@ -29,18 +45,33 @@ function scrollAppToTop() {
     }, 50);
 }
 
-// Navigation functions
+/**
+ * Checks if navigation to next page is possible
+ * @function canGoNext
+ * @returns {boolean} True if there is a next page available
+ */
 function canGoNext() {
     const flattened = getFlattenedNavigation();
     const currentIndex = getCurrentPageIndex();
     return currentIndex >= 0 && currentIndex < flattened.length - 1;
 }
 
+/**
+ * Checks if navigation to previous page is possible
+ * @function canGoPrev
+ * @returns {boolean} True if there is a previous page available
+ */
 function canGoPrev() {
     const currentIndex = getCurrentPageIndex();
     return currentIndex > 0;
 }
 
+/**
+ * Navigates to the next page in the sequence
+ * @function navigateNext
+ * @description Moves to next page if available and calls the appropriate creation function
+ * @returns {void}
+ */
 function navigateNext() {
     if (canGoNext()) {
         const flattened = getFlattenedNavigation();
@@ -54,6 +85,12 @@ function navigateNext() {
     }
 }
 
+/**
+ * Navigates to the previous page in the sequence
+ * @function navigatePrev
+ * @description Moves to previous page if available and calls the appropriate creation function
+ * @returns {void}
+ */
 function navigatePrev() {
     if (canGoPrev()) {
         const flattened = getFlattenedNavigation();
@@ -67,13 +104,26 @@ function navigatePrev() {
     }
 }
 
-// Create standardized navigation buttons (returns empty string since buttons are injected separately)
+/**
+ * Creates standardized navigation buttons HTML
+ * @function createStandardNavigation
+ * @param {boolean} first - Whether this is the first page (default: false)
+ * @param {boolean} last - Whether this is the last page (default: false)
+ * @returns {string} Empty string (buttons are now injected directly)
+ * @deprecated Buttons are now injected directly into #app container
+ */
 function createStandardNavigation(first = false, last = false) {
     // Buttons are now injected directly into #app container, so return empty string
     return '';
 }
 
-// Inject navigation buttons directly into #app container
+/**
+ * Injects navigation buttons directly into the #app container
+ * @function injectNavigationButtons
+ * @param {boolean} first - Whether this is the first page (default: false)
+ * @param {boolean} last - Whether this is the last page (default: false)
+ * @returns {void}
+ */
 function injectNavigationButtons(first = false, last = false) {
     // Remove any existing navigation buttons
     const existingButtons = document.querySelectorAll('.prev-btn, .next-btn');
@@ -101,7 +151,11 @@ function injectNavigationButtons(first = false, last = false) {
     }
 }
 
-// Get current page info for debugging
+/**
+ * Gets current page information for debugging purposes
+ * @function getCurrentPageInfo
+ * @returns {Object} Object containing current page index, total pages, and navigation state
+ */
 function getCurrentPageInfo() {
     const flattened = getFlattenedNavigation();
     const currentIndex = getCurrentPageIndex();
@@ -116,11 +170,20 @@ function getCurrentPageInfo() {
     };
 }
 
-// Initialize navigation for any page
+/**
+ * Initializes navigation for any page
+ * @function initializeNavigation
+ * @param {string} pageId - Unique identifier for the page
+ * @param {string} functionName - Name of the function that creates this page
+ * @param {boolean} first - Whether this is the first page (default: false)
+ * @param {boolean} last - Whether this is the last page (default: false)
+ * @returns {void}
+ */
 function initializeNavigation(pageId, functionName, first = false, last = false) {
-    // Update global state
-    currentNavigationId = pageId;
-    window.currentPageFunction = functionName;
+    // Update global state and gameState
+    gameState.currentNavigationId = pageId;
+    gameState.currentPageFunction = functionName;
+    window.currentPageFunction = functionName; // Keep for backward compatibility
     
     // Inject hamburger navigation
     injectNavigation();

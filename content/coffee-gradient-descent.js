@@ -1,6 +1,17 @@
 // Coffee Optimizer - Gradient Descent Version
 // Watch the algorithm learn to find the correct weights automatically
 
+/**
+ * @fileoverview Coffee shop gradient descent tutorial for the MLTEACH application.
+ * Interactive demonstration of gradient descent in a business context.
+ */
+
+/**
+ * Creates the coffee gradient descent demonstration
+ * @function createCoffeeGradientDescent
+ * @description Shows how gradient descent can automatically optimize the coffee formula
+ * @returns {void}
+ */
 function createCoffeeGradientDescent() {
     const container = document.getElementById('app');
     container.innerHTML = `

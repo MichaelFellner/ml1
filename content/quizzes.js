@@ -1,4 +1,15 @@
 
+/**
+ * @fileoverview Quiz components for the MLTEACH application.
+ * Contains interactive quizzes to test user understanding of concepts.
+ */
+
+/**
+ * Creates the loss function quiz
+ * @function createLossQuizPart
+ * @description Interactive quiz to test understanding of loss functions
+ * @returns {void}
+ */
 function createLossQuizPart() {
     const container = document.getElementById('app');
     container.innerHTML = `

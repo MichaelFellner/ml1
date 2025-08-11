@@ -1,11 +1,29 @@
-// engine.js
+/**
+ * @fileoverview OptimizationEngine class for gradient descent calculations.
+ * Core engine for the MLTEACH application's machine learning simulations.
+ */
 
+/**
+ * OptimizationEngine handles gradient descent optimization
+ * @class OptimizationEngine
+ */
 class OptimizationEngine {
+    /**
+     * Creates a new OptimizationEngine instance
+     * @constructor
+     * @param {number} learningRate - The learning rate for gradient descent (default: 0.1)
+     */
     constructor(learningRate = 0.1) {
         this.learningRate = learningRate;
         this.history = [];
     }
 
+    /**
+     * Calculates the mean squared error loss
+     * @param {number[]} variables - Current variable values
+     * @param {number[]} targets - Target values to optimize towards
+     * @returns {number} The calculated loss value
+     */
     calculateLoss(variables, targets) {
         let totalLoss = 0;
         for (let i = 0; i < variables.length; i++) {
@@ -14,6 +32,12 @@ class OptimizationEngine {
         return totalLoss / variables.length;
     }
 
+    /**
+     * Calculates gradients for each variable using TensorFlow.js
+     * @param {number[]} variables - Current variable values
+     * @param {number[]} targets - Target values
+     * @returns {number[]} Array of gradients for each variable
+     */
     calculateGradients(variables, targets) {
         const variableTensors = variables.map(v => tf.scalar(v));
         const targetTensors = targets.map(t => tf.scalar(t));
@@ -33,6 +57,13 @@ class OptimizationEngine {
         return gradients;
     }
 
+    /**
+     * Performs a single optimization step using gradient descent
+     * @param {number[]} variables - Current variable values
+     * @param {number[]} targets - Target values
+     * @param {Object[]|null} constraints - Optional constraints for each variable [{min, max}]
+     * @returns {Object} Object containing loss, gradients, newVariables, and convergence status
+     */
     optimizationStep(variables, targets, constraints = null) {
         const loss = this.calculateLoss(variables, targets);
         const gradients = this.calculateGradients(variables, targets);
@@ -82,6 +113,13 @@ class OptimizationEngine {
         };
     }
 
+    /**
+     * Checks if the optimization has converged
+     * @param {number[]} variables - Current variable values
+     * @param {number[]} targets - Target values
+     * @param {number} tolerance - Acceptable difference from target (default: 0)
+     * @returns {boolean} True if converged within tolerance
+     */
     checkConvergence(variables, targets, tolerance = 0) {
         for (let i = 0; i < variables.length; i++) {
             if (Math.abs(variables[i] - targets[i]) > tolerance) {
@@ -91,6 +129,10 @@ class OptimizationEngine {
         return true;
     }
 
+    /**
+     * Resets the optimization history
+     * @returns {void}
+     */
     reset() {
         this.history = [];
     }

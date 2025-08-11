@@ -1,6 +1,17 @@
+/**
+ * @fileoverview Coffee optimization simulation for the MLTEACH application.
+ * Demonstrates real-world application of optimization concepts.
+ */
+
 // Coffee Optimizer - Single Student Focus Design
 // Left: Current student display | Right: Formula, controls, and feedback
 
+/**
+ * Creates the coffee shop manual optimizer simulation
+ * @function createCoffeeManualOptimizer
+ * @description Interactive simulation for discovering the coffee formula through manual weight adjustment
+ * @returns {void}
+ */
 function createCoffeeManualOptimizer() {
     const container = document.getElementById('app');
     container.innerHTML = `
@@ -237,6 +248,12 @@ function createCoffeeManualOptimizer() {
     }, 100);
 }
 
+/**
+ * Sets up the coffee optimizer interactivity
+ * @function setupCoffeeOptimizer
+ * @description Initializes controls and logic for the coffee formula discovery simulation
+ * @returns {void}
+ */
 function setupCoffeeOptimizer() {
     // Hidden formula: f(x) = 5*age + 10*coffee + 3*sleepiness + 20
     const TRUE_W1 = 5;

@@ -1,6 +1,14 @@
-// config.js - Complete configuration for all levels
+/**
+ * @fileoverview Configuration file for the MLTEACH application.
+ * @deprecated Most configuration has been moved to GameState.js
+ * This file is kept for backward compatibility during migration.
+ */
 
-const levels = [
+/**
+ * Legacy level configuration
+ * @deprecated Use gameState.levels instead
+ */
+const levels = gameState ? gameState.levels : [
     {
         title: "Energy Control",
         goal: "Minimize the loss by tuning the robot to its optimal energy level."
@@ -46,7 +54,11 @@ const levels = [
     }
 ];
 
-const images = {
+/**
+ * Legacy image paths
+ * @deprecated Use gameState.images instead
+ */
+const images = gameState ? gameState.images : {
     robot: "pictures/robot.png",
     robotActive: "pictures/robot-active.png", 
     witch: "pictures/witch.png",
@@ -55,8 +67,11 @@ const images = {
     dogSad: "pictures/dog-sad.png",
 };
 
-// Constants
-const OPTIMAL_ENERGY = 75;
+/**
+ * Legacy constants - now use gameState.constants
+ * @deprecated These are kept for backward compatibility
+ */
+const OPTIMAL_ENERGY = gameState ? gameState.constants.OPTIMAL_ENERGY : 75;
 const OPTIMAL_ENERGY_AI = 90;
 const OPTIMAL_YELLOW = 60;
 const OPTIMAL_BLUE = 40;
@@ -68,11 +83,13 @@ const OPTIMAL_BLUE_MULTI = 40;
 const OPTIMAL_PURPLE = 30;
 const OPTIMAL_ORANGE = 90;
 
-// Application state
-let currentLevel = 0;
-
-// Global variables
-let userMoney = 10;
+/**
+ * Legacy global variables - migrated to GameState
+ * @deprecated These are now managed by gameState instance
+ * They are kept here only for backward compatibility during migration
+ */
+let currentLevel = gameState ? gameState.currentLevel : 0;
+let userMoney = gameState ? gameState.userMoney : 10;
 let trueBoneSize = null;
 let userFirstGuess = null;
 let dogBonesPurchased = 0;
@@ -81,6 +98,9 @@ let featureData = [];
 let currentLoss = 0;
 let robotGridStates = new Array(1000).fill(false);
 
-// Global optimizer instances
-let optimizer;
-let featureOptimizer;
+/**
+ * Legacy optimizer instances
+ * @deprecated Now managed by gameState.optimizer and gameState.featureOptimizer
+ */
+let optimizer = null;
+let featureOptimizer = null;

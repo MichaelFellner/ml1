@@ -1,6 +1,10 @@
 
-// Updated createIntroduction function
-
+/**
+ * Creates the introduction screen for the MLTEACH application
+ * @function createIntroduction
+ * @description Displays the welcome screen with animated AI examples carousel
+ * @returns {void}
+ */
 function createIntroduction() {
     const levelId = 'intro';
     const container = document.getElementById('app');

@@ -1,3 +1,9 @@
+/**
+ * Creates Level 1: Energy Control - Basic loss function tutorial
+ * @function createLevel1
+ * @description Teaches users about loss functions through robot energy optimization
+ * @returns {void}
+ */
 function createLevel1() {
     const levelId = 'level1';
     const container = document.getElementById('app');
@@ -104,6 +110,12 @@ function createLevel1() {
     setupLevel1();
 }
 
+/**
+ * Sets up interactive controls for Level 1
+ * @function setupLevel1
+ * @description Initializes energy slider and loss calculation for robot optimization
+ * @returns {void}
+ */
 function setupLevel1() {
     const energySlider = document.getElementById('energySlider');
     const energyUpBtn = document.getElementById('energyUp');
@@ -116,8 +128,8 @@ function setupLevel1() {
         updateEnergyDisplay(energy);
         
         // Calculate loss (linear error)
-        const loss = Math.abs(energy - OPTIMAL_ENERGY);
-        const distance = Math.abs(energy - OPTIMAL_ENERGY);
+        const loss = Math.abs(energy - gameState.constants.OPTIMAL_ENERGY);
+        const distance = Math.abs(energy - gameState.constants.OPTIMAL_ENERGY);
         
         // Update loss display
         document.getElementById('lossValue').textContent = loss.toFixed(0);
@@ -128,7 +140,7 @@ function setupLevel1() {
         const robotStatus = document.getElementById('robotStatus');
         const robotImg = document.getElementById('robotImg');
         
-        if (energy === OPTIMAL_ENERGY) {
+        if (energy === gameState.constants.OPTIMAL_ENERGY) {
             // Perfect!
             lossIndicator.textContent = '🎯';
             hintText.innerHTML = '<strong style="color: #2dd573;">PERFECT! You found it!</strong> 🎉';
@@ -231,12 +243,24 @@ function setupLevel1() {
     updateLevel1();
 }
 
+/**
+ * Updates the energy display UI elements
+ * @function updateEnergyDisplay
+ * @param {number} energy - Current energy level (0-100)
+ * @returns {void}
+ */
 function updateEnergyDisplay(energy) {
     document.getElementById('energyValue').textContent = energy + '%';
     document.getElementById('energyFill').style.width = energy + '%';
 }
 
 
+/**
+ * Creates the Witch's Brew level with two-variable optimization
+ * @function createWitchBrewLevel
+ * @description Teaches multi-variable optimization through potion mixing
+ * @returns {void}
+ */
 function createWitchBrewLevel() {
     const levelId = 'witch-brew';
     const container = document.getElementById('app');
@@ -334,6 +358,12 @@ function createWitchBrewLevel() {
     setupWitchBrewLevel();
 }
 
+/**
+ * Sets up interactive controls for the Witch's Brew level
+ * @function setupWitchBrewLevel
+ * @description Initializes two-variable sliders and loss calculation for potion optimization
+ * @returns {void}
+ */
 function setupWitchBrewLevel() {
     // Optimal values for the potion
     const OPTIMAL_EYE = 60;
@@ -458,9 +488,15 @@ function setupWitchBrewLevel() {
     updatePotion();
 }
 
+/**
+ * Creates Level 2: Gradient Descent Introduction
+ * @function createLevel2
+ * @description Introduces automated optimization using gradient descent
+ * @returns {void}
+ */
 function createLevel2() {
     const levelId = 'level2';
-    currentLevel = 2;
+    gameState.currentLevel = 2;
     const container = document.getElementById('app');
     
     container.innerHTML = `
@@ -571,6 +607,12 @@ function createLevel2() {
     setupLevel2();
 }
 
+/**
+ * Sets up AI-controlled gradient descent for Level 2
+ * @function setupLevel2
+ * @description Initializes automatic gradient descent controls and animations
+ * @returns {void}
+ */
 function setupLevel2() {
     const energySliderAI = document.getElementById('energySliderAI');
     const gradientBtn = document.getElementById('gradientBtn');
@@ -589,8 +631,8 @@ function setupLevel2() {
         document.getElementById('energyValueAI').textContent = energy + '%';
         document.getElementById('energyFillAI').style.width = energy + '%';
         
-        const loss = Math.abs(energy - OPTIMAL_ENERGY_AI);
-        const distance = Math.abs(energy - OPTIMAL_ENERGY_AI);
+        const loss = Math.abs(energy - gameState.constants.OPTIMAL_ENERGY_AI);
+        const distance = Math.abs(energy - gameState.constants.OPTIMAL_ENERGY_AI);
         
         // Update loss display
         document.getElementById('lossValueAI').textContent = loss.toFixed(0);
@@ -601,7 +643,7 @@ function setupLevel2() {
         const robotStatusAI = document.getElementById('robotStatusAI');
         const robotImgAI = document.getElementById('robotImgAI');
         
-        if (energy === OPTIMAL_ENERGY_AI) {
+        if (energy === gameState.constants.OPTIMAL_ENERGY_AI) {
             // Perfect!
             lossIndicatorAI.textContent = '🎯';
             aiStatus.innerHTML = '<strong style="color: #2dd573;">AI FOUND THE OPTIMAL SOLUTION!</strong> 🎉';
@@ -669,12 +711,12 @@ function setupLevel2() {
             const currentEnergy = parseInt(energySliderAI.value);
             
             // Check if already perfect
-            if (currentEnergy === OPTIMAL_ENERGY_AI) {
+            if (currentEnergy === gameState.constants.OPTIMAL_ENERGY_AI) {
                 resolve(false);
                 return;
             }
             
-            const result = optimizer.optimizationStep([currentEnergy], [OPTIMAL_ENERGY_AI], [{ min: 0, max: 100 }]);
+            const result = gameState.optimizer.optimizationStep([currentEnergy], [gameState.constants.OPTIMAL_ENERGY_AI], [{ min: 0, max: 100 }]);
             
             // Animate the slider movement
             const startValue = currentEnergy;
@@ -762,7 +804,7 @@ function setupLevel2() {
         if (isAutoRunning) {
             stopAutoRun();
         }
-        optimizer.reset();
+        gameState.optimizer.reset();
         steps = 0;
         stepCount.textContent = '0';
         stepCounter.style.display = 'none';
