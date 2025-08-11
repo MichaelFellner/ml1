@@ -237,9 +237,230 @@ function updateEnergyDisplay(energy) {
 }
 
 
-function createLevel3() {
-    const levelId = 'level3';
-    currentLevel = 3;
+function createWitchBrewLevel() {
+    const levelId = 'witch-brew';
+    const container = document.getElementById('app');
+    
+    container.innerHTML = `
+        <div class="current-level">
+            ${createLevelHeader(1, 2, 12)}
+            
+            <div class="level-content" style="display: flex; gap: 30px; padding: 20px; max-width: 1200px; margin: 0 auto; align-items: flex-start;">
+                <!-- Left: Witch Visual -->
+                <div style="flex: 1; min-width: 250px; max-width: 350px;">
+                    <div style="background: linear-gradient(135deg, rgba(118,75,162,0.1), rgba(118,75,162,0.05)); border-radius: 12px; padding: 20px; text-align: center;">
+                        <h3 style="margin: 0 0 15px 0; color: #764ba2; font-size: 1.2rem;">🧙‍♀️ Witch's Perfect Potion</h3>
+                        <img id="witchImg" src="${images.witch}" alt="Witch" style="width: 180px; height: 180px; object-fit: contain; transition: all 0.3s ease;">
+                        <div id="potionStatus" style="margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.8); border-radius: 8px; font-size: 0.95rem; color: #666; min-height: 50px;">
+                            <div id="potionEffect">Adjust both ingredients...</div>
+                            <div id="potionVisual" style="font-size: 2rem; margin-top: 5px;">🧪</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Middle: Controls and Loss -->
+                <div style="flex: 2; max-width: 600px;">
+                    <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                        <h3 style="margin: 0 0 15px 0; color: #333; font-size: 1.1rem; text-align: center;">⚗️ Mix Your Ingredients</h3>
+                        
+                        <!-- Two Variable Controls in Columns -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                            <!-- Eye of Newt Control -->
+                            <div style="background: rgba(102,126,234,0.05); padding: 15px; border-radius: 8px; border: 2px solid rgba(102,126,234,0.2);">
+                                <label style="display: block; color: #667eea; font-weight: bold; font-size: 0.9rem; margin-bottom: 8px; text-align: center;">👁️ Eye of Newt</label>
+                                <input type="range" id="eyeSlider" min="0" max="100" value="30" step="1" 
+                                    style="width: 100%; height: 6px; border-radius: 3px; background: #ddd; outline: none; -webkit-appearance: none;">
+                                <div style="text-align: center; margin-top: 8px;">
+                                    <span id="eyeValue" style="font-size: 1.3rem; font-weight: bold; color: #667eea;">30</span>
+                                    <span style="font-size: 0.8rem; color: #999;"> drops</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Dragon Scale Control -->
+                            <div style="background: rgba(229,62,62,0.05); padding: 15px; border-radius: 8px; border: 2px solid rgba(229,62,62,0.2);">
+                                <label style="display: block; color: #e53e3e; font-weight: bold; font-size: 0.9rem; margin-bottom: 8px; text-align: center;">🐉 Dragon Scale</label>
+                                <input type="range" id="dragonSlider" min="0" max="100" value="70" step="1" 
+                                    style="width: 100%; height: 6px; border-radius: 3px; background: #ddd; outline: none; -webkit-appearance: none;">
+                                <div style="text-align: center; margin-top: 8px;">
+                                    <span id="dragonValue" style="font-size: 1.3rem; font-weight: bold; color: #e53e3e;">70</span>
+                                    <span style="font-size: 0.8rem; color: #999;"> grams</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Loss Display (prominent position) -->
+                        <div style="background: linear-gradient(135deg, rgba(255,99,71,0.1), rgba(255,99,71,0.05)); border-radius: 10px; padding: 20px; text-align: center;">
+                            <div style="font-size: 0.9rem; color: #666; margin-bottom: 8px;">Loss (Distance from Perfect)</div>
+                            <div id="lossValue" style="font-size: 3.5rem; font-weight: bold; color: #ff6347; line-height: 1;">50</div>
+                            <div id="lossBar" style="height: 10px; background: #e0e0e0; border-radius: 5px; margin: 15px auto 10px; max-width: 300px; overflow: hidden;">
+                                <div id="lossBarFill" style="height: 100%; background: linear-gradient(90deg, #2ecc71, #f39c12, #e74c3c); transition: width 0.3s ease; width: 50%;"></div>
+                            </div>
+                            <div id="qualityText" style="font-size: 1rem; color: #666; margin-top: 10px;">Far from perfect...</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right: Goal Reminder -->
+                <div style="flex: 1; min-width: 250px; max-width: 350px;">
+                    <div style="background: linear-gradient(135deg, rgba(45,213,115,0.1), rgba(45,213,115,0.05)); border-radius: 12px; padding: 20px;">
+                        <h3 style="margin: 0 0 15px 0; color: #2dd573; font-size: 1.2rem; text-align: center;">🎯 Your Goal</h3>
+                        <div style="background: white; border-radius: 10px; padding: 15px;">
+                            <p style="margin: 0 0 10px 0; color: #666; font-size: 0.95rem;">Find the perfect combination of ingredients to minimize the loss!</p>
+                            <div style="display: flex; justify-content: space-between; padding: 10px; background: rgba(45,213,115,0.1); border-radius: 8px;">
+                                <span style="color: #2dd573; font-weight: bold;">Target Loss:</span>
+                                <span style="color: #2dd573; font-weight: bold; font-size: 1.2rem;">0</span>
+                            </div>
+                            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0;">
+                                <div style="font-size: 0.85rem; color: #999; margin-bottom: 8px;">Quality Indicators:</div>
+                                <div style="font-size: 0.9rem; line-height: 1.6;">
+                                    <div>🏆 Loss < 5 = Perfect!</div>
+                                    <div>✨ Loss < 15 = Very Close</div>
+                                    <div>🧪 Loss < 30 = Getting There</div>
+                                    <div>💭 Loss < 50 = Keep Trying</div>
+                                    <div>☠️ Loss > 50 = Way Off!</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            ${createStandardNavigation()}
+        </div>
+    `;
+    
+    // Initialize navigation
+    initializeNavigation(levelId, 'createWitchBrewLevel');
+    setupWitchBrewLevel();
+}
+
+function setupWitchBrewLevel() {
+    // Optimal values for the potion
+    const OPTIMAL_EYE = 60;
+    const OPTIMAL_DRAGON = 40;
+    
+    const eyeSlider = document.getElementById('eyeSlider');
+    const dragonSlider = document.getElementById('dragonSlider');
+    
+    function updatePotion() {
+        const eyeValue = parseInt(eyeSlider.value);
+        const dragonValue = parseInt(dragonSlider.value);
+        
+        // Update displayed values
+        document.getElementById('eyeValue').textContent = eyeValue;
+        document.getElementById('dragonValue').textContent = dragonValue;
+        
+        // Calculate loss (Euclidean distance)
+        const loss = Math.sqrt(
+            Math.pow(eyeValue - OPTIMAL_EYE, 2) + 
+            Math.pow(dragonValue - OPTIMAL_DRAGON, 2)
+        );
+        
+        // Update loss display
+        document.getElementById('lossValue').textContent = Math.round(loss);
+        
+        // Update loss bar
+        const maxLoss = Math.sqrt(100*100 + 100*100); // Maximum possible loss
+        const lossPercent = (loss / maxLoss) * 100;
+        document.getElementById('lossBarFill').style.width = lossPercent + '%';
+        
+        // Update status based on loss
+        const potionEffect = document.getElementById('potionEffect');
+        const potionVisual = document.getElementById('potionVisual');
+        const qualityText = document.getElementById('qualityText');
+        const witchImg = document.getElementById('witchImg');
+        
+        if (loss < 5) {
+            // Perfect!
+            potionEffect.textContent = '✨ PERFECT POTION! ✨';
+            potionEffect.style.color = '#2ecc71';
+            potionVisual.textContent = '🏆';
+            qualityText.textContent = 'Absolutely perfect!';
+            qualityText.style.color = '#2ecc71';
+            document.getElementById('lossValue').style.color = '#2ecc71';
+            witchImg.style.transform = 'scale(1.1) rotate(5deg)';
+        } else if (loss < 15) {
+            // Very close
+            potionEffect.textContent = 'Almost perfect!';
+            potionEffect.style.color = '#f39c12';
+            potionVisual.textContent = '✨';
+            qualityText.textContent = 'Very close to perfect!';
+            qualityText.style.color = '#f39c12';
+            document.getElementById('lossValue').style.color = '#f39c12';
+            witchImg.style.transform = 'scale(1.05)';
+        } else if (loss < 30) {
+            // Getting there
+            potionEffect.textContent = 'Good progress...';
+            potionEffect.style.color = '#e67e22';
+            potionVisual.textContent = '🧪';
+            qualityText.textContent = 'Getting warmer...';
+            qualityText.style.color = '#e67e22';
+            document.getElementById('lossValue').style.color = '#e67e22';
+            witchImg.style.transform = 'scale(1)';
+        } else if (loss < 50) {
+            // Far
+            potionEffect.textContent = 'Needs adjustment...';
+            potionEffect.style.color = '#e74c3c';
+            potionVisual.textContent = '💭';
+            qualityText.textContent = 'Far from perfect...';
+            qualityText.style.color = '#e74c3c';
+            document.getElementById('lossValue').style.color = '#e74c3c';
+            witchImg.style.transform = 'scale(1)';
+        } else {
+            // Very far
+            potionEffect.textContent = 'Terrible mixture!';
+            potionEffect.style.color = '#c0392b';
+            potionVisual.textContent = '☠️';
+            qualityText.textContent = 'Completely wrong!';
+            qualityText.style.color = '#c0392b';
+            document.getElementById('lossValue').style.color = '#c0392b';
+            witchImg.style.transform = 'scale(0.95)';
+        }
+    }
+    
+    // Add event listeners
+    eyeSlider.addEventListener('input', updatePotion);
+    dragonSlider.addEventListener('input', updatePotion);
+    
+    // Style the sliders
+    const sliderStyle = `
+        <style>
+            #eyeSlider::-webkit-slider-thumb, #dragonSlider::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+                background: white;
+                cursor: pointer;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                border: 2px solid #999;
+            }
+            #eyeSlider::-webkit-slider-thumb {
+                border-color: #667eea;
+            }
+            #dragonSlider::-webkit-slider-thumb {
+                border-color: #e53e3e;
+            }
+            #eyeSlider::-webkit-slider-thumb:hover {
+                transform: scale(1.2);
+                border-color: #764ba2;
+            }
+            #dragonSlider::-webkit-slider-thumb:hover {
+                transform: scale(1.2);
+                border-color: #c53030;
+            }
+        </style>
+    `;
+    document.head.insertAdjacentHTML('beforeend', sliderStyle);
+    
+    // Initial update
+    updatePotion();
+}
+
+function createLevel2() {
+    const levelId = 'level2';
+    currentLevel = 2;
     const container = document.getElementById('app');
     
     container.innerHTML = `
@@ -346,11 +567,11 @@ function createLevel3() {
     `;
     
     // Initialize navigation
-    initializeNavigation(levelId, 'createLevel3');
-    setupLevel3();
+    initializeNavigation(levelId, 'createLevel2');
+    setupLevel2();
 }
 
-function setupLevel3() {
+function setupLevel2() {
     const energySliderAI = document.getElementById('energySliderAI');
     const gradientBtn = document.getElementById('gradientBtn');
     const autoRunBtn = document.getElementById('autoRunBtn');

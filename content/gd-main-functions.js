@@ -1,4 +1,8 @@
 // Main gradient descent teaching functions
+// This file has been cleaned up - all unused functions have been removed
+// The functions that were in this file (like createGradientDescentPart1, createBalloonInflationLevel, etc.) 
+// were not referenced in nav-config and have been deleted
+// Main gradient descent teaching functions
 
 // =============================================================================
 // PART 1: GRADIENT DESCENT INTRODUCTION
@@ -9,7 +13,7 @@ function createGradientDescentPart1() {
     container.innerHTML = `
         <div class="current-level">
             <div class="level-header" style="font-size: 1.8rem; font-weight: bold;">
-                ⚡ Gradient Descent Part 1/3
+                Core Concept 2: Gradient Descent
             </div>
             <div class="level-content" style="padding: 15px 20px; max-width: 800px; margin: 0 auto;">
                 <div style="background: rgba(102,126,234,0.1); border-radius: 10px; padding: 25px; border: 2px solid rgba(102,126,234,0.3); text-align: center;">
@@ -49,15 +53,13 @@ function createBalloonInflationLevel() {
             </div>
             <div class="level-content" style="padding: 10px 20px; max-width: 1000px; margin: 0 auto;">
                 <!-- Instructions -->
-                <div style="background: rgba(102,126,234,0.1); border-radius: 10px; padding: 15px; margin-bottom: 15px; border: 2px solid rgba(102,126,234,0.3); text-align: center;">
+                <div style="background: rgba(102,126,234,0.1); border-radius: 10px; padding: 15px; margin-bottom: 0px; border: 2px solid rgba(102,126,234,0.3); text-align: center;">
                     <p style="font-size: 1rem; color: #555; margin: 0;">
-                        🎯 <strong>Goal:</strong> Find the right amount of air for different sized balloons!<br>
+                        <strong>Goal:</strong> Find the right amount of air for different sized balloons!<br>
                         <span style="font-size: 0.9rem; color: #666;">Amount of air = <strong style="color: #667eea;">w × (balloon size)</strong></span><br>
-                        <span style="font-size: 0.85rem; color: #888; font-style: italic;">Too much air and it'll pop, too little and it will look deflated!</span>
+                        This challenge should be pretty easy, there's only one variable to tune that will solve the formula for how much air to give each size balloon.
                     </p>
-                </div>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                </div><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: -30px;">
                     <!-- Left side: Balloon Display -->
                     <div style="background: rgba(255,255,255,0.9); border-radius: 15px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                         <h3 style="margin: 0 0 15px 0; color: #333; text-align: center;">Current Balloon</h3>
@@ -91,7 +93,6 @@ function createBalloonInflationLevel() {
                                 <button class="balloon-btn" data-size="2" style="padding: 8px 12px; background: white; color: #333; border: 2px solid #ddd; border-radius: 5px; cursor: pointer;">Size 2 🎈</button>
                                 <button class="balloon-btn" data-size="3" style="padding: 8px 12px; background: white; color: #333; border: 2px solid #ddd; border-radius: 5px; cursor: pointer;">Size 3 🎈</button>
                                 <button class="balloon-btn" data-size="4" style="padding: 8px 12px; background: white; color: #333; border: 2px solid #ddd; border-radius: 5px; cursor: pointer;">Size 4 🎈</button>
-                                <button class="balloon-btn" data-size="5" style="padding: 8px 12px; background: white; color: #333; border: 2px solid #ddd; border-radius: 5px; cursor: pointer;">Size 5 🎈</button>
                             </div>
                         </div>
                     </div>
@@ -128,15 +129,7 @@ function createBalloonInflationLevel() {
                             💨 Inflate Balloon
                         </button>
                         
-                        <!-- Hint section -->
-                        <div style="margin-top: 20px; padding: 15px; background: rgba(255,215,0,0.1); border-radius: 8px; border: 1px solid rgba(255,215,0,0.3);">
-                            <div style="color: #f39c12; font-weight: bold; margin-bottom: 5px; font-size: 0.9rem;">💡 Hint:</div>
-                            <p style="color: #666; font-size: 0.85rem; line-height: 1.4; margin: 0;">
-                                Too little air = deflated balloon 😔<br>
-                                Too much air = balloon pops! 💥<br>
-                                Just right = perfect balloon! 🎈✨
-                            </p>
-                        </div>
+                    
                         
                         <!-- Success tracking -->
                         <div id="success-tracker" style="margin-top: 20px; padding: 15px; background: rgba(45,213,115,0.1); border-radius: 8px; border: 1px solid rgba(45,213,115,0.3); display: none;">
@@ -336,15 +329,15 @@ function createBalloonGradientDescent() {
             </div>
             <div class="level-content" style="padding: 10px 20px; max-width: 1000px; margin: 0 auto;">
                 <!-- Instructions -->
-                <div style="background: rgba(102,126,234,0.1); border-radius: 10px; padding: 15px; margin-bottom: 15px; border: 2px solid rgba(102,126,234,0.3); text-align: center;">
+                <div style="background: rgba(102,126,234,0.1); border-radius: 10px; padding: 15px; border: 2px solid rgba(102,126,234,0.3); text-align: center;">
                     <p style="font-size: 1rem; color: #555; margin: 0;">
-                        🎯 <strong>Watch AI find the perfect formula automatically!</strong><br>
-                        <span style="font-size: 0.9rem; color: #666;">Gradient Descent will optimize <strong style="color: #667eea;">w</strong> to minimize the loss</span><br>
-                        <span style="font-size: 0.85rem; color: #888; font-style: italic;">Target formula: f(x) = 7x</span>
+                        <strong>Witness Gradient Descent Solve The Problem</strong><br>
+                        <span style="font-size: 0.9rem; color: #666;">Gradient Descent will tune the <strong style="color: #667eea;">w</strong> variable to minimize the loss</span><br><br>
+                        We haven't learned exactly how Gradient Descent works yet, but first we'll see <i>what</i> it does. Gradient Descent tunes variables by taking "steps". Each step 
+                    changes the variable in a way that ideally makes the function more accurate. Below, feel free to see Gradient Descent improve the function one step at a time 
+                    by repeatedly pressing the step button, or click on auto-optimize to have Gradient Descent take steps on its own.
                     </p>
-                </div>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                </div><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                     <!-- Left side: Visualization -->
                     <div style="background: rgba(255,255,255,0.9); border-radius: 15px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                         <h3 style="margin: 0 0 15px 0; color: #333; text-align: center;">Test Balloons</h3>
@@ -391,13 +384,6 @@ function createBalloonGradientDescent() {
                             </div>
                         </div>
                         
-                        <!-- Step history -->
-                        <div style="margin-top: 15px; padding: 10px; background: rgba(102,126,234,0.05); border-radius: 8px; max-height: 150px; overflow-y: auto;">
-                            <h4 style="margin: 0 0 8px 0; color: #667eea; font-size: 0.9rem;">📊 Optimization History</h4>
-                            <div id="history" style="font-size: 0.8rem; color: #666; line-height: 1.4;">
-                                <div>Starting optimization...</div>
-                            </div>
-                        </div>
                     </div>
                     
                     <!-- Right side: Controls -->
@@ -414,14 +400,7 @@ function createBalloonGradientDescent() {
                             </div>
                         </div>
                         
-                        <!-- Gradient info -->
-                        <div style="background: rgba(255,215,0,0.1); border-radius: 8px; padding: 12px; margin-bottom: 20px; border: 1px solid rgba(255,215,0,0.3);">
-                            <div style="font-size: 0.9rem; color: #333;">
-                                <strong>Current Gradient:</strong> <span id="gradient-value" style="color: #f39c12; font-weight: bold;">-12</span><br>
-                                <strong>Learning Rate:</strong> <span style="color: #667eea;">0.02</span><br>
-                                <strong>Next Step:</strong> w = <span id="next-w" style="color: #2dd573;">0.24</span>
-                            </div>
-                        </div>
+                    
                         
                         <!-- Iteration counter -->
                         <div style="text-align: center; margin-bottom: 20px;">
@@ -506,29 +485,29 @@ function setupBalloonGradientDescent() {
         document.getElementById('current-w').textContent = currentW.toFixed(2);
         
         // Update balloons
-        for (const size of TEST_SIZES) {
-            const predicted = Math.round(currentW * size);
-            const actual = TRUE_W * size;
-            const balloon = document.getElementById(`balloon-${size}`);
-            const gotText = document.getElementById(`balloon-${size}-got`);
+        // for (const size of TEST_SIZES) {
+        //     const predicted = Math.round(currentW * size);
+        //     const actual = TRUE_W * size;
+        //     const balloon = document.getElementById(`balloon-${size}`);
+        //     const gotText = document.getElementById(`balloon-${size}-got`);
             
-            gotText.textContent = `Got: ${predicted}`;
+        //     gotText.textContent = `Got: ${predicted}`;
             
-            const percentDiff = (predicted / actual) * 100;
-            if (percentDiff >= 95 && percentDiff <= 105) {
-                balloon.textContent = '🎈';
-                balloon.style.opacity = '1';
-                balloon.style.transform = 'scale(1)';
-            } else if (percentDiff < 95) {
-                balloon.textContent = '🎈';
-                balloon.style.opacity = '0.5';
-                balloon.style.transform = 'scale(0.8)';
-            } else {
-                balloon.textContent = '💥';
-                balloon.style.opacity = '1';
-                balloon.style.transform = 'scale(1.1)';
-            }
-        }
+        //     const percentDiff = (predicted / actual) * 100;
+        //     if (percentDiff >= 95 && percentDiff <= 105) {
+        //         balloon.textContent = '🎈';
+        //         balloon.style.opacity = '1';
+        //         balloon.style.transform = 'scale(1)';
+        //     } else if (percentDiff < 95) {
+        //         balloon.textContent = '🎈';
+        //         balloon.style.opacity = '0.5';
+        //         balloon.style.transform = 'scale(0.8)';
+        //     } else {
+        //         balloon.textContent = '💥';
+        //         balloon.style.opacity = '1';
+        //         balloon.style.transform = 'scale(1.1)';
+        //     }
+        // }
         
         // Update loss
         const loss = calculateLoss();
@@ -540,13 +519,13 @@ function setupBalloonGradientDescent() {
         document.getElementById('loss-bar').style.width = `${lossPercent}%`;
         
         // Update gradient info
-        const gradient = calculateGradient();
-        document.getElementById('gradient-value').textContent = gradient.toFixed(2);
-        const nextW = currentW - LEARNING_RATE * gradient;
-        document.getElementById('next-w').textContent = nextW.toFixed(2);
+        // const gradient = calculateGradient();
+        // document.getElementById('gradient-value').textContent = gradient.toFixed(2);
+        // const nextW = currentW - LEARNING_RATE * gradient;
+        // document.getElementById('next-w').textContent = nextW.toFixed(2);
         
-        // Update iteration
-        document.getElementById('iteration').textContent = iteration;
+        // // Update iteration
+        // document.getElementById('iteration').textContent = iteration;
         
         // Check for success (allow small tolerance)
         if (loss < 1 || Math.abs(currentW - TRUE_W) < 0.05) {
@@ -573,18 +552,6 @@ function setupBalloonGradientDescent() {
         }
     }
     
-    function addHistoryEntry(message) {
-        const history = document.getElementById('history');
-        const entry = document.createElement('div');
-        entry.textContent = message;
-        history.appendChild(entry);
-        history.scrollTop = history.scrollHeight;
-        
-        // Keep only last 10 entries
-        while (history.children.length > 10) {
-            history.removeChild(history.firstChild);
-        }
-    }
     
     function takeStep() {
         const gradient = calculateGradient();
@@ -603,7 +570,6 @@ function setupBalloonGradientDescent() {
         iteration++;
         
         const newLoss = calculateLoss();
-        addHistoryEntry(`Step ${iteration}: w: ${oldW.toFixed(2)} → ${currentW.toFixed(2)}, Loss: ${Math.round(oldLoss)} → ${Math.round(newLoss)}`);
         
         updateDisplay();
     }
@@ -763,15 +729,15 @@ function createBunnyFeedingLevel() {
             </div>
             <div class="level-content" style="padding: 10px 20px; max-width: 1000px; margin: 0 auto;">
                 <!-- Instructions -->
-                <div style="background: rgba(255,215,0,0.1); border-radius: 10px; padding: 15px; margin-bottom: 15px; border: 2px solid rgba(255,215,0,0.3); text-align: center;">
+                <div style="background: rgba(255,215,0,0.1); border-radius: 10px; padding: 15px; margin-bottom: 0px; border: 2px solid rgba(255,215,0,0.3); text-align: center;">
                     <p style="font-size: 1rem; color: #555; margin: 0;">
-                        🎯 <strong>Goal:</strong> Find the right formula to feed bunnies based on their weight!<br>
+                        <strong>Goal:</strong> Find the right formula to feed bunnies based on their weight!<br>
                         <span style="font-size: 0.9rem; color: #666;">The amount of hay needed = <strong style="color: #667eea;">w × (bunny weight) + b</strong></span><br>
-                        <span style="font-size: 0.85rem; color: #888; font-style: italic;">Now with TWO parameters to optimize - much harder!</span>
+                        The amount of each hay each bunny needs depends on its weight. But the function is now a little bit more difficult to discover, since there are now
+                        two variables to optimize. Feel free to give it a go by hand, but don't worry too much if it's too difficult. Feel free to go to the next part 
+                        even if you can't find the correct <strong style="color: #667eea;">w</strong> and <strong style="color: #667eea;">b</strong> values
                     </p>
-                </div>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                </div><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: -30px;">
                     <!-- Left side: Bunny Display -->
                     <div style="background: rgba(255,255,255,0.9); border-radius: 15px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                         <h3 style="margin: 0 0 15px 0; color: #333; text-align: center;">Current Bunny</h3>
@@ -1029,15 +995,13 @@ function createBunnyGradientDescent() {
             </div>
             <div class="level-content" style="padding: 10px 20px; max-width: 1100px; margin: 0 auto;">
                 <!-- Instructions -->
-                <div style="background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(45,213,115,0.1)); border-radius: 10px; padding: 15px; margin-bottom: 15px; border: 2px solid rgba(102,126,234,0.3); text-align: center;">
+                <div style="background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(45,213,115,0.1)); border-radius: 10px; padding: 15px; margin-bottom: 0px; border: 2px solid rgba(102,126,234,0.3); text-align: center;">
                     <p style="font-size: 1rem; color: #555; margin: 0;">
-                        ⚡ <strong>Now we see the REAL usefulness of Gradient Descent!</strong><br>
-                        <span style="font-size: 0.9rem; color: #666;">Watch AI optimize BOTH <strong style="color: #667eea;">w</strong> and <strong style="color: #764ba2;">b</strong> simultaneously!</span><br>
-                        <span style="font-size: 0.85rem; color: #888; font-style: italic;">Target formula: f(x) = 5x + 10 (much harder to find manually!)</span>
+                        <strong>What was tricky for us is easy for Gradient Descent</strong><br>
+                        <span style="font-size: 0.9rem; color: #666;">Use Gradient Descent to optimize BOTH <strong style="color: #667eea;">w</strong> and <strong style="color: #764ba2;">b</strong> simultaneously!</span><br>
+
                     </p>
-                </div>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                </div><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: -35px;">
                     <!-- Left side: Visualization -->
                     <div style="background: rgba(255,255,255,0.9); border-radius: 15px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                         <h3 style="margin: 0 0 15px 0; color: #333; text-align: center;">Test Bunnies 🐰</h3>
@@ -1092,23 +1056,7 @@ function createBunnyGradientDescent() {
                             </div>
                         </div>
                         
-                        <!-- Parameter Space Visualization -->
-                        <div style="background: white; border-radius: 8px; padding: 15px; border: 2px solid #ddd;">
-                            <h4 style="margin: 0 0 10px 0; color: #333; font-size: 1rem;">📊 Parameter Space Journey</h4>
-                            <canvas id="param-space-canvas" width="350" height="200" style="width: 100%; height: 200px; display: block; border: 1px solid #eee; border-radius: 4px;"></canvas>
-                            <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.8rem; color: #666;">
-                                <span>w: <span id="w-progress">1.0</span> → 5.0</span>
-                                <span>b: <span id="b-progress">3.0</span> → 10.0</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Step history -->
-                        <div style="margin-top: 15px; padding: 10px; background: rgba(102,126,234,0.05); border-radius: 8px; max-height: 120px; overflow-y: auto;">
-                            <h4 style="margin: 0 0 8px 0; color: #667eea; font-size: 0.9rem;">📈 Learning Progress</h4>
-                            <div id="history-bunny" style="font-size: 0.75rem; color: #666; line-height: 1.3;">
-                                <div>Starting with w=1.0, b=3.0</div>
-                            </div>
-                        </div>
+                       
                     </div>
                     
                     <!-- Right side: Controls -->
@@ -1120,34 +1068,11 @@ function createBunnyGradientDescent() {
                             <div style="font-size: 1.2rem; color: #333;">
                                 f(x) = <span id="current-w-bunny" style="color: #667eea; font-weight: bold;">1.0</span>×x + <span id="current-b-bunny" style="color: #764ba2; font-weight: bold;">3.0</span>
                             </div>
-                            <div style="font-size: 0.9rem; color: #666; margin-top: 8px;">
-                                Target: f(x) = 5×x + 10
-                            </div>
+                        
                         </div>
                         
-                        <!-- Gradient info -->
-                        <div style="background: rgba(255,215,0,0.1); border-radius: 8px; padding: 12px; margin-bottom: 20px; border: 1px solid rgba(255,215,0,0.3);">
-                            <div style="font-size: 0.85rem; color: #333; line-height: 1.6;">
-                                <strong>Gradients:</strong><br>
-                                <span style="color: #667eea;">∂L/∂w</span> = <span id="gradient-w" style="font-weight: bold;">-16.0</span><br>
-                                <span style="color: #764ba2;">∂L/∂b</span> = <span id="gradient-b" style="font-weight: bold;">-4.0</span><br>
-                                <strong>Learning Rates:</strong><br>
-                                <span style="color: #667eea;">w: 0.003</span>, <span style="color: #764ba2;">b: 0.02</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Why this is amazing -->
-                        <div style="background: linear-gradient(135deg, rgba(45,213,115,0.1), rgba(102,126,234,0.1)); border-radius: 8px; padding: 12px; margin-bottom: 20px; border: 2px solid rgba(45,213,115,0.3);">
-                            <div style="font-size: 0.9rem; color: #333; line-height: 1.5;">
-                                <strong style="color: #2dd573;">💡 Why This Is Amazing:</strong><br>
-                                <span style="font-size: 0.85rem;">
-                                • Optimizing 2 parameters at once!<br>
-                                • Would take forever manually<br>
-                                • AI finds the perfect formula automatically<br>
-                                • This scales to millions of parameters!
-                                </span>
-                            </div>
-                        </div>
+                   
+                      
                         
                         <!-- Iteration counter -->
                         <div style="text-align: center; margin-bottom: 20px;">
@@ -1236,12 +1161,9 @@ function setupBunnyGradientDescent() {
     }
     
     function updateDisplay() {
-        // Update current values
+        //Update current values
         document.getElementById('current-w-bunny').textContent = currentW.toFixed(2);
         document.getElementById('current-b-bunny').textContent = currentB.toFixed(1);
-        document.getElementById('w-progress').textContent = currentW.toFixed(1);
-        document.getElementById('b-progress').textContent = currentB.toFixed(1);
-        
         // Update bunnies
         for (const weight of TEST_WEIGHTS) {
             const predicted = Math.round(currentW * weight + currentB);
@@ -1285,106 +1207,11 @@ function setupBunnyGradientDescent() {
         
         // Update gradients
         const {gradW, gradB} = calculateGradients();
-        document.getElementById('gradient-w').textContent = gradW.toFixed(1);
-        document.getElementById('gradient-b').textContent = gradB.toFixed(1);
+
+    
         
-        // Update iteration
-        document.getElementById('iteration-bunny').textContent = iteration;
-        
-        // Check for success
-        if (loss < 2 || (Math.abs(currentW - TRUE_W) < 0.1 && Math.abs(currentB - TRUE_B) < 0.5)) {
-            document.getElementById('success-message-bunny').style.display = 'block';
-            document.getElementById('step-btn-bunny').disabled = true;
-            document.getElementById('auto-btn-bunny').disabled = true;
-            if (isAutoRunning) {
-                stopAutoRun();
-            }
-        } else {
-            document.getElementById('success-message-bunny').style.display = 'none';
-            document.getElementById('step-btn-bunny').disabled = false;
-            document.getElementById('auto-btn-bunny').disabled = false;
-        }
-        
-        // Draw parameter space
-        drawParameterSpace();
     }
     
-    function drawParameterSpace() {
-        const canvas = document.getElementById('param-space-canvas');
-        if (!canvas) return;
-        
-        const ctx = canvas.getContext('2d');
-        canvas.width = 350;
-        canvas.height = 200;
-        
-        // Clear canvas
-        ctx.fillStyle = '#f8f9fa';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        // Draw grid
-        ctx.strokeStyle = '#e9ecef';
-        ctx.lineWidth = 1;
-        for (let i = 0; i <= 10; i++) {
-            const x = (i / 10) * canvas.width;
-            ctx.beginPath();
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, canvas.height);
-            ctx.stroke();
-            
-            const y = (i / 10) * canvas.height;
-            ctx.beginPath();
-            ctx.moveTo(0, y);
-            ctx.lineTo(canvas.width, y);
-            ctx.stroke();
-        }
-        
-        // Draw axes labels
-        ctx.fillStyle = '#666';
-        ctx.font = '10px Arial';
-        ctx.fillText('w', canvas.width - 10, canvas.height - 5);
-        ctx.fillText('b', 5, 10);
-        
-        // Map parameters to canvas coordinates
-        const mapW = (w) => (w / 10) * canvas.width;
-        const mapB = (b) => canvas.height - (b / 20) * canvas.height;
-        
-        // Draw target point
-        ctx.fillStyle = '#2dd573';
-        ctx.beginPath();
-        ctx.arc(mapW(TRUE_W), mapB(TRUE_B), 6, 0, 2 * Math.PI);
-        ctx.fill();
-        
-        // Draw path
-        if (paramHistory.length > 1) {
-            ctx.strokeStyle = '#667eea';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(mapW(paramHistory[0].w), mapB(paramHistory[0].b));
-            for (let i = 1; i < paramHistory.length; i++) {
-                ctx.lineTo(mapW(paramHistory[i].w), mapB(paramHistory[i].b));
-            }
-            ctx.stroke();
-        }
-        
-        // Draw current point
-        ctx.fillStyle = '#ff6347';
-        ctx.beginPath();
-        ctx.arc(mapW(currentW), mapB(currentB), 5, 0, 2 * Math.PI);
-        ctx.fill();
-    }
-    
-    function addHistoryEntry(message) {
-        const history = document.getElementById('history-bunny');
-        const entry = document.createElement('div');
-        entry.textContent = message;
-        history.appendChild(entry);
-        history.scrollTop = history.scrollHeight;
-        
-        // Keep only last 8 entries
-        while (history.children.length > 8) {
-            history.removeChild(history.firstChild);
-        }
-    }
     
     function takeStep() {
         const {gradW, gradB} = calculateGradients();
@@ -1408,7 +1235,6 @@ function setupBunnyGradientDescent() {
         paramHistory.push({w: currentW, b: currentB});
         
         const newLoss = calculateLoss();
-        addHistoryEntry(`Step ${iteration}: w: ${oldW.toFixed(1)}→${currentW.toFixed(1)}, b: ${oldB.toFixed(1)}→${currentB.toFixed(1)}, Loss: ${Math.round(oldLoss)}→${Math.round(newLoss)}`);
         
         updateDisplay();
     }

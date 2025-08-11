@@ -1,70 +1,65 @@
 // instruction_parts.js - Instructional content between levels
 
-function createInstructionPart1() {
+// Final intro section showing all 3 core concepts
+function createCoreConcepts() {
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
-            <div class="level-content celebration" style="padding: 20px; max-width: 1200px; margin: 0 auto;">
-                <h1 style="font-size: 2.3rem; margin-bottom: 20px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Core Concepts You'll Learn</h1>
+            <div class="level-content celebration" style="padding: 20px; max-width: 1400px; margin: 0 auto;">
+                <h1 style="font-size: 2.3rem; margin-bottom: 15px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">The 3 Core Concepts of AI</h1>
+                <p style="font-size: 1.1rem; color: #666; text-align: center; margin-bottom: 30px;">Master these 3 fundamental concepts and you'll understand how AI works at a much deeper level than most people.</p>
                 
-                <div class="learning-objectives" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 30px 0;">
-                    <div id="concept1" class="objective-item" style="background: linear-gradient(135deg, rgba(255,99,71,0.1), rgba(255,99,71,0.05)); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent;">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <div class="objective-icon" style="font-size: 2.5rem;">📉</div>
-                            <div class="objective-content">
-                                <h3 style="margin: 0; font-size: 1.2rem; color: #333;">Loss</h3>
-                                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666; line-height: 1.4;">A measure of how wrong your AI's predictions are</p>
+                <div style="display: flex; flex-direction: column; gap: 20px; margin: 0 auto;">
+                    <!-- Concept 1: Loss -->
+                    <div class="objective-item" style="background: linear-gradient(135deg, rgba(255,99,71,0.1), rgba(255,99,71,0.05)); border-radius: 12px; padding: 25px; display: flex; align-items: center; gap: 20px; border: 2px solid rgba(255,99,71,0.3); cursor: pointer; transition: all 0.3s ease;">
+                        <div style="background: #ff6347; color: white; font-size: 1.8rem; font-weight: bold; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">1</div>
+                        <div class="objective-icon" style="font-size: 2.5rem; flex-shrink: 0;">📉</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0; font-size: 1.3rem; color: #333;">Loss</h3>
+                            <p style="margin: 5px 0 0 0; font-size: 0.95rem; color: #666; line-height: 1.4;">A measure of how wrong your AI's predictions are - the single number that tells us if we're on the right track</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Concept 2: Gradient Descent - EMPHASIZED -->
+                    <div class="objective-item" style="background: linear-gradient(135deg, rgba(102,126,234,0.15), rgba(102,126,234,0.08)); border-radius: 12px; padding: 25px; display: flex; align-items: center; gap: 20px; border: 3px solid rgba(102,126,234,0.5); cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(102,126,234,0.2); position: relative;">
+                        <!-- Special badge -->
+                        <div style="position: absolute; top: -12px; right: 20px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; box-shadow: 0 2px 10px rgba(102,126,234,0.3);">
+                            ✨ Most Important & Trickiest
+                        </div>
+                        <div style="background: #667eea; color: white; font-size: 1.8rem; font-weight: bold; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">2</div>
+                        <div class="objective-icon" style="font-size: 2.5rem; flex-shrink: 0;">⚡</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0; font-size: 1.4rem; color: #333;">Gradient Descent</h3>
+                            <p style="margin: 5px 0 10px 0; font-size: 0.95rem; color: #666; line-height: 1.4;">The algorithm that automatically improves AI predictions by finding the direction that reduces loss the most</p>
+                            
+                            <!-- Three parts breakdown -->
+                            <div style="background: rgba(102,126,234,0.1); border-radius: 8px; padding: 12px; margin-top: 10px;">
+                                <p style="margin: 0 0 8px 0; font-size: 0.85rem; color: #667eea; font-weight: bold;">📚 We'll learn this in 3 parts:</p>
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                                    <div style="background: white; padding: 8px; border-radius: 6px; text-align: center;">
+                                        <div style="font-size: 0.75rem; color: #667eea; font-weight: bold;">Part 1</div>
+                                        <div style="font-size: 0.8rem; color: #555; margin-top: 2px;">What It Is</div>
+                                    </div>
+                                    <div style="background: white; padding: 8px; border-radius: 6px; text-align: center;">
+                                        <div style="font-size: 0.75rem; color: #667eea; font-weight: bold;">Part 2</div>
+                                        <div style="font-size: 0.8rem; color: #555; margin-top: 2px;">How It Works</div>
+                                    </div>
+                                    <div style="background: white; padding: 8px; border-radius: 6px; text-align: center;">
+                                        <div style="font-size: 0.75rem; color: #667eea; font-weight: bold;">Part 3</div>
+                                        <div style="font-size: 0.8rem; color: #555; margin-top: 2px;">Advanced Math Caveats</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     
-                    <div id="concept2" class="objective-item" style="background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(102,126,234,0.05)); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent;">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <div class="objective-icon" style="font-size: 2.5rem;">⚡</div>
-                            <div class="objective-content">
-                                <h3 style="margin: 0; font-size: 1.2rem; color: #333;">Gradient Descent</h3>
-                                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666; line-height: 1.4;">The algorithm that automatically improves AI predictions</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="concept3" class="objective-item" style="background: linear-gradient(135deg, rgba(118,75,162,0.1), rgba(118,75,162,0.05)); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent;">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <div class="objective-icon" style="font-size: 2.5rem;">👣</div>
-                            <div class="objective-content">
-                                <h3 style="margin: 0; font-size: 1.2rem; color: #333;">Step Sizes & Learning Rate</h3>
-                                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666; line-height: 1.4;">How big steps the AI takes when learning</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="concept4" class="objective-item" style="background: linear-gradient(135deg, rgba(45,213,115,0.1), rgba(45,213,115,0.05)); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent;">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <div class="objective-icon" style="font-size: 2.5rem;">📊</div>
-                            <div class="objective-content">
-                                <h3 style="margin: 0; font-size: 1.2rem; color: #333;">Training Data</h3>
-                                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666; line-height: 1.4;">Examples that teach the AI what's correct</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="concept5" class="objective-item" style="background: linear-gradient(135deg, rgba(243,150,10,0.1), rgba(243,150,10,0.05)); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent;">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <div class="objective-icon" style="font-size: 2.5rem;">🔍</div>
-                            <div class="objective-content">
-                                <h3 style="margin: 0; font-size: 1.2rem; color: #333;">Training Features</h3>
-                                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666; line-height: 1.4;">The specific details AI looks at to make predictions</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="concept6" class="objective-item" style="background: linear-gradient(135deg, rgba(147,51,234,0.1), rgba(147,51,234,0.05)); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.3s ease; border: 2px solid transparent;">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <div class="objective-icon" style="font-size: 2.5rem;">🚀</div>
-                            <div class="objective-content">
-                                <h3 style="margin: 0; font-size: 1.2rem; color: #333;">Putting It All Together</h3>
-                                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666; line-height: 1.4;">Using gradient descent with training data and features to create a real ML model</p>
-                            </div>
+                    <!-- Concept 3: Training Data -->
+                    <div class="objective-item" style="background: linear-gradient(135deg, rgba(45,213,115,0.1), rgba(45,213,115,0.05)); border-radius: 12px; padding: 25px; display: flex; align-items: center; gap: 20px; border: 2px solid rgba(45,213,115,0.3); cursor: pointer; transition: all 0.3s ease;">
+                        <div style="background: #2dd573; color: white; font-size: 1.8rem; font-weight: bold; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">3</div>
+                        <div class="objective-icon" style="font-size: 2.5rem; flex-shrink: 0;">📊</div>
+                        <div style="flex: 1;">
+                            <h3 style="margin: 0; font-size: 1.3rem; color: #333;">Training Data</h3>
+                            <p style="margin: 5px 0 0 0; font-size: 0.95rem; color: #666; line-height: 1.4;">Examples that teach the AI what's correct - the foundation that determines what patterns the AI will learn</p>
                         </div>
                     </div>
                 </div>
@@ -75,7 +70,7 @@ function createInstructionPart1() {
     `;
     
     // Initialize navigation
-    initializeNavigation('ip1', 'createInstructionPart1');
+    initializeNavigation('core-concepts', 'createCoreConcepts');
     
     // Add interactivity
     setTimeout(() => {
@@ -83,14 +78,21 @@ function createInstructionPart1() {
         const concepts = document.querySelectorAll('.objective-item');
         concepts.forEach((concept, index) => {
             concept.addEventListener('mouseenter', () => {
-                concept.style.transform = 'translateY(-5px)';
-                concept.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
-                concept.style.borderColor = ['#ff6347', '#667eea', '#764ba2', '#2dd573', '#f3960a', '#9333ea'][index];
+                if (index === 1) { // Special effect for Gradient Descent
+                    concept.style.transform = 'translateX(10px) scale(1.02)';
+                    concept.style.boxShadow = '0 8px 25px rgba(102,126,234,0.3)';
+                } else {
+                    concept.style.transform = 'translateX(10px)';
+                    concept.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+                }
             });
             concept.addEventListener('mouseleave', () => {
-                concept.style.transform = 'translateY(0)';
-                concept.style.boxShadow = 'none';
-                concept.style.borderColor = 'transparent';
+                concept.style.transform = 'translateX(0) scale(1)';
+                if (index === 1) {
+                    concept.style.boxShadow = '0 4px 20px rgba(102,126,234,0.2)';
+                } else {
+                    concept.style.boxShadow = 'none';
+                }
             });
         });
     }, 100);
@@ -185,57 +187,6 @@ function createPrerequisites() {
                     </div>
                 </div>
                 
-                <!-- What We'll Learn -->
-                <div style="background: linear-gradient(135deg, rgba(147,51,234,0.1), rgba(147,51,234,0.05)); border-radius: 12px; padding: 25px; margin: 30px auto; max-width: 900px; border: 2px solid #9333ea;">
-                    <div style="display: flex; align-items: flex-start; gap: 20px;">
-                        <div class="objective-icon" style="font-size: 3rem;">🎯</div>
-                        <div style="flex: 1;">
-                            <h3 style="margin: 0 0 15px 0; font-size: 1.4rem; color: #333;">What You'll Learn Here</h3>
-                            <p style="font-size: 1.05rem; color: #555; line-height: 1.6; margin-bottom: 15px;">
-                                This interactive course will teach you <strong style="color: #9333ea;">how we create these AI functions</strong>:
-                            </p>
-                            <div style="display: flex; flex-direction: column; gap: 12px; margin-left: 20px;">
-                                <div style="display: flex; align-items: flex-start; gap: 10px;">
-                                    <span style="color: #9333ea; font-size: 1.2rem;">1.</span>
-                                    <div>
-                                        <strong style="color: #333;">Start with a random function</strong>
-                                        <div style="font-size: 0.9rem; color: #666;">Initially, it gives terrible outputs (high loss)</div>
-                                    </div>
-                                </div>
-                                <div style="display: flex; align-items: flex-start; gap: 10px;">
-                                    <span style="color: #9333ea; font-size: 1.2rem;">2.</span>
-                                    <div>
-                                        <strong style="color: #333;">Measure how wrong it is</strong>
-                                        <div style="font-size: 0.9rem; color: #666;">Using a "loss function" to quantify errors</div>
-                                    </div>
-                                </div>
-                                <div style="display: flex; align-items: flex-start; gap: 10px;">
-                                    <span style="color: #9333ea; font-size: 1.2rem;">3.</span>
-                                    <div>
-                                        <strong style="color: #333;">Automatically improve it</strong>
-                                        <div style="font-size: 0.9rem; color: #666;">Using "gradient descent" to minimize the loss</div>
-                                    </div>
-                                </div>
-                                <div style="display: flex; align-items: flex-start; gap: 10px;">
-                                    <span style="color: #9333ea; font-size: 1.2rem;">4.</span>
-                                    <div>
-                                        <strong style="color: #333;">Train with examples</strong>
-                                        <div style="font-size: 0.9rem; color: #666;">Show it lots of correct input-output pairs</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <p style="font-size: 1rem; color: #666; margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.5); border-radius: 8px; border-left: 4px solid #9333ea;">
-                                <strong>By the end:</strong> You'll understand the core algorithm that powers everything from ChatGPT to self-driving cars. It's simpler than you think!
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; padding: 20px; color: white; text-align: center; margin: 30px 0;">
-                    <h3 style="margin: 0 0 10px 0; font-size: 1.2rem;">🚀 Ready to Begin?</h3>
-                    <p style="margin: 0; font-size: 1rem;">Let's start by understanding the first key concept: <strong>Loss</strong> - how we measure when AI is wrong!</p>
-                </div>
-                
                 ${createStandardNavigation()}
             </div>
         </div>
@@ -261,15 +212,16 @@ function createPrerequisites() {
     }, 100);
 }
 
-function createInstructionPart2() {
+// Part 1: Understanding Loss - Detailed explanation before Level 1
+function createInstructionPart1() {
     const container = document.getElementById('app');
     container.innerHTML = `
         <div class="current-level">
             <div class="level-content celebration" style="padding: 20px; max-width: 1200px; margin: 0 auto;">
-                <h1 style="font-size: 2.3rem; margin-bottom: 20px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Core Concept 1: Loss</h1>
+                <h1 style="font-size: 2.3rem; margin-bottom: 20px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Part 1: Understanding Loss</h1>
                 
-                <!-- Reusing concept1 div styling for familiarity -->
-                <div style="background: linear-gradient(135deg, rgba(255,99,71,0.1), rgba(255,99,71,0.05)); border-radius: 12px; padding: 25px; margin: 20px auto; max-width: 800px; border: 2px solid #ff6347;">
+                <!-- Main concept box -->
+                <div style="background: linear-gradient(135deg, rgba(255,99,71,0.1), rgba(255,99,71,0.05)); border-radius: 12px; padding: 25px; margin: 20px auto; max-width: 900px; border: 2px solid #ff6347;">
                     <div style="display: flex; align-items: flex-start; gap: 20px;">
                         <div class="objective-icon" style="font-size: 3rem;">📉</div>
                         <div style="flex: 1;">
@@ -280,7 +232,9 @@ function createInstructionPart2() {
                     </div>
                 </div>
                 
+                <!-- Examples Grid -->
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
+                    <!-- Target Practice Analogy -->
                     <div style="background: rgba(255,255,255,0.5); border-radius: 12px; padding: 20px; text-align: center;">
                         <h3 style="color: #333; margin-bottom: 15px;">🎯 Think: Target Practice</h3>
                         <div style="display: flex; flex-direction: column; gap: 10px; text-align: left;">
@@ -308,6 +262,7 @@ function createInstructionPart2() {
                         </div>
                     </div>
                     
+                    <!-- AI Examples -->
                     <div style="background: rgba(255,255,255,0.5); border-radius: 12px; padding: 20px; text-align: center;">
                         <h3 style="color: #333; margin-bottom: 15px;">🤖 In AI Terms</h3>
                         <div style="display: flex; flex-direction: column; gap: 10px; text-align: left;">
@@ -336,10 +291,7 @@ function createInstructionPart2() {
                     </div>
                 </div>
                 
-                <div style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; padding: 20px; color: white; text-align: center; margin: 20px 0;">
-                    <h3 style="margin: 0 0 10px 0; font-size: 1.2rem;">🎮 Coming up: Level 1 - Robot Energy Challenge</h3>
-                    <p style="margin: 0; font-size: 1rem;">You'll help a robot find its optimal energy level by minimizing loss. Can you get the loss down to zero?</p>
-                </div>
+              
                 
                 ${createStandardNavigation()}
             </div>
@@ -347,5 +299,12 @@ function createInstructionPart2() {
     `;
     
     // Initialize navigation
-    initializeNavigation('ip2', 'createInstructionPart2');
+    initializeNavigation('ip1', 'createInstructionPart1');
+}
+
+// createInstructionPart2 placeholder - add gradient descent explanation here if needed
+function createInstructionPart2() {
+    // This can be implemented later for explaining gradient descent in detail
+    // For now, redirecting to next appropriate content
+    createInstructionPart1();
 }
