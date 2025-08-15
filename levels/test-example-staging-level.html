@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test: example-staging-level</title>
+    
+    <!-- Include all CSS -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/controls.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/training.css">
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        #app {
+            max-width: 1920px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    
+    <!-- Include utilities -->
+    <script src="../utils/ui-patterns.js"></script>
+    <script src="../utils/dom.js"></script>
+    <script src="../utils/math.js"></script>
+    <script src="../utils/format.js"></script>
+    
+    <!-- Include navigation -->
+    <script src="../js_standalone/navigation.js"></script>
+    <script src="../js_standalone/navigation-config.js"></script>
+    
+    <!-- Include the level -->
+    <script src="example-staging-level.js"></script>
+    
+    <script>
+        // Mock any missing functions
+        if (typeof createStandardNavigation === 'undefined') {
+            window.createStandardNavigation = function() {
+                return '<div style="padding: 20px; color: white;">Navigation Placeholder</div>';
+            };
+        }
+        
+        if (typeof initializeNavigation === 'undefined') {
+            window.initializeNavigation = function(id, func) {
+                console.log('Navigation initialized:', id);
+            };
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof createExampleStagingLevel === 'function') {
+                createExampleStagingLevel();
+                console.log('Level loaded successfully!');
+            } else {
+                console.error('Level function not found: createExampleStagingLevel');
+                document.getElementById('app').innerHTML = 
+                    '<div style="color: white; padding: 50px; text-align: center;">' +
+                    'Error: Level function createExampleStagingLevel not found</div>';
+            }
+        });
+    </script>
+</body>
+</html>

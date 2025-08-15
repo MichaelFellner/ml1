@@ -1,0 +1,36 @@
+# Staging area - AI development workspace
+.staging/
+*.staging
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor directories and files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Backup files
+*.backup
+*.bak
+
+# Local environment files
+.env.local
+.env.*.local
+
+# Optional: Uncomment if you add node_modules later
+# node_modules/
+# dist/
+# build/

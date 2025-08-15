@@ -1,5 +1,42 @@
 // progress-bar-inline.js - Progress bar with text inside, positioned above content
 
+// Ensure navigation functions exist before using them
+// These are temporary fallbacks that will be replaced by actual functions from navigation.js
+if (typeof getCurrentPageIndex !== 'function') {
+    window.getCurrentPageIndex = function() {
+        // Fallback implementation
+        if (window.NAVIGATION_CONFIG && window.NAVIGATION_CONFIG.sections) {
+            const currentFunc = window.currentPageFunction || 'createIntroduction';
+            let index = 0;
+            for (const section of window.NAVIGATION_CONFIG.sections) {
+                for (const item of section.items) {
+                    if (item.func === currentFunc) {
+                        return index;
+                    }
+                    index++;
+                }
+            }
+        }
+        return 0;
+    };
+}
+
+if (typeof getFlattenedNavigation !== 'function') {
+    window.getFlattenedNavigation = function() {
+        // Fallback implementation
+        if (window.NAVIGATION_CONFIG && window.NAVIGATION_CONFIG.sections) {
+            const flattened = [];
+            window.NAVIGATION_CONFIG.sections.forEach(section => {
+                section.items.forEach(item => {
+                    flattened.push(item);
+                });
+            });
+            return flattened;
+        }
+        return [];
+    };
+}
+
 class InlineProgressBar {
     constructor() {
         this.sections = [];
@@ -236,7 +273,11 @@ class InlineProgressBar {
     }
     
     updateProgress() {
-        const currentIndex = getCurrentPageIndex();
+        // Add safety check for missing function
+        const currentIndex = (typeof getCurrentPageIndex === 'function') 
+            ? getCurrentPageIndex() 
+            : 0;
+        
         if (currentIndex < 0) return;
         
         this.currentIndex = currentIndex;
@@ -325,9 +366,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Create new progress bar
     window.inlineProgressBar = new InlineProgressBar();
     
-    // Hook into navigation
-    const originalNext = window.navigateNext;
-    const originalPrev = window.navigatePrev;
+    // Hook into navigation - with safety checks
+    const originalNext = window.navigateNext || function() {};
+    const originalPrev = window.navigatePrev || function() {};
     
     window.navigateNext = function() {
         const result = originalNext.apply(this, arguments);

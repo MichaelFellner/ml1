@@ -1,5 +1,25 @@
 // instruction_parts.js - Instructional content between levels
 
+// Ensure createStandardNavigation function exists
+if (typeof createStandardNavigation !== 'function') {
+    window.createStandardNavigation = function(first = false, last = false) {
+        // Fallback implementation - returns empty string as navigation is injected separately
+        return '';
+    };
+}
+
+// Ensure initializeNavigation function exists  
+if (typeof initializeNavigation !== 'function') {
+    window.initializeNavigation = function(pageId, functionName, first = false, last = false) {
+        // Fallback implementation - basic state tracking
+        if (typeof gameState !== 'undefined') {
+            gameState.currentNavigationId = pageId;
+            gameState.currentPageFunction = functionName;
+        }
+        window.currentPageFunction = functionName;
+    };
+}
+
 // Final intro section showing all 3 core concepts
 function createCoreConcepts() {
     const container = document.getElementById('app');

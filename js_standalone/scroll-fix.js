@@ -25,40 +25,63 @@ function wrapLevelContent() {
 }
 
 // Override existing navigation functions to add wrapper after render
-const originalInitializeNavigation = window.initializeNavigation;
-window.initializeNavigation = function(...args) {
-    const result = originalInitializeNavigation.apply(this, args);
-    
-    // Small delay to ensure DOM is ready
-    setTimeout(() => {
-        wrapLevelContent();
+if (typeof window.initializeNavigation === 'function') {
+    const originalInitializeNavigation = window.initializeNavigation;
+    window.initializeNavigation = function(...args) {
+        const result = originalInitializeNavigation.apply(this, args);
         
-        // Update scroll function to target wrapper instead
-        const wrapper = document.querySelector('.level-wrapper');
-        if (wrapper) {
-            wrapper.scrollTop = 0;
+        // Small delay to ensure DOM is ready
+        setTimeout(() => {
+            wrapLevelContent();
+            
+            // Update scroll function to target wrapper instead
+            const wrapper = document.querySelector('.level-wrapper');
+            if (wrapper) {
+                wrapper.scrollTop = 0;
+            }
+        }, 10);
+        
+        return result;
+    };
+} else {
+    // If initializeNavigation doesn't exist yet, wait for it
+    const checkInterval = setInterval(() => {
+        if (typeof window.initializeNavigation === 'function') {
+            clearInterval(checkInterval);
+            const originalInitializeNavigation = window.initializeNavigation;
+            window.initializeNavigation = function(...args) {
+                const result = originalInitializeNavigation.apply(this, args);
+                setTimeout(() => {
+                    wrapLevelContent();
+                    const wrapper = document.querySelector('.level-wrapper');
+                    if (wrapper) {
+                        wrapper.scrollTop = 0;
+                    }
+                }, 10);
+                return result;
+            };
         }
-    }, 10);
-    
-    return result;
-};
+    }, 100);
+}
 
 // Also override the scrollAppToTop function
-const originalScrollAppToTop = window.scrollAppToTop;
-window.scrollAppToTop = function() {
-    setTimeout(() => {
-        const wrapper = document.querySelector('.level-wrapper');
-        if (wrapper) {
-            wrapper.scrollTop = 0;
-        } else {
-            // Fallback to original behavior
-            const contentBox = document.querySelector('.current-level');
-            if (contentBox) {
-                contentBox.scrollTop = 0;
+if (typeof window.scrollAppToTop === 'function') {
+    const originalScrollAppToTop = window.scrollAppToTop;
+    window.scrollAppToTop = function() {
+        setTimeout(() => {
+            const wrapper = document.querySelector('.level-wrapper');
+            if (wrapper) {
+                wrapper.scrollTop = 0;
+            } else {
+                // Fallback to original behavior
+                const contentBox = document.querySelector('.current-level');
+                if (contentBox) {
+                    contentBox.scrollTop = 0;
+                }
             }
-        }
-    }, 50);
-};
+        }, 50);
+    };
+}
 
 // Listen for dynamic content changes
 const observer = new MutationObserver((mutations) => {

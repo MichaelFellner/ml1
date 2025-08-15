@@ -1,5 +1,56 @@
 // fast-transitions.js - Optimized fast & smooth level transitions
 
+// Fallback definitions for navigation functions if not yet loaded
+// These will be overridden by the actual functions from navigation.js
+if (typeof canGoNext !== 'function') {
+    window.canGoNext = function() {
+        // Fallback: check if navigation functions are available
+        if (typeof window.getFlattenedNavigation === 'function' && 
+            typeof window.getCurrentPageIndex === 'function') {
+            const flattened = window.getFlattenedNavigation();
+            const currentIndex = window.getCurrentPageIndex();
+            return currentIndex >= 0 && currentIndex < flattened.length - 1;
+        }
+        return false;
+    };
+}
+
+if (typeof canGoPrev !== 'function') {
+    window.canGoPrev = function() {
+        // Fallback: check if navigation functions are available
+        if (typeof window.getCurrentPageIndex === 'function') {
+            const currentIndex = window.getCurrentPageIndex();
+            return currentIndex > 0;
+        }
+        return false;
+    };
+}
+
+if (typeof getFlattenedNavigation !== 'function') {
+    window.getFlattenedNavigation = function() {
+        // Fallback: return empty array if NAVIGATION_CONFIG not available
+        if (window.NAVIGATION_CONFIG && window.NAVIGATION_CONFIG.sections) {
+            const flattened = [];
+            window.NAVIGATION_CONFIG.sections.forEach(section => {
+                section.items.forEach(item => {
+                    flattened.push(item);
+                });
+            });
+            return flattened;
+        }
+        return [];
+    };
+}
+
+if (typeof getCurrentPageIndex !== 'function') {
+    window.getCurrentPageIndex = function() {
+        // Fallback: try to determine current page
+        const flattened = window.getFlattenedNavigation();
+        const currentFunc = window.currentPageFunction || 'createIntroduction';
+        return flattened.findIndex(item => item.func === currentFunc);
+    };
+}
+
 class FastTransitions {
     constructor() {
         this.preloadedImages = new Set();
@@ -270,10 +321,14 @@ class FastTransitions {
         
         // Enhanced next navigation
         window.navigateNext = () => {
-            if (!canGoNext()) return;
+            if (typeof canGoNext === 'function' && !canGoNext()) return;
             
-            const flattened = getFlattenedNavigation();
-            const currentIndex = getCurrentPageIndex();
+            const flattened = (typeof getFlattenedNavigation === 'function') 
+                ? getFlattenedNavigation() 
+                : [];
+            const currentIndex = (typeof getCurrentPageIndex === 'function') 
+                ? getCurrentPageIndex() 
+                : 0;
             const nextItem = flattened[currentIndex + 1];
             
             this.quickTransition(() => {
@@ -291,10 +346,14 @@ class FastTransitions {
         
         // Enhanced previous navigation
         window.navigatePrev = () => {
-            if (!canGoPrev()) return;
+            if (typeof canGoPrev === 'function' && !canGoPrev()) return;
             
-            const flattened = getFlattenedNavigation();
-            const currentIndex = getCurrentPageIndex();
+            const flattened = (typeof getFlattenedNavigation === 'function') 
+                ? getFlattenedNavigation() 
+                : [];
+            const currentIndex = (typeof getCurrentPageIndex === 'function') 
+                ? getCurrentPageIndex() 
+                : 0;
             const prevItem = flattened[currentIndex - 1];
             
             this.quickTransition(() => {
@@ -347,8 +406,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Preload adjacent levels after initial load
     setTimeout(() => {
-        const flattened = getFlattenedNavigation();
-        const currentIndex = getCurrentPageIndex();
+        const flattened = (typeof getFlattenedNavigation === 'function') 
+            ? getFlattenedNavigation() 
+            : [];
+        const currentIndex = (typeof getCurrentPageIndex === 'function') 
+            ? getCurrentPageIndex() 
+            : 0;
         
         // Preload next level
         if (currentIndex + 1 < flattened.length) {

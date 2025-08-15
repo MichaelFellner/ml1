@@ -1,0 +1,64 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ES2020",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "checkJs": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "noImplicitReturns": false,
+    "noImplicitThis": false,
+    "strictNullChecks": false,
+    "strictFunctionTypes": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": false,
+    "outDir": "./dist",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["components/*"],
+      "@components/base/*": ["components/base/*"],
+      "@components/ui/*": ["components/ui/*"],
+      "@services/*": ["services/*"],
+      "@levels/*": ["levels/*"],
+      "@templates/*": ["templates/*"],
+      "@state/*": ["state/*"],
+      "@state/stores/*": ["state/stores/*"],
+      "@scripts/*": ["scripts/*"],
+      "@types/*": ["types/*"],
+      "@css/*": ["css/*"],
+      "@js/*": ["js_standalone/*"]
+    },
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types"
+    ],
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ]
+  },
+  "include": [
+    "**/*.js",
+    "**/*.json",
+    "types/**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.min.js"
+  ],
+  "typeAcquisition": {
+    "enable": true,
+    "include": [
+      "dom",
+      "es6"
+    ]
+  }
+}

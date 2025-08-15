@@ -24,7 +24,11 @@
     <script src="js_standalone/config.js"></script>
     <script src="js_standalone/engine.js"></script>
     <script src="js_standalone/ui-helpers.js"></script>
+    <script src="utils/ui-patterns.js"></script>
+    
+    <!-- Enhanced Navigation System -->
     <script src="js_standalone/navigation-config.js"></script>
+    <script src="navigation/LevelLoader.js"></script>
     <script src="js_standalone/navigation-component.js"></script>
     <script src="js_standalone/navigation.js"></script>
     <script src="js_standalone/scroll-fix.js"></script>
@@ -40,7 +44,38 @@
     <script src="content/post-quiz-congrats.js"></script>
     <script src="content/directions-template.js"></script>
     <script src="content/gd-teach-1.js"></script>
+    
+    <!-- Service layer - load before levels that use them -->
+    <script src="services/GradientDescentService.js"></script>
+    <script src="services/LevelValidationService.js"></script>
+    <script src="services/AnimationService.js"></script>
+    
+    <!-- State management system - load before levels -->
+    <script src="state/Store.js"></script>
+    <script src="state/stores/LevelProgressStore.js"></script>
+    <script src="state/stores/GameStateStore.js"></script>
+    <script src="state/index.js"></script>
+    
+    <!-- Level templates - load before levels that use them -->
+    <script src="templates/BaseLevelTemplate.js"></script>
+    <script src="templates/InteractiveLevelTemplate.js"></script>
+    <script src="templates/generators/generateLevel.js"></script>
+    
+    <!-- Level files from the levels/ folder -->
+    <script src="levels/gradient-descent-intro.js"></script>
+    <script src="levels/test-integration-level.js"></script>
+    <script src="levels/example-staging-level.js"></script>
+    <script src="levels/balloon-inflation.js"></script>
+    <script src="levels/balloon-gradient.js"></script>
+    <script src="levels/bunny-feeding.js"></script>
+    <script src="levels/bunny-gradient.js"></script>
+    <script src="levels/index.js"></script>
+    <script src="levels/color-pattern-memory.js"></script>
+    <script src="levels/step-size-teaching.js"></script>
+    <script src="levels/step-teaching.js"></script>
+    
     <script src="content/gd-main-functions.js"></script>
+    <script src="content/gradient-descent-part2.js"></script>
     <script src="content/gd-teach-2.js"></script>
     <script src="content/parts.js"></script>
     <script src="content/levels-1-2.js"></script>
