@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Pizza Production Challenge</title>
+    <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+    <div id="app"></div>
+
+    <!-- Core dependencies -->
+    <script src="../js_standalone/GameState.js"></script>
+    <script src="../js_standalone/EventManager.js"></script>
+    <script src="../js_standalone/Constants.js"></script>
+    <script src="../js_standalone/ErrorHandler.js"></script>
+    <script src="../js_standalone/config.js"></script>
+    <script src="../js_standalone/engine.js"></script>
+    <script src="../js_standalone/ui-helpers.js"></script>
+    <script src="../utils/ui-patterns.js"></script>
+    
+    <!-- Navigation -->
+    <script src="../js_standalone/navigation-config.js"></script>
+    <script src="../navigation/LevelLoader.js"></script>
+    <script src="../js_standalone/navigation-component.js"></script>
+    <script src="../js_standalone/navigation.js"></script>
+    
+    <!-- Services -->
+    <script src="../services/GradientDescentService.js"></script>
+    <script src="../services/LevelValidationService.js"></script>
+    <script src="../services/AnimationService.js"></script>
+    
+    <!-- State management -->
+    <script src="../state/Store.js"></script>
+    <script src="../state/stores/LevelProgressStore.js"></script>
+    <script src="../state/stores/GameStateStore.js"></script>
+    <script src="../state/index.js"></script>
+    
+    <!-- Templates -->
+    <script src="../templates/BaseLevelTemplate.js"></script>
+    <script src="../templates/InteractiveLevelTemplate.js"></script>
+    
+    <!-- The level to test -->
+    <script src="pizza-production.js"></script>
+    
+    <script>
+        // Initialize the level when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Testing Pizza Production Challenge...');
+            
+            // Check if the function exists
+            if (typeof window.createPizzaProduction === 'function') {
+                console.log('✅ Level function found');
+                
+                // Create the level
+                try {
+                    const level = window.createPizzaProduction();
+                    console.log('✅ Level created successfully', level);
+                } catch (error) {
+                    console.error('❌ Failed to create level:', error);
+                }
+            } else {
+                console.error('❌ Level function not found');
+            }
+        });
+    </script>
+</body>
+</html>
