@@ -61,7 +61,8 @@ const NAVIGATION_CONFIG = {
                 { id: "gradient-descent-math-simple", name: "Gradient Math: Simple Case", func: "createGradientDescentMathSimple" },
                 { id: "gradient-descent-math-bias", name: "Gradient Math: Adding Bias", func: "createGradientDescentMathBias" },
                 { id: "gradient-descent-math-multiple", name: "Gradient Math: Multiple Parameters", func: "createGradientDescentMathMultiple" },
-                { id: "gradient-descent-math-quiz", name: "Gradient Math Quiz", func: "createGradientDescentMathQuiz" }
+                { id: "gradient-descent-math-quiz", name: "Gradient Math Quiz", func: "createGradientDescentMathQuiz" },
+                { id: "gradient-descent-congrats", name: "Gradient Descent Congratulations", func: "createGradientDescentCongrats" }
             ]
         },
         {
@@ -75,13 +76,18 @@ const NAVIGATION_CONFIG = {
                 { id: "training-data-size-impact", name: "Training Data Size Impact", func: "createTrainingDataSizeImpact" },
                 { id: "training-features-explanation", name: "Understanding Training Features", func: "createTrainingFeaturesExplanation" },
                 { id: "real-world-data-1", name: "Real World: California Housing", func: "createRealWorldData1" },
-                { id: "real-world-data-2", name: "Real World: Bike Sharing", func: "createRealWorldData2" }
+                { id: "real-world-data-2", name: "Real World: Bike Sharing", func: "createRealWorldData2" },
+                { id: "training-data-quiz", name: "Training Data Quiz", func: "createTrainingDataQuiz" }
             ]
         },
         {
             title: "Completion",
             items: [
-                { id: "post-quiz", name: "Final Congratulations", func: "createPostQuizCongrats" }
+                { id: "final-congrats", name: "Final Congratulations", func: "createFinalCongrats" },
+                { id: "beyond-linear-regression", name: "From Simple to Complex AI", func: "createBeyondLinearRegression" },
+                { id: "next-steps", name: "Your Learning Path Forward", func: "createNextSteps" },
+                { id: "thank-you-feedback", name: "Thank You & Feedback", func: "createThankYouFeedback" },
+                { id: "post-quiz", name: "Legacy Congratulations", func: "createPostQuizCongrats" }
             ]
         }
     ]
