@@ -69,7 +69,13 @@ const NAVIGATION_CONFIG = {
             items: [
                 { id: "training-data-intro", name: "Training Data Introduction", func: "createTrainingDataIntro" },
                 { id: "training-data-spreadsheet", name: "Training Data Spreadsheet", func: "createTrainingDataSpreadsheet" },
-                { id: "training-data-interactive", name: "Interactive Weight Adjustment", func: "createTrainingDataInteractive" }
+                { id: "training-data-interactive", name: "Interactive Weight Adjustment", func: "createTrainingDataInteractive" },
+                { id: "training-data-gradient-descent", name: "Gradient Descent Weight Optimizer", func: "createTrainingDataGradientDescent" },
+                { id: "training-test-data-explanation", name: "Training vs Test Data", func: "createTrainingTestDataExplanation" },
+                { id: "training-data-size-impact", name: "Training Data Size Impact", func: "createTrainingDataSizeImpact" },
+                { id: "training-features-explanation", name: "Understanding Training Features", func: "createTrainingFeaturesExplanation" },
+                { id: "real-world-data-1", name: "Real World: California Housing", func: "createRealWorldData1" },
+                { id: "real-world-data-2", name: "Real World: Bike Sharing", func: "createRealWorldData2" }
             ]
         },
         {
