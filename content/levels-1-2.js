@@ -11,91 +11,208 @@ function createLevel1() {
         <div class="current-level">
             ${createLevelHeader(0, 1, 12)}
 
-            <div class="level-content" style="display: flex; gap: 40px; align-items: center; padding: 20px; justify-content: space-between;">
-                <div class="visual-section" style="flex: 1; text-align: center; max-width: 350px;">
-                    <div style="background: rgba(255,255,255,0.5); border-radius: 15px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                        <h3 style="margin: 0 0 15px 0; color: #333; font-size: 1.3rem;">🤖 RX-7 Energy Robot</h3>
-                        <img id="robotImg" src="${images.robot}" alt="Robot" style="width: 200px; height: 200px; object-fit: contain; transition: all 0.3s ease;">
-                        <div id="robotStatus" style="margin-top: 15px; font-size: 1.1rem; color: #666; min-height: 30px;">Waiting for optimal energy...</div>
+            <style>
+                @keyframes glow-pulse {
+                    0%, 100% { opacity: 0.8; }
+                    50% { opacity: 1; }
+                }
+                
+                .robot-container {
+                    position: relative;
+                    display: inline-block;
+                }
+                
+                .robot-glow {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    transition: all 0.3s ease;
+                    animation: glow-pulse 2s infinite;
+                }
+                
+                .dial-container {
+                    position: relative;
+                    width: 200px;
+                    height: 200px;
+                    margin: 20px auto;
+                }
+                
+                .dial-svg {
+                    width: 100%;
+                    height: 100%;
+                    cursor: pointer;
+                }
+                
+                .dial-track {
+                    fill: none;
+                    stroke: #e0e0e0;
+                    stroke-width: 20;
+                }
+                
+                .dial-fill {
+                    fill: none;
+                    stroke: url(#dialGradient);
+                    stroke-width: 20;
+                    stroke-linecap: round;
+                    transition: stroke-dasharray 0.3s ease;
+                }
+                
+                .dial-handle {
+                    fill: white;
+                    stroke: #667eea;
+                    stroke-width: 3;
+                    cursor: grab;
+                    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+                    transition: all 0.2s ease;
+                }
+                
+                .dial-handle:active {
+                    cursor: grabbing;
+                    transform: scale(1.1);
+                }
+                
+                .function-display {
+                    font-family: 'Courier New', monospace;
+                    background: #f5f5f5;
+                    padding: 12px;
+                    border-radius: 8px;
+                    margin: 15px 0;
+                    border-left: 4px solid #667eea;
+                }
+                
+                .loss-formula {
+                    font-size: 1.1rem;
+                    color: #333;
+                    text-align: center;
+                }
+                
+                .loss-parts {
+                    display: flex;
+                    justify-content: space-around;
+                    margin-top: 10px;
+                    font-size: 0.95rem;
+                }
+                
+                .loss-part {
+                    padding: 5px 10px;
+                    background: white;
+                    border-radius: 5px;
+                }
+            </style>
+
+            <div class="level-content" style="display: flex; gap: 40px; align-items: stretch; padding: 20px; justify-content: center;">
+                <div class="visual-section" style="flex: 1; text-align: center; max-width: 400px; display: flex; flex-direction: column;">
+                    <div style="background: rgba(255,255,255,0.9); border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                        <h3 style="margin: 0 0 15px 0; color: #333; font-size: 1.3rem;">🤖 Energy Optimization Robot</h3>
+                        
+                        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                            <div class="robot-container">
+                                <div id="robotGlow" class="robot-glow"></div>
+                                <img id="robotImg" src="${images.robot}" alt="Robot" style="width: 180px; height: 180px; object-fit: contain; position: relative; z-index: 2; transition: all 0.3s ease;">
+                            </div>
+                        </div>
+                        
+                        <div id="robotStatus" style="margin-top: 15px; font-size: 1rem; color: #666; min-height: 30px; font-weight: 500;">Adjust the input to minimize loss!</div>
+                    </div>
+                    
+                    <!-- Loss Display moved here -->
+                    <div style="background: linear-gradient(135deg, rgba(255,99,71,0.1), rgba(255,99,71,0.05)); border-radius: 10px; padding: 15px; text-align: center; margin-top: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                        <div style="display: flex; justify-content: space-around; align-items: center;">
+                            <div>
+                                <div style="font-size: 0.9rem; color: #666;">Current Loss</div>
+                                <div id="lossValue" style="font-size: 2.5rem; font-weight: bold; color: #ff6347; transition: color 0.3s ease;">25</div>
+                            </div>
+                            <div>
+                                <div id="lossBar" style="width: 150px; height: 10px; background: #e0e0e0; border-radius: 5px; overflow: hidden;">
+                                    <div id="lossBarFill" style="height: 100%; background: linear-gradient(90deg, #2dd573, #f39c12, #e74c3c); transition: width 0.3s ease; width: 25%;"></div>
+                                </div>
+                                <div id="hintText" style="margin-top: 8px; font-size: 0.9rem; color: #666;">Getting warmer...</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="controls-section" style="flex: 2; max-width: 600px;">
-                    <div style="background: linear-gradient(135deg, rgba(255,99,71,0.1), rgba(255,99,71,0.05)); border-radius: 15px; padding: 25px; border: 2px solid transparent; transition: border-color 0.3s ease;" id="controlPanel">
-                        <h3 style="margin: 0 0 20px 0; color: #333; font-size: 1.2rem;">⚡ Adjust Energy Level</h3>
+                <div class="controls-section" style="flex: 1.5; max-width: 500px;">
+                    <div style="background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                        <h3 style="margin: 0 0 15px 0; color: #333; font-size: 1.2rem; text-align: center;">⚡ Function Input Control</h3>
                         
-                        <!-- Loss Display at the top -->
-                        <div id="lossDisplay" style="background: white; border-radius: 10px; padding: 15px; margin-bottom: 20px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                            <div style="display: flex; justify-content: space-around; align-items: center;">
-                                <div>
-                                    <div style="font-size: 0.9rem; color: #666;">Current Loss</div>
-                                    <div id="lossValue" style="font-size: 2rem; font-weight: bold; color: #ff6347;">25</div>
+                        <!-- Function Display -->
+                        <div class="function-display">
+                            <div class="loss-formula">
+                                Loss = |target - f(<span id="xValue" style="color: #667eea; font-weight: bold;">50</span>)|
+                            </div>
+                            <div class="loss-parts">
+                                <div class="loss-part">
+                                    target = <span style="color: #2dd573; font-weight: bold;">75</span>
                                 </div>
-                                <div id="lossIndicator" style="font-size: 3rem;">🔥</div>
+                                <div class="loss-part">
+                                    f(x) = <span id="fxValue" style="color: #667eea; font-weight: bold;">50</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Interactive Dial Control with Buttons -->
+                        <div style="position: relative; margin: 20px auto;">
+                            <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
+                                <!-- Decrement Button -->
+                                <button id="decrementBtn" style="
+                                    width: 40px;
+                                    height: 40px;
+                                    border-radius: 50%;
+                                    background: linear-gradient(135deg, #667eea, #764ba2);
+                                    color: white;
+                                    border: none;
+                                    font-size: 1.5rem;
+                                    cursor: pointer;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    box-shadow: 0 2px 8px rgba(102,126,234,0.3);
+                                    transition: all 0.2s ease;
+                                ">−</button>
                                 
-                            </div>
-                            <div id="hintText" style="margin-top: 10px; font-size: 0.95rem; color: #666; font-style: italic;">You're getting colder... 🥶</div>
-                        </div>
-                        
-                        <!-- Energy Controls -->
-                        <div style="margin: 20px 0;">
-                            <label for="energySlider" style="display: block; margin-bottom: 10px; color: #555; font-weight: 500;">Energy Level Control:</label>
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                <button id="energyDown" class="slider-btn" style="width: 40px; height: 40px; border-radius: 50%; background: #667eea; color: white; border: none; font-size: 1.5rem; cursor: pointer; transition: all 0.2s ease;">-</button>
-                                <div style="flex: 1; position: relative;">
-                                    <style>
-                                        #energySlider::-webkit-slider-thumb {
-                                            -webkit-appearance: none;
-                                            appearance: none;
-                                            width: 20px;
-                                            height: 20px;
-                                            border-radius: 50%;
-                                            background: #667eea;
-                                            cursor: pointer;
-                                            position: relative;
-                                            z-index: 2;
-                                            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-                                            transition: all 0.2s ease;
-                                        }
-                                        #energySlider::-webkit-slider-thumb:hover {
-                                            transform: scale(1.2);
-                                            background: #764ba2;
-                                        }
-                                        #energySlider::-moz-range-thumb {
-                                            width: 20px;
-                                            height: 20px;
-                                            border-radius: 50%;
-                                            background: #667eea;
-                                            cursor: pointer;
-                                            border: none;
-                                            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-                                            transition: all 0.2s ease;
-                                        }
-                                        #energySlider::-moz-range-thumb:hover {
-                                            transform: scale(1.2);
-                                            background: #764ba2;
-                                        }
-                                    </style>
-                                    <input type="range" id="energySlider" min="0" max="100" value="50" step="1" style="width: 100%; height: 8px; border-radius: 4px; background: #ddd; outline: none; -webkit-appearance: none;">
+                                <!-- Dial -->
+                                <div class="dial-container">
+                                    <svg class="dial-svg" id="dialSvg">
+                                        <defs>
+                                            <linearGradient id="dialGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                                            </linearGradient>
+                                        </defs>
+                                        <circle class="dial-track" cx="100" cy="100" r="80" stroke-dasharray="377 126" stroke-dashoffset="-63" />
+                                        <circle class="dial-fill" id="dialFill" cx="100" cy="100" r="80" stroke-dasharray="0 503" stroke-dashoffset="-63" />
+                                        <circle class="dial-handle" id="dialHandle" cx="100" cy="180" r="12" />
+                                        <text x="100" y="105" text-anchor="middle" font-size="32" font-weight="bold" fill="#333" id="dialValue">50</text>
+                                        <text x="100" y="125" text-anchor="middle" font-size="12" fill="#999">input (x)</text>
+                                    </svg>
                                 </div>
-                                <button id="energyUp" class="slider-btn" style="width: 40px; height: 40px; border-radius: 50%; background: #667eea; color: white; border: none; font-size: 1.5rem; cursor: pointer; transition: all 0.2s ease;">+</button>
+                                
+                                <!-- Increment Button -->
+                                <button id="incrementBtn" style="
+                                    width: 40px;
+                                    height: 40px;
+                                    border-radius: 50%;
+                                    background: linear-gradient(135deg, #667eea, #764ba2);
+                                    color: white;
+                                    border: none;
+                                    font-size: 1.5rem;
+                                    cursor: pointer;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    box-shadow: 0 2px 8px rgba(102,126,234,0.3);
+                                    transition: all 0.2s ease;
+                                ">+</button>
                             </div>
-                        </div>
-                        
-                        <!-- Energy Display Bar -->
-                        <div style="margin-top: 20px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                <span style="color: #666; font-size: 0.95rem;">Energy Level</span>
-                                <span id="energyValue" style="font-size: 1.2rem; font-weight: bold; color: #333;">50%</span>
+                            
+                            <!-- Instruction Text -->
+                            <div style="text-align: center; margin-top: 15px; font-size: 0.85rem; color: #999;">
+                                Drag the dial or use +/− buttons to adjust
                             </div>
-                            <div style="background: #ddd; border-radius: 10px; height: 30px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
-                                <div id="energyFill" class="energy-fill" style="height: 100%; transition: all 0.3s ease; background: linear-gradient(90deg, #667eea, #764ba2);"></div>
-                            </div>
-                        </div>
-                        
-                        <!-- Goal Reminder -->
-                        <div style="margin-top: 20px; padding: 12px; background: rgba(102,126,234,0.1); border-radius: 8px; text-align: center;">
-                            <div style="font-size: 0.9rem; color: #667eea;">💡 <strong>Goal:</strong> Find the energy level that makes Loss = 0</div>
                         </div>
                     </div>
                 </div>
@@ -113,145 +230,244 @@ function createLevel1() {
 /**
  * Sets up interactive controls for Level 1
  * @function setupLevel1
- * @description Initializes energy slider and loss calculation for robot optimization
+ * @description Initializes dial control and loss calculation for robot optimization
  * @returns {void}
  */
 function setupLevel1() {
-    const energySlider = document.getElementById('energySlider');
-    const energyUpBtn = document.getElementById('energyUp');
-    const energyDownBtn = document.getElementById('energyDown');
-    const lossDisplay = document.getElementById('lossDisplay');
-    const controlPanel = document.getElementById('controlPanel');
+    const TARGET = gameState.constants.OPTIMAL_ENERGY; // 75
+    let currentValue = 50;
+    let isDragging = false;
     
-    function updateLevel1() {
-        const energy = parseInt(energySlider.value);
-        updateEnergyDisplay(energy);
+    const dialSvg = document.getElementById('dialSvg');
+    const dialHandle = document.getElementById('dialHandle');
+    const dialFill = document.getElementById('dialFill');
+    const dialValue = document.getElementById('dialValue');
+    const incrementBtn = document.getElementById('incrementBtn');
+    const decrementBtn = document.getElementById('decrementBtn');
+    
+    function updateDial(value) {
+        currentValue = Math.max(0, Math.min(100, value));
         
-        // Calculate loss (linear error)
-        const loss = Math.abs(energy - gameState.constants.OPTIMAL_ENERGY);
-        const distance = Math.abs(energy - gameState.constants.OPTIMAL_ENERGY);
+        // Update dial position (270 degree arc)
+        const angle = (currentValue / 100) * 270 - 135; // -135 to 135 degrees
+        const radian = (angle * Math.PI) / 180;
+        const handleX = 100 + 80 * Math.cos(radian);
+        const handleY = 100 + 80 * Math.sin(radian);
         
-        // Update loss display
-        document.getElementById('lossValue').textContent = loss.toFixed(0);
+        dialHandle.setAttribute('cx', handleX);
+        dialHandle.setAttribute('cy', handleY);
         
-        // Update visual indicators based on distance
-        const lossIndicator = document.getElementById('lossIndicator');
+        // Update dial fill
+        const arcLength = (currentValue / 100) * 377; // 377 is 75% of circumference
+        dialFill.setAttribute('stroke-dasharray', `${arcLength} 503`);
+        
+        // Update display values
+        dialValue.textContent = Math.round(currentValue);
+        document.getElementById('xValue').textContent = Math.round(currentValue);
+        document.getElementById('fxValue').textContent = Math.round(currentValue);
+        
+        // Calculate loss (use rounded value for all comparisons to avoid floating point issues)
+        const rawLoss = Math.abs(TARGET - currentValue);
+        const loss = Math.round(rawLoss);
+        document.getElementById('lossValue').textContent = loss;
+        
+        // Update loss bar
+        const lossPercent = Math.min(100, (rawLoss / 100) * 100);
+        document.getElementById('lossBarFill').style.width = Math.max(2, 100 - lossPercent) + '%';
+        
+        // Update robot glow based on loss
+        const robotGlow = document.getElementById('robotGlow');
+        const robotImg = document.getElementById('robotImg');
         const hintText = document.getElementById('hintText');
         const robotStatus = document.getElementById('robotStatus');
-        const robotImg = document.getElementById('robotImg');
+        const lossValueEl = document.getElementById('lossValue');
         
-        if (energy === gameState.constants.OPTIMAL_ENERGY) {
-            // Perfect!
-            lossIndicator.textContent = '🎯';
-            hintText.innerHTML = '<strong style="color: #2dd573;">PERFECT! You found it!</strong> 🎉';
-            robotStatus.textContent = '⚡ Optimal energy achieved! ⚡';
-            robotStatus.style.color = '#2dd573';
-            robotImg.src = images.robotActive;
+        if (loss === 0) {
+            // PERFECT! Maximum glow with rainbow effect
+            robotGlow.style.width = '250px';
+            robotGlow.style.height = '250px';
+            robotGlow.style.background = 'radial-gradient(circle, rgba(255,215,0,0.8), rgba(255,105,180,0.6), rgba(138,43,226,0.4), transparent)';
+            robotGlow.style.boxShadow = '0 0 80px rgba(255,215,0,0.8), 0 0 120px rgba(255,105,180,0.6)';
+            robotGlow.style.animation = 'glow-pulse 0.8s infinite';
+            robotImg.style.transform = 'scale(1.15) rotate(5deg)';
+            hintText.innerHTML = '<strong style="color: #FFD700;">⭐ PERFECT! You found f(x) = target! ⭐</strong>';
+            robotStatus.innerHTML = '🎯 <strong>Loss = 0!</strong> Optimal solution found!';
+            robotStatus.style.color = '#FFD700';
+            lossValueEl.style.color = '#FFD700';
+            dialHandle.style.fill = '#FFD700';
+            dialHandle.style.stroke = '#FFA500';
+        } else if (loss <= 3) {
+            // Almost perfect - strong green glow
+            robotGlow.style.width = '220px';
+            robotGlow.style.height = '220px';
+            robotGlow.style.background = 'radial-gradient(circle, rgba(46,213,115,0.7), rgba(46,213,115,0.4), transparent)';
+            robotGlow.style.boxShadow = '0 0 60px rgba(46,213,115,0.7)';
             robotImg.style.transform = 'scale(1.1)';
-            lossDisplay.style.background = 'linear-gradient(135deg, rgba(45,213,115,0.2), rgba(45,213,115,0.1))';
-            controlPanel.style.borderColor = '#2dd573';
-            document.getElementById('lossValue').style.color = '#2dd573';
-        } else if (distance <= 5) {
-            // Very hot!
-            lossIndicator.textContent = '🔥';
-            hintText.textContent = "You're VERY hot! Almost there! 🔥";
-            robotStatus.textContent = 'So close to optimal!';
-            robotStatus.style.color = '#f3960a';
-            robotImg.src = images.robot;
+            hintText.textContent = "Almost perfect! So close!";
+            robotStatus.textContent = 'Nearly optimal!';
+            robotStatus.style.color = '#2dd573';
+            lossValueEl.style.color = '#2dd573';
+            dialHandle.style.fill = '#2dd573';
+            dialHandle.style.stroke = '#2dd573';
+        } else if (loss <= 10) {
+            // Very close - yellow-green glow
+            robotGlow.style.width = '200px';
+            robotGlow.style.height = '200px';
+            robotGlow.style.background = 'radial-gradient(circle, rgba(160,213,46,0.6), rgba(160,213,46,0.3), transparent)';
+            robotGlow.style.boxShadow = '0 0 40px rgba(160,213,46,0.6)';
             robotImg.style.transform = 'scale(1.05)';
-            lossDisplay.style.background = 'white';
-            controlPanel.style.borderColor = '#f3960a';
-            document.getElementById('lossValue').style.color = '#f3960a';
-        } else if (distance <= 15) {
-            // Getting warmer
-            lossIndicator.textContent = '🌡️';
-            hintText.textContent = "Getting warmer... 🌡️";
-            robotStatus.textContent = 'Energy not optimal yet...';
-            robotStatus.style.color = '#666';
-            robotImg.src = images.robot;
+            hintText.textContent = "Very close! Keep going!";
+            robotStatus.textContent = 'Getting very warm...';
+            robotStatus.style.color = '#a0d52e';
+            lossValueEl.style.color = '#a0d52e';
+            dialHandle.style.fill = 'white';
+            dialHandle.style.stroke = '#a0d52e';
+        } else if (loss <= 20) {
+            // Close - yellow glow
+            robotGlow.style.width = '180px';
+            robotGlow.style.height = '180px';
+            robotGlow.style.background = 'radial-gradient(circle, rgba(243,150,10,0.5), rgba(243,150,10,0.25), transparent)';
+            robotGlow.style.boxShadow = '0 0 30px rgba(243,150,10,0.5)';
+            robotImg.style.transform = 'scale(1.02)';
+            hintText.textContent = "Getting warmer...";
+            robotStatus.textContent = 'Approaching optimal...';
+            robotStatus.style.color = '#f3960a';
+            lossValueEl.style.color = '#f3960a';
+            dialHandle.style.fill = 'white';
+            dialHandle.style.stroke = '#f3960a';
+        } else if (loss <= 35) {
+            // Warm - orange glow
+            robotGlow.style.width = '160px';
+            robotGlow.style.height = '160px';
+            robotGlow.style.background = 'radial-gradient(circle, rgba(230,126,34,0.4), rgba(230,126,34,0.2), transparent)';
+            robotGlow.style.boxShadow = '0 0 20px rgba(230,126,34,0.4)';
             robotImg.style.transform = 'scale(1)';
-            lossDisplay.style.background = 'white';
-            controlPanel.style.borderColor = 'transparent';
-            document.getElementById('lossValue').style.color = '#ff6347';
-        } else if (distance <= 30) {
-            // Cold
-            lossIndicator.textContent = '❄️';
-            hintText.textContent = "You're getting colder... ❄️";
-            robotStatus.textContent = 'Need more adjustment...';
-            robotStatus.style.color = '#666';
-            robotImg.src = images.robot;
-            robotImg.style.transform = 'scale(1)';
-            lossDisplay.style.background = 'white';
-            controlPanel.style.borderColor = 'transparent';
-            document.getElementById('lossValue').style.color = '#ff6347';
+            hintText.textContent = "Getting there...";
+            robotStatus.textContent = 'Keep adjusting...';
+            robotStatus.style.color = '#e67e22';
+            lossValueEl.style.color = '#e67e22';
+            dialHandle.style.fill = 'white';
+            dialHandle.style.stroke = '#e67e22';
         } else {
-            // Very cold
-            lossIndicator.textContent = '🧊';
-            hintText.textContent = "You're very cold! 🧊";
-            robotStatus.textContent = 'Far from optimal energy...';
-            robotStatus.style.color = '#999';
-            robotImg.src = images.robot;
-            robotImg.style.transform = 'scale(1)';
-            lossDisplay.style.background = 'white';
-            controlPanel.style.borderColor = 'transparent';
-            document.getElementById('lossValue').style.color = '#ff6347';
+            // Far - minimal red glow
+            robotGlow.style.width = '140px';
+            robotGlow.style.height = '140px';
+            robotGlow.style.background = 'radial-gradient(circle, rgba(231,76,60,0.3), rgba(231,76,60,0.1), transparent)';
+            robotGlow.style.boxShadow = '0 0 10px rgba(231,76,60,0.3)';
+            robotImg.style.transform = 'scale(0.98)';
+            hintText.textContent = loss > 50 ? "Very far off!" : "Keep trying...";
+            robotStatus.textContent = 'Far from optimal...';
+            robotStatus.style.color = '#e74c3c';
+            lossValueEl.style.color = '#e74c3c';
+            dialHandle.style.fill = 'white';
+            dialHandle.style.stroke = '#667eea';
         }
         
         // Update button states
-        energyUpBtn.disabled = energy >= 100;
-        energyDownBtn.disabled = energy <= 0;
-        
-        // Style disabled buttons
-        energyUpBtn.style.opacity = energy >= 100 ? '0.5' : '1';
-        energyUpBtn.style.cursor = energy >= 100 ? 'not-allowed' : 'pointer';
-        energyDownBtn.style.opacity = energy <= 0 ? '0.5' : '1';
-        energyDownBtn.style.cursor = energy <= 0 ? 'not-allowed' : 'pointer';
+        if (incrementBtn && decrementBtn) {
+            incrementBtn.disabled = currentValue >= 100;
+            decrementBtn.disabled = currentValue <= 0;
+            incrementBtn.style.opacity = currentValue >= 100 ? '0.5' : '1';
+            incrementBtn.style.cursor = currentValue >= 100 ? 'not-allowed' : 'pointer';
+            decrementBtn.style.opacity = currentValue <= 0 ? '0.5' : '1';
+            decrementBtn.style.cursor = currentValue <= 0 ? 'not-allowed' : 'pointer';
+        }
     }
     
-    energySlider.addEventListener('input', updateLevel1);
+    // Mouse/Touch controls for dial
+    function getAngleFromPoint(x, y) {
+        const rect = dialSvg.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const angle = Math.atan2(y - centerY, x - centerX) * (180 / Math.PI);
+        let normalizedAngle = angle + 135; // Normalize to 0-270 range
+        if (normalizedAngle < 0) normalizedAngle = 0;
+        if (normalizedAngle > 270) normalizedAngle = 270;
+        return (normalizedAngle / 270) * 100;
+    }
     
-    energyUpBtn.addEventListener('click', () => {
-        const currentValue = parseInt(energySlider.value);
+    dialSvg.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        const value = getAngleFromPoint(e.clientX, e.clientY);
+        updateDial(value);
+        e.preventDefault();
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            const value = getAngleFromPoint(e.clientX, e.clientY);
+            updateDial(value);
+        }
+    });
+    
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+    
+    // Touch support
+    dialSvg.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        const touch = e.touches[0];
+        const value = getAngleFromPoint(touch.clientX, touch.clientY);
+        updateDial(value);
+        e.preventDefault();
+    });
+    
+    document.addEventListener('touchmove', (e) => {
+        if (isDragging) {
+            const touch = e.touches[0];
+            const value = getAngleFromPoint(touch.clientX, touch.clientY);
+            updateDial(value);
+        }
+    });
+    
+    document.addEventListener('touchend', () => {
+        isDragging = false;
+    });
+    
+    // Button controls
+    incrementBtn.addEventListener('click', () => {
+        updateDial(currentValue + 1);
+    });
+    
+    decrementBtn.addEventListener('click', () => {
+        updateDial(currentValue - 1);
+    });
+    
+    // Button hover effects
+    incrementBtn.addEventListener('mouseenter', () => {
         if (currentValue < 100) {
-            energySlider.value = currentValue + 1;
-            updateLevel1();
+            incrementBtn.style.transform = 'scale(1.1)';
+            incrementBtn.style.boxShadow = '0 4px 12px rgba(102,126,234,0.4)';
         }
     });
+    incrementBtn.addEventListener('mouseleave', () => {
+        incrementBtn.style.transform = 'scale(1)';
+        incrementBtn.style.boxShadow = '0 2px 8px rgba(102,126,234,0.3)';
+    });
     
-    energyDownBtn.addEventListener('click', () => {
-        const currentValue = parseInt(energySlider.value);
+    decrementBtn.addEventListener('mouseenter', () => {
         if (currentValue > 0) {
-            energySlider.value = currentValue - 1;
-            updateLevel1();
+            decrementBtn.style.transform = 'scale(1.1)';
+            decrementBtn.style.boxShadow = '0 4px 12px rgba(102,126,234,0.4)';
+        }
+    });
+    decrementBtn.addEventListener('mouseleave', () => {
+        decrementBtn.style.transform = 'scale(1)';
+        decrementBtn.style.boxShadow = '0 2px 8px rgba(102,126,234,0.3)';
+    });
+    
+    // Keyboard controls (still available but not advertised)
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+            updateDial(currentValue - (e.shiftKey ? 10 : 1));
+        } else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+            updateDial(currentValue + (e.shiftKey ? 10 : 1));
         }
     });
     
-    // Add hover effects for buttons
-    energyUpBtn.addEventListener('mouseenter', () => {
-        if (!energyUpBtn.disabled) energyUpBtn.style.transform = 'scale(1.1)';
-    });
-    energyUpBtn.addEventListener('mouseleave', () => {
-        energyUpBtn.style.transform = 'scale(1)';
-    });
-    energyDownBtn.addEventListener('mouseenter', () => {
-        if (!energyDownBtn.disabled) energyDownBtn.style.transform = 'scale(1.1)';
-    });
-    energyDownBtn.addEventListener('mouseleave', () => {
-        energyDownBtn.style.transform = 'scale(1)';
-    });
-    
-    updateLevel1();
-}
-
-/**
- * Updates the energy display UI elements
- * @function updateEnergyDisplay
- * @param {number} energy - Current energy level (0-100)
- * @returns {void}
- */
-function updateEnergyDisplay(energy) {
-    document.getElementById('energyValue').textContent = energy + '%';
-    document.getElementById('energyFill').style.width = energy + '%';
+    // Initialize
+    updateDial(50);
 }
 
 
@@ -269,21 +485,43 @@ function createWitchBrewLevel() {
         <div class="current-level">
             ${createLevelHeader(1, 2, 12)}
             
-            <div class="level-content" style="display: flex; gap: 30px; padding: 20px; max-width: 1200px; margin: 0 auto; align-items: flex-start;">
+            <div class="level-content" style="display: flex; gap: 30px; padding: 20px; max-width: 1200px; margin: 0 auto; align-items: stretch;">
                 <!-- Left: Witch Visual -->
                 <div style="flex: 1; min-width: 250px; max-width: 350px;">
-                    <div style="background: linear-gradient(135deg, rgba(118,75,162,0.1), rgba(118,75,162,0.05)); border-radius: 12px; padding: 20px; text-align: center;">
-                        <h3 style="margin: 0 0 15px 0; color: #764ba2; font-size: 1.2rem;">🧙‍♀️ Witch's Perfect Potion</h3>
-                        <img id="witchImg" src="${images.witch}" alt="Witch" style="width: 180px; height: 180px; object-fit: contain; transition: all 0.3s ease;">
-                        <div id="potionStatus" style="margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.8); border-radius: 8px; font-size: 0.95rem; color: #666; min-height: 50px;">
-                            <div id="potionEffect">Adjust both ingredients...</div>
-                            <div id="potionVisual" style="font-size: 2rem; margin-top: 5px;">🧪</div>
+                    <div style="background: linear-gradient(135deg, rgba(118,75,162,0.1), rgba(118,75,162,0.05)); border-radius: 12px; padding: 20px; text-align: center; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div style="flex: 1; display: flex; align-items: center; justify-content: center; min-height: 250px; padding: 20px 10px; position: relative;">
+                            <!-- Witch glow effect behind the image -->
+                            <div id="witchGlow" style="
+                                position: absolute;
+                                width: 200px;
+                                height: 200px;
+                                border-radius: 50%;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                transition: all 0.3s ease;
+                                z-index: 1;
+                            "></div>
+                            <img id="witchImg" src="${images.witch}" alt="Witch" style="
+                                width: 100%;
+                                max-width: 220px;
+                                height: auto;
+                                max-height: 220px;
+                                object-fit: contain;
+                                transition: all 0.3s ease;
+                                position: relative;
+                                z-index: 2;
+                            ">
+                        </div>
+                        <div id="potionStatus" style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.8); border-radius: 8px; font-size: 0.95rem; color: #666; min-height: 40px;">
+                            <div id="potionEffect" style="font-weight: 500;">Adjust both ingredients...</div>
+                            <div id="hintText" style="margin-top: 8px; font-size: 0.85rem; color: #999;">Target: Eye=60, Dragon=40</div>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Middle: Controls and Loss -->
-                <div style="flex: 2; max-width: 600px;">
+                <div style="flex: 2.5; max-width: 700px;">
                     <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                         <h3 style="margin: 0 0 15px 0; color: #333; font-size: 1.1rem; text-align: center;">⚗️ Mix Your Ingredients</h3>
                         
@@ -292,9 +530,39 @@ function createWitchBrewLevel() {
                             <!-- Eye of Newt Control -->
                             <div style="background: rgba(102,126,234,0.05); padding: 15px; border-radius: 8px; border: 2px solid rgba(102,126,234,0.2);">
                                 <label style="display: block; color: #667eea; font-weight: bold; font-size: 0.9rem; margin-bottom: 8px; text-align: center;">👁️ Eye of Newt</label>
-                                <input type="range" id="eyeSlider" min="0" max="100" value="30" step="1" 
-                                    style="width: 100%; height: 6px; border-radius: 3px; background: #ddd; outline: none; -webkit-appearance: none;">
-                                <div style="text-align: center; margin-top: 8px;">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                    <button id="eyeDecrement" style="
+                                        width: 28px;
+                                        height: 28px;
+                                        border-radius: 50%;
+                                        background: #667eea;
+                                        color: white;
+                                        border: none;
+                                        font-size: 1.2rem;
+                                        cursor: pointer;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        transition: all 0.2s ease;
+                                    ">−</button>
+                                    <input type="range" id="eyeSlider" min="0" max="100" value="30" step="1" 
+                                        style="flex: 1; height: 6px; border-radius: 3px; background: #ddd; outline: none; -webkit-appearance: none;">
+                                    <button id="eyeIncrement" style="
+                                        width: 28px;
+                                        height: 28px;
+                                        border-radius: 50%;
+                                        background: #667eea;
+                                        color: white;
+                                        border: none;
+                                        font-size: 1.2rem;
+                                        cursor: pointer;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        transition: all 0.2s ease;
+                                    ">+</button>
+                                </div>
+                                <div style="text-align: center;">
                                     <span id="eyeValue" style="font-size: 1.3rem; font-weight: bold; color: #667eea;">30</span>
                                     <span style="font-size: 0.8rem; color: #999;"> drops</span>
                                 </div>
@@ -303,9 +571,39 @@ function createWitchBrewLevel() {
                             <!-- Dragon Scale Control -->
                             <div style="background: rgba(229,62,62,0.05); padding: 15px; border-radius: 8px; border: 2px solid rgba(229,62,62,0.2);">
                                 <label style="display: block; color: #e53e3e; font-weight: bold; font-size: 0.9rem; margin-bottom: 8px; text-align: center;">🐉 Dragon Scale</label>
-                                <input type="range" id="dragonSlider" min="0" max="100" value="70" step="1" 
-                                    style="width: 100%; height: 6px; border-radius: 3px; background: #ddd; outline: none; -webkit-appearance: none;">
-                                <div style="text-align: center; margin-top: 8px;">
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                    <button id="dragonDecrement" style="
+                                        width: 28px;
+                                        height: 28px;
+                                        border-radius: 50%;
+                                        background: #e53e3e;
+                                        color: white;
+                                        border: none;
+                                        font-size: 1.2rem;
+                                        cursor: pointer;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        transition: all 0.2s ease;
+                                    ">−</button>
+                                    <input type="range" id="dragonSlider" min="0" max="100" value="70" step="1" 
+                                        style="flex: 1; height: 6px; border-radius: 3px; background: #ddd; outline: none; -webkit-appearance: none;">
+                                    <button id="dragonIncrement" style="
+                                        width: 28px;
+                                        height: 28px;
+                                        border-radius: 50%;
+                                        background: #e53e3e;
+                                        color: white;
+                                        border: none;
+                                        font-size: 1.2rem;
+                                        cursor: pointer;
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        transition: all 0.2s ease;
+                                    ">+</button>
+                                </div>
+                                <div style="text-align: center;">
                                     <span id="dragonValue" style="font-size: 1.3rem; font-weight: bold; color: #e53e3e;">70</span>
                                     <span style="font-size: 0.8rem; color: #999;"> grams</span>
                                 </div>
@@ -315,7 +613,7 @@ function createWitchBrewLevel() {
                         <!-- Loss Display (prominent position) -->
                         <div style="background: linear-gradient(135deg, rgba(255,99,71,0.1), rgba(255,99,71,0.05)); border-radius: 10px; padding: 20px; text-align: center;">
                             <div style="font-size: 0.9rem; color: #666; margin-bottom: 8px;">Loss (Distance from Perfect)</div>
-                            <div id="lossValue" style="font-size: 3.5rem; font-weight: bold; color: #ff6347; line-height: 1;">50</div>
+                            <div id="lossValue" style="font-size: 3.5rem; font-weight: bold; color: #ff6347; line-height: 1;">50.0</div>
                             <div id="lossBar" style="height: 10px; background: #e0e0e0; border-radius: 5px; margin: 15px auto 10px; max-width: 300px; overflow: hidden;">
                                 <div id="lossBarFill" style="height: 100%; background: linear-gradient(90deg, #2ecc71, #f39c12, #e74c3c); transition: width 0.3s ease; width: 50%;"></div>
                             </div>
@@ -324,29 +622,7 @@ function createWitchBrewLevel() {
                     </div>
                 </div>
                 
-                <!-- Right: Goal Reminder -->
-                <div style="flex: 1; min-width: 250px; max-width: 350px;">
-                    <div style="background: linear-gradient(135deg, rgba(45,213,115,0.1), rgba(45,213,115,0.05)); border-radius: 12px; padding: 20px;">
-                        <h3 style="margin: 0 0 15px 0; color: #2dd573; font-size: 1.2rem; text-align: center;">🎯 Your Goal</h3>
-                        <div style="background: white; border-radius: 10px; padding: 15px;">
-                            <p style="margin: 0 0 10px 0; color: #666; font-size: 0.95rem;">Find the perfect combination of ingredients to minimize the loss!</p>
-                            <div style="display: flex; justify-content: space-between; padding: 10px; background: rgba(45,213,115,0.1); border-radius: 8px;">
-                                <span style="color: #2dd573; font-weight: bold;">Target Loss:</span>
-                                <span style="color: #2dd573; font-weight: bold; font-size: 1.2rem;">0</span>
-                            </div>
-                            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0;">
-                                <div style="font-size: 0.85rem; color: #999; margin-bottom: 8px;">Quality Indicators:</div>
-                                <div style="font-size: 0.9rem; line-height: 1.6;">
-                                    <div>🏆 Loss < 5 = Perfect!</div>
-                                    <div>✨ Loss < 15 = Very Close</div>
-                                    <div>🧪 Loss < 30 = Getting There</div>
-                                    <div>💭 Loss < 50 = Keep Trying</div>
-                                    <div>☠️ Loss > 50 = Way Off!</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
             
             ${createStandardNavigation()}
@@ -371,88 +647,232 @@ function setupWitchBrewLevel() {
     
     const eyeSlider = document.getElementById('eyeSlider');
     const dragonSlider = document.getElementById('dragonSlider');
+    const eyeIncrement = document.getElementById('eyeIncrement');
+    const eyeDecrement = document.getElementById('eyeDecrement');
+    const dragonIncrement = document.getElementById('dragonIncrement');
+    const dragonDecrement = document.getElementById('dragonDecrement');
     
     function updatePotion() {
         const eyeValue = parseInt(eyeSlider.value);
         const dragonValue = parseInt(dragonSlider.value);
         
-        // Update displayed values
+        // Update displayed values immediately
         document.getElementById('eyeValue').textContent = eyeValue;
         document.getElementById('dragonValue').textContent = dragonValue;
         
-        // Calculate loss (Euclidean distance)
-        const loss = Math.sqrt(
-            Math.pow(eyeValue - OPTIMAL_EYE, 2) + 
-            Math.pow(dragonValue - OPTIMAL_DRAGON, 2)
-        );
+        // Calculate loss (Euclidean distance) with more precision
+        const eyeDiff = Math.abs(eyeValue - OPTIMAL_EYE);
+        const dragonDiff = Math.abs(dragonValue - OPTIMAL_DRAGON);
+        const loss = Math.sqrt(eyeDiff * eyeDiff + dragonDiff * dragonDiff);
         
-        // Update loss display
-        document.getElementById('lossValue').textContent = Math.round(loss);
+        // Display loss with one decimal place for better feedback
+        const displayLoss = loss.toFixed(1);
+        
+        // Update loss display immediately
+        const lossElement = document.getElementById('lossValue');
+        lossElement.textContent = displayLoss;
         
         // Update loss bar
         const maxLoss = Math.sqrt(100*100 + 100*100); // Maximum possible loss
         const lossPercent = (loss / maxLoss) * 100;
-        document.getElementById('lossBarFill').style.width = lossPercent + '%';
+        document.getElementById('lossBarFill').style.width = Math.max(2, lossPercent) + '%';
+        
+        // Update hint text with current differences
+        const hintText = document.getElementById('hintText');
+        if (loss < 0.5) {
+            hintText.innerHTML = '<strong style="background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000, #ff7f00, #ffff00); background-size: 200% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: rainbow-shift 2s linear infinite;">⭐ PERFECT! ⭐</strong>';
+        } else {
+            const eyeHint = eyeValue < OPTIMAL_EYE ? '↑' : eyeValue > OPTIMAL_EYE ? '↓' : '✓';
+            const dragonHint = dragonValue < OPTIMAL_DRAGON ? '↑' : dragonValue > OPTIMAL_DRAGON ? '↓' : '✓';
+            hintText.innerHTML = `Eye: ${eyeHint} (${eyeDiff} off) | Dragon: ${dragonHint} (${dragonDiff} off)`;
+        }
         
         // Update status based on loss
         const potionEffect = document.getElementById('potionEffect');
-        const potionVisual = document.getElementById('potionVisual');
         const qualityText = document.getElementById('qualityText');
         const witchImg = document.getElementById('witchImg');
+        const witchGlow = document.getElementById('witchGlow');
         
-        if (loss < 5) {
-            // Perfect!
-            potionEffect.textContent = '✨ PERFECT POTION! ✨';
-            potionEffect.style.color = '#2ecc71';
-            potionVisual.textContent = '🏆';
-            qualityText.textContent = 'Absolutely perfect!';
-            qualityText.style.color = '#2ecc71';
-            document.getElementById('lossValue').style.color = '#2ecc71';
+        if (loss < 0.5) {
+            // PERFECT! Rainbow glow
+            potionEffect.innerHTML = '✨ <strong style="background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000, #ff7f00, #ffff00); background-size: 200% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: rainbow-shift 2s linear infinite;">PERFECT POTION!</strong> ✨';
+            potionEffect.style.color = 'transparent';
+            qualityText.innerHTML = '<strong style="background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000, #ff7f00, #ffff00); background-size: 200% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: rainbow-shift 2s linear infinite;">Absolutely perfect!</strong>';
+            qualityText.style.color = 'transparent';
+            lossElement.style.background = 'linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3, #ff0000, #ff7f00, #ffff00)';
+            lossElement.style.backgroundSize = '200% 100%';
+            lossElement.style.webkitBackgroundClip = 'text';
+            lossElement.style.webkitTextFillColor = 'transparent';
+            lossElement.style.backgroundClip = 'text';
+            lossElement.style.animation = 'rainbow-shift 2s linear infinite';
             witchImg.style.transform = 'scale(1.1) rotate(5deg)';
+            
+            // Rainbow witch glow
+            witchGlow.style.width = '280px';
+            witchGlow.style.height = '280px';
+            witchGlow.style.background = 'radial-gradient(circle, rgba(255,0,150,0.8), rgba(255,150,0,0.6), rgba(255,255,0,0.5), rgba(0,255,0,0.4), rgba(0,150,255,0.3), rgba(238,130,238,0.2), transparent)';
+            witchGlow.style.boxShadow = '0 0 80px rgba(255,0,150,0.8), 0 0 120px rgba(255,255,0,0.5)';
+            witchGlow.style.animation = 'pulse-rainbow 1s infinite';
+        } else if (loss < 5) {
+            // Almost perfect - strong green glow
+            potionEffect.textContent = 'Nearly perfect!';
+            potionEffect.style.color = '#2ecc71';
+            qualityText.textContent = 'Almost there!';
+            qualityText.style.color = '#2ecc71';
+            lossElement.style.background = '';
+            lossElement.style.backgroundSize = '';
+            lossElement.style.webkitBackgroundClip = '';
+            lossElement.style.webkitTextFillColor = '';
+            lossElement.style.backgroundClip = '';
+            lossElement.style.animation = '';
+            lossElement.style.color = '#2ecc71';
+            witchImg.style.transform = 'scale(1.08) rotate(2deg)';
+            
+            witchGlow.style.width = '250px';
+            witchGlow.style.height = '250px';
+            witchGlow.style.background = 'radial-gradient(circle, rgba(46,213,115,0.8), rgba(46,213,115,0.4), transparent)';
+            witchGlow.style.boxShadow = '0 0 60px rgba(46,213,115,0.8)';
+            witchGlow.style.animation = 'pulse-glow 1.5s infinite';
         } else if (loss < 15) {
-            // Very close
+            // Very close - yellow-green glow
             potionEffect.textContent = 'Almost perfect!';
-            potionEffect.style.color = '#f39c12';
-            potionVisual.textContent = '✨';
+            potionEffect.style.color = '#a0d52e';
             qualityText.textContent = 'Very close to perfect!';
-            qualityText.style.color = '#f39c12';
-            document.getElementById('lossValue').style.color = '#f39c12';
+            qualityText.style.color = '#a0d52e';
+            lossElement.style.background = '';
+            lossElement.style.backgroundSize = '';
+            lossElement.style.webkitBackgroundClip = '';
+            lossElement.style.webkitTextFillColor = '';
+            lossElement.style.backgroundClip = '';
+            lossElement.style.animation = '';
+            lossElement.style.color = '#a0d52e';
             witchImg.style.transform = 'scale(1.05)';
+            
+            witchGlow.style.width = '230px';
+            witchGlow.style.height = '230px';
+            witchGlow.style.background = 'radial-gradient(circle, rgba(160,213,46,0.7), rgba(160,213,46,0.3), transparent)';
+            witchGlow.style.boxShadow = '0 0 40px rgba(160,213,46,0.7)';
+            witchGlow.style.animation = 'pulse-glow 2s infinite';
         } else if (loss < 30) {
-            // Getting there
+            // Getting there - yellow glow
             potionEffect.textContent = 'Good progress...';
-            potionEffect.style.color = '#e67e22';
-            potionVisual.textContent = '🧪';
+            potionEffect.style.color = '#f39c12';
             qualityText.textContent = 'Getting warmer...';
-            qualityText.style.color = '#e67e22';
-            document.getElementById('lossValue').style.color = '#e67e22';
-            witchImg.style.transform = 'scale(1)';
+            qualityText.style.color = '#f39c12';
+            lossElement.style.background = '';
+            lossElement.style.backgroundSize = '';
+            lossElement.style.webkitBackgroundClip = '';
+            lossElement.style.webkitTextFillColor = '';
+            lossElement.style.backgroundClip = '';
+            lossElement.style.animation = '';
+            lossElement.style.color = '#f39c12';
+            witchImg.style.transform = 'scale(1.02)';
+            
+            witchGlow.style.width = '210px';
+            witchGlow.style.height = '210px';
+            witchGlow.style.background = 'radial-gradient(circle, rgba(243,156,18,0.6), rgba(243,156,18,0.2), transparent)';
+            witchGlow.style.boxShadow = '0 0 30px rgba(243,156,18,0.6)';
+            witchGlow.style.animation = 'pulse-glow 2.5s infinite';
         } else if (loss < 50) {
-            // Far
+            // Far - orange glow
             potionEffect.textContent = 'Needs adjustment...';
-            potionEffect.style.color = '#e74c3c';
-            potionVisual.textContent = '💭';
+            potionEffect.style.color = '#e67e22';
             qualityText.textContent = 'Far from perfect...';
-            qualityText.style.color = '#e74c3c';
-            document.getElementById('lossValue').style.color = '#e74c3c';
+            qualityText.style.color = '#e67e22';
+            lossElement.style.background = '';
+            lossElement.style.backgroundSize = '';
+            lossElement.style.webkitBackgroundClip = '';
+            lossElement.style.webkitTextFillColor = '';
+            lossElement.style.backgroundClip = '';
+            lossElement.style.animation = '';
+            lossElement.style.color = '#e67e22';
             witchImg.style.transform = 'scale(1)';
+            
+            witchGlow.style.width = '190px';
+            witchGlow.style.height = '190px';
+            witchGlow.style.background = 'radial-gradient(circle, rgba(230,126,34,0.5), rgba(230,126,34,0.15), transparent)';
+            witchGlow.style.boxShadow = '0 0 20px rgba(230,126,34,0.5)';
+            witchGlow.style.animation = 'pulse-glow 3s infinite';
         } else {
-            // Very far
+            // Very far - dim red glow
             potionEffect.textContent = 'Terrible mixture!';
             potionEffect.style.color = '#c0392b';
-            potionVisual.textContent = '☠️';
             qualityText.textContent = 'Completely wrong!';
             qualityText.style.color = '#c0392b';
-            document.getElementById('lossValue').style.color = '#c0392b';
+            lossElement.style.background = '';
+            lossElement.style.backgroundSize = '';
+            lossElement.style.webkitBackgroundClip = '';
+            lossElement.style.webkitTextFillColor = '';
+            lossElement.style.backgroundClip = '';
+            lossElement.style.animation = '';
+            lossElement.style.color = '#c0392b';
             witchImg.style.transform = 'scale(0.95)';
+            
+            witchGlow.style.width = '170px';
+            witchGlow.style.height = '170px';
+            witchGlow.style.background = 'radial-gradient(circle, rgba(192,57,43,0.3), rgba(192,57,43,0.1), transparent)';
+            witchGlow.style.boxShadow = '0 0 10px rgba(192,57,43,0.3)';
+            witchGlow.style.animation = 'none';
         }
+        
+        // Update button states
+        eyeIncrement.disabled = eyeValue >= 100;
+        eyeIncrement.style.opacity = eyeValue >= 100 ? '0.5' : '1';
+        eyeIncrement.style.cursor = eyeValue >= 100 ? 'not-allowed' : 'pointer';
+        
+        eyeDecrement.disabled = eyeValue <= 0;
+        eyeDecrement.style.opacity = eyeValue <= 0 ? '0.5' : '1';
+        eyeDecrement.style.cursor = eyeValue <= 0 ? 'not-allowed' : 'pointer';
+        
+        dragonIncrement.disabled = dragonValue >= 100;
+        dragonIncrement.style.opacity = dragonValue >= 100 ? '0.5' : '1';
+        dragonIncrement.style.cursor = dragonValue >= 100 ? 'not-allowed' : 'pointer';
+        
+        dragonDecrement.disabled = dragonValue <= 0;
+        dragonDecrement.style.opacity = dragonValue <= 0 ? '0.5' : '1';
+        dragonDecrement.style.cursor = dragonValue <= 0 ? 'not-allowed' : 'pointer';
     }
     
-    // Add event listeners
+    // Add event listeners for sliders
     eyeSlider.addEventListener('input', updatePotion);
     dragonSlider.addEventListener('input', updatePotion);
     
-    // Style the sliders
+    // Add event listeners for buttons
+    eyeIncrement.addEventListener('click', () => {
+        eyeSlider.value = Math.min(100, parseInt(eyeSlider.value) + 1);
+        updatePotion();
+    });
+    
+    eyeDecrement.addEventListener('click', () => {
+        eyeSlider.value = Math.max(0, parseInt(eyeSlider.value) - 1);
+        updatePotion();
+    });
+    
+    dragonIncrement.addEventListener('click', () => {
+        dragonSlider.value = Math.min(100, parseInt(dragonSlider.value) + 1);
+        updatePotion();
+    });
+    
+    dragonDecrement.addEventListener('click', () => {
+        dragonSlider.value = Math.max(0, parseInt(dragonSlider.value) - 1);
+        updatePotion();
+    });
+    
+    // Button hover effects
+    [eyeIncrement, eyeDecrement, dragonIncrement, dragonDecrement].forEach(btn => {
+        btn.addEventListener('mouseenter', () => {
+            if (!btn.disabled) {
+                btn.style.transform = 'scale(1.1)';
+                btn.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+            }
+        });
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = 'scale(1)';
+            btn.style.boxShadow = 'none';
+        });
+    });
+    
+    // Style the sliders and animations
     const sliderStyle = `
         <style>
             #eyeSlider::-webkit-slider-thumb, #dragonSlider::-webkit-slider-thumb {
@@ -480,9 +900,51 @@ function setupWitchBrewLevel() {
                 transform: scale(1.2);
                 border-color: #c53030;
             }
+            
+            @keyframes pulse-glow {
+                0%, 100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+                50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+            }
+            
+            @keyframes pulse-rainbow {
+                0%, 100% { 
+                    opacity: 0.9; 
+                    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+                }
+                50% { 
+                    opacity: 1; 
+                    transform: translate(-50%, -50%) scale(1.1) rotate(180deg);
+                }
+            }
+            
+            @keyframes rainbow-shift {
+                0% { background-position: 0% 50%; }
+                100% { background-position: -200% 50%; }
+            }
         </style>
     `;
     document.head.insertAdjacentHTML('beforeend', sliderStyle);
+    
+    // Make sliders more responsive
+    eyeSlider.addEventListener('change', updatePotion);
+    dragonSlider.addEventListener('change', updatePotion);
+    
+    // Add keyboard support for fine control
+    document.addEventListener('keydown', (e) => {
+        if (e.target === eyeSlider || e.target === dragonSlider) {
+            e.preventDefault();
+            const slider = e.target;
+            const currentValue = parseInt(slider.value);
+            
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+                slider.value = Math.max(0, currentValue - 1);
+                updatePotion();
+            } else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+                slider.value = Math.min(100, currentValue + 1);
+                updatePotion();
+            }
+        }
+    });
     
     // Initial update
     updatePotion();

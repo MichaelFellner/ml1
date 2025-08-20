@@ -28,7 +28,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     scroll-behavior: smooth;
-    padding: 30px 60px 30px 80px; /* Less right padding for scrollbar space */
+    padding: 0px 60px 30px 80px; /* Less right padding for scrollbar space */
     position: relative;
     
     /* Firefox scrollbar - blue with rounded ends */
@@ -135,7 +135,7 @@
 /* Level Content Layout */
 .level-content {
     display: flex;
-    gap: 80px;
+    gap: 0px;
     align-items: flex-start;
     flex-wrap: wrap;
     justify-content: space-around;
@@ -146,7 +146,7 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 20px;
+    gap: 0px;
 }
 
 .level-content.full-width {

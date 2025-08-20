@@ -28,7 +28,7 @@ function createInstructionPart1() {
     container.innerHTML = `
         <div class="current-level">
             <div class="level-content celebration" style="padding: 20px; max-width: 1200px; margin: 0 auto;">
-                <h1 style="font-size: 2.3rem; margin-bottom: 20px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Part 1: Understanding Loss</h1>
+                <h1 style="font-size: 2.3rem; margin-bottom: 20px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Core Concept 1: Loss</h1>
                 
                 <!-- Main concept box -->
                 <div style="background: linear-gradient(135deg, rgba(255,99,71,0.1), rgba(255,99,71,0.05)); border-radius: 12px; padding: 25px; margin: 20px auto; max-width: 900px; border: 2px solid #ff6347;">
@@ -36,7 +36,8 @@ function createInstructionPart1() {
                         <div class="objective-icon" style="font-size: 3rem;">📉</div>
                         <div style="flex: 1;">
                             <h3 style="margin: 0 0 15px 0; font-size: 1.4rem; color: #333;">Loss: How Wrong Your AI Is</h3>
-                            <p style="font-size: 1.05rem; color: #555; line-height: 1.6; margin-bottom: 15px;"><strong>Loss</strong> is the most important concept in AI. It's simply a number that tells us how wrong our predictions are.</p>
+                            <p style="font-size: 1.05rem; color: #555; line-height: 1.6; margin-bottom: 15px;">Loss is how we measure how good a function is at making predictions. It's simply a number that tells us how wrong our predictions are. 
+                            We can't make a function better if we don't have a way of measuring how good it is.</p>
                             <p style="font-size: 1rem; color: #666; line-height: 1.5;">The goal of AI is always the same: <strong style="color: #ff6347;">minimize the loss</strong> to make better predictions!</p>
                         </div>
                     </div>

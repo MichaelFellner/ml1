@@ -64,8 +64,8 @@ class GameState {
                 goal: "Minimize the loss by tuning the robot to its optimal energy level."
             },
             {
-                title: "Gradient Descent 1", 
-                goal: "Keep pressing the gradient descent button to automatically find the optimal energy level!",
+                title: "Two Loss Term Level", 
+                goal: "Get the Correct Amount of Each Ingredient to Make the Perfect Potion",
             },
             {
                 title: "Two Loss Terms",

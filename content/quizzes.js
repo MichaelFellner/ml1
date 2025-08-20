@@ -17,16 +17,6 @@ function createLossQuizPart() {
             <div class="level-content celebration" style="padding: 20px; max-width: 1200px; margin: 0 auto;">
                 <h1 style="font-size: 2.3rem; margin-bottom: 20px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">✏️ Check Your Understanding: Loss Functions & Multiple Variables</h1>
                 
-                <div style="background: linear-gradient(135deg, rgba(255,99,71,0.1), rgba(255,99,71,0.05)); border-radius: 12px; padding: 25px; margin: 20px auto; max-width: 800px; border: 2px solid #ff6347;">
-                    <div style="display: flex; align-items: flex-start; gap: 20px;">
-                        <div class="objective-icon" style="font-size: 3rem;">🧮</div>
-                        <div style="flex: 1;">
-                            <h3 style="margin: 0 0 15px 0; font-size: 1.4rem; color: #333;">Quick Quiz: Calculate the Loss!</h3>
-                            <p style="font-size: 1.05rem; color: #555; line-height: 1.6;">Now that you've learned about single and multiple variables, test your understanding!</p>
-                            <p style="font-size: 0.95rem; color: #666; line-height: 1.5;">Calculate the loss for these different scenarios:</p>
-                        </div>
-                    </div>
-                </div>
                 
                 <!-- Quiz Questions -->
                 <div style="display: grid; gap: 20px; margin: 30px auto; max-width: 800px;">

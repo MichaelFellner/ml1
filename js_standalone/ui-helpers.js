@@ -17,7 +17,7 @@ function createLevelHeader(levelIndex, levelNumber, totalLevels) {
     
     return `
         <div class="level-header">
-            Level ${levelNumber}/${totalLevels}: ${level.goal}
+            Level ${levelNumber}: ${level.goal}
             ${hasDescription ? `<div class="level-description">${level.description}</div>` : ''}
         </div>
     `;

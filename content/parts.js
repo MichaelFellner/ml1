@@ -10,8 +10,8 @@ function createCoreConcepts() {
     container.innerHTML = `
         <div class="current-level">
             <div class="level-content celebration" style="padding: 20px; max-width: 1400px; margin: 0 auto;">
-                <h1 style="font-size: 2.3rem; margin-bottom: 15px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">The 3 Core Concepts of AI</h1>
-                <p style="font-size: 1.1rem; color: #666; text-align: center; margin-bottom: 30px;">Master these 3 fundamental concepts and you'll understand how AI works at a much deeper level than most people.</p>
+                <h1 style="font-size: 2.3rem; margin-bottom: 15px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">3 Core Concepts of AI</h1>
+                <p style="font-size: 1.1rem; color: #666; text-align: center; margin-bottom: 30px;">After learning these 3 concepts you'll be able to understand how a simple AI model works!</p>
                 
                 <div style="display: flex; flex-direction: column; gap: 20px; margin: 0 auto;">
                     <!-- Concept 1: Loss -->
@@ -38,8 +38,8 @@ function createCoreConcepts() {
                             
                             <!-- Three parts breakdown -->
                             <div style="background: rgba(102,126,234,0.1); border-radius: 8px; padding: 12px; margin-top: 10px;">
-                                <p style="margin: 0 0 8px 0; font-size: 0.85rem; color: #667eea; font-weight: bold;">📚 We'll learn this in 3 parts:</p>
-                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                                <p style="margin: 0 0 8px 0; font-size: 0.85rem; color: #667eea; font-weight: bold;">📚 We'll learn this in 2 parts:</p>
+                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
                                     <div style="background: white; padding: 8px; border-radius: 6px; text-align: center;">
                                         <div style="font-size: 0.75rem; color: #667eea; font-weight: bold;">Part 1</div>
                                         <div style="font-size: 0.8rem; color: #555; margin-top: 2px;">What It Is</div>
@@ -48,10 +48,7 @@ function createCoreConcepts() {
                                         <div style="font-size: 0.75rem; color: #667eea; font-weight: bold;">Part 2</div>
                                         <div style="font-size: 0.8rem; color: #555; margin-top: 2px;">How It Works</div>
                                     </div>
-                                    <div style="background: white; padding: 8px; border-radius: 6px; text-align: center;">
-                                        <div style="font-size: 0.75rem; color: #667eea; font-weight: bold;">Part 3</div>
-                                        <div style="font-size: 0.8rem; color: #555; margin-top: 2px;">Advanced Math Caveats</div>
-                                    </div>
+                                  
                                 </div>
                             </div>
                         </div>
@@ -188,29 +185,86 @@ function createPrerequisites() {
     container.innerHTML = `
         <div class="current-level">
             <div class="level-content celebration" style="padding: 30px;">
-                <h1 style="font-size: 2.5rem; margin-bottom: 30px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Prerequisites</h1>
+                <h1 style="font-size: 2.3rem; margin-bottom: 25px; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;">
+                    ✨ Prerequisites Check ✨
+                </h1>
                 
-                <div style="max-width: 800px; margin: 0 auto;">
-                    <div style="background: rgba(102,126,234,0.1); border-radius: 12px; padding: 25px; margin: 20px 0;">
-                        <h3 style="color: #333; margin-bottom: 15px;">What You Need to Know</h3>
-                        <ul style="font-size: 1.1rem; color: #555; line-height: 1.8;">
-                            <li>Basic arithmetic (addition, subtraction, multiplication)</li>
-                            <li>Understanding of what a function is (input → output)</li>
-                            <li>Willingness to learn through interactive examples!</li>
-                        </ul>
+                <div style="max-width: 900px; margin: 0 auto; display: flex; gap: 20px;">
+                    <!-- What You Need Section -->
+                    <div style="flex: 1; background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.05)); border-radius: 16px; padding: 20px; border: 2px solid rgba(102,126,234,0.2); position: relative; overflow: hidden;">
+                        <!-- Decorative corner element -->
+                        <div style="position: absolute; top: -20px; right: -20px; width: 60px; height: 60px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; opacity: 0.1;"></div>
+                        
+                        <h3 style="color: #667eea; margin-bottom: 18px; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 1.4rem;">✅</span> What You Need
+                        </h3>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div style="display: flex; align-items: center; gap: 12px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                                <span style="font-size: 1.3rem;">🔢</span>
+                                <span style="font-size: 0.95rem; color: #444;">Basic math (+ − × ÷)</span>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: 12px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                                <span style="font-size: 1.3rem;">📈</span>
+                                <span style="font-size: 0.95rem; color: #444;">Understanding of parabolas</span>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: 12px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                                <span style="font-size: 1.3rem;">⚡</span>
+                                <span style="font-size: 0.95rem; color: #444;">Functions (input → output)</span>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: 12px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                                <span style="font-size: 1.3rem;">😎</span>
+                                <span style="font-size: 0.95rem; color: #444; ">A positive attitude</span>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div style="background: rgba(76,175,80,0.1); border-radius: 12px; padding: 25px; margin: 20px 0;">
-                        <h3 style="color: #333; margin-bottom: 15px;">What You Don't Need</h3>
-                        <ul style="font-size: 1.1rem; color: #555; line-height: 1.8;">
-                            <li>Calculus or advanced math</li>
-                            <li>Programming experience</li>
-                            <li>Prior AI knowledge</li>
-                        </ul>
+                    <!-- What You Don't Need Section -->
+                    <div style="flex: 1; background: linear-gradient(135deg, rgba(76,175,80,0.08), rgba(45,213,115,0.05)); border-radius: 16px; padding: 20px; border: 2px solid rgba(76,175,80,0.2); position: relative; overflow: hidden;">
+                        <!-- Decorative corner element -->
+                        <div style="position: absolute; top: -20px; right: -20px; width: 60px; height: 60px; background: linear-gradient(135deg, #4caf50, #2dd573); border-radius: 50%; opacity: 0.1;"></div>
+                        
+                        <h3 style="color: #4caf50; margin-bottom: 18px; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 1.4rem;">🚫</span> Not Required
+                        </h3>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div style="display: flex; align-items: center; gap: 12px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); opacity: 0.7;">
+                                <span style="font-size: 1.3rem;">∫</span>
+                                <span style="font-size: 0.95rem; color: #666; text-decoration: line-through;">Calculus or advanced math</span>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: 12px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); opacity: 0.7;">
+                                <span style="font-size: 1.3rem;">💻</span>
+                                <span style="font-size: 0.95rem; color: #666; text-decoration: line-through;">Programming experience</span>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: 12px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); opacity: 0.7;">
+                                <span style="font-size: 1.3rem;">🤖</span>
+                                <span style="font-size: 0.95rem; color: #666; text-decoration: line-through;">Prior AI knowledge</span>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; gap: 12px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); opacity: 0.7;">
+                                <span style="font-size: 1.3rem;">📚</span>
+                                <span style="font-size: 0.95rem; color: #666; text-decoration: line-through;">Heavy textbooks</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                
+                <!-- Fun confidence booster -->
+                <div style="text-align: center; margin-top: 25px; padding: 15px; background: linear-gradient(90deg, rgba(255,193,7,0.1), rgba(255,152,0,0.1)); border-radius: 12px; border: 2px dashed rgba(255,152,0,0.3);">
+                    <p style="margin: 0; font-size: 1.05rem; color: #f57c00;">
+                        <span style="font-size: 1.3rem;">🎮</span> 
+                        <strong>Ready to go?</strong> You'll learn everything through fun, interactive games!
+                        <span style="font-size: 1.3rem;">🚀</span>
+                    </p>
+                </div>
        
-                <div class="button-container" style="margin-top: 30px;">
+                <div class="button-container" style="margin-top: 25px;">
                     ${createStandardNavigation()}
                 </div>
             </div>
@@ -219,4 +273,22 @@ function createPrerequisites() {
     
     // Initialize navigation
     initializeNavigation(levelId, 'createPrerequisites');
+    
+    // Add hover effects
+    setTimeout(() => {
+        const cards = document.querySelectorAll('[style*="background: white"]');
+        cards.forEach(card => {
+            card.style.transition = 'transform 0.2s ease, box-shadow 0.2s ease';
+            card.addEventListener('mouseenter', () => {
+                if (!card.parentElement.parentElement.innerHTML.includes('Not Required')) {
+                    card.style.transform = 'translateX(5px)';
+                    card.style.boxShadow = '0 3px 8px rgba(102,126,234,0.2)';
+                }
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateX(0)';
+                card.style.boxShadow = '0 2px 4px rgba(0,0,0,0.05)';
+            });
+        });
+    }, 100);
 }

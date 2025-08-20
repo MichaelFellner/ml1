@@ -15,13 +15,14 @@ const NAVIGATION_CONFIG = {
             items: [
                 { id: "intro", name: "Welcome", func: "createIntroduction" },
                 { id: "core-concepts", name: "3 Core Concepts", func: "createCoreConcepts" },
-                { id: "prerequisites", name: "Prerequisites", func: "createPrerequisites" }
+                { id: "prerequisites", name: "Prerequisites", func: "createPrerequisites" },
+                { id: "spoiler-alert", name: "Spoiler Alert", func: "createSpoilerAlert" }
             ]
         },
         {
             title: "Understanding Loss",
             items: [
-                { id: "ip1", name: "Part 1: Understanding Loss", func: "createInstructionPart1" },
+                { id: "ip1", name: "Core Concept 1: Loss", func: "createInstructionPart1" },
                 { id: "level1", name: "Level 1: Energy Control", func: "createLevel1" },
                 { id: "ip2a", name: "Behind the Scenes: Line Visualization", func: "createBehindTheScenesSimple" },
                 { id: "ip2b", name: "Behind the Scenes: Loss Parabola", func: "createBehindTheScenesLevel1" },

@@ -5,50 +5,24 @@ function createBehindTheScenesSimple() {
     container.innerHTML = `
         <div class="current-level" style="background: linear-gradient(to bottom, #000000, #1a1a1a);">
             <div class="level-content" style="padding: 8px; max-width: 1200px; margin: 0 auto; display: block !important; gap: 0 !important;">
-                <h1 style="font-size: 2rem; margin: 0 !important; padding: 0 !important; text-align: center; color: white; line-height: 1.2;">Behind the Scenes: What the Computer Sees</h1>
+                <h1 style="font-size: 2rem; margin: 0 !important; padding: 0 !important; text-align: center; color: white; line-height: 1.2;">Behind the Scenes: How the Robot Loss is Calculated</h1>
                 
                 <!-- Message at the top -->
                 <div style="background: rgba(255,255,255,0.9); border-radius: 8px; padding: 8px 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; margin: 12px 0 !important; display: block !important;">
-                    <p style="margin: 0 !important; padding: 0 !important; font-size: 0.95rem; color: #333; line-height: 1.3;">This is the same problem as Level 1, but now you see it as the computer does - finding the right position on a line!</p>
+                    <p style="margin: 0 !important; padding: 0 !important; font-size: 0.95rem; color: #333; line-height: 1.3;">We just saw that we needed to tune the energy to 75 to get 0 loss, but here's the math behind the scenes for why.</p>
                 </div>
                 
                 <div style="display: grid; grid-template-columns: 3fr 2fr; gap: 15px; margin: 4px 0 0 0 !important; padding: 0 !important;">
-                    <!-- Left side: Line Visualization instead of Robot -->
-                    <div style="background: rgba(255,255,255,0.9); border-radius: 10px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
-                        <h2 style="margin: 0 0 10px 0; color: #333; font-size: 1.1rem;">Energy Visualization</h2>
+                    <!-- Left side: Loss Function Graph -->
+                    <div style="background: rgba(255,255,255,0.9); border-radius: 10px; padding: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+                        <h2 style="margin: 0 0 8px 0; color: #333; font-size: 1.1rem;">Loss Function: |Energy - 75|</h2>
                         
-                        <!-- Line visualization container -->
-                        <div style="position: relative; height: 220px; background: #f8f9fa; border-radius: 8px; padding: 25px; margin-bottom: 10px; border: 1px solid #e9ecef;">
-                            <!-- The horizontal line -->
-                            <div style="position: absolute; left: 7%; right: 7%; top: 50%; height: 4px; background: #ddd; transform: translateY(-50%);">
-                            </div>
-                            
-                            <!-- Scale markers -->
-                            <div style="position: absolute; left: 7%; top: 52%; transform: translateY(-50%);">
-                                <div style="width: 2px; height: 20px; background: #999; margin: 0 auto;"></div>
-                                <div style="color: #666; font-size: 0.8rem; margin-top: 5px;">0</div>
-                            </div>
-                            <div style="position: absolute; left: 50%; top: 52%; transform: translate(-50%, -50%);">
-                                <div style="width: 2px; height: 20px; background: #999; margin: 0 auto;"></div>
-                                <div style="color: #666; font-size: 0.8rem; margin-top: 5px;">50</div>
-                            </div>
-                            <div style="position: absolute; left: 93%; top: 52%; transform: translateY(-50%);">
-                                <div style="width: 2px; height: 20px; background: #999; margin: 0 auto;"></div>
-                                <div style="color: #666; font-size: 0.8rem; margin-top: 5px;">100</div>
-                            </div>
-                            
-                            <!-- Target marker at 75 -->
-                            <div id="target-marker" style="position: absolute; left: 71.5%; top: 50%; transform: translate(-50%, -50%); width: 24px; height: 24px; border-radius: 50%; background: #2dd573; border: 3px solid white; box-shadow: 0 0 15px rgba(45,213,115,0.6); z-index: 1;">
-                                <div style="position: absolute; top: -30px; left: 50%; transform: translateX(-50%); color: #2dd573; font-weight: bold; font-size: 0.9rem; white-space: nowrap;">Target: 75</div>
-                            </div>
-                            
-                            <!-- Moving dot -->
-                            <div id="energy-dot" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; background: #ff6347; border-radius: 50%; transition: all 0.3s ease; box-shadow: 0 0 12px rgba(255,99,71,0.6); z-index: 2;">
-                                <div id="energy-label" style="position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%); color: #333; font-weight: bold; font-size: 0.9rem; white-space: nowrap;">Energy: 50</div>
-                            </div>
+                        <!-- Graph Canvas -->
+                        <div style="position: relative; height: 380px; background: #f8f9fa; border-radius: 8px; padding: 10px; margin-bottom: 0; border: 1px solid #e9ecef;">
+                            <canvas id="loss-graph" width="500" height="380" style="width: 500px; height: 380px; display: block;"></canvas>
+                            <!-- Current point indicator -->
+                            <div id="current-point" style="position: absolute; width: 12px; height: 12px; background: #ff6347; border-radius: 50%; transform: translate(-50%, -50%); transition: all 0.3s ease; box-shadow: 0 0 10px rgba(255,99,71,0.8); pointer-events: none;"></div>
                         </div>
-                        
-                        <div style="font-size: 0.9rem; color: #666; margin-top: 8px;">The computer doesn't see a robot - it sees a point on a line!</div>
                     </div>
                     
                     <!-- Right side: Controls and Info (same as Level 1) -->
@@ -102,10 +76,9 @@ function createBehindTheScenesSimple() {
                         <!-- Hints -->
                         <div id="hint-box" style="margin-top: 12px; padding: 10px; background: rgba(243,150,10,0.1); border-radius: 8px; border: 1px solid rgba(243,150,10,0.3);">
                             <div style="display: flex; align-items: center; gap: 6px;">
-                                <span style="font-size: 1.2rem;">💡</span>
                                 <div>
-                                    <strong style="color: #f3960a; font-size: 0.85rem;">Hint:</strong>
-                                    <span id="hint-text" style="color: #666; font-size: 0.8rem;">Move the slider to find the energy level where loss = 0!</span>
+                                    <strong style="color: #f3960a; font-size: 0.85rem;">About Absolute Value:</strong>
+                                    <span style="color: #666; font-size: 0.8rem;">The | | symbols mean "absolute value" which means to drop the negative sign if the number is negative. Loss should always be 0 or higher.</span>
                                 </div>
                             </div>
                         </div>
@@ -124,14 +97,163 @@ function createBehindTheScenesSimple() {
     
     // Add functionality
     setTimeout(() => {
+        const canvas = document.getElementById('loss-graph');
+        const ctx = canvas ? canvas.getContext('2d') : null;
         const slider = document.getElementById('energy-slider');
         const energyValue = document.getElementById('energy-value');
         const currentEnergyDisplay = document.getElementById('current-energy-display');
         const lossValue = document.getElementById('loss-value');
         const lossDisplay = document.getElementById('loss-display');
-        const hintText = document.getElementById('hint-text');
-        const energyDot = document.getElementById('energy-dot');
-        const energyLabel = document.getElementById('energy-label');
+        const currentPoint = document.getElementById('current-point');
+        
+        // Set canvas size
+        if (canvas) {
+            canvas.width = 500;
+            canvas.height = 380;
+        }
+        
+        function drawGraph(energy) {
+            if (!ctx || !canvas) return;
+            
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 40;
+            
+            // Clear canvas
+            ctx.fillStyle = '#f8f9fa';
+            ctx.fillRect(0, 0, width, height);
+            
+            // Draw grid lines
+            ctx.strokeStyle = '#e9ecef';
+            ctx.lineWidth = 1;
+            // Vertical grid lines
+            for (let i = 0; i <= 10; i++) {
+                const x = padding + (i / 10) * (width - 2 * padding);
+                ctx.beginPath();
+                ctx.moveTo(x, padding);
+                ctx.lineTo(x, height - padding);
+                ctx.stroke();
+            }
+            // Horizontal grid lines
+            for (let i = 0; i <= 8; i++) {
+                const y = padding + (i / 8) * (height - 2 * padding);
+                ctx.beginPath();
+                ctx.moveTo(padding, y);
+                ctx.lineTo(width - padding, y);
+                ctx.stroke();
+            }
+            
+            // Draw axes
+            ctx.strokeStyle = '#666';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(padding, height - padding);
+            ctx.lineTo(width - padding, height - padding); // X axis
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, height - padding); // Y axis
+            ctx.stroke();
+            
+            // Draw labels
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Arial';
+            // X-axis labels
+            ctx.fillText('0', padding - 5, height - padding + 20);
+            ctx.fillText('25', padding + (width - 2 * padding) * 0.25 - 5, height - padding + 20);
+            ctx.fillText('50', padding + (width - 2 * padding) * 0.5 - 5, height - padding + 20);
+            ctx.fillText('75', padding + (width - 2 * padding) * 0.75 - 5, height - padding + 20);
+            ctx.fillText('100', width - padding - 10, height - padding + 20);
+            
+            // Y-axis labels
+            ctx.fillText('0', padding - 20, height - padding + 5);
+            ctx.fillText('25', padding - 25, height - padding - (height - 2 * padding) * 0.33);
+            ctx.fillText('50', padding - 25, height - padding - (height - 2 * padding) * 0.67);
+            ctx.fillText('75', padding - 25, padding + 5);
+            
+            // Axis titles
+            ctx.font = '14px Arial';
+            ctx.fillText('Energy (x)', width / 2 - 25, height - 5);
+            ctx.save();
+            ctx.translate(12, height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('Loss', -15, 0);
+            ctx.restore();
+            
+            // Draw the V-shaped absolute value function
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            const xScale = (width - 2 * padding) / 100;
+            const yScale = (height - 2 * padding) / 75; // Max loss is 75
+            
+            for (let x = 0; x <= 100; x += 0.5) {
+                const loss = Math.abs(x - 75);
+                const xPos = padding + x * xScale;
+                const yPos = height - padding - loss * yScale;
+                
+                if (x === 0) {
+                    ctx.moveTo(xPos, yPos);
+                } else {
+                    ctx.lineTo(xPos, yPos);
+                }
+            }
+            ctx.stroke();
+            
+            // Draw minimum point marker (at x=75, y=0)
+            const minX = padding + 75 * xScale;
+            const minY = height - padding;
+            ctx.fillStyle = '#2dd573';
+            ctx.beginPath();
+            ctx.arc(minX, minY, 5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Draw vertical dashed line at x=75
+            ctx.strokeStyle = 'rgba(45, 213, 115, 0.3)';
+            ctx.setLineDash([5, 5]);
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(minX, padding);
+            ctx.lineTo(minX, height - padding);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Add label for minimum
+            ctx.fillStyle = '#2dd573';
+            ctx.font = '11px Arial';
+            ctx.fillText('Min at x=75', minX - 30, padding + 20);
+            
+            // Update current point position
+            const currentX = padding + energy * xScale;
+            const currentY = height - padding - Math.abs(energy - 75) * yScale;
+            if (currentPoint) {
+                // Add 10px to account for the container's padding
+                currentPoint.style.left = (currentX + 10) + 'px';
+                currentPoint.style.top = (currentY + 10) + 'px';
+                
+                // Change dot color based on loss
+                const loss = Math.abs(energy - 75);
+                if (loss === 0) {
+                    currentPoint.style.background = '#2dd573';
+                    currentPoint.style.boxShadow = '0 0 20px rgba(45,213,115,0.8)';
+                } else if (loss < 10) {
+                    currentPoint.style.background = '#f3960a';
+                    currentPoint.style.boxShadow = '0 0 15px rgba(243,150,10,0.8)';
+                } else {
+                    currentPoint.style.background = '#ff6347';
+                    currentPoint.style.boxShadow = '0 0 10px rgba(255,99,71,0.8)';
+                }
+            }
+            
+            // Draw vertical line from current point to x-axis
+            ctx.strokeStyle = 'rgba(255, 99, 71, 0.3)';
+            ctx.setLineDash([3, 3]);
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(currentX, currentY);
+            ctx.lineTo(currentX, height - padding);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
         
         function updateDisplay(energy) {
             const loss = Math.abs(energy - 75);
@@ -147,30 +269,8 @@ function createBehindTheScenesSimple() {
                 }
             }
             
-            // Update dot position
-            if (energyDot) {
-                // Map 0-100 to the line's position (accounting for 40px padding on each side)
-                // Line goes from 40px to (width - 40px), which in percentage is approximately 7% to 93%
-                const leftPos = 7 + (energy * 0.86); // Maps 0-100 to 7%-93%
-                energyDot.style.left = `${leftPos}%`;
-                
-                // Update dot color based on loss
-                if (loss === 0) {
-                    energyDot.style.background = '#2dd573';
-                    energyDot.style.boxShadow = '0 0 20px rgba(45,213,115,0.8)';
-                } else if (loss < 10) {
-                    energyDot.style.background = '#f3960a';
-                    energyDot.style.boxShadow = '0 0 15px rgba(243,150,10,0.8)';
-                } else {
-                    energyDot.style.background = '#ff6347';
-                    energyDot.style.boxShadow = '0 0 12px rgba(255,99,71,0.6)';
-                }
-            }
-            
-            // Update energy label
-            if (energyLabel) {
-                energyLabel.textContent = `Energy: ${energy}`;
-            }
+            // Draw the graph with current point
+            drawGraph(energy);
             
             // Update loss display background
             if (lossDisplay) {
@@ -183,18 +283,6 @@ function createBehindTheScenesSimple() {
                 } else {
                     lossDisplay.style.background = 'rgba(255,99,71,0.1)';
                     lossDisplay.style.borderColor = 'rgba(255,99,71,0.3)';
-                }
-            }
-            
-            // Update hints
-            if (hintText) {
-                hintText.style.fontSize = '0.8rem';
-                if (loss === 0) {
-                    hintText.textContent = 'Perfect! You found the optimal energy level!';
-                } else if (energy < 75) {
-                    hintText.textContent = 'Too low! Try increasing the energy.';
-                } else {
-                    hintText.textContent = 'Too high! Try decreasing the energy.';
                 }
             }
         }
@@ -219,7 +307,8 @@ function createBehindTheScenesLevel1() {
                 <h1 style="font-size: 1.9rem; margin: 0 !important; padding: 0 !important; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2;">Alternative Loss Functions</h1>
                 
                 <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 10px; margin: 4px 0 !important; display: block !important;">
-                    <p style="color: #555; font-size: 0.95rem; line-height: 1.4; margin: 0 !important; padding: 0 !important;">Loss functions can come in other forms too. We just witnessed "absolute loss" where loss is equal to the absolte distance the current guess is from the true value. But loss can also be calculated using the formula: <b>(Guess - True)²</b>.</p>
+                    <p style="color: #555; font-size: 0.95rem; line-height: 1.4; margin: 0 !important; padding: 0 !important;">Loss functions can come in other forms too. We just witnessed "absolute loss" where loss is equal to the absolte distance the current guess is from the true value. But loss can also be calculated using the formula: <b>(Guess - True)²</b>. This 
+                    is known as <strong>mean squared error loss</strong>.</p>
                 </div>
                 
                 <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin: 4px 0 0 0 !important; padding: 0 !important;">
@@ -283,7 +372,7 @@ function createBehindTheScenesLevel1() {
                         
                         <div style="margin-top: 12px; padding: 10px; background: rgba(118,75,162,0.1); border-radius: 6px; border: 1px solid rgba(118,75,162,0.3);">
                             <div style="color: #764ba2; font-weight: bold; margin-bottom: 5px; font-size: 0.85rem;">Insight:</div>
-                            <p style="color: #555; font-size: 0.8rem; line-height: 1.3; margin: 0;">Because the loss calculation is always squared, the loss can never be negative. We usually want the lowest possible loss to be zero.</p>
+                            <p style="color: #555; font-size: 0.8rem; line-height: 1.3; margin: 0;">Because the loss calculation is always squared, the loss can never be negative. We want the lowest possible loss to be zero.</p>
                         </div>
                     </div>
                 </div>
