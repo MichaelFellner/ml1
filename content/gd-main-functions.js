@@ -22,7 +22,7 @@ function createGradientDescentPart1b() {
     container.innerHTML = `
         <div class="current-level">
             <div class="level-header">
-                ⚡ Adding Complexity: The Bias Term
+                Introducing The Bias Term
             </div>
             <div class="level-content" style="padding: 15px 20px; max-width: 800px; margin: 0 auto;">
                 <div style="background: rgba(102,126,234,0.1); border-radius: 10px; padding: 25px; border: 2px solid rgba(102,126,234,0.3); text-align: center;">
@@ -49,34 +49,13 @@ function createGradientDescentPart1b() {
                                 <strong style="color: #764ba2;">b</strong> = the bias (starting point)
                             </p>
                         </div>
-                    </div>
-                    
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
-                        <div style="background: rgba(255,215,0,0.1); border-radius: 8px; padding: 15px; border: 2px solid rgba(255,215,0,0.3);">
-                            <h3 style="font-size: 1rem; margin: 0 0 10px 0; color: #f39c12;">🎯 The Good:</h3>
-                            <p style="font-size: 0.9rem; line-height: 1.4; color: #666; margin: 0;">
-                                Can find more complicated patterns!<br>
-                                More flexible and powerful.<br>
-                                Works for real-world problems.
-                            </p>
-                        </div>
                         
-                        <div style="background: rgba(255,99,71,0.1); border-radius: 8px; padding: 15px; border: 2px solid rgba(255,99,71,0.3);">
-                            <h3 style="font-size: 1rem; margin: 0 0 10px 0; color: #ff6347;">🤔 The Challenge:</h3>
-                            <p style="font-size: 0.9rem; line-height: 1.4; color: #666; margin: 0;">
-                                Two parameters to optimize!<br>
-                                Much harder to find by hand.<br>
-                                This is where AI really shines!
-                            </p>
-                        </div>
                     </div>
+                    <p>Gradient Descent might have not seemed that useful when optimizing such a simple f(x) = w·x function, but now
+                        we'll start adding more variables...</p>
+                   
                     
-                    <div style="background: rgba(45,213,115,0.1); border-radius: 8px; padding: 15px; margin-top: 20px; border: 2px solid rgba(45,213,115,0.3);">
-                        <p style="font-size: 1rem; line-height: 1.5; color: #333; margin: 0;">
-                            <strong style="color: #2dd573;">💡 Key Insight:</strong> Gradient descent can optimize <em>both</em> <strong>w</strong> and <strong>b</strong> at the same time!<br>
-                            <span style="font-size: 0.9rem; color: #666;">Let's see this in action with the bunny feeding challenge...</span>
-                        </p>
-                    </div>
+                    
                 </div>
                 
                 ${createStandardNavigation()}

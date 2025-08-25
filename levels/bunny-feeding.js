@@ -91,7 +91,7 @@ function createBunnyFeedingLevel() {
     container.innerHTML = `
         <div class="current-level">
             <div class="level-header">
-                🐰 Bunny Feeding Challenge
+                Manually Adjusting 2 Variables: Bunny Feeding Challenge
             </div>
             <div class="level-content" style="padding: 10px 20px; max-width: 1000px; margin: 0 auto;">
                 <!-- Instructions -->
@@ -99,46 +99,11 @@ function createBunnyFeedingLevel() {
                     <p style="font-size: 1rem; color: #555; margin: 0;">
                         <strong>Goal:</strong> Find the right formula to feed bunnies based on their weight!<br>
                         <span style="font-size: 0.9rem; color: #666;">The amount of hay needed = <strong style="color: #667eea;">w × (bunny weight) + b</strong></span><br>
-                        The amount of each hay each bunny needs depends on its weight. But the function is now a little bit more difficult to discover, since there are now
-                        two variables to optimize. Feel free to give it a go by hand, but don't worry too much if it's too difficult. Feel free to go to the next part 
-                        even if you can't find the correct <strong style="color: #667eea;">w</strong> and <strong style="color: #667eea;">b</strong> values
+                        There are four bunnies below, each needs a different amount of food. Try to find the optimal <strong>w</strong> and <strong>b</strong> values yourself. It will
+                        be much trickier this time! If you get stuck don't worry. The next level will use gradient descent to feed them.
                     </p>
                 </div><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: -30px;">
-                    <!-- Left side: Bunny Display -->
-                    <div style="background: rgba(255,255,255,0.9); border-radius: 15px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                        <h3 style="margin: 0 0 15px 0; color: #333; text-align: center;">Current Bunny</h3>
-                        
-                        <!-- Bunny visualization -->
-                        <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 10px; margin-bottom: 15px;">
-                            <div id="bunny-emoji" style="font-size: 80px; margin-bottom: 10px;">🐰</div>
-                            <div style="font-size: 1.1rem; color: #333;">
-                                Weight: <span id="bunny-weight" style="font-weight: bold; color: #667eea; font-size: 1.3rem;">2</span> kg
-                            </div>
-                        </div>
-                        
-                        <!-- Result display -->
-                        <div id="result-display" style="display: none; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center;">
-                            <div id="result-message" style="font-size: 1rem; font-weight: bold; margin-bottom: 10px;"></div>
-                            <div style="font-size: 0.9rem; color: #666;">
-                                You gave: <span id="given-hay" style="font-weight: bold;">0</span> units of hay<br>
-                                Needed: <span id="needed-hay" style="font-weight: bold;">0</span> units of hay<br>
-                                Loss: <span id="loss-value" style="font-weight: bold; color: #ff6347;">0</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Bunny selector -->
-                        <div style="margin-top: 20px; padding: 15px; background: rgba(102,126,234,0.05); border-radius: 8px;">
-                            <div style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">Test different bunnies:</div>
-                            <div style="display: flex; gap: 10px; justify-content: center;">
-                                <button class="bunny-btn" data-weight="2" style="padding: 8px 12px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">2kg 🐰</button>
-                                <button class="bunny-btn" data-weight="4" style="padding: 8px 12px; background: white; color: #333; border: 2px solid #ddd; border-radius: 5px; cursor: pointer;">4kg 🐰</button>
-                                <button class="bunny-btn" data-weight="6" style="padding: 8px 12px; background: white; color: #333; border: 2px solid #ddd; border-radius: 5px; cursor: pointer;">6kg 🐰</button>
-                                <button class="bunny-btn" data-weight="8" style="padding: 8px 12px; background: white; color: #333; border: 2px solid #ddd; border-radius: 5px; cursor: pointer;">8kg 🐰</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Right side: Controls -->
+                 <!-- Left side: Controls -->
                     <div style="background: rgba(255,255,255,0.9); border-radius: 15px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                         <h3 style="margin: 0 0 15px 0; color: #333; text-align: center;">Your Formula</h3>
                         
@@ -191,6 +156,41 @@ function createBunnyFeedingLevel() {
                             </div>
                         </div>
                     </div>
+                    <!--Right side: Bunny Display -->
+                    <div style="background: rgba(255,255,255,0.9); border-radius: 15px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <h3 style="margin: 0 0 15px 0; color: #333; text-align: center;">Current Bunny</h3>
+                        
+                        <!-- Bunny visualization -->
+                        <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 10px; margin-bottom: 15px;">
+                            <div id="bunny-emoji" style="font-size: 80px; margin-bottom: 10px;">🐰</div>
+                            <div style="font-size: 1.1rem; color: #333;">
+                                Weight: <span id="bunny-weight" style="font-weight: bold; color: #667eea; font-size: 1.3rem;">2</span> kg
+                            </div>
+                        </div>
+                        
+                        <!-- Result display -->
+                        <div id="result-display" style="display: none; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center;">
+                            <div id="result-message" style="font-size: 1rem; font-weight: bold; margin-bottom: 10px;"></div>
+                            <div style="font-size: 0.9rem; color: #666;">
+                                You gave: <span id="given-hay" style="font-weight: bold;">0</span> units of hay<br>
+                                Needed: <span id="needed-hay" style="font-weight: bold;">0</span> units of hay<br>
+                                Loss: <span id="loss-value" style="font-weight: bold; color: #ff6347;">0</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Bunny selector -->
+                        <div style="margin-top: 20px; padding: 15px; background: rgba(102,126,234,0.05); border-radius: 8px;">
+                            <div style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">Test different bunnies:</div>
+                            <div style="display: flex; gap: 10px; justify-content: center;">
+                                <button class="bunny-btn" data-weight="2" style="padding: 8px 12px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">2kg 🐰</button>
+                                <button class="bunny-btn" data-weight="4" style="padding: 8px 12px; background: white; color: #333; border: 2px solid #ddd; border-radius: 5px; cursor: pointer;">4kg 🐰</button>
+                                <button class="bunny-btn" data-weight="6" style="padding: 8px 12px; background: white; color: #333; border: 2px solid #ddd; border-radius: 5px; cursor: pointer;">6kg 🐰</button>
+                                <button class="bunny-btn" data-weight="8" style="padding: 8px 12px; background: white; color: #333; border: 2px solid #ddd; border-radius: 5px; cursor: pointer;">8kg 🐰</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                   
                 </div>
                 
                 ${createStandardNavigation()}

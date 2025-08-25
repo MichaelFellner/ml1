@@ -23,7 +23,53 @@ function createBunnyGradientDescent() {
 
                     </p>
                 </div><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: -35px;">
-                    <!-- Left side: Visualization -->
+                <!-- Left side: Controls -->
+                    <div style="background: rgba(255,255,255,0.9); border-radius: 15px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <h3 style="margin: 0 0 15px 0; color: #333; text-align: center;">Two-Parameter Optimization</h3>
+                        
+                        <!-- Current state display -->
+                        <div style="background: white; border: 2px solid #667eea; border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: center; font-family: 'Courier New', monospace;">
+                            <div style="font-size: 1.2rem; color: #333;">
+                                f(x) = <span id="current-w-bunny" style="color: #667eea; font-weight: bold;">1.0</span>×x + <span id="current-b-bunny" style="color: #764ba2; font-weight: bold;">3.0</span>
+                            </div>
+                        
+                        </div>
+                        
+                   
+                      
+                        
+                        <!-- Iteration counter -->
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <div style="font-size: 2rem; color: #667eea; font-weight: bold;">
+                                Step <span id="iteration-bunny">0</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Control buttons -->
+                        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                            <button id="step-btn-bunny" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                                📉 One Step
+                            </button>
+                            <button id="auto-btn-bunny" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #2dd573, #1cb85c); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                                ⚡ Auto Train
+                            </button>
+                        </div>
+                        
+                        <button id="reset-btn-bunny" style="width: 100%; padding: 10px; background: #6c757d; color: white; border: none; border-radius: 8px; font-size: 0.9rem; cursor: pointer; transition: all 0.3s;">
+                            🔄 Reset to Random
+                        </button>
+                        
+                        <!-- Success message -->
+                        <div id="success-message-bunny" style="display: none; margin-top: 20px; padding: 15px; background: rgba(45,213,115,0.1); border-radius: 8px; border: 2px solid rgba(45,213,115,0.3); text-align: center;">
+                            <div style="color: #2dd573; font-weight: bold; font-size: 1.1rem;">
+                                🎉 Perfect! Found w = 5, b = 10! 🎉
+                            </div>
+                            <div style="color: #666; font-size: 0.9rem; margin-top: 5px;">
+                                All bunnies are perfectly fed!
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right side: Visualization -->
                     <div style="background: rgba(255,255,255,0.9); border-radius: 15px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                         <h3 style="margin: 0 0 15px 0; color: #333; text-align: center;">Test Bunnies 🐰</h3>
                         
@@ -80,52 +126,7 @@ function createBunnyGradientDescent() {
                        
                     </div>
                     
-                    <!-- Right side: Controls -->
-                    <div style="background: rgba(255,255,255,0.9); border-radius: 15px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                        <h3 style="margin: 0 0 15px 0; color: #333; text-align: center;">Two-Parameter Optimization</h3>
-                        
-                        <!-- Current state display -->
-                        <div style="background: white; border: 2px solid #667eea; border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: center; font-family: 'Courier New', monospace;">
-                            <div style="font-size: 1.2rem; color: #333;">
-                                f(x) = <span id="current-w-bunny" style="color: #667eea; font-weight: bold;">1.0</span>×x + <span id="current-b-bunny" style="color: #764ba2; font-weight: bold;">3.0</span>
-                            </div>
-                        
-                        </div>
-                        
-                   
-                      
-                        
-                        <!-- Iteration counter -->
-                        <div style="text-align: center; margin-bottom: 20px;">
-                            <div style="font-size: 2rem; color: #667eea; font-weight: bold;">
-                                Step <span id="iteration-bunny">0</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Control buttons -->
-                        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                            <button id="step-btn-bunny" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.3s;">
-                                📉 One Step
-                            </button>
-                            <button id="auto-btn-bunny" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #2dd573, #1cb85c); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.3s;">
-                                ⚡ Auto Train
-                            </button>
-                        </div>
-                        
-                        <button id="reset-btn-bunny" style="width: 100%; padding: 10px; background: #6c757d; color: white; border: none; border-radius: 8px; font-size: 0.9rem; cursor: pointer; transition: all 0.3s;">
-                            🔄 Reset to Random
-                        </button>
-                        
-                        <!-- Success message -->
-                        <div id="success-message-bunny" style="display: none; margin-top: 20px; padding: 15px; background: rgba(45,213,115,0.1); border-radius: 8px; border: 2px solid rgba(45,213,115,0.3); text-align: center;">
-                            <div style="color: #2dd573; font-weight: bold; font-size: 1.1rem;">
-                                🎉 Perfect! Found w = 5, b = 10! 🎉
-                            </div>
-                            <div style="color: #666; font-size: 0.9rem; margin-top: 5px;">
-                                All bunnies are perfectly fed!
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
                 
                 ${createStandardNavigation()}
@@ -289,7 +290,7 @@ function setupBunnyGradientDescent() {
             } else {
                 takeStep();
             }
-        }, 400);
+        }, 50);
     }
     
     function stopAutoRun() {

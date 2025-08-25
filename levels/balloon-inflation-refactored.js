@@ -14,7 +14,7 @@ function createBalloonInflationLevel() {
     container.innerHTML = `
         <div class="current-level">
             <div class="level-header">
-                🎈 Balloon Inflation Challenge
+                🎈 Balloon Inflation Challenge yo
             </div>
             <div class="level-content" style="padding: 10px 20px; max-width: 1000px; margin: 0 auto;">
                 <!-- Instructions -->

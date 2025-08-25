@@ -1,32 +1,23 @@
 /**
- * Balloon Inflation Challenge Level
+ * Balloon Inflation Challenge Level - Draggable Pump Version
  * 
- * Interactive level where users manually adjust parameters to inflate balloons
- * Updated to use state management system for persistence and progress tracking
+ * Interactive level where users drag the pump up/down to control air pressure
+ * The pump position directly controls the w parameter
  * 
- * @fileoverview Balloon inflation level implementation with parameter adjustment
+ * @fileoverview Enhanced balloon inflation level with draggable pump
  * @author MLTEACH Team
- * @version 3.0.0
- * @since 1.0.0
- * 
- * @requires GameStateStore - For parameter persistence and activity tracking
- * @requires LevelProgressStore - For level completion and progress tracking
- * @requires createStandardNavigation - For navigation UI
- * @requires initializeNavigation - For navigation setup
- * @requires utils/index.js - For utility functions (DOM, math, formatting, validation)
+ * @version 6.0.0
  * 
  * Level Configuration:
- * - Type: Interactive parameter adjustment
+ * - Type: Interactive parameter adjustment with draggable pump
  * - Target function: f(x) = 7x (where x is balloon size)
- * - Parameter: w (air multiplier)
- * - Range: 0 to 15, step 0.5
+ * - Parameter: w (air multiplier) controlled by pump position
+ * - Range: 0 to 9.9 (balloon pops when w > 7)
  * - Balloon sizes: 1, 2, 3, 4
- * - Success criteria: w = 7 (exact match) or 95-105% accuracy
- * 
- * @changelog v3.0.0 - Refactored to use utility functions from utils/ folder
+ * - Success criteria: Minimize loss across all balloons
  */
 
-// Utility function implementations (inline to avoid ES6 module dependencies)
+// Utility function implementations
 function getElementById(id, required = true) {
     const element = document.getElementById(id);
     if (!element && required) {
@@ -41,22 +32,14 @@ function clamp(value, min, max) {
 }
 
 function formatNumber(num, decimals = 1) {
-    if (typeof num !== 'number' || isNaN(num)) return String(num);
-    if (!isFinite(num)) return num > 0 ? '∞' : '-∞';
-    return num.toFixed(decimals).replace(/\.?0+$/, '');
+    const n = parseFloat(num);
+    if (isNaN(n)) return String(num);
+    if (!isFinite(n)) return n > 0 ? '∞' : '-∞';
+    return n.toFixed(decimals);
 }
 
-function calculateAccuracy(actual, expected) {
-    if (expected === 0) return actual === 0 ? 100 : 0;
-    return Math.max(0, 100 - (Math.abs(actual - expected) / Math.abs(expected)) * 100);
-}
-
-function shake(element, duration = 300) {
-    if (!element) return;
-    element.style.animation = 'shake 0.3s';
-    setTimeout(() => {
-        element.style.animation = '';
-    }, duration);
+function calculateLoss(predicted, actual) {
+    return Math.abs(predicted - actual);
 }
 
 // Check if state management system is available
@@ -65,147 +48,213 @@ if (typeof LevelProgressStore === 'undefined' || typeof GameStateStore === 'unde
 }
 
 /**
- * Creates and initializes the balloon inflation level
- * 
- * Sets up the complete UI, initializes state management integration,
- * and configures the interactive balloon inflation challenge.
- * 
- * @function createBalloonInflationLevel
- * @returns {void} Renders level content to DOM and initializes functionality
- * 
- * @example
- * // Create the balloon inflation level
- * createBalloonInflationLevel();
- * 
- * @description
- * This function:
- * 1. Renders the complete level UI to the #app container
- * 2. Initializes standard navigation
- * 3. Sets up state management integration if available
- * 4. Calls setupBalloonLevel() to configure interactive behavior
- * 
- * The level includes:
- * - Balloon visualization with size-based scaling
- * - Parameter slider for air multiplier (w)
- * - Formula display showing f(x) = w × size
- * - Multiple balloon sizes to test (1-4)
- * - Result feedback with visual animations
- * - State persistence across sessions
+ * Creates and initializes the enhanced balloon inflation level
  */
 function createBalloonInflationLevel() {
     const container = document.getElementById('app');
     container.innerHTML = `
+        <style>
+            @keyframes glowPulse {
+                0% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(1.1);
+                }
+                100% {
+                    transform: scale(1);
+                }
+            }
+            
+            @keyframes sparkle {
+                0%, 100% {
+                    opacity: 0;
+                }
+                50% {
+                    opacity: 1;
+                }
+            }
+            
+            .loss-glow {
+                animation: glowPulse 2s ease-in-out;
+            }
+            
+            @keyframes pumpDown {
+                0% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(20px);
+                }
+                100% {
+                    transform: translateY(0);
+                }
+            }
+            
+            .pump-animation {
+                animation: pumpDown 0.5s ease-in-out;
+            }
+            
+            @keyframes balloonPop {
+                0% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+                50% {
+                    transform: scale(1.3);
+                    opacity: 0.8;
+                }
+                100% {
+                    transform: scale(1.5);
+                    opacity: 0;
+                }
+            }
+            
+            .balloon-popping {
+                animation: balloonPop 0.3s ease-out forwards;
+            }
+        </style>
         <div class="current-level">
             <div class="level-header">
-                🎈 Balloon Inflation Challenge
+                Manually Optimizing 1 Variable
             </div>
-            <div class="level-content" style="padding: 10px 20px; max-width: 1000px; margin: 0 auto;">
-                <!-- Instructions -->
-                <div style="background: rgba(102,126,234,0.1); border-radius: 10px; padding: 15px; margin-bottom: 0px; border: 2px solid rgba(102,126,234,0.3); text-align: center;">
-                    <p style="font-size: 1rem; color: #555; margin: 0;">
-                        <strong>Goal:</strong> Find the right amount of air for different sized balloons!<br>
-                        <span style="font-size: 0.9rem; color: #666;">Amount of air = <strong style="color: #667eea;">w × (balloon size)</strong></span><br>
-                        This challenge should be pretty easy, there's only one variable to tune that will solve the formula for how much air to give each size balloon.
-                    </p>
-                </div><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: -30px;">
-                    <!-- Left side: Balloon Display -->
-                    <div style="background: rgba(255,255,255,0.9); border-radius: 15px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                        <h3 style="margin: 0 0 15px 0; color: #333; text-align: center;">Current Balloon</h3>
-                        
-                        <!-- Balloon visualization -->
-                        <div style="text-align: center; padding: 20px; background: linear-gradient(to bottom, #e3f2fd, #bbdefb); border-radius: 10px; margin-bottom: 15px; position: relative; height: 200px;">
-                            <div id="balloon-container" style="position: relative; height: 100%; display: flex; align-items: center; justify-content: center;">
-                                <div id="balloon-emoji" style="font-size: 80px; transition: all 0.5s ease;">🎈</div>
-                                <div id="pop-effect" style="position: absolute; font-size: 100px; opacity: 0; transition: opacity 0.3s;">💥</div>
-                            </div>
-                            <div style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 1.1rem; color: #333;">
-                                Size: <span id="balloon-size" style="font-weight: bold; color: #667eea; font-size: 1.3rem;">1</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Result display -->
-                        <div id="result-display" style="display: none; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center;">
-                            <div id="result-message" style="font-size: 1rem; font-weight: bold; margin-bottom: 10px;"></div>
-                            <div style="font-size: 0.9rem; color: #666;">
-                                You gave: <span id="given-air" style="font-weight: bold;">0</span> units of air<br>
-                                Perfect amount: <span id="needed-air" style="font-weight: bold;">0</span> units of air<br>
-                                Difference: <span id="difference-value" style="font-weight: bold; color: #ff6347;">0</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Balloon selector -->
-                        <div style="margin-top: 20px; padding: 15px; background: rgba(102,126,234,0.05); border-radius: 8px;">
-                            <div style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">Test different balloon sizes:</div>
-                            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                                <button class="balloon-btn" data-size="1" style="padding: 8px 12px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">Size 1 🎈</button>
-                                <button class="balloon-btn" data-size="2" style="padding: 8px 12px; background: white; color: #333; border: 2px solid #ddd; border-radius: 5px; cursor: pointer;">Size 2 🎈</button>
-                                <button class="balloon-btn" data-size="3" style="padding: 8px 12px; background: white; color: #333; border: 2px solid #ddd; border-radius: 5px; cursor: pointer;">Size 3 🎈</button>
-                                <button class="balloon-btn" data-size="4" style="padding: 8px 12px; background: white; color: #333; border: 2px solid #ddd; border-radius: 5px; cursor: pointer;">Size 4 🎈</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Right side: Controls -->
-                    <div style="background: rgba(255,255,255,0.9); border-radius: 15px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                        <h3 style="margin: 0 0 15px 0; color: #333; text-align: center;">Your Formula</h3>
-                        
-                        <!-- Formula display -->
-                        <div style="background: white; border: 2px solid #667eea; border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: center; font-family: 'Courier New', monospace;">
-                            <div style="font-size: 1.2rem; color: #333;">
-                                air = <span style="color: #667eea; font-weight: bold;" id="w-display">1</span> × size
-                            </div>
-                            <div style="font-size: 0.9rem; color: #666; margin-top: 8px;">
-                                For this balloon: <span id="formula-result" style="font-weight: bold;">1</span> units of air
-                            </div>
-                        </div>
-                        
-                        <!-- W control -->
-                        <div style="margin-bottom: 25px;">
-                            <label style="display: block; margin-bottom: 8px; color: #333; font-weight: bold;">
-                                w (air multiplier): <span id="w-value" style="color: #667eea;">1</span>
-                            </label>
-                            <input type="range" id="w-slider" min="0" max="15" value="1" step="0.5" style="width: 100%; height: 8px; border-radius: 4px; background: #ddd; outline: none;">
-                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #999; margin-top: 5px;">
-                                <span>0</span>
-                                <span>7.5</span>
-                                <span>15</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Inflate button -->
-                        <button id="inflate-btn" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: all 0.3s;">
-                            💨 Inflate Balloon
-                        </button>
-                        
-                    
-                        
-                        <!-- Success tracking -->
-                        <div id="success-tracker" style="margin-top: 20px; padding: 15px; background: rgba(45,213,115,0.1); border-radius: 8px; border: 1px solid rgba(45,213,115,0.3); display: none;">
-                            <div style="text-align: center; color: #2dd573; font-weight: bold;">
-                                🎉 Perfect Formula Found! 🎉<br>
-                                <span style="font-size: 0.9rem; color: #333;">f(x) = 7x</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div style="text-align: center; padding: 0; margin: 0; color: #666; font-size: 0.95rem;">
+            Before we see what <strong>Gradient Descent</strong> <i>does</i>, lets do a challenge that will have you do the job of Gradient Descent yourself. Below is a pump and different balloons. 
+            Each different sized balloons needs a different amount of air to inflate it to its largest size without popping. The amount of air each balloon receives is <strong style="color": blue>w · x</strong>. The
+            <strong>x</strong> variable is the size of the balloon and <strong>w</strong> is a multiplier on how much air to give. Your job is to find the optimal w value that can inflate all the balloons through trial and error. Use the loss
+            as a clue for finding the right amount. 
+            <div class="level-content" style="padding: 15px; display: flex; justify-content: center;">
                 
-                ${createStandardNavigation()}
+                <!-- Main Container with Fixed Width -->
+                <div style="width: 1000px; background: linear-gradient(to bottom, #e3f2fd, #bbdefb); border-radius: 15px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); margin-bottom: 20px;">
+                    
+                    <!-- Formula Display -->
+                    <div style="background: white; border-radius: 10px; padding: 15px; margin-bottom: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <div style="font-size: 2rem; font-family: 'Courier New', monospace; color: #333; font-weight: bold; text-align: center; white-space: nowrap;">
+                            f(<span id="formula-x" style="color: #764ba2;">1</span>) = <span id="formula-w" style="color: #667eea; display: inline-block; width: 50px; text-align: right;">0.0</span> × <span id="formula-x2" style="color: #764ba2;">1</span> = <span id="formula-result" style="color: #ff6b6b; display: inline-block; width: 80px; text-align: right;">0.0</span> units of air
+                            <span style="margin: 0 15px; color: #999;">|</span>
+                            Loss: <span id="loss-inline" style="color: #ff6b6b; font-weight: bold; display: inline-block;">--</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Main Interactive Area -->
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 40px; margin-bottom: 20px; height: 200px;">
+                        
+                        <!-- Center Group: Buttons, Pump, and Balloon -->
+                        <div style="display: flex; align-items: center; gap: 20px;">
+                            <!-- Fine adjustment buttons -->
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <button id="w-increase" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-size: 1.5rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+                                    +
+                                </button>
+                                <button id="w-decrease" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-size: 1.5rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+                                    −
+                                </button>
+                            </div>
+                            
+                            <!-- Draggable Pump Container -->
+                            <div style="position: relative; width: 120px; height: 200px;">
+                                <!-- Pressure scale background -->
+                                <div style="position: absolute; left: 10px; top: 0; bottom: 0; width: 100px; background: linear-gradient(to top, #e2e8f0 0%, #667eea 50%, #764ba2 100%); border-radius: 10px; opacity: 0.2;"></div>
+                                
+                                <!-- Draggable Pump -->
+                                <div id="pump-container" style="position: absolute; left: 20px; right: 20px; cursor: grab; user-select: none; top: 110px;">
+                                    <div style="text-align: center; position: relative;">
+                                        <!-- Pump visual -->
+                                        <div style="width: 70px; height: 90px; background: linear-gradient(to bottom, #4a5568, #2d3748); border-radius: 8px; position: relative; box-shadow: 0 3px 8px rgba(0,0,0,0.3);">
+                                            <!-- Pump handle -->
+                                            <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 30px; height: 20px; background: #1a202c; border-radius: 5px;"></div>
+                                            <!-- Pump details -->
+                                            <div style="position: absolute; top: 15px; left: 8px; right: 8px; height: 50px; background: rgba(255,255,255,0.1); border-radius: 5px;"></div>
+                                            <!-- W value display -->
+                                            <div style="position: absolute; bottom: 8px; left: 0; right: 0; text-align: center; color: white; font-weight: bold; font-size: 12px;">
+                                                w = <span id="pump-w-value">0.0</span>
+                                            </div>
+                                        </div>
+                                        <!-- Nozzle -->
+                                        <div style="position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 20px; height: 15px; background: #2d3748; border-radius: 0 0 50% 50%;"></div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Instructions -->
+                                <div style="position: absolute; bottom: -25px; left: 0; right: 0; text-align: center; font-size: 11px; color: #666;">
+                                    ↕ Drag pump up/down
+                                </div>
+                            </div>
+                            
+                            <!-- Air Flow Visual -->
+                            <div style="position: relative; width: 60px; height: 100px; display: flex; align-items: center;">
+                                <div style="width: 100%; height: 4px; background: #718096; position: relative;">
+                                    <div id="air-flow" style="position: absolute; width: 20px; height: 4px; background: #667eea; left: -20px; transition: left 0.5s linear; opacity: 0;"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Balloon -->
+                            <div style="text-align: center; position: relative;">
+                                <div id="balloon-container" style="position: relative; width: 200px; height: 200px; display: flex; align-items: center; justify-content: center;">
+                                    <svg width="200" height="200" viewBox="0 0 200 200">
+                                        <!-- Balloon shape -->
+                                        <ellipse id="balloon-shape" cx="100" cy="100" rx="15" ry="16.5" fill="#ff6b6b" stroke="#e53e3e" stroke-width="2" style="transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);"/>
+                                        <!-- Highlight -->
+                                        <ellipse id="balloon-highlight" cx="95" cy="95" rx="5" ry="6" fill="white" opacity="0.3"/>
+                                    </svg>
+                                    <!-- Pop effect -->
+                                    <div id="pop-effect" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 80px; opacity: 0; transition: opacity 0.3s, font-size 0.3s; z-index: 10;">💥</div>
+                                </div>
+                                
+                                <!-- Pump/Reset Button -->
+                                <button id="pump-button" style="margin-top: -10px; padding: 10px 25px; background: linear-gradient(135deg, #ff6b6b, #feca57); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.2); transition: all 0.3s;">
+                                    💨 Pump Air!
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Status Text -->
+                        <div style="width: 180px; padding: 15px; display: flex; flex-direction: column; justify-content: center;">
+                            <div id="status-text" style="font-size: 1.1rem; color: #666; font-weight: 500; text-align: left; line-height: 1.5;">
+                                Adjust w and pump air to test!
+                            </div>
+                            <div id="status-emoji" style="font-size: 2rem; margin-top: 10px; text-align: center;">
+                                🎯
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Balloon Selector -->
+                    <div style="padding: 12px 0; margin-bottom: 15px;">
+                        <div style="font-size: 0.9rem; color: #444; margin-bottom: 10px; text-align: center;">Select balloon size to test:</div>
+                        <div style="display: flex; gap: 15px; justify-content: center;">
+                            <button class="balloon-btn" data-size="1" style="padding: 8px 18px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.95rem; transition: all 0.3s;">
+                                🎈 Size 1
+                            </button>
+                            <button class="balloon-btn" data-size="2" style="padding: 8px 18px; background: white; color: #333; border: 2px solid #ddd; border-radius: 6px; cursor: pointer; font-size: 0.95rem; transition: all 0.3s;">
+                                🎈 Size 2
+                            </button>
+                            <button class="balloon-btn" data-size="3" style="padding: 8px 18px; background: white; color: #333; border: 2px solid #ddd; border-radius: 6px; cursor: pointer; font-size: 0.95rem; transition: all 0.3s;">
+                                🎈 Size 3
+                            </button>
+                            <button class="balloon-btn" data-size="4" style="padding: 8px 18px; background: white; color: #333; border: 2px solid #ddd; border-radius: 6px; cursor: pointer; font-size: 0.95rem; transition: all 0.3s;">
+                                🎈 Size 4
+                            </button>
+                        </div>
+                    </div>
+                    
+                </div>
             </div>
+            
+            ${createStandardNavigation()}
         </div>
     `;
     
     // Initialize navigation
     initializeNavigation('balloon-level', 'createBalloonInflationLevel');
     
-    // Initialize level in state management system
+    // Initialize level
     if (typeof LevelProgressStore !== 'undefined' && typeof GameStateStore !== 'undefined') {
-        // Wait for state system to be ready
         const initializeLevel = () => {
             try {
                 LevelProgressStore.startLevel('balloon-inflation');
                 GameStateStore.setCurrentLevel('balloon-inflation');
-                
-                // Setup balloon level logic with state management
                 setupBalloonLevel();
             } catch (error) {
                 console.warn('State management not yet ready, falling back to basic setup');
@@ -213,465 +262,654 @@ function createBalloonInflationLevel() {
             }
         };
         
-        // Check if state system is already initialized
         if (window.StateManager && window.StateManager.initialized) {
             initializeLevel();
         } else {
-            // Wait for state ready event
             window.addEventListener('mlteach:state:ready', initializeLevel, { once: true });
-            // Fallback timeout in case event doesn't fire
             setTimeout(initializeLevel, 1000);
         }
     } else {
-        // Fallback to basic setup
         setupBalloonLevel();
     }
 }
 
 /**
- * Sets up the interactive behavior for the balloon inflation level
- * 
- * Configures all event handlers, state management, parameter controls,
- * and scoring logic for the balloon inflation challenge.
- * 
- * @function setupBalloonLevel
- * @returns {void} Initializes all level functionality
- * 
- * @description
- * This function handles:
- * - Parameter restoration from previous sessions
- * - W slider input handling with real-time formula updates
- * - Balloon size selection and visual updates
- * - Inflation attempts with accuracy calculation
- * - Success tracking and level completion
- * - State persistence and progress tracking
- * - Visual feedback animations (pop, shake, scale)
- * 
- * Success Criteria:
- * - Exact match: w = 7 (100% accuracy)
- * - Acceptable: 95-105% accuracy for current balloon
- * - Perfect formula discovery completes the level
- * 
- * Scoring Algorithm:
- * - Base score: 70 points for completion
- * - Attempt bonus: Up to 20 points (fewer attempts = higher bonus)
- * - Speed bonus: Up to 10 points (faster completion = higher bonus)
- * - Maximum score: 100 points
+ * Sets up the interactive behavior for the enhanced balloon inflation level
  */
 function setupBalloonLevel() {
-    // Level configuration constants
-    /** @type {number} The correct w parameter for the target function f(x) = 7x */
+    // Constants
     const TRUE_W = 7;
-    
-    /** @type {string} Unique identifier for this level used in state management */
     const LEVEL_ID = 'balloon-inflation';
+    const PUMP_MIN_Y = 10;
+    const PUMP_MAX_Y = 110;
+    const PUMP_RANGE = PUMP_MAX_Y - PUMP_MIN_Y;
+    const MAX_W = 9.9;  // Maximum w value
     
-    // Level state variables
-    /** @type {number} Currently selected balloon size (1-4) */
+    // State variables
     let currentBalloonSize = 1;
-    
-    /** @type {number} Count of balloons inflated with perfect accuracy */
-    let perfectBalloons = 0;
-    
-    /** @type {number} Timestamp when the level session started (for scoring) */
-    let sessionStartTime = Date.now();
-    
-    /** @type {number} Total number of inflation attempts made this session */
     let attempts = 0;
+    let sessionStartTime = Date.now();
+    let currentW = 0;  // Start at 0
+    let isDragging = false;
+    let dragStartY = 0;
+    let pumpStartY = 0;
+    let balloonInflated = false;
+    const BASE_BALLOON_SIZE = 15; // Smaller starting size
     
-    // DOM element references using utility function
-    /** @type {HTMLInputElement} Range slider for adjusting w parameter (0-15) */
-    const wSlider = getElementById('w-slider');
-    
-    /** @type {HTMLButtonElement} Button to trigger balloon inflation attempt */
-    const inflateBtn = getElementById('inflate-btn');
-    
-    /** @type {NodeListOf<HTMLButtonElement>} Buttons for selecting balloon size (1-4) */
+    // DOM elements
+    const pumpContainer = getElementById('pump-container');
+    const pumpButton = getElementById('pump-button');
     const balloonButtons = document.querySelectorAll('.balloon-btn');
+    const balloonShape = getElementById('balloon-shape');
+    const balloonHighlight = getElementById('balloon-highlight');
+    const popEffect = getElementById('pop-effect');
+    const airFlow = getElementById('air-flow');
+    const wIncreaseBtn = getElementById('w-increase');
+    const wDecreaseBtn = getElementById('w-decrease');
+    const statusText = getElementById('status-text');
+    const statusEmoji = getElementById('status-emoji');
     
-    // Simple scoring function
-    const calculateScore = ({ attempts, timeSpent, success, accuracy }) => {
-        if (!success) return 0;
-        
-        const timeInSeconds = timeSpent / 1000;
-        let score = 70; // base score
-        
-        // Attempt bonus (decreasing with more attempts)
-        const attemptPenalty = Math.min(attempts - 1, 9) / 9;
-        score += 20 * (1 - attemptPenalty);
-        
-        // Speed bonus based on thresholds
-        let speedMultiplier = 0;
-        if (timeInSeconds < 30) speedMultiplier = 1;
-        else if (timeInSeconds < 60) speedMultiplier = 0.5;
-        else if (timeInSeconds < 120) speedMultiplier = 0.2;
-        
-        score += 10 * speedMultiplier;
-        score *= (accuracy / 100);
-        
-        return Math.min(100, Math.max(0, Math.round(score)));
-    };
-    
-    // State management initialization
-    /** @type {Object.<string, any>} Previously saved parameters from GameStateStore */
-    let savedParameters = {};
-    
-    /** @type {boolean} Whether state management services are available and functional */
+    // State management
     let hasStateManagement = false;
-    
     if (typeof GameStateStore !== 'undefined') {
         try {
-            savedParameters = GameStateStore.getParameters(LEVEL_ID);
+            const savedParams = GameStateStore.getParameters(LEVEL_ID);
+            if (savedParams.w !== undefined) {
+                currentW = savedParams.w;
+            }
             hasStateManagement = true;
-            
-            // Restore saved w value if available
-            if (savedParameters.w !== undefined) {
-                wSlider.value = savedParameters.w;
-                console.log(`Restored previous w value: ${savedParameters.w}`);
-            }
-            
-            // Restore balloon size if available
-            if (savedParameters.balloonSize !== undefined) {
-                currentBalloonSize = savedParameters.balloonSize;
-                
-                // Update UI to reflect saved balloon size
-                balloonButtons.forEach(btn => {
-                    if (parseInt(btn.dataset.size) === currentBalloonSize) {
-                        btn.style.background = '#667eea';
-                        btn.style.color = 'white';
-                        btn.style.border = 'none';
-                    } else {
-                        btn.style.background = 'white';
-                        btn.style.color = '#333';
-                        btn.style.border = '2px solid #ddd';
-                    }
-                });
-                
-                document.getElementById('balloon-size').textContent = currentBalloonSize;
-                
-                // Update balloon visual size
-                const balloonEmoji = document.getElementById('balloon-emoji');
-                const baseSize = 60;
-                balloonEmoji.style.fontSize = `${baseSize + (currentBalloonSize * 10)}px`;
-                
-                console.log(`Restored previous balloon size: ${currentBalloonSize}`);
-            }
-            
-            // Check if user has progress from previous session
-            const levelProgress = LevelProgressStore.getLevelProgress(LEVEL_ID);
-            if (levelProgress && levelProgress.attempts > 0) {
-                attempts = levelProgress.attempts;
-                console.log(`Restored previous attempts: ${attempts}`);
-            }
         } catch (error) {
             console.warn('Could not load saved parameters:', error);
         }
     }
     
     /**
-     * Updates the formula display and saves parameters to state management
-     * 
-     * Uses utility functions for DOM manipulation and number formatting.
-     * Reads the current w value from the slider, updates all formula displays,
-     * calculates the result for the current balloon size, and persists the
-     * parameters to state management if available.
-     * 
-     * @function updateFormula
-     * @returns {void} Updates UI and saves state
+     * Updates pump position based on w value
      */
-    function updateFormula() {
-        const w = clamp(parseFloat(wSlider.value), 0, 15);
+    function updatePumpPosition() {
+        // Map w (0-9.9) to y position (PUMP_MAX_Y to PUMP_MIN_Y)
+        const yPos = PUMP_MAX_Y - (currentW / MAX_W) * PUMP_RANGE;
+        pumpContainer.style.top = `${yPos}px`;
+        pumpContainer.style.transform = 'translateY(0)';
+    }
+    
+    /**
+     * Updates all displays based on current w and balloon size
+     */
+    function updateDisplay() {
+        const airAmount = currentW * currentBalloonSize;
         
-        // Update displays using utility functions
-        const wDisplay = getElementById('w-display');
-        const wValue = getElementById('w-value');
-        const formulaResult = getElementById('formula-result');
+        // Update formula display
+        getElementById('formula-x').textContent = currentBalloonSize;
+        getElementById('formula-x2').textContent = currentBalloonSize;
+        getElementById('formula-w').textContent = currentW.toFixed(1);
+        getElementById('formula-result').textContent = airAmount.toFixed(1);
+        getElementById('pump-w-value').textContent = currentW.toFixed(1);
         
-        if (wDisplay) wDisplay.textContent = formatNumber(w, 1);
-        if (wValue) wValue.textContent = formatNumber(w, 1);
-        
-        const result = w * currentBalloonSize;
-        if (formulaResult) formulaResult.textContent = formatNumber(result, 1);
-        
-        // Save parameter updates to state management
+        // Save state if available
         if (hasStateManagement) {
             try {
-                GameStateStore.updateParameters(LEVEL_ID, { w: w });
-                GameStateStore.updateActivity('parameter_adjustment', { parameter: 'w', value: w });
-                
-                // Update partial progress
-                LevelProgressStore.updateProgress(LEVEL_ID, {
-                    solutions: { w: w },
-                    currentBalloonSize: currentBalloonSize,
-                    attempts: attempts
-                });
+                GameStateStore.updateParameters(LEVEL_ID, { w: currentW });
             } catch (error) {
-                console.warn('Could not save parameter update:', error);
+                console.warn('Could not save parameters:', error);
             }
         }
     }
     
     /**
-     * Handles balloon inflation attempt and provides visual/textual feedback
-     * 
-     * Calculates the accuracy of the current parameter settings, provides
-     * appropriate feedback through animations and messages, tracks the attempt
-     * in state management, and handles level completion if criteria are met.
-     * 
-     * @function inflateBalloon
-     * @returns {void} Processes attempt and updates UI
-     * 
-     * @description
-     * Process flow:
-     * 1. Calculate user's answer: w × currentBalloonSize
-     * 2. Compare with correct answer: 7 × currentBalloonSize  
-     * 3. Determine accuracy percentage
-     * 4. Provide visual feedback based on result:
-     *    - Perfect (95-105%): Green success message, balloon grows
-     *    - Too little (<95%): Yellow warning, balloon deflates
-     *    - Too much (>105%): Red error, balloon pops with animation
-     * 5. Track attempt in state management
-     * 6. Check for level completion (w = 7 exactly)
-     * 7. Calculate and save final score if completed
-     * 
-     * Visual Effects:
-     * - Scale animations for balloon size changes
-     * - Pop animation with 💥 emoji overlay
-     * - Shake animation for result display
-     * - Opacity changes for deflation effect
+     * Sets up dragging for the pump
      */
-    /**
-     * Handles balloon inflation attempt using utility functions for validation and formatting
-     * 
-     * Uses LevelUtils.validateParameters for accuracy checking and formatNumber for display.
-     * Provides visual feedback through animations and styled messages.
-     * 
-     * @function inflateBalloon
-     * @returns {void} Processes attempt and updates UI
-     */
-    function inflateBalloon() {
-        const w = clamp(parseFloat(wSlider.value), 0, 15);
-        attempts++;
+    function setupPumpDragging() {
+        // Mouse events
+        pumpContainer.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            dragStartY = e.clientY;
+            pumpStartY = parseFloat(pumpContainer.style.top) || PUMP_MAX_Y - (currentW / MAX_W) * PUMP_RANGE;
+            pumpContainer.style.cursor = 'grabbing';
+            e.preventDefault();
+        });
         
-        const yourAnswer = w * currentBalloonSize;
-        const correctAnswer = TRUE_W * currentBalloonSize;
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            
+            const deltaY = e.clientY - dragStartY;
+            let newY = clamp(pumpStartY + deltaY, PUMP_MIN_Y, PUMP_MAX_Y);
+            
+            // Update pump position
+            pumpContainer.style.top = `${newY}px`;
+            
+            // Calculate new w value from position
+            currentW = ((PUMP_MAX_Y - newY) / PUMP_RANGE) * MAX_W;
+            currentW = Math.round(currentW * 10) / 10; // Round to 0.1
+            currentW = clamp(currentW, 0, MAX_W);
+            
+            updateDisplay();
+        });
         
-        // Calculate accuracy
-        const accuracy = calculateAccuracy(yourAnswer, correctAnswer);
-        const isCorrect = accuracy >= 95;
-        const isPerfect = w === TRUE_W;
-        
-        // Track attempt in state management
-        if (hasStateManagement) {
-            try {
-                GameStateStore.updateActivity('attempt', { 
-                    balloonSize: currentBalloonSize,
-                    userAnswer: yourAnswer,
-                    correctAnswer: correctAnswer,
-                    accuracy: accuracy
-                });
-            } catch (error) {
-                console.warn('Could not track attempt:', error);
+        document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                pumpContainer.style.cursor = 'grab';
             }
+        });
+        
+        // Touch events for mobile
+        pumpContainer.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            dragStartY = e.touches[0].clientY;
+            pumpStartY = parseFloat(pumpContainer.style.top) || PUMP_MAX_Y - (currentW / MAX_W) * PUMP_RANGE;
+            e.preventDefault();
+        });
+        
+        document.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            
+            const deltaY = e.touches[0].clientY - dragStartY;
+            let newY = clamp(pumpStartY + deltaY, PUMP_MIN_Y, PUMP_MAX_Y);
+            
+            pumpContainer.style.top = `${newY}px`;
+            
+            currentW = ((PUMP_MAX_Y - newY) / PUMP_RANGE) * MAX_W;
+            currentW = Math.round(currentW * 10) / 10;
+            currentW = clamp(currentW, 0, MAX_W);
+            
+            updateDisplay();
+        });
+        
+        document.addEventListener('touchend', () => {
+            isDragging = false;
+        });
+    }
+    
+    /**
+     * Animates air flow visual
+     */
+    function animateAirFlow() {
+        airFlow.style.opacity = '1';
+        airFlow.style.left = '-20px';
+        setTimeout(() => {
+            airFlow.style.left = '80px';
+            setTimeout(() => {
+                airFlow.style.opacity = '0';
+                setTimeout(() => {
+                    airFlow.style.left = '-20px';
+                }, 100);
+            }, 400);
+        }, 50);
+    }
+    
+    /**
+     * Resets the balloon to original small size
+     */
+    function resetBalloon() {
+        // Clear any transitions first
+        balloonShape.style.transition = 'none';
+        if (balloonHighlight) {
+            balloonHighlight.style.transition = 'none';
         }
         
-        // Update result display using utility functions
-        const resultDisplay = getElementById('result-display');
-        const resultMessage = getElementById('result-message');
-        const balloonEmoji = getElementById('balloon-emoji');
-        const popEffect = getElementById('pop-effect');
+        // All balloons start at the same small size
+        balloonShape.setAttribute('rx', BASE_BALLOON_SIZE);
+        balloonShape.setAttribute('ry', BASE_BALLOON_SIZE * 1.1);
+        balloonShape.setAttribute('fill', '#ff6b6b');
+        balloonShape.style.opacity = '1';  // Make sure balloon is visible again
+        balloonShape.style.display = '';  // Restore display property
+        balloonShape.classList.remove('balloon-popping');  // Remove animation class
         
-        if (!resultDisplay || !resultMessage || !balloonEmoji) {
-            console.warn('Could not find required elements for result display');
+        // Reset highlight
+        if (balloonHighlight) {
+            balloonHighlight.setAttribute('rx', 5);
+            balloonHighlight.setAttribute('ry', 6);
+            balloonHighlight.style.opacity = '0.3';  // Reset highlight opacity
+            balloonHighlight.style.display = '';  // Restore display property
+            balloonHighlight.classList.remove('balloon-popping');  // Remove animation class
+        }
+        
+        // Hide pop effect and reset its size
+        popEffect.style.opacity = '0';
+        popEffect.style.fontSize = '80px';
+        popEffect.style.transition = '';
+        
+        // Reset loss display and clear any animation
+        const lossElement = getElementById('loss-inline');
+        lossElement.innerHTML = '--';  // Use innerHTML to clear any sparkles
+        lossElement.classList.remove('loss-glow');
+        lossElement.style.textShadow = '';
+        
+        // Reset status
+        if (statusText) statusText.textContent = 'Adjust w and pump air to test!';
+        if (statusEmoji) statusEmoji.textContent = '🎯';
+        
+        // Change button back to "Pump Air!"
+        pumpButton.innerHTML = '💨 Pump Air!';
+        pumpButton.style.background = 'linear-gradient(135deg, #ff6b6b, #feca57)';
+        
+        balloonInflated = false;
+        
+        // Re-enable transitions after reset
+        setTimeout(() => {
+            balloonShape.style.transition = 'all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            if (balloonHighlight) {
+                balloonHighlight.style.transition = 'all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            }
+        }, 50);
+    }
+    
+    /**
+     * Handles pump action - inflates balloon and calculates loss
+     */
+    function pumpAir() {
+        // If balloon is already inflated, reset it first
+        if (balloonInflated) {
+            resetBalloon();
             return;
         }
         
-        resultDisplay.style.display = 'block';
+        // Animate pump
+        pumpContainer.classList.add('pump-animation');
+        setTimeout(() => {
+            pumpContainer.classList.remove('pump-animation');
+        }, 500);
         
-        // Update numerical displays with formatting
-        const givenAir = getElementById('given-air');
-        const neededAir = getElementById('needed-air');
-        const differenceValue = getElementById('difference-value');
+        attempts++;
+        animateAirFlow();
+        balloonInflated = true;
         
-        if (givenAir) givenAir.textContent = formatNumber(yourAnswer, 1);
-        if (neededAir) neededAir.textContent = formatNumber(correctAnswer, 1);
-        if (differenceValue) differenceValue.textContent = formatNumber(Math.abs(yourAnswer - correctAnswer), 1);
+        const yourAir = currentW * currentBalloonSize;
+        const correctAir = TRUE_W * currentBalloonSize;
+        const loss = calculateLoss(yourAir, correctAir);
+        const maxLoss = 15; // Maximum expected loss for color scaling
         
-        // Reset animations
-        if (popEffect) popEffect.style.opacity = '0';
-        balloonEmoji.style.transform = 'scale(1)';
-        balloonEmoji.style.opacity = '1';
+        // Update loss display with color based on value
+        const lossElement = getElementById('loss-inline');
+        // Start with plain text (will be overridden if loss = 0)
+        lossElement.innerHTML = formatNumber(loss, 2);
         
-        if (isCorrect) {
-            // Success styling
-            resultDisplay.style.background = 'rgba(45,213,115,0.1)';
-            resultDisplay.style.border = '2px solid rgba(45,213,115,0.3)';
-            resultMessage.style.color = '#2dd573';
-            resultMessage.textContent = `🎉 Perfect! Accuracy: ${formatNumber(accuracy, 0)}%`;
-            balloonEmoji.style.transform = 'scale(1.2)';
-            balloonEmoji.textContent = '🎈';
-            
-            perfectBalloons++;
-            
-            // Check if formula is perfect
-            if (isPerfect) {
-                const successTracker = getElementById('success-tracker');
-                if (successTracker) successTracker.style.display = 'block';
-                
-                // Complete the level using utility scorer
-                if (hasStateManagement) {
-                    try {
-                        const timeSpent = Date.now() - sessionStartTime;
-                        const score = calculateScore({
-                            attempts: attempts,
-                            timeSpent: timeSpent,
-                            success: true,
-                            accuracy: accuracy
-                        });
-                        
-                        LevelProgressStore.completeLevel(LEVEL_ID, {
-                            score: score,
-                            solutions: { w: w },
-                            timeSpent: timeSpent
-                        });
-                        
-                        // Add success notification
-                        GameStateStore.addNotification({
-                            type: 'success',
-                            message: `Perfect! You found w = ${TRUE_W}! Level completed with score: ${score}`,
-                            duration: 5000
-                        });
-                        
-                        console.log(`Level completed! Score: ${score}, Time: ${formatNumber(timeSpent/1000, 1)}s`);
-                    } catch (error) {
-                        console.warn('Could not save level completion:', error);
-                    }
-                }
-            }
-        } else if (accuracy < 80) {
-            // Significantly off - pop animation
-            resultDisplay.style.background = 'rgba(255,99,71,0.1)';
-            resultDisplay.style.border = '2px solid rgba(255,99,71,0.3)';
-            resultMessage.style.color = '#ff6347';
-            resultMessage.textContent = `💥 POP! Too much air! Accuracy: ${formatNumber(accuracy, 0)}%`;
-            
-            // Pop animation
-            balloonEmoji.style.opacity = '0';
-            if (popEffect) popEffect.style.opacity = '1';
-            setTimeout(() => {
-                if (popEffect) popEffect.style.opacity = '0';
-                balloonEmoji.style.opacity = '1';
-                balloonEmoji.textContent = '💔';
-                balloonEmoji.style.transform = 'scale(0.5)';
-            }, 300);
+        // Calculate color based on loss (green when close to 0, red when far)
+        const lossRatio = Math.min(loss / maxLoss, 1);
+        let glowColor;
+        if (loss === 0) {
+            glowColor = '#4ade80';
+            lossElement.style.textShadow = `0 0 10px ${glowColor}, 0 0 20px ${glowColor}, 0 0 30px gold`;
+            // Add sparkle effect
+            lossElement.innerHTML = `✨ ${formatNumber(loss, 2)} ✨`;
+        } else if (lossRatio < 0.3) {
+            // Close to perfect - greenish
+            glowColor = `rgb(${Math.round(74 + lossRatio * 500)}, ${Math.round(222 - lossRatio * 100)}, 128)`;
+            lossElement.style.textShadow = `0 0 10px ${glowColor}, 0 0 20px ${glowColor}`;
+        } else if (lossRatio < 0.6) {
+            // Medium - yellowish
+            glowColor = `rgb(${Math.round(251 - lossRatio * 100)}, ${Math.round(191 - lossRatio * 100)}, 36)`;
+            lossElement.style.textShadow = `0 0 10px ${glowColor}, 0 0 20px ${glowColor}`;
         } else {
-            // Close but not perfect
-            resultDisplay.style.background = 'rgba(255,215,0,0.1)';
-            resultDisplay.style.border = '2px solid rgba(255,215,0,0.3)';
-            resultMessage.style.color = '#f3960a';
-            resultMessage.textContent = `😔 Close! Accuracy: ${formatNumber(accuracy, 0)}% - Keep trying!`;
-            balloonEmoji.style.transform = 'scale(0.8)';
-            balloonEmoji.style.opacity = '0.7';
-            balloonEmoji.textContent = '🎈';
+            // Far - reddish
+            glowColor = '#ff6b6b';
+            lossElement.style.textShadow = `0 0 10px ${glowColor}, 0 0 20px ${glowColor}`;
         }
         
-        // Apply shake animation
-        shake(resultDisplay, 300);
-    }
-    
-    // Balloon selector
-    balloonButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Update active button
-            balloonButtons.forEach(b => {
-                b.style.background = 'white';
-                b.style.color = '#333';
-                b.style.border = '2px solid #ddd';
-            });
-            btn.style.background = '#667eea';
-            btn.style.color = 'white';
-            btn.style.border = 'none';
+        // Trigger animation
+        lossElement.classList.remove('loss-glow');
+        void lossElement.offsetWidth;
+        lossElement.classList.add('loss-glow');
+        setTimeout(() => {
+            lossElement.classList.remove('loss-glow');
+        }, 2000);
+        
+        // Update status text
+        if (statusText && statusEmoji) {
+            if (loss === 0) {
+                statusText.textContent = 'Perfect! You found the optimal w value!';
+                statusEmoji.textContent = '🎆';
+            } else if (currentW > TRUE_W) {
+                statusText.textContent = 'Too much air! The balloon popped! Decrease w below 7.';
+                statusEmoji.textContent = '💥';
+            } else if (yourAir < correctAir * 0.5) {
+                statusText.textContent = 'Way too little air! Increase w significantly.';
+                statusEmoji.textContent = '⬆️';
+            } else if (yourAir < correctAir) {
+                statusText.textContent = 'Need more air. Increase w a bit.';
+                statusEmoji.textContent = '🔼';
+            } else {
+                statusText.textContent = 'Too much air. Decrease w slightly.';
+                statusEmoji.textContent = '🔽';
+            }
+        }
+        
+        // Reset pop effect
+        popEffect.style.opacity = '0';
+        
+        // Ensure transitions are enabled for animations
+        balloonShape.style.transition = 'all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+        if (balloonHighlight) {
+            balloonHighlight.style.transition = 'all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+        }
+        
+        // Determine outcome based on accuracy
+        // Adjusted sizes to fit within 200x200 container
+        const maxSize = 60 + (currentBalloonSize * 8); // Max radius ~90px
+        let targetRx, targetRy, balloonColor;
+        let highlightRx = 5, highlightRy = 6;
+        
+        if (loss === 0) {
+            // Perfect
+            targetRx = maxSize;
+            targetRy = maxSize * 1.1;
+            balloonColor = '#4ade80';
+            highlightRx = maxSize * 0.3;
+            highlightRy = maxSize * 0.35;
             
-            // Update current balloon
-            currentBalloonSize = parseInt(btn.dataset.size);
-            document.getElementById('balloon-size').textContent = currentBalloonSize;
+            // Animate balloon
+            balloonShape.setAttribute('rx', targetRx);
+            balloonShape.setAttribute('ry', targetRy);
+            balloonShape.setAttribute('fill', balloonColor);
             
-            // Reset balloon display
-            const balloonEmoji = document.getElementById('balloon-emoji');
-            balloonEmoji.textContent = '🎈';
-            balloonEmoji.style.transform = 'scale(1)';
-            balloonEmoji.style.opacity = '1';
+            if (balloonHighlight) {
+                balloonHighlight.setAttribute('rx', highlightRx);
+                balloonHighlight.setAttribute('ry', highlightRy);
+            }
+        } else if (currentW > TRUE_W) {
+            // w value is too high (> 7) - balloon inflates then pops
+            // First inflate the balloon to maximum before popping
+            targetRx = maxSize * 1.3;  // Make it even bigger before popping
+            targetRy = maxSize * 1.4;
+            balloonColor = '#ff0000';  // Bright red for danger
+            highlightRx = targetRx * 0.3;
+            highlightRy = targetRy * 0.3;
             
-            // Update balloon size visually
-            const baseSize = 60;
-            const scaledSize = baseSize + (currentBalloonSize * 10);
-            balloonEmoji.style.fontSize = `${clamp(scaledSize, 40, 120)}px`;
+            // Animate balloon to large size first
+            balloonShape.setAttribute('rx', targetRx);
+            balloonShape.setAttribute('ry', targetRy);
+            balloonShape.setAttribute('fill', balloonColor);
             
-            // Hide previous result
-            document.getElementById('result-display').style.display = 'none';
-            
-            // Save balloon size selection to state management
-            if (hasStateManagement) {
-                try {
-                    GameStateStore.updateParameters(LEVEL_ID, { 
-                        balloonSize: currentBalloonSize 
-                    });
-                    GameStateStore.updateActivity('balloon_selection', { 
-                        size: currentBalloonSize 
-                    });
-                } catch (error) {
-                    console.warn('Could not save balloon selection:', error);
-                }
+            if (balloonHighlight) {
+                balloonHighlight.setAttribute('rx', highlightRx);
+                balloonHighlight.setAttribute('ry', highlightRy);
             }
             
-            // Update formula display
-            updateFormula();
+            // Then pop after a short delay
+            setTimeout(() => {
+                // Instantly shrink balloon to nothing (the "pop")
+                balloonShape.setAttribute('rx', '0');
+                balloonShape.setAttribute('ry', '0');
+                balloonShape.style.opacity = '0';
+                
+                if (balloonHighlight) {
+                    balloonHighlight.setAttribute('rx', '0');
+                    balloonHighlight.setAttribute('ry', '0');
+                    balloonHighlight.style.opacity = '0';
+                }
+                
+                // Show big pop effect
+                popEffect.style.opacity = '1';
+                popEffect.style.fontSize = '150px';  // Make it bigger
+                
+                // Pulse the pop effect
+                setTimeout(() => {
+                    popEffect.style.fontSize = '120px';
+                }, 100);
+            }, 500);  // Wait half a second before popping
+        } else if (yourAir < correctAir * 0.5) {
+            // Way too little - stays small
+            targetRx = BASE_BALLOON_SIZE * 1.2;
+            targetRy = BASE_BALLOON_SIZE * 1.3;
+            balloonColor = '#fbbf24';
+            highlightRx = 6;
+            highlightRy = 7;
+            
+            // Animate balloon
+            balloonShape.setAttribute('rx', targetRx);
+            balloonShape.setAttribute('ry', targetRy);
+            balloonShape.setAttribute('fill', balloonColor);
+            
+            if (balloonHighlight) {
+                balloonHighlight.setAttribute('rx', highlightRx);
+                balloonHighlight.setAttribute('ry', highlightRy);
+            }
+        } else if (yourAir < correctAir) {
+            // A bit too little - partially inflated
+            const inflationRatio = yourAir / correctAir;
+            targetRx = BASE_BALLOON_SIZE + (maxSize - BASE_BALLOON_SIZE) * inflationRatio * 0.8;
+            targetRy = (BASE_BALLOON_SIZE + (maxSize - BASE_BALLOON_SIZE) * inflationRatio * 0.8) * 1.1;
+            balloonColor = '#fb923c';
+            highlightRx = targetRx * 0.3;
+            highlightRy = targetRy * 0.3;
+            
+            // Animate balloon
+            balloonShape.setAttribute('rx', targetRx);
+            balloonShape.setAttribute('ry', targetRy);
+            balloonShape.setAttribute('fill', balloonColor);
+            
+            if (balloonHighlight) {
+                balloonHighlight.setAttribute('rx', highlightRx);
+                balloonHighlight.setAttribute('ry', highlightRy);
+            }
+        } else {
+            // A bit too much - slightly over-inflated
+            targetRx = maxSize * 0.95;
+            targetRy = maxSize * 1.05;
+            balloonColor = '#f87171';
+            highlightRx = targetRx * 0.3;
+            highlightRy = targetRy * 0.3;
+            
+            // Animate balloon
+            balloonShape.setAttribute('rx', targetRx);
+            balloonShape.setAttribute('ry', targetRy);
+            balloonShape.setAttribute('fill', balloonColor);
+            
+            if (balloonHighlight) {
+                balloonHighlight.setAttribute('rx', highlightRx);
+                balloonHighlight.setAttribute('ry', highlightRy);
+            }
+        }
+        
+        // Change button to "Reset"
+        pumpButton.innerHTML = '🔄 Reset';
+        pumpButton.style.background = 'linear-gradient(135deg, #718096, #4a5568)';
+        
+        // Track in state management
+        if (hasStateManagement) {
+            try {
+                GameStateStore.updateActivity('pump_attempt', {
+                    balloonSize: currentBalloonSize,
+                    yourAir: yourAir,
+                    correctAir: correctAir,
+                    loss: loss
+                });
+                
+                if (currentW === TRUE_W) {
+                    const timeSpent = Date.now() - sessionStartTime;
+                    LevelProgressStore.completeLevel(LEVEL_ID, {
+                        score: Math.max(0, 100 - attempts * 5),
+                        solutions: { w: currentW },
+                        timeSpent: timeSpent
+                    });
+                }
+            } catch (error) {
+                console.warn('Could not track activity:', error);
+            }
+        }
+    }
+    
+    /**
+     * Handles balloon size selection
+     */
+    function selectBalloon(size) {
+        // Reset balloon first if it's inflated
+        if (balloonInflated) {
+            resetBalloon();
+        }
+        
+        currentBalloonSize = size;
+        
+        // Update button styles
+        balloonButtons.forEach(btn => {
+            if (parseInt(btn.dataset.size) === size) {
+                btn.style.background = '#667eea';
+                btn.style.color = 'white';
+                btn.style.border = 'none';
+                btn.style.transform = 'scale(1.05)';
+            } else {
+                btn.style.background = 'white';
+                btn.style.color = '#333';
+                btn.style.border = '2px solid #ddd';
+                btn.style.transform = 'scale(1)';
+            }
+        });
+        
+        // Temporarily disable transitions for instant reset
+        balloonShape.style.transition = 'none';
+        if (balloonHighlight) {
+            balloonHighlight.style.transition = 'none';
+        }
+        
+        // Always reset to small size
+        balloonShape.setAttribute('rx', BASE_BALLOON_SIZE);
+        balloonShape.setAttribute('ry', BASE_BALLOON_SIZE * 1.1);
+        balloonShape.setAttribute('fill', '#ff6b6b');
+        balloonShape.style.opacity = '1';  // Make sure balloon is visible
+        balloonShape.style.display = '';  // Restore display property
+        balloonShape.classList.remove('balloon-popping');  // Remove animation class
+        
+        // Reset highlight
+        if (balloonHighlight) {
+            balloonHighlight.setAttribute('rx', 5);
+            balloonHighlight.setAttribute('ry', 6);
+            balloonHighlight.style.opacity = '0.3';
+            balloonHighlight.style.display = '';  // Restore display property
+            balloonHighlight.classList.remove('balloon-popping');  // Remove animation class
+        }
+        
+        // Hide pop effect and reset its size
+        popEffect.style.opacity = '0';
+        popEffect.style.fontSize = '80px';
+        popEffect.style.transition = '';
+        
+        // Reset loss display and clear any animation
+        const lossElement = getElementById('loss-inline');
+        lossElement.innerHTML = '--';  // Use innerHTML to clear any sparkles
+        lossElement.classList.remove('loss-glow');
+        lossElement.style.textShadow = '';
+        
+        // Update status for new balloon
+        if (statusText) statusText.textContent = `Testing balloon size ${size}. Adjust w and pump!`;
+        if (statusEmoji) statusEmoji.textContent = '🎯';
+        
+        // Re-enable transitions after reset
+        setTimeout(() => {
+            balloonShape.style.transition = 'all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            if (balloonHighlight) {
+                balloonHighlight.style.transition = 'all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            }
+        }, 50);
+        
+        // Update displays
+        updateDisplay();
+    }
+    
+    // Event listeners
+    setupPumpDragging();
+    
+    // Add + and - button handlers
+    if (wIncreaseBtn) {
+        wIncreaseBtn.addEventListener('click', () => {
+            currentW = Math.min(currentW + 0.1, MAX_W);
+            currentW = Math.round(currentW * 10) / 10; // Round to 0.1
+            updatePumpPosition();
+            updateDisplay();
+        });
+        
+        wIncreaseBtn.addEventListener('mouseenter', () => {
+            wIncreaseBtn.style.transform = 'scale(1.1)';
+        });
+        
+        wIncreaseBtn.addEventListener('mouseleave', () => {
+            wIncreaseBtn.style.transform = 'scale(1)';
+        });
+    }
+    
+    if (wDecreaseBtn) {
+        wDecreaseBtn.addEventListener('click', () => {
+            currentW = Math.max(currentW - 0.1, 0);
+            currentW = Math.round(currentW * 10) / 10; // Round to 0.1
+            updatePumpPosition();
+            updateDisplay();
+        });
+        
+        wDecreaseBtn.addEventListener('mouseenter', () => {
+            wDecreaseBtn.style.transform = 'scale(1.1)';
+        });
+        
+        wDecreaseBtn.addEventListener('mouseleave', () => {
+            wDecreaseBtn.style.transform = 'scale(1)';
+        });
+    }
+    
+    pumpButton.addEventListener('click', pumpAir);
+    pumpButton.addEventListener('mouseenter', () => {
+        pumpButton.style.transform = 'translateY(-2px)';
+        pumpButton.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+    });
+    pumpButton.addEventListener('mouseleave', () => {
+        pumpButton.style.transform = 'translateY(0)';
+        pumpButton.style.boxShadow = '0 3px 10px rgba(0,0,0,0.2)';
+    });
+    
+    balloonButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            selectBalloon(parseInt(btn.dataset.size));
+        });
+        btn.addEventListener('mouseenter', () => {
+            if (btn.style.background !== 'rgb(102, 126, 234)') {
+                btn.style.transform = 'scale(1.05)';
+                btn.style.borderColor = '#667eea';
+            }
+        });
+        btn.addEventListener('mouseleave', () => {
+            if (btn.style.background !== 'rgb(102, 126, 234)') {
+                btn.style.transform = 'scale(1)';
+                btn.style.borderColor = '#ddd';
+            }
         });
     });
     
-    // Slider listener
-    wSlider.addEventListener('input', updateFormula);
+    // Initialize display
+    updatePumpPosition();
+    updateDisplay();
     
-    // Inflate button
-    inflateBtn.addEventListener('click', () => {
-        // Track click in state management
-        if (hasStateManagement) {
-            try {
-                GameStateStore.updateActivity('click', { element: 'inflate-button' });
-            } catch (error) {
-                console.warn('Could not track click:', error);
-            }
-        }
-        
-        inflateBalloon();
-    });
+    // Initialize balloon at small size
+    balloonShape.setAttribute('rx', BASE_BALLOON_SIZE);
+    balloonShape.setAttribute('ry', BASE_BALLOON_SIZE * 1.1);
+    balloonShape.style.opacity = '1';
+    balloonShape.style.display = '';
+    balloonShape.style.transition = '';
+    balloonShape.classList.remove('balloon-popping');
     
-    // Add hover effect to inflate button
-    inflateBtn.addEventListener('mouseenter', () => {
-        inflateBtn.style.transform = 'translateY(-2px)';
-        inflateBtn.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
-    });
-    inflateBtn.addEventListener('mouseleave', () => {
-        inflateBtn.style.transform = 'translateY(0)';
-        inflateBtn.style.boxShadow = 'none';
-    });
-    
-    // Add shake animation CSS if not already present
-    if (!document.getElementById('shake-style')) {
-        const style = document.createElement('style');
-        style.id = 'shake-style';
-        style.textContent = `
-            @keyframes shake {
-                0%, 100% { transform: translateX(0); }
-                25% { transform: translateX(-5px); }
-                75% { transform: translateX(5px); }
-            }
-        `;
-        document.head.appendChild(style);
+    // Initialize highlight
+    if (balloonHighlight) {
+        balloonHighlight.setAttribute('rx', 5);
+        balloonHighlight.setAttribute('ry', 6);
+        balloonHighlight.style.opacity = '0.3';
+        balloonHighlight.style.display = '';
+        balloonHighlight.style.transition = '';
+        balloonHighlight.classList.remove('balloon-popping');
     }
     
-    // Initialize
-    updateFormula();
+    // Initialize pop effect
+    popEffect.style.opacity = '0';
+    popEffect.style.fontSize = '80px';
+    popEffect.style.transition = '';
+    
+    // Initialize loss display
+    const lossElement = getElementById('loss-inline');
+    if (lossElement) {
+        lossElement.innerHTML = '--';
+        lossElement.classList.remove('loss-glow');
+        lossElement.style.textShadow = '';
+    }
+    
+    // Initialize status
+    if (statusText) statusText.textContent = 'Testing balloon size 1. Adjust w and pump!';
+    if (statusEmoji) statusEmoji.textContent = '🎯';
 }
 
 // Export the functions

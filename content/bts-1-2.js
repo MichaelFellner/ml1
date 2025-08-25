@@ -555,11 +555,11 @@ function createBehindTheScenesBalloon() {
     container.innerHTML = `
         <div class="current-level" style="background: linear-gradient(to bottom, #000000, #1a1a1a);">
             <div class="level-content" style="padding: 8px; max-width: 1200px; margin: 0 auto; display: block !important; gap: 0 !important;">
-                <h1 style="font-size: 2rem; margin: 0 !important; padding: 0 !important; text-align: center; color: white; line-height: 1.2;">Behind the Scenes: How the Balloon Function Moves</h1>
+                <h1 style="font-size: 2rem; margin: 0 !important; padding: 0 !important; text-align: center; color: white; line-height: 1.2;">Behind the Scenes: Graphical Representation of Balloon Function</h1>
                 
                 <!-- Message at the top -->
                 <div style="background: rgba(255,255,255,0.9); border-radius: 8px; padding: 8px 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; margin: 12px 0 !important; display: block !important;">
-                    <p style="margin: 0 !important; padding: 0 !important; font-size: 0.95rem; color: #333; line-height: 1.3;">Watch how changing the parameter 'w' moves the entire function f(x) = w·x up and down. The AI is learning to find the right slope!</p>
+                    <p style="margin: 0 !important; padding: 0 !important; font-size: 0.95rem; color: #333; line-height: 1.3;">We can see a graph of the <strong>f(x) = w·x</strong> function below. Optimizing w is like adjusting the slope of a line!</p>
                 </div>
                 
                 <div style="display: grid; grid-template-columns: 3fr 2fr; gap: 15px; margin: 4px 0 0 0 !important; padding: 0 !important;">
@@ -598,7 +598,7 @@ function createBehindTheScenesBalloon() {
                     
                     <!-- Right side: Explanation and Test Points -->
                     <div style="background: rgba(255,255,255,0.9); border-radius: 10px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                        <h2 style="margin: 0 0 12px 0; color: #333; font-size: 1.1rem;">📊 What the Computer Sees</h2>
+                        <h2 style="margin: 0 0 12px 0; color: #333; font-size: 1.1rem;">Notes</h2>
                         
                 
                         
@@ -613,9 +613,10 @@ function createBehindTheScenesBalloon() {
                         
                         <!-- Insight Box -->
                         <div style="padding: 12px; background: rgba(45,213,115,0.1); border-radius: 6px; border: 1px solid rgba(45,213,115,0.3);">
-                            <div style="color: #2dd573; font-weight: bold; margin-bottom: 5px; font-size: 0.9rem;">💡 Key Insight:</div>
+                            <div style="color: #2dd573; font-weight: bold; margin-bottom: 5px; font-size: 0.9rem;">Insight:</div>
                             <p style="color: #555; font-size: 0.85rem; line-height: 1.4; margin: 0;">
-                                The function f(x) = w·x is a line through the origin. Changing 'w' changes the slope of this line. The AI needs to find w=7 to minimize the loss across all test points!
+                                The red dotted lines representing the loss for different sized balloons. Above we can calculate the total loss by adding the loss for 
+                                each balloon!
                             </p>
                         </div>
                         

@@ -29,8 +29,55 @@ function createCoffeeGradientDescent() {
                 
                 <!-- Main Container -->
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <!-- Left Side: Gradient Descent Controls -->
+                    <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                        
+                        <!-- Current Weights -->
+                        <div style="background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 20px; border: 2px solid #e9ecef;">
+                            <div style="color: #7f8c8d; font-size: 0.8rem; margin-bottom: 10px; text-align: center;">CURRENT WEIGHTS</div>
+                            <div style="font-family: 'Courier New', monospace; font-size: 0.95rem; text-align: center; color: #2c3e50;">
+                                f(x) = <span id="w1-display" style="color: #3498db; font-size: 1.1rem; font-weight: bold;">0.00</span>×age + 
+                                <span id="w2-display" style="color: #e74c3c; font-size: 1.1rem; font-weight: bold;">0.00</span>×cups + 
+                                <span id="w3-display" style="color: #f39c12; font-size: 1.1rem; font-weight: bold;">0.00</span>×tired + 
+                                <span id="bias-display" style="color: #2ecc71; font-size: 1.1rem; font-weight: bold;">0.00</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Learning Rate Control -->
+                        <div style="background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <label style="color: #2c3e50; font-weight: bold; font-size: 0.9rem;">Learning Rate</label>
+                                <div style="background: #3498db; padding: 4px 12px; border-radius: 20px;">
+                                    <span id="lr-value" style="color: white; font-weight: bold; font-size: 0.9rem;">0.0001</span>
+                                </div>
+                            </div>
+                            <input type="range" id="lr-slider" min="1" max="5" value="1" step="1" 
+                                style="width: 100%; height: 8px; border-radius: 4px; background: #e9ecef; outline: none; cursor: pointer;">
+                            <div style="display: flex; justify-content: space-between; color: #95a5a6; font-size: 0.7rem; margin-top: 5px;">
+                                <span>Slow</span>
+                                <span>Medium</span>
+                                <span>Fast</span>
+                            </div>
+                            <div style="margin-top: 10px; padding: 10px; background: #e3f2fd; border-radius: 6px; font-size: 0.8rem; color: #1976d2;">
+                                💡 <strong>Tip:</strong> Too high = overshoots, too low = slow learning
+                            </div>
+                        </div>
+                        
+                        <!-- Control Buttons -->
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                            <button id="step-btn" style="padding: 12px; background: #3498db; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                                Step →
+                            </button>
+                            <button id="auto-btn" style="padding: 12px; background: #2ecc71; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                                Auto Run
+                            </button>
+                            <button id="reset-btn" style="padding: 12px; background: #e74c3c; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.3s;">
+                                Reset
+                            </button>
+                        </div>
+                    </div>
                     
-                    <!-- Left Side: Students Display -->
+                    <!-- Right Side: Students Display -->
                     <div style="background: #2c3e50; border-radius: 12px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
                         
                         <!-- All Students Display -->
@@ -131,53 +178,7 @@ function createCoffeeGradientDescent() {
                         </div>
                     </div>
                     
-                    <!-- Right Side: Gradient Descent Controls -->
-                    <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
-                        
-                        <!-- Current Weights -->
-                        <div style="background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 20px; border: 2px solid #e9ecef;">
-                            <div style="color: #7f8c8d; font-size: 0.8rem; margin-bottom: 10px; text-align: center;">CURRENT WEIGHTS</div>
-                            <div style="font-family: 'Courier New', monospace; font-size: 0.95rem; text-align: center; color: #2c3e50;">
-                                f(x) = <span id="w1-display" style="color: #3498db; font-size: 1.1rem; font-weight: bold;">0.00</span>×age + 
-                                <span id="w2-display" style="color: #e74c3c; font-size: 1.1rem; font-weight: bold;">0.00</span>×cups + 
-                                <span id="w3-display" style="color: #f39c12; font-size: 1.1rem; font-weight: bold;">0.00</span>×tired + 
-                                <span id="bias-display" style="color: #2ecc71; font-size: 1.1rem; font-weight: bold;">0.00</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Learning Rate Control -->
-                        <div style="background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                <label style="color: #2c3e50; font-weight: bold; font-size: 0.9rem;">Learning Rate</label>
-                                <div style="background: #3498db; padding: 4px 12px; border-radius: 20px;">
-                                    <span id="lr-value" style="color: white; font-weight: bold; font-size: 0.9rem;">0.0001</span>
-                                </div>
-                            </div>
-                            <input type="range" id="lr-slider" min="1" max="5" value="1" step="1" 
-                                style="width: 100%; height: 8px; border-radius: 4px; background: #e9ecef; outline: none; cursor: pointer;">
-                            <div style="display: flex; justify-content: space-between; color: #95a5a6; font-size: 0.7rem; margin-top: 5px;">
-                                <span>Slow</span>
-                                <span>Medium</span>
-                                <span>Fast</span>
-                            </div>
-                            <div style="margin-top: 10px; padding: 10px; background: #e3f2fd; border-radius: 6px; font-size: 0.8rem; color: #1976d2;">
-                                💡 <strong>Tip:</strong> Too high = overshoots, too low = slow learning
-                            </div>
-                        </div>
-                        
-                        <!-- Control Buttons -->
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-                            <button id="step-btn" style="padding: 12px; background: #3498db; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.3s;">
-                                Step →
-                            </button>
-                            <button id="auto-btn" style="padding: 12px; background: #2ecc71; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.3s;">
-                                Auto Run
-                            </button>
-                            <button id="reset-btn" style="padding: 12px; background: #e74c3c; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.3s;">
-                                Reset
-                            </button>
-                        </div>
-                    </div>
+                    
                 </div>
                 
                 <!-- Success Message -->

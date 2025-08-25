@@ -29,76 +29,7 @@ function createCoffeeManualOptimizer() {
                 
                 <!-- Main Container -->
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    
-                    <!-- Left Side: Student Display -->
-                    <div style="background: #2c3e50; border-radius: 12px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
-                        
-                        <!-- Student Selector -->
-                        <div style="display: flex; gap: 10px; margin-bottom: 25px;">
-                            <button class="student-btn" data-student="0" style="flex: 1; padding: 10px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s;">
-                                Student A
-                                <div class="student-status" data-student="0" style="font-size: 0.75rem; margin-top: 3px; opacity: 0.9;">⚪ Not solved</div>
-                            </button>
-                            <button class="student-btn" data-student="1" style="flex: 1; padding: 10px; background: #34495e; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s;">
-                                Student B
-                                <div class="student-status" data-student="1" style="font-size: 0.75rem; margin-top: 3px; opacity: 0.9;">⚪ Not solved</div>
-                            </button>
-                            <button class="student-btn" data-student="2" style="flex: 1; padding: 10px; background: #34495e; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s;">
-                                Student C
-                                <div class="student-status" data-student="2" style="font-size: 0.75rem; margin-top: 3px; opacity: 0.9;">⚪ Not solved</div>
-                            </button>
-                        </div>
-                        
-                        <!-- Current Student Display -->
-                        <div id="student-display" style="background: rgba(255,255,255,0.05); border-radius: 10px; padding: 20px;">
-                            <h2 id="student-name" style="color: #ecf0f1; margin: 0 0 20px 0; text-align: center; font-size: 1.3rem;">Student A</h2>
-                            
-                            <!-- Input Parameters -->
-                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px;">
-                                <div style="background: rgba(52,152,219,0.2); border-radius: 8px; padding: 15px; text-align: center; border: 2px solid #3498db;">
-                                    <div style="color: #3498db; font-size: 0.8rem; margin-bottom: 5px;">AGE</div>
-                                    <div id="student-age" style="color: white; font-size: 1.8rem; font-weight: bold;">20</div>
-                                </div>
-                                <div style="background: rgba(231,76,60,0.2); border-radius: 8px; padding: 15px; text-align: center; border: 2px solid #e74c3c;">
-                                    <div style="color: #e74c3c; font-size: 0.8rem; margin-bottom: 5px;">CUPS/DAY</div>
-                                    <div id="student-cups" style="color: white; font-size: 1.8rem; font-weight: bold;">2</div>
-                                </div>
-                                <div style="background: rgba(243,156,18,0.2); border-radius: 8px; padding: 15px; text-align: center; border: 2px solid #f39c12;">
-                                    <div style="color: #f39c12; font-size: 0.8rem; margin-bottom: 5px;">TIREDNESS</div>
-                                    <div id="student-tired" style="color: white; font-size: 1.8rem; font-weight: bold;">7</div>
-                                </div>
-                            </div>
-                            
-                            <!-- Visual Coffee Display -->
-                            <div style="position: relative; height: 200px; background: rgba(0,0,0,0.3); border-radius: 10px; overflow: hidden; margin-bottom: 20px;">
-                                <!-- Target line -->
-                                <div id="target-line" style="position: absolute; bottom: 50%; width: 100%; height: 2px; background: #2ecc71; z-index: 2;">
-                                    <div style="position: absolute; left: 10px; top: -20px; background: #2ecc71; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.85rem; font-weight: bold;">
-                                        TARGET: <span id="target-value">161</span>ml
-                                    </div>
-                                </div>
-                                
-                                <!-- Current value bar -->
-                                <div id="value-bar" style="position: absolute; bottom: 0; left: 20%; right: 20%; background: linear-gradient(to top, #3498db, #5dade2); transition: height 0.3s ease; height: 0%; border-radius: 5px 5px 0 0;">
-                                    <div id="current-value-label" style="position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: white; padding: 3px 10px; border-radius: 4px; font-weight: bold; white-space: nowrap;">
-                                        0ml
-                                    </div>
-                                </div>
-                                
-                                <!-- Grid lines -->
-                                <div style="position: absolute; top: 25%; width: 100%; height: 1px; background: rgba(255,255,255,0.1);"></div>
-                                <div style="position: absolute; top: 75%; width: 100%; height: 1px; background: rgba(255,255,255,0.1);"></div>
-                            </div>
-                            
-                            <!-- Result Status -->
-                            <div id="result-status" style="padding: 15px; border-radius: 8px; text-align: center; background: rgba(231,76,60,0.2); border: 2px solid #e74c3c;">
-                                <div id="status-message" style="color: #e74c3c; font-weight: bold; font-size: 1.1rem;">Off by 161ml</div>
-                                <div id="status-detail" style="color: #ecf0f1; font-size: 0.85rem; margin-top: 5px; opacity: 0.8;">Need to increase the output</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Right Side: Formula & Controls -->
+                     <!-- Left Side: Formula & Controls -->
                     <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
                         
                         <!-- Current Formula -->
@@ -185,6 +116,75 @@ function createCoffeeManualOptimizer() {
                             <div id="hint-text-3" style="display: none; margin-bottom: 10px; padding: 10px; background: #fff3cd; border-radius: 6px; color: #856404; font-size: 0.85rem;">Daily cups has the biggest impact - set it to 10 (Age should be 5)</div>
                         </div>
                     </div>
+                    <!-- Right Side: Student Display -->
+                    <div style="background: #2c3e50; border-radius: 12px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+                        
+                        <!-- Student Selector -->
+                        <div style="display: flex; gap: 10px; margin-bottom: 25px;">
+                            <button class="student-btn" data-student="0" style="flex: 1; padding: 10px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s;">
+                                Student A
+                                <div class="student-status" data-student="0" style="font-size: 0.75rem; margin-top: 3px; opacity: 0.9;">⚪ Not solved</div>
+                            </button>
+                            <button class="student-btn" data-student="1" style="flex: 1; padding: 10px; background: #34495e; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s;">
+                                Student B
+                                <div class="student-status" data-student="1" style="font-size: 0.75rem; margin-top: 3px; opacity: 0.9;">⚪ Not solved</div>
+                            </button>
+                            <button class="student-btn" data-student="2" style="flex: 1; padding: 10px; background: #34495e; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s;">
+                                Student C
+                                <div class="student-status" data-student="2" style="font-size: 0.75rem; margin-top: 3px; opacity: 0.9;">⚪ Not solved</div>
+                            </button>
+                        </div>
+                        
+                        <!-- Current Student Display -->
+                        <div id="student-display" style="background: rgba(255,255,255,0.05); border-radius: 10px; padding: 20px;">
+                            <h2 id="student-name" style="color: #ecf0f1; margin: 0 0 20px 0; text-align: center; font-size: 1.3rem;">Student A</h2>
+                            
+                            <!-- Input Parameters -->
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px;">
+                                <div style="background: rgba(52,152,219,0.2); border-radius: 8px; padding: 15px; text-align: center; border: 2px solid #3498db;">
+                                    <div style="color: #3498db; font-size: 0.8rem; margin-bottom: 5px;">AGE</div>
+                                    <div id="student-age" style="color: white; font-size: 1.8rem; font-weight: bold;">20</div>
+                                </div>
+                                <div style="background: rgba(231,76,60,0.2); border-radius: 8px; padding: 15px; text-align: center; border: 2px solid #e74c3c;">
+                                    <div style="color: #e74c3c; font-size: 0.8rem; margin-bottom: 5px;">CUPS/DAY</div>
+                                    <div id="student-cups" style="color: white; font-size: 1.8rem; font-weight: bold;">2</div>
+                                </div>
+                                <div style="background: rgba(243,156,18,0.2); border-radius: 8px; padding: 15px; text-align: center; border: 2px solid #f39c12;">
+                                    <div style="color: #f39c12; font-size: 0.8rem; margin-bottom: 5px;">TIREDNESS</div>
+                                    <div id="student-tired" style="color: white; font-size: 1.8rem; font-weight: bold;">7</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Visual Coffee Display -->
+                            <div style="position: relative; height: 200px; background: rgba(0,0,0,0.3); border-radius: 10px; overflow: hidden; margin-bottom: 20px;">
+                                <!-- Target line -->
+                                <div id="target-line" style="position: absolute; bottom: 50%; width: 100%; height: 2px; background: #2ecc71; z-index: 2;">
+                                    <div style="position: absolute; left: 10px; top: -20px; background: #2ecc71; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.85rem; font-weight: bold;">
+                                        TARGET: <span id="target-value">161</span>ml
+                                    </div>
+                                </div>
+                                
+                                <!-- Current value bar -->
+                                <div id="value-bar" style="position: absolute; bottom: 0; left: 20%; right: 20%; background: linear-gradient(to top, #3498db, #5dade2); transition: height 0.3s ease; height: 0%; border-radius: 5px 5px 0 0;">
+                                    <div id="current-value-label" style="position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: white; padding: 3px 10px; border-radius: 4px; font-weight: bold; white-space: nowrap;">
+                                        0ml
+                                    </div>
+                                </div>
+                                
+                                <!-- Grid lines -->
+                                <div style="position: absolute; top: 25%; width: 100%; height: 1px; background: rgba(255,255,255,0.1);"></div>
+                                <div style="position: absolute; top: 75%; width: 100%; height: 1px; background: rgba(255,255,255,0.1);"></div>
+                            </div>
+                            
+                            <!-- Result Status -->
+                            <div id="result-status" style="padding: 15px; border-radius: 8px; text-align: center; background: rgba(231,76,60,0.2); border: 2px solid #e74c3c;">
+                                <div id="status-message" style="color: #e74c3c; font-weight: bold; font-size: 1.1rem;">Off by 161ml</div>
+                                <div id="status-detail" style="color: #ecf0f1; font-size: 0.85rem; margin-top: 5px; opacity: 0.8;">Need to increase the output</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                   
                 </div>
                 
                 <!-- Success Message -->

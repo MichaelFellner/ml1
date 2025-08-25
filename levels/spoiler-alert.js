@@ -157,7 +157,7 @@ function createSpoilerAlert() {
                                     <div class="ai-example-title">💬 ChatGPT</div>
                                     <div class="ai-example-input">
                                         <strong>Input:</strong><br>
-                                        "Write me a poem"
+                                        x = "Write me a poem"
                                     </div>
                                 </div>
                                 <div class="flip-card-back">
@@ -177,7 +177,7 @@ function createSpoilerAlert() {
                                     <div class="ai-example-title">📷 Image AI</div>
                                     <div class="ai-example-input">
                                         <strong>Input:</strong><br>
-                                        Photo of your pet
+                                        x = Photo of your pet
                                     </div>
                                 </div>
                                 <div class="flip-card-back">
@@ -197,7 +197,7 @@ function createSpoilerAlert() {
                                     <div class="ai-example-title">🎤 Voice AI</div>
                                     <div class="ai-example-input">
                                         <strong>Input:</strong><br>
-                                        "What's the weather?"
+                                        x = "What's the weather?"
                                     </div>
                                 </div>
                                 <div class="flip-card-back">
@@ -217,7 +217,7 @@ function createSpoilerAlert() {
                                     <div class="ai-example-title">🎬 Netflix AI</div>
                                     <div class="ai-example-input">
                                         <strong>Input:</strong><br>
-                                        Your watch history
+                                        x = Your watch history
                                     </div>
                                 </div>
                                 <div class="flip-card-back">

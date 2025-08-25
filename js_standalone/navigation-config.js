@@ -38,12 +38,12 @@ const NAVIGATION_CONFIG = {
             items: [
                 { id: "gradient-descent-intro", name: "Gradient Descent Introduction", func: "createGradientDescentPart1" },
                 { id: "balloon-inflation", name: "Balloon Inflation Challenge", func: "createBalloonInflationLevel" },
-                { id: "balloon-gradient", name: "AI Balloon Optimizer", func: "createBalloonGradientDescent" },
                 { id: "balloon-bts", name: "Behind the Scenes: Balloon Function", func: "createBehindTheScenesBalloon" },
+                { id: "balloon-gradient", name: "AI Balloon Optimizer", func: "createBalloonGradientDescent" },
                 { id: "gd1b", name: "Adding Bias Term", func: "createGradientDescentPart1b" },
                 { id: "bunny-feeding", name: "Bunny Feeding Challenge", func: "createBunnyFeedingLevel" },
-                { id: "bunny-gradient", name: "AI Bunny Feeder", func: "createBunnyGradientDescent" },
                 { id: "bunny-bts", name: "Behind the Scenes: Bunny Function", func: "createBehindTheScenesBunny" },
+                { id: "bunny-gradient", name: "AI Bunny Feeder", func: "createBunnyGradientDescent" },
                 { id: "coffee-manual", name: "Coffee Formula Discovery", func: "createCoffeeManualOptimizer" },
                 { id: "coffee-gradient", name: "Coffee Gradient Descent", func: "createCoffeeGradientDescent" },
                 //{ id: "balloon-inflation-behind-scenes", name: "Balloon: Behind the Mathematical Curtain", func: "createBalloonInflationBehindScenes" },
@@ -53,9 +53,10 @@ const NAVIGATION_CONFIG = {
         {
             title: "Deep Dive into Gradient Descent",
             items: [
+                { id: "gradient-descent-part2", name: "Core Concept 2: Gradient Descent (Part 2)", func: "createGradientDescentPart2" },
                 { id: "gradient-descent-overview", name: "How Gradient Descent Works", func: "createGradientDescentOverview" },
                 { id: "introduction-to-steps", name: "Introduction to Steps", func: "createIntroductionToSteps" },
-                { id: "step-size-teaching", name: "Step Size Teaching", func: "createStepSizeTeaching" },
+                //{ id: "step-size-teaching", name: "Step Size Teaching", func: "createStepSizeTeaching" },
                 { id: "pizza-production", name: "Pizza Production Challenge", func: "createPizzaProduction" },
                 { id: "pizza-production-behind-scenes", name: "Pizza: Two-Parameter Math Revealed", func: "createPizzaProductionBehindScenes" },
                 { id: "music-studio-mixer", name: "Music Studio Mixer", func: "createMusicStudioMixer" },
