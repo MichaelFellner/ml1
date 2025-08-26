@@ -148,6 +148,11 @@ function createBunnyFeedingLevel() {
                             🥕 Feed Bunny
                         </button>
                         
+                        <!-- Reset button -->
+                        <button id="reset-btn" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #ff9a56, #ff6347); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: all 0.3s; margin-top: 10px; display: none;">
+                            🔄 Reset to Try Again
+                        </button>
+                        
                         <!-- Success tracking -->
                         <div id="success-tracker" style="margin-top: 20px; padding: 15px; background: rgba(45,213,115,0.1); border-radius: 8px; border: 1px solid rgba(45,213,115,0.3); display: none;">
                             <div style="text-align: center; color: #2dd573; font-weight: bold;">
@@ -161,11 +166,12 @@ function createBunnyFeedingLevel() {
                         <h3 style="margin: 0 0 15px 0; color: #333; text-align: center;">Current Bunny</h3>
                         
                         <!-- Bunny visualization -->
-                        <div style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 10px; margin-bottom: 15px;">
+                        <div id="bunny-viz" style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 10px; margin-bottom: 15px; position: relative;">
                             <div id="bunny-emoji" style="font-size: 80px; margin-bottom: 10px;">🐰</div>
                             <div style="font-size: 1.1rem; color: #333;">
                                 Weight: <span id="bunny-weight" style="font-weight: bold; color: #667eea; font-size: 1.3rem;">2</span> kg
                             </div>
+                            <div id="bunny-status" style="font-size: 1.2rem; font-weight: bold; margin-top: 10px; height: 30px;"></div>
                         </div>
                         
                         <!-- Result display -->
@@ -174,7 +180,10 @@ function createBunnyFeedingLevel() {
                             <div style="font-size: 0.9rem; color: #666;">
                                 You gave: <span id="given-hay" style="font-weight: bold;">0</span> units of hay<br>
                                 Needed: <span id="needed-hay" style="font-weight: bold;">0</span> units of hay<br>
-                                Loss: <span id="loss-value" style="font-weight: bold; color: #ff6347;">0</span>
+                                This bunny's loss: <span id="loss-value" style="font-weight: bold; color: #ff6347;">0</span><br>
+                                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd;">
+                                    Total loss for all 4 bunnies: <span id="total-loss" style="font-weight: bold; color: #ff6347; font-size: 1.1rem;">0</span>
+                                </div>
                             </div>
                         </div>
                         
@@ -248,6 +257,17 @@ function setupBunnyLevel() {
     /** @type {Set<number>} Set of bunny weights that have been fed correctly */
     let correctBunnies = new Set();
     
+    /** @type {Object} Stores the state of each bunny after feeding */
+    let bunnyStates = {
+        2: { fed: false, emoji: '🐰', loss: 0, status: '', yourAnswer: 0, correctAnswer: 0, accuracy: 0 },
+        4: { fed: false, emoji: '🐰', loss: 0, status: '', yourAnswer: 0, correctAnswer: 0, accuracy: 0 },
+        6: { fed: false, emoji: '🐰', loss: 0, status: '', yourAnswer: 0, correctAnswer: 0, accuracy: 0 },
+        8: { fed: false, emoji: '🐰', loss: 0, status: '', yourAnswer: 0, correctAnswer: 0, accuracy: 0 }
+    };
+    
+    /** @type {boolean} Whether feeding has been attempted with current parameters */
+    let hasFedWithCurrentParams = false;
+    
     // DOM element references using utility function
     /** @type {HTMLInputElement} Range slider for adjusting w parameter (0-10) */
     const wSlider = getElementById('w-slider');
@@ -258,8 +278,40 @@ function setupBunnyLevel() {
     /** @type {HTMLButtonElement} Button to trigger bunny feeding attempt */
     const feedBtn = getElementById('feed-btn');
     
+    /** @type {HTMLButtonElement} Button to reset feeding state */
+    const resetBtn = getElementById('reset-btn');
+    
     /** @type {NodeListOf<HTMLButtonElement>} Buttons for selecting bunny weight */
     const bunnyButtons = document.querySelectorAll('.bunny-btn');
+    
+    /**
+     * Calculates total loss across all bunnies
+     */
+    function calculateTotalLoss() {
+        const w = clamp(parseFloat(wSlider.value), 0, 10);
+        const b = clamp(parseFloat(bSlider.value), 0, 20);
+        let totalLoss = 0;
+        
+        [2, 4, 6, 8].forEach(weight => {
+            const yourAnswer = w * weight + b;
+            const correctAnswer = TRUE_W * weight + TRUE_B;
+            totalLoss += Math.abs(yourAnswer - correctAnswer);
+        });
+        
+        return totalLoss;
+    }
+    
+    /**
+     * Updates the bunny button emojis based on their states
+     */
+    function updateBunnyButtons() {
+        bunnyButtons.forEach(btn => {
+            const weight = parseInt(btn.dataset.weight);
+            const state = bunnyStates[weight];
+            const emoji = state.fed ? state.emoji : '🐰';
+            btn.innerHTML = `${weight}kg ${emoji}`;
+        });
+    }
     
     /**
      * Updates the formula display and parameter values using utility functions
@@ -289,96 +341,204 @@ function setupBunnyLevel() {
         
         const result = w * currentBunnyWeight + b;
         if (formulaResult) formulaResult.textContent = formatNumber(result, 1);
+        
+        // Update current bunny display if it has been fed with current params
+        if (hasFedWithCurrentParams && bunnyStates[currentBunnyWeight].fed) {
+            displayBunnyState(currentBunnyWeight);
+        }
     }
     
     /**
-     * Handles bunny feeding attempt using utility functions for validation and formatting
+     * Displays the state of a specific bunny
+     */
+    function displayBunnyState(weight) {
+        const state = bunnyStates[weight];
+        const bunnyEmoji = getElementById('bunny-emoji');
+        const bunnyStatus = getElementById('bunny-status');
+        const bunnyViz = getElementById('bunny-viz');
+        const resultDisplay = getElementById('result-display');
+        const resultMessage = getElementById('result-message');
+        
+        if (state.fed) {
+            bunnyEmoji.textContent = state.emoji;
+            bunnyStatus.textContent = state.status;
+            
+            // Update background color and message based on state
+            if (state.emoji === '😊') {
+                bunnyStatus.style.color = '#2dd573';
+                bunnyViz.style.background = 'linear-gradient(135deg, rgba(45,213,115,0.1), rgba(45,213,115,0.2))';
+                if (resultDisplay) {
+                    resultDisplay.style.background = 'rgba(45,213,115,0.1)';
+                    resultDisplay.style.border = '2px solid rgba(45,213,115,0.3)';
+                }
+                if (resultMessage) {
+                    resultMessage.style.color = '#2dd573';
+                    resultMessage.textContent = `🎉 Perfect! Accuracy: ${formatNumber(state.accuracy, 0)}%`;
+                }
+            } else if (state.emoji === '😢') {
+                bunnyStatus.style.color = '#f3960a';
+                bunnyViz.style.background = 'linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,215,0,0.2))';
+                if (resultDisplay) {
+                    resultDisplay.style.background = 'rgba(255,215,0,0.1)';
+                    resultDisplay.style.border = '2px solid rgba(255,215,0,0.3)';
+                }
+                if (resultMessage) {
+                    resultMessage.style.color = '#f3960a';
+                    resultMessage.textContent = `⚠️ Not enough food! Accuracy: ${formatNumber(state.accuracy, 0)}%`;
+                }
+            } else if (state.emoji === '😴') {
+                bunnyStatus.style.color = '#ff6347';
+                bunnyViz.style.background = 'linear-gradient(135deg, rgba(255,99,71,0.1), rgba(255,99,71,0.2))';
+                if (resultDisplay) {
+                    resultDisplay.style.background = 'rgba(255,99,71,0.1)';
+                    resultDisplay.style.border = '2px solid rgba(255,99,71,0.3)';
+                }
+                if (resultMessage) {
+                    resultMessage.style.color = '#ff6347';
+                    resultMessage.textContent = `⚠️ Too much food! Accuracy: ${formatNumber(state.accuracy, 0)}%`;
+                }
+            }
+            
+            // Show result display with this bunny's specific data
+            if (resultDisplay) {
+                resultDisplay.style.display = 'block';
+                
+                // Update this bunny's specific values
+                const givenHay = getElementById('given-hay');
+                const neededHay = getElementById('needed-hay');
+                const lossValue = getElementById('loss-value');
+                
+                if (givenHay) givenHay.textContent = formatNumber(state.yourAnswer, 1);
+                if (neededHay) neededHay.textContent = formatNumber(state.correctAnswer, 1);
+                if (lossValue) lossValue.textContent = formatNumber(state.loss, 1);
+                
+                // Update total loss
+                const totalLoss = getElementById('total-loss');
+                if (totalLoss) totalLoss.textContent = formatNumber(calculateTotalLoss(), 1);
+            }
+        } else {
+            bunnyEmoji.textContent = '🐰';
+            bunnyStatus.textContent = '';
+            bunnyViz.style.background = '#f8f9fa';
+            if (resultDisplay) resultDisplay.style.display = 'none';
+        }
+    }
+    
+    /**
+     * Handles bunny feeding attempt - feeds ALL bunnies with the current formula
      * 
-     * Calculates the accuracy of current parameter settings, provides appropriate
-     * feedback through animations and messages, and handles level completion.
+     * Calculates the result for all four bunnies using the current w and b values,
+     * updates each bunny's state, and displays the currently selected bunny's results.
      * 
      * @function feedBunny
      * @returns {void} Processes attempt and updates UI
      * 
      * @description
      * Process flow:
-     * 1. Calculate user's answer: w × currentBunnyWeight + b
-     * 2. Compare with correct answer: 5 × currentBunnyWeight + 10
-     * 3. Determine accuracy and loss
-     * 4. Provide visual feedback based on result:
-     *    - Perfect (loss < 0.5): Green success message, happy bunny
-     *    - Too little: Yellow warning, sad bunny
-     *    - Too much: Red error, overfed bunny
-     * 5. Check for level completion (w = 5 AND b = 10)
-     * 6. Apply shake animation to result display
+     * 1. Apply formula to ALL bunnies: w × weight + b for each
+     * 2. Calculate each bunny's loss and accuracy
+     * 3. Update all bunny states (happy, hungry, or overfed)
+     * 4. Display the currently selected bunny's detailed results
+     * 5. Update all bunny button emojis
+     * 6. Check for perfect formula discovery (w = 5 AND b = 10)
      */
     function feedBunny() {
         const w = clamp(parseFloat(wSlider.value), 0, 10);
         const b = clamp(parseFloat(bSlider.value), 0, 20);
         
-        const yourAnswer = w * currentBunnyWeight + b;
-        const correctAnswer = TRUE_W * currentBunnyWeight + TRUE_B;
-        const loss = Math.abs(yourAnswer - correctAnswer);
+        hasFedWithCurrentParams = true;
+        let allPerfect = true;
         
-        // Calculate accuracy
-        const accuracy = calculateAccuracy(yourAnswer, correctAnswer);
-        
-        // Update result display using utility functions
-        const resultDisplay = getElementById('result-display');
-        const resultMessage = getElementById('result-message');
-        const bunnyEmoji = getElementById('bunny-emoji');
-        
-        if (!resultDisplay || !resultMessage || !bunnyEmoji) {
-            console.warn('Could not find required elements for result display');
-            return;
-        }
-        
-        resultDisplay.style.display = 'block';
-        
-        // Update numerical displays with formatting
-        const givenHay = getElementById('given-hay');
-        const neededHay = getElementById('needed-hay');
-        const lossValue = getElementById('loss-value');
-        
-        if (givenHay) givenHay.textContent = formatNumber(yourAnswer, 1);
-        if (neededHay) neededHay.textContent = formatNumber(correctAnswer, 1);
-        if (lossValue) lossValue.textContent = formatNumber(loss, 1);
-        
-        
-        if (loss < 0.5) {
-            // Perfect feeding!
-            resultDisplay.style.background = 'rgba(45,213,115,0.1)';
-            resultDisplay.style.border = '2px solid rgba(45,213,115,0.3)';
-            resultMessage.style.color = '#2dd573';
-            resultMessage.textContent = `🎉 Perfect! The bunny is happy! Accuracy: ${formatNumber(accuracy, 0)}%`;
-            bunnyEmoji.textContent = '🐰';
+        // Feed ALL bunnies with the current formula
+        [2, 4, 6, 8].forEach(weight => {
+            const yourAnswer = w * weight + b;
+            const correctAnswer = TRUE_W * weight + TRUE_B;
+            const loss = Math.abs(yourAnswer - correctAnswer);
+            const accuracy = calculateAccuracy(yourAnswer, correctAnswer);
             
-            // Mark this bunny as correctly fed
-            correctBunnies.add(currentBunnyWeight);
+            // Update this bunny's state
+            bunnyStates[weight].fed = true;
+            bunnyStates[weight].yourAnswer = yourAnswer;
+            bunnyStates[weight].correctAnswer = correctAnswer;
+            bunnyStates[weight].loss = loss;
+            bunnyStates[weight].accuracy = accuracy;
             
-            // Check if formula is perfect
-            if (w === TRUE_W && b === TRUE_B) {
-                const successTracker = getElementById('success-tracker');
-                if (successTracker) successTracker.style.display = 'block';
+            if (loss < 0.5) {
+                // Perfect feeding!
+                bunnyStates[weight].emoji = '😊';
+                bunnyStates[weight].status = 'Happy & Full! 😊';
+                correctBunnies.add(weight);
+            } else if (yourAnswer < correctAnswer) {
+                // Too little hay
+                bunnyStates[weight].emoji = '😢';
+                bunnyStates[weight].status = 'Still Hungry! 😢';
+                allPerfect = false;
+            } else {
+                // Too much hay
+                bunnyStates[weight].emoji = '😴';
+                bunnyStates[weight].status = 'Food Coma! 😴';
+                allPerfect = false;
             }
-        } else if (yourAnswer < correctAnswer) {
-            // Too little hay
-            resultDisplay.style.background = 'rgba(255,215,0,0.1)';
-            resultDisplay.style.border = '2px solid rgba(255,215,0,0.3)';
-            resultMessage.style.color = '#f3960a';
-            resultMessage.textContent = `😔 The bunny is still a little hungry... Accuracy: ${formatNumber(accuracy, 0)}%`;
-            bunnyEmoji.textContent = '😢';
-        } else {
-            // Too much hay
-            resultDisplay.style.background = 'rgba(255,99,71,0.1)';
-            resultDisplay.style.border = '2px solid rgba(255,99,71,0.3)';
-            resultMessage.style.color = '#ff6347';
-            resultMessage.textContent = `😴 The bunny ate too much and had to take a nap! Accuracy: ${formatNumber(accuracy, 0)}%`;
-            bunnyEmoji.textContent = '😵';
+        });
+        
+        // Display the currently selected bunny's results
+        displayBunnyState(currentBunnyWeight);
+        
+        // Update all bunny button emojis
+        updateBunnyButtons();
+        
+        // Check if formula is perfect
+        if (w === TRUE_W && b === TRUE_B && allPerfect) {
+            const successTracker = getElementById('success-tracker');
+            if (successTracker) successTracker.style.display = 'block';
         }
         
-        // Apply shake animation
-        shake(resultDisplay, 300);
+        // Disable feed button and show reset button
+        feedBtn.disabled = true;
+        feedBtn.style.opacity = '0.5';
+        feedBtn.style.cursor = 'not-allowed';
+        resetBtn.style.display = 'block';
+        
+        // Apply shake animation to result display
+        const resultDisplay = getElementById('result-display');
+        if (resultDisplay) {
+            shake(resultDisplay, 300);
+        }
+    }
+    
+    /**
+     * Reset feeding state for all bunnies
+     */
+    function resetFeeding() {
+        // Reset all bunny states
+        Object.keys(bunnyStates).forEach(weight => {
+            bunnyStates[weight] = { fed: false, emoji: '🐰', loss: 0, status: '', yourAnswer: 0, correctAnswer: 0, accuracy: 0 };
+        });
+        
+        hasFedWithCurrentParams = false;
+        
+        // Reset UI
+        const bunnyEmoji = getElementById('bunny-emoji');
+        const bunnyStatus = getElementById('bunny-status');
+        const bunnyViz = getElementById('bunny-viz');
+        const resultDisplay = getElementById('result-display');
+        
+        if (bunnyEmoji) bunnyEmoji.textContent = '🐰';
+        if (bunnyStatus) bunnyStatus.textContent = '';
+        if (bunnyViz) bunnyViz.style.background = '#f8f9fa';
+        if (resultDisplay) resultDisplay.style.display = 'none';
+        
+        // Update bunny buttons
+        updateBunnyButtons();
+        
+        // Enable feed button and hide reset button
+        feedBtn.disabled = false;
+        feedBtn.style.opacity = '1';
+        feedBtn.style.cursor = 'pointer';
+        resetBtn.style.display = 'none';
+        
+        // Update formula display
+        updateFormula();
     }
     
     // Bunny selector
@@ -397,12 +557,11 @@ function setupBunnyLevel() {
             // Update current bunny using utility functions
             currentBunnyWeight = parseInt(btn.dataset.weight);
             const bunnyWeight = getElementById('bunny-weight');
-            const bunnyEmojiDisplay = getElementById('bunny-emoji');
-            const resultDisplay = getElementById('result-display');
             
             if (bunnyWeight) bunnyWeight.textContent = currentBunnyWeight;
-            if (bunnyEmojiDisplay) bunnyEmojiDisplay.textContent = '🐰';
-            if (resultDisplay) resultDisplay.style.display = 'none';
+            
+            // Display this bunny's current state
+            displayBunnyState(currentBunnyWeight);
             
             // Update formula display
             updateFormula();
@@ -416,14 +575,29 @@ function setupBunnyLevel() {
     // Feed button
     feedBtn.addEventListener('click', feedBunny);
     
+    // Reset button
+    resetBtn.addEventListener('click', resetFeeding);
+    
     // Add hover effect to feed button
     feedBtn.addEventListener('mouseenter', () => {
-        feedBtn.style.transform = 'translateY(-2px)';
-        feedBtn.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+        if (!feedBtn.disabled) {
+            feedBtn.style.transform = 'translateY(-2px)';
+            feedBtn.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+        }
     });
     feedBtn.addEventListener('mouseleave', () => {
         feedBtn.style.transform = 'translateY(0)';
         feedBtn.style.boxShadow = 'none';
+    });
+    
+    // Add hover effect to reset button
+    resetBtn.addEventListener('mouseenter', () => {
+        resetBtn.style.transform = 'translateY(-2px)';
+        resetBtn.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+    });
+    resetBtn.addEventListener('mouseleave', () => {
+        resetBtn.style.transform = 'translateY(0)';
+        resetBtn.style.boxShadow = 'none';
     });
     
     // Add shake animation CSS if not already present

@@ -17,7 +17,7 @@ function createCoffeeManualOptimizer() {
     container.innerHTML = `
         <div class="current-level">
             <div class="level-content celebration" style="padding: 20px; max-width: 1000px; margin: 0 auto;">
-                <h1 style="font-size: 1.8rem; margin: 0 0 15px 0; text-align: center; color: #2c3e50;">Coffee Formula Discovery</h1>
+                <h1 style="font-size: 1.8rem; margin: 0 0 15px 0; text-align: center; color: #2c3e50;">4 Variable Challenge: Coffee Formula Discovery</h1>
                 
                 <!-- Explanation Box -->
                 <div style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; padding: 18px; margin-bottom: 20px; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">

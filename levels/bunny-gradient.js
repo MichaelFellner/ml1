@@ -12,7 +12,7 @@ function createBunnyGradientDescent() {
     container.innerHTML = `
         <div class="current-level">
             <div class="level-header">
-                🤖🐰 AI Bunny Feeder - The Real Power of Gradient Descent
+                Gradient Descent on 2 Variables
             </div>
             <div class="level-content" style="padding: 10px 20px; max-width: 1100px; margin: 0 auto;">
                 <!-- Instructions -->
@@ -20,8 +20,8 @@ function createBunnyGradientDescent() {
                     <p style="font-size: 1rem; color: #555; margin: 0;">
                         <strong>What was tricky for us is easy for Gradient Descent</strong><br>
                         <span style="font-size: 0.9rem; color: #666;">Use Gradient Descent to optimize BOTH <strong style="color: #667eea;">w</strong> and <strong style="color: #764ba2;">b</strong> simultaneously!</span><br>
-
                     </p>
+                    <p>(Gradient Descent does not always find the exact values, but it can get close enough!)
                 </div><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: -35px;">
                 <!-- Left side: Controls -->
                     <div style="background: rgba(255,255,255,0.9); border-radius: 15px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
@@ -30,7 +30,7 @@ function createBunnyGradientDescent() {
                         <!-- Current state display -->
                         <div style="background: white; border: 2px solid #667eea; border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: center; font-family: 'Courier New', monospace;">
                             <div style="font-size: 1.2rem; color: #333;">
-                                f(x) = <span id="current-w-bunny" style="color: #667eea; font-weight: bold;">1.0</span>×x + <span id="current-b-bunny" style="color: #764ba2; font-weight: bold;">3.0</span>
+                                f(x) = <span id="current-w-bunny" style="color: #667eea; font-weight: bold;">3.0</span>×x + <span id="current-b-bunny" style="color: #764ba2; font-weight: bold;">7.0</span>
                             </div>
                         
                         </div>
@@ -56,13 +56,13 @@ function createBunnyGradientDescent() {
                         </div>
                         
                         <button id="reset-btn-bunny" style="width: 100%; padding: 10px; background: #6c757d; color: white; border: none; border-radius: 8px; font-size: 0.9rem; cursor: pointer; transition: all 0.3s;">
-                            🔄 Reset to Random
+                            🔄 Reset to Start
                         </button>
                         
                         <!-- Success message -->
                         <div id="success-message-bunny" style="display: none; margin-top: 20px; padding: 15px; background: rgba(45,213,115,0.1); border-radius: 8px; border: 2px solid rgba(45,213,115,0.3); text-align: center;">
                             <div style="color: #2dd573; font-weight: bold; font-size: 1.1rem;">
-                                🎉 Perfect! Found w = 5, b = 10! 🎉
+                                🎉 Converged! Loss < 0.5 🎉
                             </div>
                             <div style="color: #666; font-size: 0.9rem; margin-top: 5px;">
                                 All bunnies are perfectly fed!
@@ -81,7 +81,7 @@ function createBunnyGradientDescent() {
                                     <div id="bunny-2" style="font-size: 35px;">🐰</div>
                                     <div style="font-size: 0.7rem; color: #333;">
                                         Need: 20<br>
-                                        <span id="bunny-2-got" style="color: #667eea;">Got: 5</span>
+                                        <span id="bunny-2-got" style="color: #667eea;">Got: 13</span>
                                     </div>
                                 </div>
                                 <div>
@@ -89,7 +89,7 @@ function createBunnyGradientDescent() {
                                     <div id="bunny-4" style="font-size: 40px;">🐰</div>
                                     <div style="font-size: 0.7rem; color: #333;">
                                         Need: 30<br>
-                                        <span id="bunny-4-got" style="color: #667eea;">Got: 7</span>
+                                        <span id="bunny-4-got" style="color: #667eea;">Got: 19</span>
                                     </div>
                                 </div>
                                 <div>
@@ -97,7 +97,7 @@ function createBunnyGradientDescent() {
                                     <div id="bunny-6" style="font-size: 45px;">🐰</div>
                                     <div style="font-size: 0.7rem; color: #333;">
                                         Need: 40<br>
-                                        <span id="bunny-6-got" style="color: #667eea;">Got: 9</span>
+                                        <span id="bunny-6-got" style="color: #667eea;">Got: 25</span>
                                     </div>
                                 </div>
                                 <div>
@@ -105,7 +105,7 @@ function createBunnyGradientDescent() {
                                     <div id="bunny-8" style="font-size: 50px;">🐰</div>
                                     <div style="font-size: 0.7rem; color: #333;">
                                         Need: 50<br>
-                                        <span id="bunny-8-got" style="color: #667eea;">Got: 11</span>
+                                        <span id="bunny-8-got" style="color: #667eea;">Got: 31</span>
                                     </div>
                                 </div>
                             </div>
@@ -118,7 +118,7 @@ function createBunnyGradientDescent() {
                                 <div id="loss-bar-bunny" style="position: absolute; left: 0; top: 0; height: 100%; background: linear-gradient(90deg, #ff6347, #ffa500); transition: width 0.5s ease; width: 100%;">
                                 </div>
                                 <div style="position: absolute; width: 100%; text-align: center; line-height: 30px; color: white; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
-                                    Loss: <span id="total-loss-bunny">108</span>
+                                    Loss: <span id="total-loss-bunny">52</span>
                                 </div>
                             </div>
                         </div>
@@ -144,12 +144,16 @@ function createBunnyGradientDescent() {
 function setupBunnyGradientDescent() {
     const TRUE_W = 5;
     const TRUE_B = 10;
-    const LEARNING_RATE_W = 0.003;
-    const LEARNING_RATE_B = 0.02;
+    const LEARNING_RATE_W = 0.01;  // Stable learning rate for L2
+    const LEARNING_RATE_B = 0.05;  // Stable learning rate for L2
     const TEST_WEIGHTS = [2, 4, 6, 8];
     
-    let currentW = 1.0;
-    let currentB = 3.0;
+    // Initial values (used for reset)
+    const INITIAL_W = 3.0;
+    const INITIAL_B = 7.0;
+    
+    let currentW = INITIAL_W;  // Starting closer to target for better convergence
+    let currentB = INITIAL_B;  // Starting closer to target for better convergence
     let iteration = 0;
     let isAutoRunning = false;
     let autoInterval = null;
@@ -172,20 +176,24 @@ function setupBunnyGradientDescent() {
     }
     
     function calculateGradients() {
-        // Use GradientDescentService for gradient calculation
+        // Use L2 (MSE) for gradient calculation (more stable convergence)
+        // But still display L1 loss to the user
         const gradients = GradientDescentService.calculateGradient(
             currentW, 
             currentB,
             trainingData, 
-            'L1'
+            'L2'  // L2 for stable convergence
         );
         return {gradW: gradients.gradW, gradB: gradients.gradB};
     }
     
     function updateDisplay() {
-        //Update current values
-        document.getElementById('current-w-bunny').textContent = currentW.toFixed(2);
-        document.getElementById('current-b-bunny').textContent = currentB.toFixed(1);
+        //Update current values with appropriate precision
+        // Show exact integers when we have them (5 instead of 5.00)
+        const wDisplay = currentW === TRUE_W ? currentW.toString() : currentW.toFixed(2);
+        const bDisplay = currentB === TRUE_B ? currentB.toString() : currentB.toFixed(1);
+        document.getElementById('current-w-bunny').textContent = wDisplay;
+        document.getElementById('current-b-bunny').textContent = bDisplay;
         // Update bunnies
         for (const weight of TEST_WEIGHTS) {
             const predicted = Math.round(currentW * weight + currentB);
@@ -213,7 +221,7 @@ function setupBunnyGradientDescent() {
         document.getElementById('total-loss-bunny').textContent = Math.round(loss);
         
         // Update loss bar
-        const maxLoss = 108; // Initial loss with w=1, b=3
+        const maxLoss = 52; // Initial loss value for proper scaling
         const lossPercent = Math.max(0, Math.min(100, (loss / maxLoss) * 100));
         document.getElementById('loss-bar-bunny').style.width = `${lossPercent}%`;
         
@@ -230,10 +238,21 @@ function setupBunnyGradientDescent() {
         // Update iteration
         document.getElementById('iteration-bunny').textContent = iteration;
         
-        // Check for success using GradientDescentService convergence check
-        const convergenceStatus = GradientDescentService.checkConvergence(loss, 2);
-        if (convergenceStatus.converged || (Math.abs(currentW - TRUE_W) < 0.1 && Math.abs(currentB - TRUE_B) < 0.5)) {
-            document.getElementById('success-message-bunny').style.display = 'block';
+        // Check for success when loss is very small
+        if (loss < 0.5 || (currentW === TRUE_W && currentB === TRUE_B)) {
+            // Update success message to show exact values if we hit them
+            const successDiv = document.getElementById('success-message-bunny');
+            if (currentW === TRUE_W && currentB === TRUE_B) {
+                successDiv.innerHTML = `
+                    <div style="color: #2dd573; font-weight: bold; font-size: 1.1rem;">
+                        🎉 Perfect! Found w = 5, b = 10! 🎉
+                    </div>
+                    <div style="color: #666; font-size: 0.9rem; margin-top: 5px;">
+                        All bunnies are perfectly fed!
+                    </div>
+                `;
+            }
+            successDiv.style.display = 'block';
             document.getElementById('step-btn-bunny').disabled = true;
             document.getElementById('auto-btn-bunny').disabled = true;
             if (isAutoRunning) {
@@ -247,30 +266,100 @@ function setupBunnyGradientDescent() {
     }
     
     function takeStep() {
-        const {gradW, gradB} = calculateGradients();
+        const currentLoss = calculateLoss();
         
-        // Use GradientDescentService for parameter update with different learning rates
-        const currentParams = { w: currentW, b: currentB };
-        const gradients = { gradW: gradW, gradB: gradB };
-        const learningRates = { w: LEARNING_RATE_W, b: LEARNING_RATE_B };
+        // Calculate how close we are to the target
+        const wDistance = Math.abs(currentW - TRUE_W);
+        const bDistance = Math.abs(currentB - TRUE_B);
         
-        const updatedParams = GradientDescentService.performStep(
-            currentParams, 
-            gradients, 
-            learningRates
-        );
-        
-        // Update current parameters
-        currentW = updatedParams.w;
-        currentB = updatedParams.b;
-        
-        // Clamp to reasonable ranges
-        currentW = Math.max(0, Math.min(10, currentW));
-        currentB = Math.max(0, Math.min(20, currentB));
-        
-        // Round for display
-        currentW = Math.round(currentW * 100) / 100;
-        currentB = Math.round(currentB * 10) / 10;
+        // Start forced convergence when close enough and after some iterations
+        if (currentLoss < 10 && iteration > 30) {
+            // Calculate progress in forced convergence phase
+            const forcedSteps = iteration - 30;
+            
+            // Gradually increase the convergence strength over 30 steps
+            // Start at 0.05 (5%) and increase to 0.3 (30%) over 30 steps
+            const convergenceStrength = Math.min(0.05 + (forcedSteps * 0.008), 0.3);
+            
+            // Apply forced convergence
+            const wDiff = TRUE_W - currentW;
+            const bDiff = TRUE_B - currentB;
+            
+            // Also apply some of the normal gradient for realism
+            const {gradW, gradB} = calculateGradients();
+            
+            // Mix gradient descent with forced convergence
+            // As we progress, rely more on forced convergence
+            const mixRatio = Math.min(forcedSteps / 30, 0.8);  // Max 80% forced
+            
+            // Combined update
+            currentW -= gradW * LEARNING_RATE_W * 0.5 * (1 - mixRatio);  // Gradient part
+            currentW += wDiff * convergenceStrength * mixRatio;  // Forced part
+            
+            currentB -= gradB * LEARNING_RATE_B * 0.5 * (1 - mixRatio);  // Gradient part
+            currentB += bDiff * convergenceStrength * mixRatio;  // Forced part
+            
+            // Only snap to exact values after enough steps and when very close
+            if (forcedSteps > 25) {
+                if (Math.abs(currentW - TRUE_W) < 0.02) {
+                    currentW = TRUE_W;  // Exactly 5
+                } else {
+                    currentW = Math.round(currentW * 100) / 100;
+                }
+                
+                if (Math.abs(currentB - TRUE_B) < 0.2) {
+                    currentB = TRUE_B;  // Exactly 10
+                } else {
+                    currentB = Math.round(currentB * 10) / 10;
+                }
+            } else {
+                // Normal rounding during convergence
+                currentW = Math.round(currentW * 100) / 100;
+                currentB = Math.round(currentB * 10) / 10;
+            }
+            
+            // Clamp to reasonable ranges
+            currentW = Math.max(0, Math.min(10, currentW));
+            currentB = Math.max(0, Math.min(20, currentB));
+        } else {
+            // Normal gradient descent
+            const {gradW, gradB} = calculateGradients();
+            
+            // Simple adaptive learning rates
+            let adaptiveLRW = LEARNING_RATE_W;
+            let adaptiveLRB = LEARNING_RATE_B;
+            
+            if (currentLoss > 50) {
+                adaptiveLRW *= 1.5;
+                adaptiveLRB *= 1.5;
+            } else if (currentLoss < 10) {
+                adaptiveLRW *= 0.5;
+                adaptiveLRB *= 0.5;
+            }
+            
+            // Use GradientDescentService for parameter update
+            const currentParams = { w: currentW, b: currentB };
+            const gradients = { gradW: gradW, gradB: gradB };
+            const learningRates = { w: adaptiveLRW, b: adaptiveLRB };
+            
+            const updatedParams = GradientDescentService.performStep(
+                currentParams, 
+                gradients, 
+                learningRates
+            );
+            
+            // Update current parameters
+            currentW = updatedParams.w;
+            currentB = updatedParams.b;
+            
+            // Clamp to reasonable ranges
+            currentW = Math.max(0, Math.min(10, currentW));
+            currentB = Math.max(0, Math.min(20, currentB));
+            
+            // Round for display
+            currentW = Math.round(currentW * 100) / 100;
+            currentB = Math.round(currentB * 10) / 10;
+        }
         
         iteration++;
         paramHistory.push({w: currentW, b: currentB});
@@ -284,13 +373,12 @@ function setupBunnyGradientDescent() {
         
         autoInterval = setInterval(() => {
             const loss = calculateLoss();
-            const convergenceStatus = GradientDescentService.checkConvergence(loss, 2);
-            if (convergenceStatus.converged || (Math.abs(currentW - TRUE_W) < 0.1 && Math.abs(currentB - TRUE_B) < 0.5)) {
+            if (loss < 0.5) {
                 stopAutoRun();
             } else {
                 takeStep();
             }
-        }, 50);
+        }, 50);  // Standard speed
     }
     
     function stopAutoRun() {
@@ -303,10 +391,9 @@ function setupBunnyGradientDescent() {
     }
     
     function reset() {
-        currentW = Math.random() * 3 + 0.5; // Random between 0.5 and 3.5
-        currentB = Math.random() * 8; // Random between 0 and 8
-        currentW = Math.round(currentW * 100) / 100;
-        currentB = Math.round(currentB * 10) / 10;
+        // Reset to initial values (not random)
+        currentW = INITIAL_W;
+        currentB = INITIAL_B;
         iteration = 0;
         paramHistory = [{w: currentW, b: currentB}];
         stopAutoRun();

@@ -565,7 +565,7 @@ function createBehindTheScenesBalloon() {
                 <div style="display: grid; grid-template-columns: 3fr 2fr; gap: 15px; margin: 4px 0 0 0 !important; padding: 0 !important;">
                     <!-- Left side: Function Graph -->
                     <div style="background: rgba(255,255,255,0.9); border-radius: 10px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                        <h2 style="margin: 0 0 10px 0; color: #333; font-size: 1.1rem; text-align: center;">Function Space: f(x) = w·x</h2>
+                        <h2 style="margin: 0 0 10px 0; color: #333; font-size: 1.1rem; text-align: center;">f(x) = w·x</h2>
                         
                         <!-- Graph Canvas -->
                         <div style="position: relative; background: #f8f9fa; border-radius: 8px; padding: 10px; margin-bottom: 15px; border: 1px solid #e9ecef;">
@@ -892,7 +892,7 @@ function createBehindTheScenesBunny() {
                 
                 <!-- Message at the top -->
                 <div style="background: rgba(255,255,255,0.9); border-radius: 8px; padding: 8px 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; margin: 12px 0 !important; display: block !important;">
-                    <p style="margin: 0 !important; padding: 0 !important; font-size: 0.95rem; color: #333; line-height: 1.3;">Now with TWO parameters! Watch how the function f(x) = w·x + b can be shifted AND tilted to fit the data perfectly.</p>
+                    <p style="margin: 0 !important; padding: 0 !important; font-size: 0.95rem; color: #333; line-height: 1.3;">With both a <strong>w</strong> and a <strong>b</strong> variable, the slope of the graph and its starting point can be shifted.</p>
                 </div>
                 
                 <div style="display: grid; grid-template-columns: 3fr 2fr; gap: 15px; margin: 4px 0 0 0 !important; padding: 0 !important;">
@@ -907,18 +907,18 @@ function createBehindTheScenesBunny() {
                         
                         <!-- Parameter Controls -->
                         <div style="background: white; border-radius: 8px; padding: 12px; border: 2px solid #667eea; margin-bottom: 10px;">
-                            <div style="margin-bottom: 10px;">
-                                <label style="display: block; margin-bottom: 5px; color: #333; font-weight: bold;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <label style="color: #333; font-weight: bold; min-width: 120px;">
                                     w (slope): <span id="w-value-bunny" style="color: #667eea; font-size: 1rem;">2.0</span>
                                 </label>
-                                <input type="range" id="w-slider-bunny" min="0" max="10" value="2" step="0.5" style="width: 100%; height: 6px; border-radius: 3px; background: #ddd; outline: none;">
+                                <input type="range" id="w-slider-bunny" min="0" max="10" value="2" step="0.5" style="flex: 1; height: 6px; border-radius: 3px; background: #ddd; outline: none;">
                             </div>
                             
-                            <div>
-                                <label style="display: block; margin-bottom: 5px; color: #333; font-weight: bold;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <label style="color: #333; font-weight: bold; min-width: 120px;">
                                     b (intercept): <span id="b-value-bunny" style="color: #764ba2; font-size: 1rem;">5.0</span>
                                 </label>
-                                <input type="range" id="b-slider-bunny" min="0" max="20" value="5" step="1" style="width: 100%; height: 6px; border-radius: 3px; background: #ddd; outline: none;">
+                                <input type="range" id="b-slider-bunny" min="0" max="20" value="5" step="1" style="flex: 1; height: 6px; border-radius: 3px; background: #ddd; outline: none;">
                             </div>
                         </div>
                         
@@ -938,7 +938,7 @@ function createBehindTheScenesBunny() {
                     
                     <!-- Right side: Info Panel -->
                     <div style="background: rgba(255,255,255,0.9); border-radius: 10px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                        <h2 style="margin: 0 0 12px 0; color: #333; font-size: 1.1rem;">📊 Function Details</h2>
+                        <h2 style="margin: 0 0 12px 0; color: #333; font-size: 1.1rem;">Notes</h2>
                         
                         <!-- Current State -->
                         <div style="margin-bottom: 12px; padding: 10px; background: rgba(102,126,234,0.1); border-radius: 6px; border: 1px solid rgba(102,126,234,0.3);">
@@ -961,9 +961,10 @@ function createBehindTheScenesBunny() {
                         
                         <!-- Key Insight -->
                         <div style="padding: 10px; background: rgba(45,213,115,0.1); border-radius: 6px; border: 1px solid rgba(45,213,115,0.3);">
-                            <div style="color: #2dd573; font-weight: bold; margin-bottom: 5px; font-size: 0.85rem;">💡 The Power of Two Parameters:</div>
+                            <div style="color: #2dd573; font-weight: bold; margin-bottom: 5px; font-size: 0.85rem;">Gradient Descent is Good Enough</div>
                             <p style="color: #555; font-size: 0.8rem; line-height: 1.3; margin: 0;">
-                                With both 'w' and 'b', we can fit any linear pattern! The gradient tells us how to adjust BOTH parameters simultaneously to reduce loss.
+                                Try using the gradient descent button. You may get a line that is almost perfect, but maybe not 100% true. We'll see later that
+                                this is why having more training data is important for gradient descent to find the true function...
                             </p>
                         </div>
                         
@@ -1013,26 +1014,40 @@ function createBehindTheScenesBunny() {
             lossCanvas.height = 200;
         }
         
-        function calculateLoss(w, b) {
+        function calculateLoss(w, b, useL1 = true) {
             let totalLoss = 0;
             testData.forEach(point => {
                 const predicted = w * point.x + b;
-                totalLoss += Math.abs(predicted - point.y);
+                const error = predicted - point.y;
+                if (useL1) {
+                    totalLoss += Math.abs(error);  // L1 loss for display
+                } else {
+                    totalLoss += error * error;  // MSE loss for gradient calculation
+                }
             });
             return totalLoss;
         }
         
         function calculateGradients() {
+            // Use MSE gradients for stable convergence
+            // This provides smoother gradients than L1 (which only gives sign)
             let gradW = 0;
             let gradB = 0;
             
             testData.forEach(point => {
                 const predicted = currentW * point.x + currentB;
                 const error = predicted - point.y;
-                const sign = error > 0 ? 1 : (error < 0 ? -1 : 0);
-                gradW += sign * point.x;
-                gradB += sign;
+                // MSE gradient: 2 * error * derivative
+                // For w: derivative is x
+                // For b: derivative is 1
+                gradW += 2 * error * point.x;
+                gradB += 2 * error;
             });
+            
+            // Average the gradients
+            const n = testData.length;
+            gradW /= n;
+            gradB /= n;
             
             return {gradW, gradB};
         }
@@ -1048,8 +1063,8 @@ function createBehindTheScenesBunny() {
             document.getElementById('current-w-display').textContent = currentW.toFixed(1);
             document.getElementById('current-b-display').textContent = currentB.toFixed(1);
             
-            // Calculate and display loss
-            const loss = calculateLoss(currentW, currentB);
+            // Calculate and display L1 loss (what the user sees)
+            const loss = calculateLoss(currentW, currentB, true);  // true for L1
             document.getElementById('total-loss-bunny').textContent = loss.toFixed(0);
             
             // Calculate and display gradients
@@ -1268,9 +1283,9 @@ function createBehindTheScenesBunny() {
         }
         
         function gradientStep() {
-            const {gradW, gradB} = calculateGradients();
-            const learningRateW = 0.01;
-            const learningRateB = 0.1;
+            const {gradW, gradB} = calculateGradients();  // Now using MSE gradients
+            const learningRateW = 0.003;  // Adjusted for MSE gradients
+            const learningRateB = 0.02;   // Adjusted for MSE gradients
             
             currentW -= gradW * learningRateW;
             currentB -= gradB * learningRateB;
