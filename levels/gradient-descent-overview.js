@@ -11,7 +11,7 @@ window.createGradientDescentOverview = function() {
         constructor() {
             super({
                 id: 'gradient-descent-overview',
-                name: 'How Gradient Descent Works: Quick Overview',
+                name: 'How Gradient Descent Works: Quick Reference',
                 type: 'tutorial',
                 description: '', // No instructions needed
                 targetFunction: { w: 8 }, // Target: f(x) = 8x
@@ -67,7 +67,7 @@ window.createGradientDescentOverview = function() {
                 });
             }
             
-            // Add CSS animation for fadeIn
+            // Add CSS animation for fadeIn and button hover states
             const style = document.createElement('style');
             style.textContent = `
                 @keyframes fadeIn {
@@ -83,6 +83,23 @@ window.createGradientDescentOverview = function() {
                 #reset-level-btn:hover {
                     background: #5a6268 !important;
                     transform: translateY(-1px);
+                }
+                #repeat-btn:hover:not(:disabled) {
+                    background: linear-gradient(180deg, #ff9500 0%, #ff7300 100%) !important;
+                    transform: translateY(-1px);
+                    box-shadow: 
+                        0 6px 0 #cc5500,
+                        0 8px 10px rgba(0,0,0,0.3) !important;
+                }
+                #repeat-btn:active:not(:disabled) {
+                    transform: translateY(3px);
+                    box-shadow: 
+                        0 2px 0 #cc5500,
+                        0 3px 6px rgba(0,0,0,0.2) !important;
+                }
+                #repeat-btn:disabled {
+                    cursor: not-allowed;
+                    opacity: 0.8;
                 }
             `;
             document.head.appendChild(style);
@@ -144,8 +161,11 @@ window.createGradientDescentOverview = function() {
             // Re-enable repeat button
             const repeatBtn = document.getElementById('repeat-btn');
             if (repeatBtn) {
-                repeatBtn.textContent = 'repeat';
-                repeatBtn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                repeatBtn.textContent = 'REPEAT';
+                repeatBtn.style.background = 'linear-gradient(180deg, #ff8c00 0%, #ff6a00 100%)';
+                repeatBtn.style.color = 'white';
+                repeatBtn.style.border = 'none';
+                repeatBtn.style.boxShadow = '0 5px 0 #cc5500, 0 6px 8px rgba(0,0,0,0.2)';
                 repeatBtn.disabled = false;
             }
             
@@ -176,7 +196,25 @@ window.createGradientDescentOverview = function() {
                 formula2.innerHTML = `f(4) = ${this.currentW} × 4 = ${output}<br>Error = ${output} - 32 = ${error}`;
             }
             
-            // Update text area 3
+            // Update the output value in text area 2
+            const outputValueSpan = document.getElementById('output-value');
+            if (outputValueSpan) {
+                outputValueSpan.textContent = output;
+            }
+            
+            // Update text area 3 error description
+            const errorText = document.getElementById('error-text');
+            if (errorText) {
+                if (error < 0) {
+                    errorText.innerHTML = `We see that the error is ${error}, meaning that the w value of ${this.currentW} wasn't high enough. So we need to increase w.`;
+                } else if (error === 0) {
+                    errorText.innerHTML = `Perfect! The error is 0, meaning that the w value of ${this.currentW} is exactly right!`;
+                } else {
+                    errorText.innerHTML = `We see that the error is ${error}, meaning that the w value of ${this.currentW} was too high. So we need to decrease w.`;
+                }
+            }
+            
+            // Update text area 3 formula
             const formula3 = document.getElementById('formula-3');
             if (formula3) {
                 if (error < 0) {
@@ -193,7 +231,8 @@ window.createGradientDescentOverview = function() {
             if (repeatBtn) {
                 if (error === 0) {
                     repeatBtn.textContent = '✓ Complete';
-                    repeatBtn.style.background = '#2dd573';
+                    repeatBtn.style.background = 'linear-gradient(180deg, #3ee87f 0%, #2dd573 100%)';
+                    repeatBtn.style.boxShadow = '0 5px 0 #22a857, 0 6px 8px rgba(0,0,0,0.2)';
                     repeatBtn.disabled = true;
                     // Also trigger reset button visibility here as backup
                     setTimeout(() => {
@@ -297,8 +336,8 @@ window.createGradientDescentOverview = function() {
                 return `
                     <div style="${styles.container}">
                         <div style="${styles.number}">2</div>
-                        <div style="${styles.text}">
-                            Then we plug a value into our function, for example, 4, and compare our function's output (12) to the true result (32).
+                        <div id="text-area-2" style="${styles.text}">
+                            Then we plug a value into our function, for example, 4, and compare our function's output (<span id="output-value">12</span>) to the true result (32).
                             <span style="font-style: italic; color: #666;">(Where do we get the true result from? That question will be answered later)</span>.
                             We then calculate the error.
                         </div>
@@ -311,23 +350,30 @@ window.createGradientDescentOverview = function() {
                 return `
                     <div style="${styles.container}">
                         <div style="${styles.number}">3</div>
-                        <div style="${styles.text}">
-                            We see that the error is -20, meaning that the w value of 3 wasn't high enough. So we need to increase w.
+                        <div id="text-area-3" style="${styles.text}">
+                            <span id="error-text">We see that the error is -20, meaning that the w value of 3 wasn't high enough. So we need to increase w.</span>
                             But by how much? <strong>This is the topic of the next level.</strong> For now, let's just say we increase w by 1.
                             <div style="margin-top: 10px;">
                                 We then 
                                 <button id="repeat-btn" style="
                                     display: inline-block;
-                                    padding: 8px 16px;
-                                    background: linear-gradient(135deg, #667eea, #764ba2);
+                                    padding: 10px 20px;
+                                    background: linear-gradient(180deg, #ff8c00 0%, #ff6a00 100%);
                                     color: white;
                                     border: none;
-                                    border-radius: 6px;
+                                    border-radius: 8px;
                                     font-weight: bold;
+                                    font-size: 1rem;
                                     cursor: pointer;
-                                    transition: all 0.3s;
-                                    margin: 0 5px;
-                                ">repeat</button>
+                                    transition: all 0.1s;
+                                    margin: 0 6px;
+                                    box-shadow: 
+                                        0 5px 0 #cc5500,
+                                        0 6px 8px rgba(0,0,0,0.2);
+                                    text-transform: uppercase;
+                                    letter-spacing: 0.5px;
+                                    position: relative;
+                                ">REPEAT</button>
                                 the process.
                                 <button id="reset-level-btn" style="
                                     display: none;

@@ -1,7 +1,8 @@
 /**
- * Gradient Descent Math - Simple Case
+ * Gradient Descent Math - Simple Case with Pump Visualization
  * 
- * Explains the math of gradient descent for f(x) = wx with MSE loss
+ * Teaches gradient descent by discovering the true function y = 7040x
+ * Uses a pump metaphor to visualize the gradient descent process
  */
 
 window.createGradientDescentMathSimple = function() {
@@ -10,17 +11,36 @@ window.createGradientDescentMathSimple = function() {
         constructor() {
             super({
                 id: 'gradient-descent-math-simple',
-                name: 'Gradient Descent Math: Simple Case',
+                name: 'Gradient Descent: Finding the True Function',
                 type: 'tutorial',
-                description: 'Understanding parameter updates for f(x) = wx'
+                description: 'Use gradient descent to discover y = 7040x'
             });
             
-            this.currentExample = 0;
-            this.examples = [
-                { x: 2, y_true: 10, w: 3, lr: 0.1 },
-                { x: 5, y_true: 15, w: 2, lr: 0.05 },
-                { x: 3, y_true: 12, w: 5, lr: 0.2 }
+            // The true function is y = 7040x
+            this.true_w = 7040;
+            
+            // Starting weight (deliberately wrong)
+            this.current_w = 100;
+            
+            // Learning rate
+            this.learning_rate = 0.00001;
+            
+            // Training data points from the true function
+            this.training_data = [
+                { x: 1, y: 7040 },
+                { x: 2, y: 14080 },
+                { x: 0.5, y: 3520 }
             ];
+            
+            // Current training example index
+            this.current_example_index = 0;
+            
+            // History of weight updates
+            this.weight_history = [this.current_w];
+            this.step_count = 0;
+            
+            // Pump animation state
+            this.isPumping = false;
         }
         
         async setup() {
@@ -32,139 +52,194 @@ window.createGradientDescentMathSimple = function() {
             }
             
             this._setupHandlers();
-            // Update example after DOM is ready
-            setTimeout(() => this._updateExample(), 100);
+            // Update display after DOM is ready
+            setTimeout(() => this._updateDisplay(), 100);
         }
         
         _generateMainContent() {
             return `
+                <style>
+                    @keyframes pumpDown {
+                        0% { transform: translateY(0); }
+                        50% { transform: translateY(15px); }
+                        100% { transform: translateY(0); }
+                    }
+                    
+                    @keyframes flow {
+                        0% { left: 0; opacity: 0; }
+                        10% { opacity: 1; }
+                        90% { opacity: 1; }
+                        100% { left: 100%; opacity: 0; }
+                    }
+                    
+                    @keyframes pulse {
+                        0%, 100% { transform: scale(1); }
+                        50% { transform: scale(1.05); }
+                    }
+                    
+                    .pump-active {
+                        animation: pumpDown 0.5s ease-in-out;
+                    }
+                    
+                    .flow-particle {
+                        position: absolute;
+                        width: 8px;
+                        height: 8px;
+                        background: #667eea;
+                        border-radius: 50%;
+                        animation: flow 1s linear;
+                    }
+                    
+                    .pulse-glow {
+                        animation: pulse 2s ease-in-out infinite;
+                    }
+                    
+                    .converged-glow {
+                        box-shadow: 0 0 20px #2dd573, 0 0 40px #2dd573;
+                        background: linear-gradient(135deg, #2dd573, #1cb85c) !important;
+                    }
+                </style>
+                
                 <div style="max-height: 80vh; display: flex; flex-direction: column; gap: 20px; padding: 20px;">
                     <!-- Title -->
                     <div style="text-align: center;">
-                        <h2 style="color: #333; margin: 0;">📐 Gradient Descent Math: Simple Case</h2>
-                        <p style="color: #666; margin-top: 10px;">Learn how gradient descent updates parameters - no calculus required!</p>
+                        <h2 style="color: #333; margin: 0;">🔧 Gradient Descent: Finding y = ???x</h2>
+                        <p style="color: #666; margin-top: 10px;">Use gradient descent to discover the true weight! The pump adjusts w automatically based on the gradient.</p>
                     </div>
                     
-                    <!-- Main Content Grid -->
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; flex: 1;">
-                        <!-- Left Panel: Formula & Explanation -->
-                        <div style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                            <h3 style="color: #667eea; margin: 0 0 15px 0;">The Function & Loss</h3>
+                    <!-- Main Content -->
+                    <div style="display: flex; gap: 20px; justify-content: center; align-items: stretch;">
+                        <!-- Left Panel: Pump Visualization -->
+                        <div style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 400px;">
+                            <h3 style="color: #667eea; margin: 0 0 15px 0;">Gradient Descent Pump</h3>
                             
-                            <!-- Function Display -->
-                            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                                <div style="font-family: 'Courier New', monospace; font-size: 1.2rem; color: #333; text-align: center;">
-                                    f(x) = w × x
-                                </div>
-                                <div style="color: #666; font-size: 0.9rem; text-align: center; margin-top: 5px;">
-                                    Our simple linear function
-                                </div>
-                            </div>
-                            
-                            <!-- MSE Loss -->
-                            <div style="background: #fff5f5; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                                <div style="font-family: 'Courier New', monospace; color: #e53e3e;">
-                                    Loss = (prediction - target)²
-                                </div>
-                                <div style="color: #666; font-size: 0.85rem; margin-top: 5px;">
-                                    Mean Squared Error (MSE)
-                                </div>
-                            </div>
-                            
-                            <!-- Update Rule -->
-                            <div style="background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1)); padding: 20px; border-radius: 8px; border: 2px solid #667eea;">
-                                <h4 style="color: #667eea; margin: 0 0 10px 0;">✨ The Update Rule</h4>
-                                <div style="font-family: 'Courier New', monospace; font-size: 1rem; line-height: 1.8;">
-                                    <div>error = prediction - target</div>
-                                    <div>gradient = 2 × error × x</div>
-                                    <div style="background: white; padding: 10px; border-radius: 5px; margin: 10px 0; border: 2px solid #667eea;">
-                                        <strong>w_new = w - learning_rate × gradient</strong>
+                            <!-- Current Model Display -->
+                            <div style="background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1)); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 2px solid #667eea;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 1.5rem; font-family: 'Courier New', monospace; color: #333;">
+                                        y = <span id="current-w-display" style="color: #667eea; font-weight: bold;">100</span>x
+                                    </div>
+                                    <div style="font-size: 0.9rem; color: #666; margin-top: 5px;">
+                                        Step <span id="step-count">0</span>
                                     </div>
                                 </div>
-                                <div style="color: #666; font-size: 0.85rem; margin-top: 10px;">
-                                    💡 The gradient tells us the slope - how much the loss increases when w increases
+                            </div>
+                            
+                            <!-- Pump Container -->
+                            <div style="position: relative; height: 250px; display: flex; align-items: center; justify-content: center;">
+                                <!-- Gauge Background -->
+                                <div style="position: absolute; left: 20px; top: 10px; bottom: 10px; width: 60px;">
+                                    <div style="height: 100%; background: linear-gradient(to top, #e3e8ef 0%, #667eea 50%, #2dd573 100%); border-radius: 10px; opacity: 0.2;"></div>
+                                    <div style="position: absolute; top: 5%; left: -20px; font-size: 0.7rem; color: #666;">7040</div>
+                                    <div style="position: absolute; top: 50%; left: -20px; font-size: 0.7rem; color: #666;">3520</div>
+                                    <div style="position: absolute; bottom: 5%; left: -10px; font-size: 0.7rem; color: #666;">0</div>
+                                </div>
+                                
+                                <!-- Pump Visual -->
+                                <div id="pump-visual" style="position: relative;">
+                                    <div style="width: 100px; height: 120px; background: linear-gradient(to bottom, #4a5568, #2d3748); border-radius: 10px; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+                                        <!-- Pump Handle -->
+                                        <div id="pump-handle" style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 40px; height: 25px; background: #1a202c; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+                                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 0.8rem;">⬇</div>
+                                        </div>
+                                        <!-- Pump Body -->
+                                        <div style="position: absolute; top: 20px; left: 10px; right: 10px; height: 60px; background: rgba(255,255,255,0.1); border-radius: 5px;"></div>
+                                        <!-- Current W Indicator -->
+                                        <div id="w-indicator" style="position: absolute; left: -80px; top: 50%; transform: translateY(-50%); width: 60px; height: 4px; background: #667eea;">
+                                            <div style="position: absolute; right: -10px; top: -8px; width: 20px; height: 20px; background: #667eea; border-radius: 50%;"></div>
+                                        </div>
+                                    </div>
+                                    <!-- Nozzle -->
+                                    <div style="position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); width: 30px; height: 20px; background: #2d3748; border-radius: 0 0 50% 50%;"></div>
+                                </div>
+                                
+                                <!-- Flow Pipe -->
+                                <div style="position: absolute; right: 80px; bottom: 60px; width: 150px; height: 4px; background: #94a3b8;">
+                                    <div id="flow-container" style="position: relative; width: 100%; height: 100%; overflow: hidden;"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Control Buttons -->
+                            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                                <button id="take-step-btn" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; transition: all 0.3s;">
+                                    📉 Take Gradient Step
+                                </button>
+                                <button id="auto-run-btn" style="flex: 1; padding: 12px; background: #2dd573; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; transition: all 0.3s;">
+                                    ▶️ Auto Run
+                                </button>
+                            </div>
+                            
+                            <!-- Learning Rate Control -->
+                            <div style="background: #f0f7ff; padding: 12px; border-radius: 8px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <label style="color: #333; font-size: 0.9rem;">Learning Rate:</label>
+                                    <span id="lr-display" style="font-family: 'Courier New', monospace; color: #667eea; font-weight: bold;">0.00001</span>
+                                </div>
+                                <input type="range" id="lr-slider" min="-6" max="-3" step="0.5" value="-5" style="width: 100%;">
+                                <div style="display: flex; justify-content: space-between; color: #999; font-size: 0.7rem; margin-top: 5px;">
+                                    <span>Slow</span>
+                                    <span>Fast</span>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Right Panel: Interactive Example -->
-                        <div style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                            <h3 style="color: #764ba2; margin: 0 0 15px 0;">Interactive Example</h3>
+                        <!-- Right Panel: Information Display -->
+                        <div style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 400px;">
+                            <h3 style="color: #764ba2; margin: 0 0 15px 0;">Training Progress</h3>
                             
-                            <!-- Example Controls -->
-                            <div style="margin-bottom: 15px;">
-                                <div style="display: flex; gap: 10px; justify-content: center;">
-                                    <button id="prev-example" style="padding: 8px 15px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">← Previous</button>
-                                    <span style="padding: 8px 15px; background: #f8f9fa; border-radius: 5px;">Example <span id="example-num">1</span> of 3</span>
-                                    <button id="next-example" style="padding: 8px 15px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">Next →</button>
-                                </div>
-                            </div>
-                            
-                            <!-- Given Values -->
-                            <div style="background: #f0f7ff; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                                <h4 style="color: #333; margin: 0 0 10px 0;">Given:</h4>
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-family: 'Courier New', monospace;">
-                                    <div>x = <span id="x-value" style="color: #667eea; font-weight: bold;">2</span></div>
-                                    <div>target = <span id="target-value" style="color: #667eea; font-weight: bold;">10</span></div>
-                                    <div>w = <span id="w-value" style="color: #667eea; font-weight: bold;">3</span></div>
-                                    <div>α = <span id="lr-value" style="color: #667eea; font-weight: bold;">0.1</span></div>
-                                </div>
-                            </div>
-                            
-                            <!-- Step-by-step Calculation -->
-                            <div style="background: #fff9e6; padding: 15px; border-radius: 8px;">
-                                <h4 style="color: #333; margin: 0 0 10px 0;">📝 Step-by-Step Calculation:</h4>
-                                <div id="calculation-steps" style="font-family: 'Courier New', monospace; font-size: 0.9rem; line-height: 2;">
+                            <!-- Current Calculation -->
+                            <div style="background: #fff9e6; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                                <h4 style="color: #333; margin: 0 0 8px 0; font-size: 0.9rem;">Current Gradient Calculation:</h4>
+                                <div id="gradient-calc" style="font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.6;">
                                     <!-- Will be filled dynamically -->
                                 </div>
                             </div>
                             
-                            <!-- Result -->
-                            <div style="background: linear-gradient(135deg, rgba(45,213,115,0.1), rgba(45,213,115,0.2)); padding: 15px; border-radius: 8px; margin-top: 15px; border: 2px solid #2dd573;">
-                                <div style="text-align: center;">
-                                    <div style="color: #666; font-size: 0.9rem;">New weight after update:</div>
-                                    <div style="font-size: 1.5rem; color: #2dd573; font-weight: bold; font-family: 'Courier New', monospace;">
-                                        w_new = <span id="w-new-value">2.4</span>
-                                    </div>
+                            <!-- Loss Display -->
+                            <div style="background: #fff5f5; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="color: #666; font-size: 0.9rem;">Total Loss (MSE):</span>
+                                    <span id="total-loss" style="font-size: 1.3rem; color: #e53e3e; font-weight: bold;">--</span>
+                                </div>
+                                <div id="loss-bar" style="margin-top: 10px; height: 20px; background: #f0f0f0; border-radius: 10px; overflow: hidden;">
+                                    <div id="loss-fill" style="height: 100%; background: linear-gradient(90deg, #e53e3e, #fbbf24); width: 100%; transition: width 0.5s;"></div>
                                 </div>
                             </div>
                             
-                            <!-- Learning Rate Effect -->
-                            <div style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
-                                <h4 style="color: #666; margin: 0 0 10px 0; font-size: 0.9rem;">🎯 Try Different Learning Rates:</h4>
-                                <div style="display: flex; gap: 10px; justify-content: center;">
-                                    <button class="lr-button" data-lr="0.01" style="padding: 6px 12px; background: white; border: 1px solid #ddd; border-radius: 5px; cursor: pointer;">α=0.01</button>
-                                    <button class="lr-button" data-lr="0.1" style="padding: 6px 12px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">α=0.1</button>
-                                    <button class="lr-button" data-lr="0.5" style="padding: 6px 12px; background: white; border: 1px solid #ddd; border-radius: 5px; cursor: pointer;">α=0.5</button>
-                                    <button class="lr-button" data-lr="1.0" style="padding: 6px 12px; background: white; border: 1px solid #ddd; border-radius: 5px; cursor: pointer;">α=1.0</button>
+                            <!-- Progress Indicator -->
+                            <div id="progress-box" style="background: linear-gradient(135deg, rgba(45,213,115,0.1), rgba(45,213,115,0.2)); padding: 15px; border-radius: 8px; border: 2px solid #2dd573; margin-bottom: 15px;">
+                                <h4 style="color: #333; margin: 0 0 10px 0; font-size: 0.9rem;">Distance to True Weight:</h4>
+                                <div id="progress-text" style="text-align: center; font-size: 1.2rem; color: #2dd573; font-weight: bold;">
+                                    <!-- Will be filled dynamically -->
                                 </div>
-                                <div id="lr-effect" style="text-align: center; margin-top: 10px; color: #666; font-size: 0.85rem;">
-                                    <!-- Will show effect of different learning rates -->
+                                <div style="margin-top: 10px; height: 10px; background: #e0e0e0; border-radius: 5px; overflow: hidden;">
+                                    <div id="progress-bar" style="height: 100%; background: linear-gradient(135deg, #2dd573, #1cb85c); width: 0%; transition: width 0.5s;"></div>
                                 </div>
                             </div>
+                            
+                            <!-- Training Data Display -->
+                            <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                                <h4 style="color: #333; margin: 0 0 8px 0; font-size: 0.9rem;">Training Data:</h4>
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; font-family: 'Courier New', monospace; font-size: 0.8rem;">
+                                    ${this.training_data.map((point, i) => `
+                                        <div id="data-${i}" style="padding: 8px; background: ${i === 0 ? '#fff5f5' : 'white'}; border-radius: 5px; border: 1px solid ${i === 0 ? '#e53e3e' : '#ddd'};">
+                                            <div style="color: #666;">x=${point.x}</div>
+                                            <div style="color: #333; font-weight: bold;">y=${point.y}</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            
+                            <!-- Reset Button -->
+                            <button id="reset-btn" style="width: 100%; padding: 10px; background: #6c757d; color: white; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+                                🔄 Reset to w = 100
+                            </button>
                         </div>
                     </div>
                     
-                    <!-- Key Insights -->
-                    <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; border-radius: 10px;">
-                        <h3 style="margin: 0 0 10px 0;">💡 Key Insights</h3>
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
-                            <div>
-                                <strong>Gradient Direction:</strong><br>
-                                Positive error → decrease w<br>
-                                Negative error → increase w
-                            </div>
-                            <div>
-                                <strong>Learning Rate Effect:</strong><br>
-                                Small α → slow but stable<br>
-                                Large α → fast but may overshoot
-                            </div>
-                            <div>
-                                <strong>Input Matters:</strong><br>
-                                Larger x → larger gradient<br>
-                                This is why we multiply by x!
-                            </div>
-                        </div>
+                    <!-- Bottom Info -->
+                    <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 15px; border-radius: 10px; text-align: center;">
+                        <strong>🎯 Goal:</strong> The gradient descent pump automatically adjusts w to minimize loss. Watch as it discovers that y = 7040x!
                     </div>
                 </div>
                 
@@ -173,111 +248,304 @@ window.createGradientDescentMathSimple = function() {
         }
         
         _setupHandlers() {
-            // Example navigation
-            const prevBtn = document.getElementById('prev-example');
-            const nextBtn = document.getElementById('next-example');
-            
-            if (prevBtn) {
-                this.addEventListenerWithCleanup(prevBtn, 'click', () => {
-                    this.currentExample = (this.currentExample - 1 + this.examples.length) % this.examples.length;
-                    this._updateExample();
+            // Take step button
+            const stepBtn = document.getElementById('take-step-btn');
+            if (stepBtn) {
+                this.addEventListenerWithCleanup(stepBtn, 'click', () => {
+                    this._takeGradientStep();
                 });
             }
             
-            if (nextBtn) {
-                this.addEventListenerWithCleanup(nextBtn, 'click', () => {
-                    this.currentExample = (this.currentExample + 1) % this.examples.length;
-                    this._updateExample();
+            // Auto run button
+            const autoBtn = document.getElementById('auto-run-btn');
+            if (autoBtn) {
+                this.addEventListenerWithCleanup(autoBtn, 'click', () => {
+                    if (this.autoRunning) {
+                        this._stopAutoRun();
+                    } else {
+                        this._startAutoRun();
+                    }
                 });
             }
             
-            // Learning rate buttons
-            const lrButtons = document.querySelectorAll('.lr-button');
-            lrButtons.forEach(btn => {
-                this.addEventListenerWithCleanup(btn, 'click', () => {
-                    const lr = parseFloat(btn.dataset.lr);
-                    this._updateWithLearningRate(lr);
-                    
-                    // Update button styles
-                    lrButtons.forEach(b => {
-                        b.style.background = 'white';
-                        b.style.color = '#333';
-                        b.style.border = '1px solid #ddd';
-                    });
-                    btn.style.background = '#667eea';
-                    btn.style.color = 'white';
-                    btn.style.border = 'none';
+            // Reset button
+            const resetBtn = document.getElementById('reset-btn');
+            if (resetBtn) {
+                this.addEventListenerWithCleanup(resetBtn, 'click', () => {
+                    this._reset();
                 });
+            }
+            
+            // Learning rate slider
+            const lrSlider = document.getElementById('lr-slider');
+            if (lrSlider) {
+                this.addEventListenerWithCleanup(lrSlider, 'input', (e) => {
+                    this.learning_rate = Math.pow(10, parseFloat(e.target.value));
+                    document.getElementById('lr-display').textContent = this.learning_rate.toExponential(0);
+                });
+            }
+            
+            // Pump handle click for manual step
+            const pumpHandle = document.getElementById('pump-handle');
+            if (pumpHandle) {
+                this.addEventListenerWithCleanup(pumpHandle, 'click', () => {
+                    this._takeGradientStep();
+                });
+                
+                this.addEventListenerWithCleanup(pumpHandle, 'mouseenter', () => {
+                    pumpHandle.style.transform = 'translateX(-50%) scale(1.1)';
+                });
+                
+                this.addEventListenerWithCleanup(pumpHandle, 'mouseleave', () => {
+                    pumpHandle.style.transform = 'translateX(-50%) scale(1)';
+                });
+            }
+        }
+        
+        _takeGradientStep() {
+            if (this.isPumping) return;
+            
+            // Animate pump
+            this._animatePump();
+            
+            const example = this.training_data[this.current_example_index];
+            
+            // Calculate gradient
+            const prediction = this.current_w * example.x;
+            const error = prediction - example.y;
+            const gradient = 2 * error * example.x;
+            
+            // Update weight
+            this.current_w = this.current_w - this.learning_rate * gradient;
+            this.weight_history.push(this.current_w);
+            this.step_count++;
+            
+            // Cycle through training data
+            this.current_example_index = (this.current_example_index + 1) % this.training_data.length;
+            
+            // Update display
+            this._updateDisplay();
+            this._updateGradientCalculation(example, prediction, error, gradient);
+            
+            // Check for convergence
+            if (Math.abs(this.current_w - this.true_w) < 1) {
+                this._handleConvergence();
+            }
+        }
+        
+        _animatePump() {
+            this.isPumping = true;
+            const pumpVisual = document.getElementById('pump-visual');
+            const flowContainer = document.getElementById('flow-container');
+            
+            if (pumpVisual) {
+                pumpVisual.classList.add('pump-active');
+                setTimeout(() => {
+                    pumpVisual.classList.remove('pump-active');
+                    this.isPumping = false;
+                }, 500);
+            }
+            
+            // Create flow particles
+            if (flowContainer) {
+                const particle = document.createElement('div');
+                particle.className = 'flow-particle';
+                flowContainer.appendChild(particle);
+                setTimeout(() => {
+                    particle.remove();
+                }, 1000);
+            }
+        }
+        
+        _updateDisplay() {
+            // Update w display
+            const wDisplay = document.getElementById('current-w-display');
+            if (wDisplay) {
+                wDisplay.textContent = Math.round(this.current_w);
+            }
+            
+            // Update step count
+            const stepDisplay = document.getElementById('step-count');
+            if (stepDisplay) {
+                stepDisplay.textContent = this.step_count;
+            }
+            
+            // Update w indicator position
+            const indicator = document.getElementById('w-indicator');
+            if (indicator) {
+                const percentage = Math.min(100, (this.current_w / this.true_w) * 50);
+                indicator.style.top = `${100 - percentage}%`;
+            }
+            
+            // Calculate and update loss
+            let totalLoss = 0;
+            for (const point of this.training_data) {
+                const prediction = this.current_w * point.x;
+                const error = prediction - point.y;
+                totalLoss += error * error;
+            }
+            totalLoss = totalLoss / this.training_data.length;
+            
+            const lossDisplay = document.getElementById('total-loss');
+            if (lossDisplay) {
+                if (totalLoss > 1000000) {
+                    lossDisplay.textContent = (totalLoss / 1000000).toFixed(1) + 'M';
+                } else if (totalLoss > 1000) {
+                    lossDisplay.textContent = (totalLoss / 1000).toFixed(1) + 'K';
+                } else {
+                    lossDisplay.textContent = totalLoss.toFixed(0);
+                }
+            }
+            
+            // Update loss bar
+            const lossFill = document.getElementById('loss-fill');
+            if (lossFill) {
+                const maxLoss = 50000000; // Approximate max loss at start
+                const lossPercent = Math.max(0, Math.min(100, (1 - totalLoss / maxLoss) * 100));
+                lossFill.style.width = `${100 - lossPercent}%`;
+            }
+            
+            // Update progress
+            this._updateProgress();
+            
+            // Highlight current training data
+            this.training_data.forEach((_, i) => {
+                const el = document.getElementById(`data-${i}`);
+                if (el) {
+                    if (i === this.current_example_index) {
+                        el.style.background = '#fff5f5';
+                        el.style.border = '1px solid #e53e3e';
+                    } else {
+                        el.style.background = 'white';
+                        el.style.border = '1px solid #ddd';
+                    }
+                }
             });
         }
         
-        _updateExample() {
-            const example = this.examples[this.currentExample];
+        _updateGradientCalculation(example, prediction, error, gradient) {
+            const calcEl = document.getElementById('gradient-calc');
+            if (!calcEl) return;
             
-            // Update displayed values
-            document.getElementById('x-value').textContent = example.x;
-            document.getElementById('target-value').textContent = example.y_true;
-            document.getElementById('w-value').textContent = example.w;
-            document.getElementById('lr-value').textContent = example.lr;
-            document.getElementById('example-num').textContent = this.currentExample + 1;
-            
-            this._calculateUpdate(example.x, example.y_true, example.w, example.lr);
+            calcEl.innerHTML = `
+                <div>Point: (${example.x}, ${example.y})</div>
+                <div>Pred: ${Math.round(prediction)}</div>
+                <div>Error: <span style="color: ${error > 0 ? '#e53e3e' : '#2dd573'};">${error.toFixed(0)}</span></div>
+                <div>Gradient: ${gradient.toFixed(0)}</div>
+                <div style="margin-top: 5px; padding-top: 5px; border-top: 1px solid #ddd;">
+                    Update: ${this.learning_rate.toExponential(0)} × ${gradient.toFixed(0)}
+                </div>
+            `;
         }
         
-        _calculateUpdate(x, y_true, w, lr) {
-            // Calculate step by step
-            const prediction = w * x;
-            const error = prediction - y_true;
-            const gradient = 2 * error * x;
-            const w_new = w - lr * gradient;
+        _updateProgress() {
+            const progressText = document.getElementById('progress-text');
+            const progressBar = document.getElementById('progress-bar');
+            const progressBox = document.getElementById('progress-box');
             
-            // Display calculation steps
-            const stepsEl = document.getElementById('calculation-steps');
-            if (stepsEl) {
-                stepsEl.innerHTML = `
-                    <div style="color: #666;">1. Calculate prediction:</div>
-                    <div style="margin-left: 20px; color: #333;">f(${x}) = ${w} × ${x} = <strong>${prediction}</strong></div>
-                    
-                    <div style="color: #666; margin-top: 10px;">2. Calculate error:</div>
-                    <div style="margin-left: 20px; color: #333;">${prediction} - ${y_true} = <strong>${error.toFixed(2)}</strong></div>
-                    
-                    <div style="color: #666; margin-top: 10px;">3. Calculate gradient:</div>
-                    <div style="margin-left: 20px; color: #333;">2 × ${error.toFixed(2)} × ${x} = <strong>${gradient.toFixed(2)}</strong></div>
-                    
-                    <div style="color: #666; margin-top: 10px;">4. Update weight:</div>
-                    <div style="margin-left: 20px; color: #333;">${w} - ${lr} × ${gradient.toFixed(2)} = <strong>${w_new.toFixed(3)}</strong></div>
-                `;
-            }
+            const difference = Math.abs(this.current_w - this.true_w);
+            const percentComplete = Math.max(0, Math.min(100, (1 - difference / (this.true_w - 100)) * 100));
             
-            // Update result
-            document.getElementById('w-new-value').textContent = w_new.toFixed(3);
-        }
-        
-        _updateWithLearningRate(lr) {
-            const example = this.examples[this.currentExample];
-            this._calculateUpdate(example.x, example.y_true, example.w, lr);
-            
-            // Update learning rate display
-            document.getElementById('lr-value').textContent = lr;
-            
-            // Show effect description
-            const effectEl = document.getElementById('lr-effect');
-            if (effectEl) {
-                const stepSize = Math.abs(lr * 2 * (example.w * example.x - example.y_true) * example.x);
-                let description = '';
-                
-                if (lr <= 0.01) {
-                    description = `Very small steps (${stepSize.toFixed(4)}). Very stable but slow convergence.`;
-                } else if (lr <= 0.1) {
-                    description = `Moderate steps (${stepSize.toFixed(3)}). Good balance of speed and stability.`;
-                } else if (lr <= 0.5) {
-                    description = `Large steps (${stepSize.toFixed(2)}). Fast but might overshoot.`;
+            if (progressText) {
+                if (difference < 1) {
+                    progressText.textContent = '🎉 FOUND IT! w = 7040';
+                } else if (difference < 100) {
+                    progressText.textContent = `Very close! Off by ${Math.round(difference)}`;
+                } else if (difference < 1000) {
+                    progressText.textContent = `Getting warmer... ${Math.round(difference)} away`;
                 } else {
-                    description = `Very large steps (${stepSize.toFixed(2)}). Risk of divergence!`;
+                    progressText.textContent = `${Math.round(difference / 1000)}K away from target`;
                 }
-                
-                effectEl.textContent = description;
             }
+            
+            if (progressBar) {
+                progressBar.style.width = `${percentComplete}%`;
+            }
+            
+            if (progressBox && difference < 1) {
+                progressBox.classList.add('converged-glow', 'pulse-glow');
+            }
+        }
+        
+        _handleConvergence() {
+            // Stop auto run if active
+            this._stopAutoRun();
+            
+            // Visual celebration
+            const pumpVisual = document.getElementById('pump-visual');
+            if (pumpVisual) {
+                pumpVisual.classList.add('pulse-glow');
+            }
+            
+            // Disable step button
+            const stepBtn = document.getElementById('take-step-btn');
+            if (stepBtn) {
+                stepBtn.disabled = true;
+                stepBtn.textContent = '✅ Converged!';
+                stepBtn.classList.add('converged-glow');
+            }
+        }
+        
+        _startAutoRun() {
+            this.autoRunning = true;
+            const autoBtn = document.getElementById('auto-run-btn');
+            if (autoBtn) {
+                autoBtn.textContent = '⏸️ Pause';
+                autoBtn.style.background = '#e53e3e';
+            }
+            
+            this.autoInterval = setInterval(() => {
+                this._takeGradientStep();
+                
+                if (Math.abs(this.current_w - this.true_w) < 1) {
+                    this._stopAutoRun();
+                }
+            }, 100);
+        }
+        
+        _stopAutoRun() {
+            this.autoRunning = false;
+            const autoBtn = document.getElementById('auto-run-btn');
+            if (autoBtn) {
+                autoBtn.textContent = '▶️ Auto Run';
+                autoBtn.style.background = '#2dd573';
+            }
+            
+            if (this.autoInterval) {
+                clearInterval(this.autoInterval);
+                this.autoInterval = null;
+            }
+        }
+        
+        _reset() {
+            this.current_w = 100;
+            this.weight_history = [this.current_w];
+            this.step_count = 0;
+            this.current_example_index = 0;
+            
+            // Stop auto run
+            this._stopAutoRun();
+            
+            // Remove converged state
+            const progressBox = document.getElementById('progress-box');
+            if (progressBox) {
+                progressBox.classList.remove('converged-glow', 'pulse-glow');
+            }
+            
+            const pumpVisual = document.getElementById('pump-visual');
+            if (pumpVisual) {
+                pumpVisual.classList.remove('pulse-glow');
+            }
+            
+            const stepBtn = document.getElementById('take-step-btn');
+            if (stepBtn) {
+                stepBtn.disabled = false;
+                stepBtn.textContent = '📉 Take Gradient Step';
+                stepBtn.classList.remove('converged-glow');
+                stepBtn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+            }
+            
+            this._updateDisplay();
         }
     }
     

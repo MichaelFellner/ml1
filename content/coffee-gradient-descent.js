@@ -1,9 +1,6 @@
-// Coffee Optimizer - Gradient Descent Version
-// Watch the algorithm learn to find the correct weights automatically
-
 /**
- * @fileoverview Coffee shop gradient descent tutorial for the MLTEACH application.
- * Interactive demonstration of gradient descent in a business context.
+ * @fileoverview Coffee Booth Gradient Descent - Watch the algorithm learn the perfect formula
+ * Interactive demonstration showing gradient descent automatically finding the optimal weights
  */
 
 /**
@@ -15,188 +12,487 @@
 function createCoffeeGradientDescent() {
     const container = document.getElementById('app');
     container.innerHTML = `
-        <div class="current-level">
-            <div class="level-content celebration" style="padding: 20px; max-width: 1100px; margin: 0 auto;">
-                <h1 style="font-size: 1.8rem; margin: 0 0 15px 0; text-align: center; color: #2c3e50;">Coffee Formula - Gradient Descent</h1>
-                
-                <!-- Explanation Box -->
-                <div style="background: linear-gradient(135deg, #3498db, #2980b9); border-radius: 12px; padding: 18px; margin-bottom: 20px; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
-                    <div style="font-size: 0.95rem; line-height: 1.5; text-align: center;">
-                        Watch <strong>Gradient Descent</strong> automatically find the correct weights! The algorithm calculates how wrong each weight is, 
-                        then adjusts them to reduce the error. Press "Step" to see one update, or "Auto Run" to watch it learn continuously.
-                    </div>
+        <div class="current-level" style="
+            background: url('pictures/coffee_image.jpg'), linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f39c12 100%);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+        ">
+            <div class="level-content" style="padding: 20px; max-width: 1800px; margin: 0 auto; position: relative; z-index: 1;">
+                <!-- Title with backdrop -->
+                <div style="
+                    background: rgba(0, 0, 0, 0.7);
+                    border-radius: 15px;
+                    padding: 15px 30px;
+                    margin-bottom: -20px;
+                    max-width: 900px;
+                    isolation: isolate;
+                ">
+                    <h1 style="
+                        text-align: center !important;
+                        color: white !important;
+                        margin: 0 0 10px 0 !important;
+                        font-size: 2rem !important;
+                        font-weight: bold !important;
+                        mix-blend-mode: normal !important;
+                        background: none !important;
+                        background-clip: unset !important;
+                        -webkit-background-clip: unset !important;
+                        -webkit-text-fill-color: white !important;
+                    ">4 Variable Gradient Descent</h1>
+                    <p style="
+                        text-align: center !important;
+                        color: white !important;
+                        margin: 0 !important;
+                        font-size: 1rem !important;
+                        mix-blend-mode: normal !important;
+                        background: none !important;
+                        background-clip: unset !important;
+                        -webkit-background-clip: unset !important;
+                        -webkit-text-fill-color: white !important;
+                    ">
+                        Tuning 4 variables by hand was almost impossible, now lets use gradient descent and really see the power of this algorithm!
+                    </p>
                 </div>
-                
-                <!-- Main Container -->
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <!-- Left Side: Gradient Descent Controls -->
-                    <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                    
+                <!-- Coffee Booth with Formula and Controls -->
+                <div style="
+                    position: relative;
+                    width: 98%;
+                    max-width: none;
+                    margin: 0 auto 30px;
+                    background: linear-gradient(to bottom, rgba(139,69,19,0.98) 0%, rgba(101,67,33,0.98) 100%);
+                    border-radius: 15px 15px 0 0;
+                    padding: 15px 30px;
+                    box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+                    backdrop-filter: blur(10px);
+                ">
+                    <!-- Booth Awning -->
+                    <div style="
+                        position: absolute;
+                        top: -30px;
+                        left: -20px;
+                        right: -20px;
+                        height: 40px;
+                        background: repeating-linear-gradient(
+                            45deg,
+                            #ff6b6b,
+                            #ff6b6b 20px,
+                            #fff 20px,
+                            #fff 40px
+                        );
+                        border-radius: 15px 15px 0 0;
+                        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                    "></div>
                         
-                        <!-- Current Weights -->
-                        <div style="background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 20px; border: 2px solid #e9ecef;">
-                            <div style="color: #7f8c8d; font-size: 0.8rem; margin-bottom: 10px; text-align: center;">CURRENT WEIGHTS</div>
-                            <div style="font-family: 'Courier New', monospace; font-size: 0.95rem; text-align: center; color: #2c3e50;">
-                                f(x) = <span id="w1-display" style="color: #3498db; font-size: 1.1rem; font-weight: bold;">0.00</span>×age + 
-                                <span id="w2-display" style="color: #e74c3c; font-size: 1.1rem; font-weight: bold;">0.00</span>×cups + 
-                                <span id="w3-display" style="color: #f39c12; font-size: 1.1rem; font-weight: bold;">0.00</span>×tired + 
-                                <span id="bias-display" style="color: #2ecc71; font-size: 1.1rem; font-weight: bold;">0.00</span>
-                            </div>
+                    <!-- Current Formula Display -->
+                    <div style="
+                        background: rgba(255, 255, 255, 0.98);
+                        border-radius: 10px;
+                        padding: 15px 20px;
+                        margin-bottom: 15px;
+                        text-align: center;
+                        box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+                    ">
+                        <div style="font-size: 1.2rem; font-weight: bold; color: #2c3e50; margin-bottom: 12px;">
+                            Current Coffee Formula
                         </div>
-                        
-                        <!-- Learning Rate Control -->
-                        <div style="background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                <label style="color: #2c3e50; font-weight: bold; font-size: 0.9rem;">Learning Rate</label>
-                                <div style="background: #3498db; padding: 4px 12px; border-radius: 20px;">
-                                    <span id="lr-value" style="color: white; font-weight: bold; font-size: 0.9rem;">0.0001</span>
-                                </div>
-                            </div>
-                            <input type="range" id="lr-slider" min="1" max="5" value="1" step="1" 
-                                style="width: 100%; height: 8px; border-radius: 4px; background: #e9ecef; outline: none; cursor: pointer;">
-                            <div style="display: flex; justify-content: space-between; color: #95a5a6; font-size: 0.7rem; margin-top: 5px;">
-                                <span>Slow</span>
-                                <span>Medium</span>
-                                <span>Fast</span>
-                            </div>
-                            <div style="margin-top: 10px; padding: 10px; background: #e3f2fd; border-radius: 6px; font-size: 0.8rem; color: #1976d2;">
-                                💡 <strong>Tip:</strong> Too high = overshoots, too low = slow learning
-                            </div>
+                        <div style="
+                            font-family: 'Courier New', monospace;
+                            font-size: 1.15rem;
+                            color: #2c3e50;
+                            background: #f8f9fa;
+                            padding: 12px 20px;
+                            border-radius: 8px;
+                            display: inline-block;
+                            white-space: nowrap;
+                        ">
+                            Coffee = 
+                            <span id="w1-display" style="color: #3498db; font-weight: bold; font-size: 1.2rem;">0.00</span>×Age + 
+                            <span id="w2-display" style="color: #e74c3c; font-weight: bold; font-size: 1.2rem;">0.00</span>×Cups + 
+                            <span id="w3-display" style="color: #f39c12; font-weight: bold; font-size: 1.2rem;">0.00</span>×Tired + 
+                            <span id="bias-display" style="color: #2ecc71; font-weight: bold; font-size: 1.2rem;">0.00</span>ml
                         </div>
-                        
+                        <div style="margin-top: 10px; font-size: 0.85rem; color: #7f8c8d;">
+                            With 4 Variables Gradient Descent may need (spoilers for future parts) training data to find the exact function...
+                        </div>
+                    </div>
+                    
+                    <!-- Gradient Descent Controls -->
+                    <div style="
+                        display: grid;
+                        grid-template-columns: 1fr 1fr;
+                        gap: 15px;
+                        margin-bottom: 15px;
+                    ">
                         <!-- Control Buttons -->
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-                            <button id="step-btn" style="padding: 12px; background: #3498db; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.3s;">
-                                Step →
-                            </button>
-                            <button id="auto-btn" style="padding: 12px; background: #2ecc71; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.3s;">
-                                Auto Run
-                            </button>
-                            <button id="reset-btn" style="padding: 12px; background: #e74c3c; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: all 0.3s;">
-                                Reset
+                        <div style="
+                            background: rgba(255, 255, 255, 0.98);
+                            border-radius: 8px;
+                            padding: 15px;
+                            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                        ">
+                            <div style="text-align: center; margin-bottom: 10px;">
+                                <div style="color: #2c3e50; font-weight: bold; font-size: 0.9rem; margin-bottom: 8px;">Gradient Descent Controls</div>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                <button id="gradient-btn" style="
+                                    background: linear-gradient(135deg, #3498db, #2980b9);
+                                    color: white;
+                                    border: none;
+                                    padding: 10px 15px;
+                                    font-size: 0.95rem;
+                                    font-weight: bold;
+                                    border-radius: 8px;
+                                    cursor: pointer;
+                                    box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
+                                    transition: all 0.3s;
+                                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(52, 152, 219, 0.4)'" 
+                                   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 3px 10px rgba(52, 152, 219, 0.3)'">
+                                    ▶️ Start
+                                </button>
+                                <button id="step-btn" style="
+                                    background: linear-gradient(135deg, #f39c12, #e67e22);
+                                    color: white;
+                                    border: none;
+                                    padding: 10px 15px;
+                                    font-size: 0.95rem;
+                                    font-weight: bold;
+                                    border-radius: 8px;
+                                    cursor: pointer;
+                                    box-shadow: 0 3px 10px rgba(243, 156, 18, 0.3);
+                                    transition: all 0.3s;
+                                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(243, 156, 18, 0.4)'" 
+                                   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 3px 10px rgba(243, 156, 18, 0.3)'">
+                                    Step →
+                                </button>
+                            </div>
+                            <button id="reset-btn" style="
+                                background: linear-gradient(135deg, #e74c3c, #c0392b);
+                                color: white;
+                                border: none;
+                                padding: 10px 15px;
+                                font-size: 0.95rem;
+                                font-weight: bold;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+                                transition: all 0.3s;
+                                width: 100%;
+                                margin-top: 8px;
+                            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(231, 76, 60, 0.4)'" 
+                               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 3px 10px rgba(231, 76, 60, 0.3)'">
+                                🔄 Reset
                             </button>
                         </div>
-                    </div>
-                    
-                    <!-- Right Side: Students Display -->
-                    <div style="background: #2c3e50; border-radius: 12px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
                         
-                        <!-- All Students Display -->
-                        <h3 style="color: #ecf0f1; margin: 0 0 20px 0; text-align: center;">Training Data</h3>
-                        
-                        <div style="display: grid; gap: 15px;">
-                            <!-- Student A -->
-                            <div class="student-card" data-index="0" style="background: #34495e; border-radius: 8px; padding: 15px; border: 2px solid #34495e; transition: all 0.3s;">
-                                <div style="display: grid; grid-template-columns: 1fr 2fr 1fr; align-items: center; gap: 15px;">
-                                    <div>
-                                        <div style="color: #ecf0f1; font-weight: bold; margin-bottom: 5px;">Student A</div>
-                                        <div style="font-size: 0.7rem; color: #95a5a6;">
-                                            Age: <span style="color: #3498db;">20</span><br>
-                                            Cups: <span style="color: #e74c3c;">2</span><br>
-                                            Tired: <span style="color: #f39c12;">7</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Mini bar visualization -->
-                                    <div style="position: relative; height: 60px; background: rgba(0,0,0,0.3); border-radius: 4px; overflow: hidden;">
-                                        <div class="target-marker" style="position: absolute; bottom: 64%; width: 100%; height: 2px; background: #2ecc71; opacity: 0.8;"></div>
-                                        <div class="prediction-bar" data-student="0" style="position: absolute; bottom: 0; width: 100%; background: linear-gradient(to top, #3498db, #5dade2); transition: height 0.3s; height: 0%;"></div>
-                                    </div>
-                                    
-                                    <div style="text-align: right;">
-                                        <div style="color: #2ecc71; font-size: 0.75rem;">Target: 161</div>
-                                        <div class="prediction-value" data-student="0" style="color: #ecf0f1; font-size: 0.9rem; font-weight: bold;">0</div>
-                                        <div class="error-value" data-student="0" style="color: #e74c3c; font-size: 0.7rem;">-161</div>
-                                    </div>
-                                </div>
+                        <!-- Stats Display -->
+                        <div style="
+                            background: rgba(255, 255, 255, 0.98);
+                            border-radius: 8px;
+                            padding: 15px;
+                            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                            display: flex;
+                            justify-content: space-around;
+                            align-items: center;
+                        ">
+                            <div style="text-align: center;">
+                                <div style="color: #95a5a6; font-size: 0.8rem;">Step</div>
+                                <div id="step-count" style="color: #2c3e50; font-size: 1.5rem; font-weight: bold;">0</div>
                             </div>
-                            
-                            <!-- Student B -->
-                            <div class="student-card" data-index="1" style="background: #34495e; border-radius: 8px; padding: 15px; border: 2px solid #34495e; transition: all 0.3s;">
-                                <div style="display: grid; grid-template-columns: 1fr 2fr 1fr; align-items: center; gap: 15px;">
-                                    <div>
-                                        <div style="color: #ecf0f1; font-weight: bold; margin-bottom: 5px;">Student B</div>
-                                        <div style="font-size: 0.7rem; color: #95a5a6;">
-                                            Age: <span style="color: #3498db;">19</span><br>
-                                            Cups: <span style="color: #e74c3c;">1</span><br>
-                                            Tired: <span style="color: #f39c12;">9</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Mini bar visualization -->
-                                    <div style="position: relative; height: 60px; background: rgba(0,0,0,0.3); border-radius: 4px; overflow: hidden;">
-                                        <div class="target-marker" style="position: absolute; bottom: 61%; width: 100%; height: 2px; background: #2ecc71; opacity: 0.8;"></div>
-                                        <div class="prediction-bar" data-student="1" style="position: absolute; bottom: 0; width: 100%; background: linear-gradient(to top, #e74c3c, #ec7063); transition: height 0.3s; height: 0%;"></div>
-                                    </div>
-                                    
-                                    <div style="text-align: right;">
-                                        <div style="color: #2ecc71; font-size: 0.75rem;">Target: 152</div>
-                                        <div class="prediction-value" data-student="1" style="color: #ecf0f1; font-size: 0.9rem; font-weight: bold;">0</div>
-                                        <div class="error-value" data-student="1" style="color: #e74c3c; font-size: 0.7rem;">-152</div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Student C -->
-                            <div class="student-card" data-index="2" style="background: #34495e; border-radius: 8px; padding: 15px; border: 2px solid #34495e; transition: all 0.3s;">
-                                <div style="display: grid; grid-template-columns: 1fr 2fr 1fr; align-items: center; gap: 15px;">
-                                    <div>
-                                        <div style="color: #ecf0f1; font-weight: bold; margin-bottom: 5px;">Student C</div>
-                                        <div style="font-size: 0.7rem; color: #95a5a6;">
-                                            Age: <span style="color: #3498db;">22</span><br>
-                                            Cups: <span style="color: #e74c3c;">4</span><br>
-                                            Tired: <span style="color: #f39c12;">3</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Mini bar visualization -->
-                                    <div style="position: relative; height: 60px; background: rgba(0,0,0,0.3); border-radius: 4px; overflow: hidden;">
-                                        <div class="target-marker" style="position: absolute; bottom: 72%; width: 100%; height: 2px; background: #2ecc71; opacity: 0.8;"></div>
-                                        <div class="prediction-bar" data-student="2" style="position: absolute; bottom: 0; width: 100%; background: linear-gradient(to top, #f39c12, #f5b041); transition: height 0.3s; height: 0%;"></div>
-                                    </div>
-                                    
-                                    <div style="text-align: right;">
-                                        <div style="color: #2ecc71; font-size: 0.75rem;">Target: 179</div>
-                                        <div class="prediction-value" data-student="2" style="color: #ecf0f1; font-size: 0.9rem; font-weight: bold;">0</div>
-                                        <div class="error-value" data-student="2" style="color: #e74c3c; font-size: 0.7rem;">-179</div>
-                                    </div>
-                                </div>
+                            <div style="text-align: center;">
+                                <div style="color: #95a5a6; font-size: 0.8rem;">Total Error</div>
+                                <div id="total-loss" style="color: #e74c3c; font-size: 1.5rem; font-weight: bold;">0</div>
                             </div>
                         </div>
-                        
-                        <!-- Loss Display -->
-                        <div style="margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div>
-                                    <div style="color: #95a5a6; font-size: 0.8rem;">Total Loss (Absolute)</div>
-                                    <div id="total-loss" style="color: #e74c3c; font-size: 1.5rem; font-weight: bold;">492</div>
-                                </div>
-                                <div style="text-align: right;">
-                                    <div style="color: #95a5a6; font-size: 0.8rem;">Step</div>
-                                    <div id="step-count" style="color: #ecf0f1; font-size: 1.2rem; font-weight: bold;">0</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    
-                </div>
-                
-                <!-- Success Message -->
-                <div id="success-message" style="display: none; margin-top: 20px; padding: 20px; background: linear-gradient(135deg, #2ecc71, #27ae60); border-radius: 12px; text-align: center; color: white; box-shadow: 0 4px 15px rgba(46,204,113,0.3);">
-                    <h2 style="margin: 0 0 10px 0;">🎉 Converged! Found the Optimal Weights!</h2>
-                    <div style="font-size: 1.1rem; font-family: 'Courier New', monospace;">
-                        Final: <span id="final-formula">5×age + 10×cups + 3×tired + 20</span>
-                    </div>
-                    <div style="margin-top: 10px; font-size: 0.9rem; opacity: 0.9;">
-                        Gradient Descent found the solution in <span id="final-steps">0</span> steps!
                     </div>
                 </div>
+                    
+                <!-- Student Line with Results -->
+                <div style="
+                    position: relative;
+                    width: 98%;
+                    max-width: none;
+                    margin-top: -100px;
+                    padding: 15px;
+                    display: flex;
+                    justify-content: space-around;
+                    align-items: flex-end;
+                ">
+                        <!-- Student 1: Joe -->
+                        <div class="student" data-student="0" style="
+                            position: relative;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                        ">
+                            <div class="student-avatar" style="
+                                width: 140px;
+                                height: 160px;
+                                background: linear-gradient(to bottom, #fdbcb4 0%, #f0a0a0 100%);
+                                border-radius: 70px 70px 10px 10px;
+                                position: relative;
+                                box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+                                transition: all 0.3s;
+                                border: 3px solid rgba(255,255,255,0.8);
+                            ">
+                                <!-- Face -->
+                                <div style="
+                                    position: absolute;
+                                    top: 35px;
+                                    left: 50%;
+                                    transform: translateX(-50%);
+                                    font-size: 3.5rem;
+                                ">👨‍🎓</div>
+                                <!-- Name Tag -->
+                                <div style="
+                                    position: absolute;
+                                    bottom: -30px;
+                                    left: 50%;
+                                    transform: translateX(-50%);
+                                    background: white;
+                                    padding: 6px 18px;
+                                    border-radius: 15px;
+                                    font-weight: bold;
+                                    font-size: 1.1rem;
+                                    color: #2c3e50;
+                                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                                    white-space: nowrap;
+                                ">Joe</div>
+                            </div>
+                            <!-- Hover Profile -->
+                            <div class="student-profile" style="
+                                position: absolute;
+                                bottom: 180px;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                background: white;
+                                padding: 15px;
+                                border-radius: 10px;
+                                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+                                opacity: 0;
+                                pointer-events: none;
+                                transition: opacity 0.3s;
+                                white-space: nowrap;
+                                z-index: 10;
+                            ">
+                                <div style="font-weight: bold; color: #2c3e50; margin-bottom: 8px;">Joe's Profile</div>
+                                <div style="font-size: 0.9rem; color: #555; line-height: 1.4;">
+                                    📅 20 years old<br>
+                                    ☕ Drinks 2 cups/day<br>
+                                    😴 Tiredness: 7/10<br>
+                                    <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e0e0e0;">
+                                        🎯 Needs: <span style="font-weight: bold; color: #2ecc71;">161ml</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Prediction Display -->
+                            <div class="prediction-display" data-student="0" style="
+                                position: absolute;
+                                bottom: 180px;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                background: white;
+                                padding: 10px 15px;
+                                border-radius: 8px;
+                                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                                opacity: 0;
+                                pointer-events: none;
+                                transition: opacity 0.3s;
+                                white-space: nowrap;
+                                z-index: 10;
+                                text-align: center;
+                            ">
+                                <div class="prediction-text" style="font-weight: bold; color: #2c3e50;">Predicted: <span class="prediction-value">0</span>ml</div>
+                                <div class="error-text" style="font-size: 0.85rem; color: #7f8c8d; margin-top: 4px;">Error: <span class="error-value">0</span>ml</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Student 2: Sarah -->
+                        <div class="student" data-student="1" style="
+                            position: relative;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                        ">
+                            <div class="student-avatar" style="
+                                width: 140px;
+                                height: 160px;
+                                background: linear-gradient(to bottom, #c9b4f4 0%, #a090d0 100%);
+                                border-radius: 70px 70px 10px 10px;
+                                position: relative;
+                                box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+                                transition: all 0.3s;
+                                border: 3px solid rgba(255,255,255,0.8);
+                            ">
+                                <!-- Face -->
+                                <div style="
+                                    position: absolute;
+                                    top: 35px;
+                                    left: 50%;
+                                    transform: translateX(-50%);
+                                    font-size: 3.5rem;
+                                ">👩‍🎓</div>
+                                <!-- Name Tag -->
+                                <div style="
+                                    position: absolute;
+                                    bottom: -30px;
+                                    left: 50%;
+                                    transform: translateX(-50%);
+                                    background: white;
+                                    padding: 6px 18px;
+                                    border-radius: 15px;
+                                    font-weight: bold;
+                                    font-size: 1.1rem;
+                                    color: #2c3e50;
+                                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                                    white-space: nowrap;
+                                ">Sarah</div>
+                            </div>
+                            <!-- Hover Profile -->
+                            <div class="student-profile" style="
+                                position: absolute;
+                                bottom: 180px;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                background: white;
+                                padding: 15px;
+                                border-radius: 10px;
+                                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+                                opacity: 0;
+                                pointer-events: none;
+                                transition: opacity 0.3s;
+                                white-space: nowrap;
+                                z-index: 10;
+                            ">
+                                <div style="font-weight: bold; color: #2c3e50; margin-bottom: 8px;">Sarah's Profile</div>
+                                <div style="font-size: 0.9rem; color: #555; line-height: 1.4;">
+                                    📅 19 years old<br>
+                                    ☕ Drinks 1 cup/day<br>
+                                    😴 Tiredness: 9/10<br>
+                                    <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e0e0e0;">
+                                        🎯 Needs: <span style="font-weight: bold; color: #2ecc71;">152ml</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Prediction Display -->
+                            <div class="prediction-display" data-student="1" style="
+                                position: absolute;
+                                bottom: 180px;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                background: white;
+                                padding: 10px 15px;
+                                border-radius: 8px;
+                                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                                opacity: 0;
+                                pointer-events: none;
+                                transition: opacity 0.3s;
+                                white-space: nowrap;
+                                z-index: 10;
+                                text-align: center;
+                            ">
+                                <div class="prediction-text" style="font-weight: bold; color: #2c3e50;">Predicted: <span class="prediction-value">0</span>ml</div>
+                                <div class="error-text" style="font-size: 0.85rem; color: #7f8c8d; margin-top: 4px;">Error: <span class="error-value">0</span>ml</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Student 3: Emma -->
+                        <div class="student" data-student="2" style="
+                            position: relative;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                        ">
+                            <div class="student-avatar" style="
+                                width: 140px;
+                                height: 160px;
+                                background: linear-gradient(to bottom, #b4e7ce 0%, #90c0a0 100%);
+                                border-radius: 70px 70px 10px 10px;
+                                position: relative;
+                                box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+                                transition: all 0.3s;
+                                border: 3px solid rgba(255,255,255,0.8);
+                            ">
+                                <!-- Face -->
+                                <div style="
+                                    position: absolute;
+                                    top: 35px;
+                                    left: 50%;
+                                    transform: translateX(-50%);
+                                    font-size: 3.5rem;
+                                ">👩‍💼</div>
+                                <!-- Name Tag -->
+                                <div style="
+                                    position: absolute;
+                                    bottom: -30px;
+                                    left: 50%;
+                                    transform: translateX(-50%);
+                                    background: white;
+                                    padding: 6px 18px;
+                                    border-radius: 15px;
+                                    font-weight: bold;
+                                    font-size: 1.1rem;
+                                    color: #2c3e50;
+                                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                                    white-space: nowrap;
+                                ">Emma</div>
+                            </div>
+                            <!-- Hover Profile -->
+                            <div class="student-profile" style="
+                                position: absolute;
+                                bottom: 180px;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                background: white;
+                                padding: 15px;
+                                border-radius: 10px;
+                                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+                                opacity: 0;
+                                pointer-events: none;
+                                transition: opacity 0.3s;
+                                white-space: nowrap;
+                                z-index: 10;
+                            ">
+                                <div style="font-weight: bold; color: #2c3e50; margin-bottom: 8px;">Emma's Profile</div>
+                                <div style="font-size: 0.9rem; color: #555; line-height: 1.4;">
+                                    📅 22 years old<br>
+                                    ☕ Drinks 4 cups/day<br>
+                                    😴 Tiredness: 3/10<br>
+                                    <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e0e0e0;">
+                                        🎯 Needs: <span style="font-weight: bold; color: #2ecc71;">179ml</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Prediction Display -->
+                            <div class="prediction-display" data-student="2" style="
+                                position: absolute;
+                                bottom: 180px;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                background: white;
+                                padding: 10px 15px;
+                                border-radius: 8px;
+                                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                                opacity: 0;
+                                pointer-events: none;
+                                transition: opacity 0.3s;
+                                white-space: nowrap;
+                                z-index: 10;
+                                text-align: center;
+                            ">
+                                <div class="prediction-text" style="font-weight: bold; color: #2c3e50;">Predicted: <span class="prediction-value">0</span>ml</div>
+                                <div class="error-text" style="font-size: 0.85rem; color: #7f8c8d; margin-top: 4px;">Error: <span class="error-value">0</span>ml</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+               
                 
                 ${createStandardNavigation()}
             </div>
         </div>
         
         <style>
+            /* Number Input Styling */
             input[type="range"]::-webkit-slider-thumb {
                 -webkit-appearance: none;
                 width: 18px;
@@ -212,24 +508,44 @@ function createCoffeeGradientDescent() {
                 transform: scale(1.2);
             }
             
-            button:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            /* Student Interactions */
+            .student:hover .student-avatar {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                border-color: rgba(255,255,255,1);
             }
             
-            button:active {
-                transform: translateY(0);
+            .student:hover .student-profile {
+                opacity: 1 !important;
+            }
+            
+            .student.running .prediction-display {
+                opacity: 1 !important;
+            }
+            
+            /* Animations */
+            @keyframes bounce {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-10px); }
+            }
+            
+            @keyframes pulse {
+                0%, 100% { transform: scale(1); opacity: 1; }
+                50% { transform: scale(1.05); opacity: 0.7; }
+            }
+            
+            .updating {
+                animation: pulse 0.5s ease-in-out;
+            }
+            
+            .serving .student-avatar {
+                animation: bounce 0.5s ease-in-out;
             }
             
             button:disabled {
                 opacity: 0.5;
                 cursor: not-allowed;
-                transform: none;
-            }
-            
-            @keyframes pulse {
-                0%, 100% { opacity: 1; }
-                50% { opacity: 0.7; }
+                transform: none !important;
             }
         </style>
     `;
@@ -237,24 +553,30 @@ function createCoffeeGradientDescent() {
     // Initialize navigation
     initializeNavigation('coffee-gradient', 'createCoffeeGradientDescent');
     
-    // Add interactivity
+    // Setup interactivity
     setTimeout(() => {
         setupGradientDescent();
     }, 100);
 }
 
+/**
+ * Sets up the gradient descent functionality
+ * @function setupGradientDescent
+ * @description Initializes the gradient descent algorithm and controls
+ * @returns {void}
+ */
 function setupGradientDescent() {
-    // True weights
+    // True weights (target formula)
     const TRUE_W1 = 5;
     const TRUE_W2 = 10;
     const TRUE_W3 = 3;
     const TRUE_BIAS = 20;
     
-    // Training data
+    // Training data (3 students)
     const STUDENTS = [
-        { age: 20, cups: 2, tired: 7, target: 161 },
-        { age: 19, cups: 1, tired: 9, target: 152 },
-        { age: 22, cups: 4, tired: 3, target: 179 }
+        { name: 'Joe', age: 20, cups: 2, tired: 7, target: 161 },
+        { name: 'Sarah', age: 19, cups: 1, tired: 9, target: 152 },
+        { name: 'Emma', age: 22, cups: 4, tired: 3, target: 179 }
     ];
     
     // Current weights (start with small random values)
@@ -263,33 +585,41 @@ function setupGradientDescent() {
     let w3 = Math.random() * 0.1;
     let bias = Math.random() * 0.1;
     
-    // Gradient descent parameters
-    let learningRate = 0.0001;
+    // Fixed gradient descent parameters
+    const learningRate = 0.0001; // Fixed learning rate
     let stepCount = 0;
     let isRunning = false;
     let animationId = null;
+    let hasServed = false; // Track if serving animation has played
     
     // Get elements
+    const gradientBtn = document.getElementById('gradient-btn');
     const stepBtn = document.getElementById('step-btn');
-    const autoBtn = document.getElementById('auto-btn');
     const resetBtn = document.getElementById('reset-btn');
-    const lrSlider = document.getElementById('lr-slider');
+    const studentElements = document.querySelectorAll('.student');
     
     // Calculate predictions and loss
     function forward() {
         let totalLoss = 0;
         const predictions = [];
+        let perfectCount = 0;
         
         STUDENTS.forEach((student, i) => {
             const pred = w1 * student.age + w2 * student.cups + w3 * student.tired + bias;
             predictions.push(pred);
-            const error = pred - student.target;
-            totalLoss += Math.abs(error);
+            const error = Math.abs(pred - student.target);
+            totalLoss += error;
+            
+            // Count as perfect if within 5ml tolerance
+            if (error <= 5) {
+                perfectCount++;
+            }
         });
         
         return {
             predictions,
-            loss: totalLoss
+            loss: totalLoss,
+            allPerfect: perfectCount === 3
         };
     }
     
@@ -315,59 +645,133 @@ function setupGradientDescent() {
     }
     
     // Update display
-    function updateDisplay() {
-        const { predictions, loss } = forward();
+    function updateDisplay(showServing = false) {
+        const { predictions, loss, allPerfect } = forward();
         
-        // Update weight displays
-        document.getElementById('w1-display').textContent = w1.toFixed(2);
-        document.getElementById('w2-display').textContent = w2.toFixed(2);
-        document.getElementById('w3-display').textContent = w3.toFixed(2);
-        document.getElementById('bias-display').textContent = bias.toFixed(2);
+        // Update weight displays with animation
+        const w1Display = document.getElementById('w1-display');
+        const w2Display = document.getElementById('w2-display');
+        const w3Display = document.getElementById('w3-display');
+        const biasDisplay = document.getElementById('bias-display');
         
-        // Update predictions and errors
+        w1Display.textContent = w1.toFixed(2);
+        w2Display.textContent = w2.toFixed(2);
+        w3Display.textContent = w3.toFixed(2);
+        biasDisplay.textContent = bias.toFixed(2);
+        
+        // Add pulse animation to weights when updating
+        if (isRunning) {
+            [w1Display, w2Display, w3Display, biasDisplay].forEach(el => {
+                el.parentElement.classList.add('updating');
+                setTimeout(() => el.parentElement.classList.remove('updating'), 500);
+            });
+        }
+        
+        // Update predictions and errors for each student
         predictions.forEach((pred, i) => {
             const target = STUDENTS[i].target;
             const error = pred - target;
+            const absError = Math.abs(error);
+            const studentEl = studentElements[i];
             
-            // Update values
-            document.querySelector(`.prediction-value[data-student="${i}"]`).textContent = Math.round(pred);
-            const errorElement = document.querySelector(`.error-value[data-student="${i}"]`);
-            errorElement.textContent = error > 0 ? `+${Math.round(error)}` : Math.round(error);
+            // Update prediction display
+            const predDisplay = studentEl.querySelector('.prediction-display');
+            const predValue = predDisplay.querySelector('.prediction-value');
+            const errorValue = predDisplay.querySelector('.error-value');
             
-            // Update bar height
-            const bar = document.querySelector(`.prediction-bar[data-student="${i}"]`);
-            const barHeight = Math.min(100, (pred / 250) * 100);
-            bar.style.height = Math.max(0, barHeight) + '%';
+            predValue.textContent = Math.round(pred);
+            errorValue.textContent = error > 0 ? `+${Math.round(error)}` : Math.round(error);
             
-            // Update card border color based on error
-            const card = document.querySelectorAll('.student-card')[i];
-            if (Math.abs(error) < 1) {
-                card.style.borderColor = '#2ecc71';
-                bar.style.background = 'linear-gradient(to top, #27ae60, #2ecc71)';
-            } else if (Math.abs(error) < 10) {
-                card.style.borderColor = '#f39c12';
-                bar.style.background = 'linear-gradient(to top, #d68910, #f39c12)';
+            // Color code based on error magnitude (±5ml tolerance for perfect)
+            if (absError <= 5) {
+                predDisplay.style.borderLeft = '3px solid #2ecc71';
+                errorValue.style.color = '#2ecc71';
+            } else if (absError < 20) {
+                predDisplay.style.borderLeft = '3px solid #f39c12';
+                errorValue.style.color = '#f39c12';
             } else {
-                card.style.borderColor = '#e74c3c';
-                bar.style.background = pred > target ? 
-                    'linear-gradient(to top, #c0392b, #e74c3c)' : 
-                    'linear-gradient(to top, #5d6d7e, #85929e)';
+                predDisplay.style.borderLeft = '3px solid #e74c3c';
+                errorValue.style.color = '#e74c3c';
+            }
+            
+            // Show prediction display when running
+            if (isRunning || stepCount > 0) {
+                studentEl.classList.add('running');
             }
         });
         
-        // Update loss
-        document.getElementById('total-loss').textContent = loss.toFixed(1);
+        // Update loss and step count
+        document.getElementById('total-loss').textContent = Math.round(loss);
         document.getElementById('step-count').textContent = stepCount;
         
-        // Check for convergence
-        if (loss < 3) {
+        // Check if all students are perfect and show serving animation
+        if (allPerfect && !hasServed) {
+            hasServed = true;
             if (isRunning) {
                 stopAuto();
             }
-            document.getElementById('success-message').style.display = 'block';
-            document.getElementById('final-steps').textContent = stepCount;
-            document.getElementById('final-formula').textContent = 
-                `${w1.toFixed(1)}×age + ${w2.toFixed(1)}×cups + ${w3.toFixed(1)}×tired + ${bias.toFixed(1)}`;
+            
+            // Play serving animation with status indicators
+            playServingAnimation(predictions);
+            
+            // Show success message
+            setTimeout(() => {
+                document.getElementById('success-message').style.display = 'block';
+                document.getElementById('final-steps').textContent = stepCount;
+                document.getElementById('final-formula').textContent = 
+                    `${w1.toFixed(1)}×Age + ${w2.toFixed(1)}×Cups + ${w3.toFixed(1)}×Tiredness + ${bias.toFixed(1)}ml`;
+            }, 2000);
+        }
+    }
+    
+    // Play serving animation
+    async function playServingAnimation(predictions) {
+        for (let i = 0; i < STUDENTS.length; i++) {
+            const student = STUDENTS[i];
+            const studentEl = studentElements[i];
+            const pred = predictions[i];
+            const error = Math.abs(pred - student.target);
+            
+            // Animate serving
+            studentEl.classList.add('serving');
+            const avatarEl = studentEl.querySelector('.student-avatar');
+            avatarEl.style.animation = 'bounce 0.5s ease-in-out';
+            
+            // Remove animation after completion
+            setTimeout(() => {
+                avatarEl.style.animation = '';
+            }, 500);
+            
+            // Remove existing status indicator if present
+            const existingStatus = studentEl.querySelector('.status-indicator');
+            if (existingStatus) {
+                existingStatus.remove();
+            }
+            
+            // Create status indicator
+            const statusDiv = document.createElement('div');
+            statusDiv.className = 'status-indicator';
+            statusDiv.style.cssText = `
+                position: absolute;
+                top: -10px;
+                right: -10px;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                background: #2ecc71;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                animation: pulse 0.5s ease-in-out;
+            `;
+            statusDiv.textContent = '✅';
+            
+            // Add to avatar
+            avatarEl.appendChild(statusDiv);
+            
+            await new Promise(resolve => setTimeout(resolve, 300));
         }
     }
     
@@ -385,25 +789,33 @@ function setupGradientDescent() {
         updateDisplay();
     }
     
-    // Auto run
+    // Auto run gradient descent
     function autoRun() {
         if (!isRunning) return;
         
         step();
         
-        // Continue if loss is still high
-        const { loss } = forward();
-        if (loss > 3 && stepCount < 10000) {
+        // Continue if not all perfect
+        const { allPerfect } = forward();
+        if (!allPerfect && stepCount < 10000) {
             animationId = setTimeout(autoRun, 50);
         } else {
             stopAuto();
         }
     }
     
+    function startAuto() {
+        isRunning = true;
+        gradientBtn.textContent = '⏹ Stop';
+        gradientBtn.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
+        stepBtn.disabled = true;
+        autoRun();
+    }
+    
     function stopAuto() {
         isRunning = false;
-        autoBtn.textContent = 'Auto Run';
-        autoBtn.style.background = '#2ecc71';
+        gradientBtn.textContent = '▶️ Start';
+        gradientBtn.style.background = 'linear-gradient(135deg, #3498db, #2980b9)';
         stepBtn.disabled = false;
         if (animationId) {
             clearTimeout(animationId);
@@ -417,35 +829,39 @@ function setupGradientDescent() {
         w3 = Math.random() * 0.1;
         bias = Math.random() * 0.1;
         stepCount = 0;
+        hasServed = false;
         document.getElementById('success-message').style.display = 'none';
+        
+        // Clear student displays
+        studentElements.forEach(student => {
+            student.classList.remove('running', 'serving');
+            student.querySelector('.student-avatar').style.animation = '';
+            
+            // Remove status indicators
+            const statusIndicator = student.querySelector('.status-indicator');
+            if (statusIndicator) {
+                statusIndicator.remove();
+            }
+        });
+        
         stopAuto();
         updateDisplay();
     }
     
     // Event listeners
+    gradientBtn.addEventListener('click', () => {
+        if (isRunning) {
+            stopAuto();
+        } else {
+            startAuto();
+        }
+    });
+    
     stepBtn.addEventListener('click', () => {
         step();
     });
     
-    autoBtn.addEventListener('click', () => {
-        if (isRunning) {
-            stopAuto();
-        } else {
-            isRunning = true;
-            autoBtn.textContent = 'Stop';
-            autoBtn.style.background = '#e74c3c';
-            stepBtn.disabled = true;
-            autoRun();
-        }
-    });
-    
     resetBtn.addEventListener('click', reset);
-    
-    lrSlider.addEventListener('input', () => {
-        const lrOptions = [0.0001, 0.0005, 0.001, 0.005, 0.01];
-        learningRate = lrOptions[parseInt(lrSlider.value) - 1];
-        document.getElementById('lr-value').textContent = learningRate;
-    });
     
     // Initialize display
     updateDisplay();

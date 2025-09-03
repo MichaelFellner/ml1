@@ -1,27 +1,25 @@
 /**
- * Introduction to Steps
+ * Intro to Learning Rates
  * 
- * Interactive level teaching gradient descent step sizes through balloon pumping
+ * Interactive level teaching gradient descent learning rates through balloon pumping
  * 
- * In this level, you'll learn how gradient descent takes steps to minimize error.
- * The balloon machine demonstrates how we adjust parameters (w) based on the error
- * between our current output and the target. Each step moves us closer to the
- * optimal value by applying the gradient descent update rule.
+ * In this level, you'll learn how the learning rate affects gradient descent steps.
+ * The balloon machine demonstrates how different learning rates change the speed
+ * and stability of convergence. Too small and progress is slow, too large and
+ * you might overshoot or oscillate around the target.
  * 
  * The key concept: new w = w - learning_rate * gradient
  * where gradient = error * input_coefficient = error * 10
- * and learning_rate = 0.001 in this implementation.
- * This formula shows how we update our parameter based on the gradient.
- * The gradient tells us the direction and magnitude to adjust w.
+ * You control the learning rate to see how it affects convergence speed.
  */
 
-window.createIntroductionToSteps = function() {
+window.createIntroToLearningRates = function() {
     
-    class IntroductionToStepsLevel extends window.InteractiveLevelTemplate {
+    class IntroToLearningRatesLevel extends window.InteractiveLevelTemplate {
         constructor() {
             super({
-                id: 'introduction-to-steps',
-                name: 'Introduction to Steps',
+                id: 'intro-to-learning-rates',
+                name: 'Intro to Learning Rates',
                 type: 'interactive',
                 description: '',
                 targetFunction: { 
@@ -40,7 +38,7 @@ window.createIntroductionToSteps = function() {
                 validation: {
                     tolerance: 0.002,  // ±2 tolerance on 7040 means 0.02% tolerance
                     customValidator: function(params, target) {
-                        // We're testing with x = 1 (balloon size 1)
+                        // We're testing with x = 1
                         const x = 1;
                         const prediction = params.w * x;
                         const trueValue = target.w * x;  // 7040 * 1 = 7040
@@ -73,7 +71,7 @@ window.createIntroductionToSteps = function() {
             });
             
             // Custom state for this level
-            this.learningRate = 0.1;  // Learning rate for discovering w = 7040
+            this.currentLearningRate = 0.1;  // Default learning rate for discovering w = 7040
             this.lastError = null;
             this.canUpdate = false;
             this.updateCount = 0;
@@ -86,7 +84,7 @@ window.createIntroductionToSteps = function() {
             
             // CRITICAL: Initialize navigation
             if (typeof initializeNavigation === 'function') {
-                initializeNavigation('introduction-to-steps', 'createIntroductionToSteps');
+                initializeNavigation('intro-to-learning-rates', 'createIntroToLearningRates');
             }
             
             // Setup custom event handlers
@@ -99,11 +97,11 @@ window.createIntroductionToSteps = function() {
                     <!-- Level Introduction Box -->
                     <div style="background: rgba(102,126,234,0.08); border: 2px solid rgba(102,126,234,0.2); border-radius: 8px; padding: 15px; margin-bottom: 20px; max-width: 1200px; margin: 0 auto 20px;">
                         <div style="color: #333; font-size: 0.95rem; line-height: 1.6;">
-                            <strong style="color: #667eea; font-size: 1.1rem;">Discover the True Function: y = ???x</strong><br>
-                            Use gradient descent to find the true weight w! The pump shows your current function y = w·x. 
-                            Test different x values to see how well your w predicts the true outputs. The gradient descent formula 
-                            <code style="background: rgba(0,0,0,0.05); padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', monospace;">w_new = w - α × gradient</code> 
-                            automatically adjusts w based on the error. Keep updating until you discover that the true function is y = 7040x!
+                            <strong style="color: #667eea; font-size: 1.1rem;">Master the Learning Rate to Discover y = ???x</strong><br>
+                            The learning rate controls how big each gradient descent step is. You're trying to discover the true function y = 7040x. 
+                            A small learning rate (like 0.01) makes tiny, careful steps. A large learning rate (like 1.0) takes big jumps. 
+                            Try different values to see the trade-off: small rates are stable but slow, while large rates converge faster but might overshoot. 
+                            Find the sweet spot that discovers w = 7040 quickly without oscillating!
                         </div>
                     </div>
                     
@@ -313,6 +311,29 @@ window.createIntroductionToSteps = function() {
                             <div id="balloon-status" style="margin-bottom: 15px; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.9); min-height: 45px; text-align: center; display: flex; align-items: center; justify-content: center;">
                                 <div id="status-text" style="font-size: 0.95rem; color: #666;">Press "Pump Balloon" to test!</div>
                             </div>
+                            
+                            <!-- Learning Rate Control Section -->
+                            <div id="update-formula" style="padding: 15px; background: rgba(255,255,255,0.95); border-radius: 8px; min-height: 50px; margin-bottom: 15px;">
+                                <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
+                                    <div style="color: #666; font-size: 0.9rem; font-weight: bold;">Learning Rate:</div>
+                                    <input type="number" id="learning-rate-input" value="0.1" step="0.01" min="0.001" max="10" style="
+                                        width: 100px;
+                                        padding: 6px 8px;
+                                        border: 2px solid #667eea;
+                                        border-radius: 5px;
+                                        font-size: 1rem;
+                                        font-weight: bold;
+                                        text-align: center;
+                                        color: #667eea;
+                                        background: rgba(102,126,234,0.05);
+                                        font-family: 'Courier New', monospace;
+                                        -webkit-appearance: none;
+                                        -moz-appearance: textfield;
+                                        transition: all 0.3s;
+                                    ">
+                                    <div style="font-size: 0.85rem; color: #999;">Controls step size multiplier</div>
+                                </div>
+                            </div>
                         
                         <!-- Action Buttons Grid -->
                         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
@@ -369,6 +390,38 @@ window.createIntroductionToSteps = function() {
         _setupCustomHandlers() {
             // Initial plunger position
             this._updatePlungerHeight(100);
+            
+            // Learning rate input handler
+            const lrInput = document.getElementById('learning-rate-input');
+            if (lrInput) {
+                this.addEventListenerWithCleanup(lrInput, 'input', (e) => {
+                    const value = parseFloat(e.target.value);
+                    if (!isNaN(value) && value > 0 && value <= 10) {
+                        this.currentLearningRate = value;
+                    }
+                });
+                
+                // Prevent negative or invalid values and handle blur styling
+                this.addEventListenerWithCleanup(lrInput, 'blur', (e) => {
+                    const value = parseFloat(e.target.value);
+                    if (isNaN(value) || value <= 0) {
+                        e.target.value = '0.1';
+                        this.currentLearningRate = 0.1;
+                    } else if (value > 10) {
+                        e.target.value = '10';
+                        this.currentLearningRate = 10;
+                    }
+                    // Remove focus styling
+                    e.target.style.boxShadow = 'none';
+                    e.target.style.borderColor = '#667eea';
+                });
+                
+                // Add focus effect to learning rate input
+                this.addEventListenerWithCleanup(lrInput, 'focus', (e) => {
+                    e.target.style.boxShadow = '0 0 0 3px rgba(102,126,234,0.2)';
+                    e.target.style.borderColor = '#764ba2';
+                });
+            }
             
             // Pump button handler
             const pumpBtn = document.getElementById('pump-btn');
@@ -461,7 +514,6 @@ window.createIntroductionToSteps = function() {
             const balloon = document.getElementById('balloon');
             const popEffect = document.getElementById('pop-effect');
             const status = document.getElementById('balloon-status');
-            const errorValue = document.getElementById('error-value');
             const plunger = document.getElementById('pump-plunger');
             
             // Get current position
@@ -481,14 +533,11 @@ window.createIntroductionToSteps = function() {
                 }, 300);
             }, 200);
             
-            // Store the error value that will be used in gradient calculation
-            this.lastError = validation.error;  // This error feeds into the gradient formula
+            // Update error
+            this.lastError = validation.error;
             this.canUpdate = true;
             
             const statusText = document.getElementById('status-text');
-            
-            // Error is now stored and ready for gradient descent update
-            // (Preview removed per request)
             
             // Enable update button
             const updateBtn = document.getElementById('update-w-btn');
@@ -516,7 +565,11 @@ window.createIntroductionToSteps = function() {
                 // Complete level
                 this.completeLevel({
                     score: 100,
-                    solutions: { w: this.getParameters().w }
+                    solutions: { 
+                        w: this.getParameters().w,
+                        learningRate: this.currentLearningRate,
+                        updates: this.updateCount
+                    }
                 });
                 
             } else if (validation.status === 'too_high') {
@@ -543,6 +596,7 @@ window.createIntroductionToSteps = function() {
             if (!this.canUpdate || this.lastError === null) return;
             
             const currentW = this.getParameters().w;
+            const lr = this.currentLearningRate;
             
             // ============ GRADIENT CALCULATION START ============
             // This is where gradient descent happens!
@@ -557,15 +611,25 @@ window.createIntroductionToSteps = function() {
             const gradient = -this.lastError * this.testX;
             
             // Step 2: Calculate the step size (gradient × learning_rate)  
-            const stepSize = gradient * this.learningRate;
+            const stepSize = gradient * lr;
             
             // Step 3: Apply the gradient update to get new w
             // Subtract the step size (gradient descent moves opposite to gradient)
             const newW = currentW - stepSize;
             // ============ GRADIENT CALCULATION END ============
             
-            // Clamp to valid range (post-processing, not part of gradient calculation)
-            const clampedW = Math.max(0, Math.min(10000, newW));
+            // Clamp to valid range
+            let clampedW = Math.max(0, Math.min(10000, newW));
+            let resetToOne = false;
+            let hitMax = false;
+            
+            if (newW <= 0) {
+                clampedW = 1;
+                resetToOne = true;
+            } else if (newW >= 10000) {
+                clampedW = 10000;
+                hitMax = true;
+            }
             
             // Show update indicator with arrow and values
             const updateIndicator = document.getElementById('update-indicator');
@@ -584,7 +648,7 @@ window.createIntroductionToSteps = function() {
                 // Show the step size calculation: error × learning rate
                 stepFormula.innerHTML = `
                     <span style="color: #666;">error × α</span><br>
-                    <span style="color: #333;">${Math.abs(this.lastError).toFixed(0)} × ${this.learningRate}</span>
+                    <span style="color: #333;">${Math.abs(this.lastError).toFixed(0)} × ${lr}</span>
                 `;
                 
                 // Show the result with appropriate sign
@@ -611,6 +675,22 @@ window.createIntroductionToSteps = function() {
                 updateIndicator.style.opacity = '1';
             }
             
+            // Update count
+            this.updateCount++;
+            
+            // Update status if w hit boundaries
+            if (resetToOne) {
+                const statusText = document.getElementById('status-text');
+                if (statusText) {
+                    statusText.innerHTML = '<span style="color: #dc3545; font-weight: bold;">The large learning rate caused w to become nearly 0, resetting w to 1.</span>';
+                }
+            } else if (hitMax) {
+                const statusText = document.getElementById('status-text');
+                if (statusText) {
+                    statusText.innerHTML = '<span style="color: #dc3545; font-weight: bold;">The learning rate caused w to reach its maximum value of 10000.</span>';
+                }
+            }
+            
             // Update the slider and value
             const wSlider = document.getElementById('w-slider');
             if (wSlider) {
@@ -632,8 +712,6 @@ window.createIntroductionToSteps = function() {
                 updateBtn.style.background = '#6c757d';
             }
             
-            // Reset displays
-            
             // Reset balloon
             const balloon = document.getElementById('balloon');
             if (balloon) {
@@ -641,9 +719,8 @@ window.createIntroductionToSteps = function() {
             }
             
             // Track update
-            this.updateCount++;
             this.trackAction('parameter_update', { 
-                learningRate: this.learningRate,
+                learningRate: lr,
                 oldW: currentW,
                 newW: clampedW,
                 error: this.lastError,
@@ -668,13 +745,18 @@ window.createIntroductionToSteps = function() {
             this.canUpdate = false;
             this.updateCount = 0;
             
+            // Reset learning rate
+            const lrInput = document.getElementById('learning-rate-input');
+            if (lrInput) {
+                lrInput.value = '0.1';
+                this.currentLearningRate = 0.1;
+            }
+            
             // Hide update indicator
             const updateIndicator = document.getElementById('update-indicator');
             if (updateIndicator) {
                 updateIndicator.style.opacity = '0';
             }
-            
-            // Reset displays
             
             // Reset balloon to smallest size (unless w is 0)
             const balloon = document.getElementById('balloon');
@@ -706,9 +788,9 @@ window.createIntroductionToSteps = function() {
     }
     
     // Add animation CSS if not present
-    if (!document.getElementById('intro-steps-style')) {
+    if (!document.getElementById('intro-lr-style')) {
         const style = document.createElement('style');
-        style.id = 'intro-steps-style';
+        style.id = 'intro-lr-style';
         style.textContent = `
             @keyframes rainbowPulse {
                 0% { filter: hue-rotate(0deg); transform: scale(1); }
@@ -719,18 +801,28 @@ window.createIntroductionToSteps = function() {
                 80% { filter: hue-rotate(288deg); }
                 100% { filter: hue-rotate(360deg); transform: scale(1); }
             }
+            
+            /* Remove spinner arrows from number inputs */
+            #learning-rate-input::-webkit-inner-spin-button,
+            #learning-rate-input::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            #learning-rate-input {
+                -moz-appearance: textfield;
+            }
         `;
         document.head.appendChild(style);
     }
     
-    const level = new IntroductionToStepsLevel();
+    const level = new IntroToLearningRatesLevel();
     level.create().catch(error => {
-        console.error('Failed to create Introduction to Steps:', error);
+        console.error('Failed to create Intro to Learning Rates:', error);
     });
     
     return level;
 };
 
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = window.createIntroductionToSteps;
+    module.exports = window.createIntroToLearningRates;
 }

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLTEACH - Background Test</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <style>
+        .test-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1 {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .info-text {
+            text-align: center;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .theme-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .theme-card {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .theme-card.active {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>MLTEACH Background System Test</h1>
+        <p class="info-text">
+            Welcome to the new MLTEACH with futuristic AI-themed animated backgrounds!<br>
+            Click the gear icon in the bottom-right corner to open the settings menu and choose different themes.<br><br>
+            Available themes include:
+        </p>
+        
+        <div class="theme-preview-grid">
+            <div class="theme-card" onclick="changeToTheme('neural-network')">
+                <h3>Neural Network</h3>
+                <p>Connected particles with grid</p>
+            </div>
+            <div class="theme-card" onclick="changeToTheme('quantum-field')">
+                <h3>Quantum Field</h3>
+                <p>Quantum waves and particles</p>
+            </div>
+            <div class="theme-card" onclick="changeToTheme('cyber-matrix')">
+                <h3>Cyber Matrix</h3>
+                <p>Matrix rain effect</p>
+            </div>
+            <div class="theme-card active" onclick="changeToTheme('ai-gradient')">
+                <h3>AI Gradient</h3>
+                <p>Smooth animated gradients</p>
+            </div>
+            <div class="theme-card" onclick="changeToTheme('deep-learning')">
+                <h3>Deep Learning</h3>
+                <p>Neural network layers</p>
+            </div>
+            <div class="theme-card" onclick="changeToTheme('data-stream')">
+                <h3>Data Stream</h3>
+                <p>Flowing data visualization</p>
+            </div>
+            <div class="theme-card" onclick="changeToTheme('classic-orange')">
+                <h3>Classic Orange</h3>
+                <p>Original MLTEACH theme</p>
+            </div>
+        </div>
+        
+        <p class="info-text" style="margin-top: 30px;">
+            <strong>Features:</strong><br>
+            ✓ Gentle animated backgrounds<br>
+            ✓ Multiple futuristic AI themes<br>
+            ✓ Particle effects and connections<br>
+            ✓ Adjustable animation speed<br>
+            ✓ Performance settings<br>
+            ✓ Saves your preference
+        </p>
+    </div>
+    
+    <script src="components/settings/BackgroundSystem.js"></script>
+    <script src="components/settings/SettingsMenu.js"></script>
+    <script>
+        function changeToTheme(themeName) {
+            if (window.backgroundSystem) {
+                window.backgroundSystem.changeTheme(themeName);
+                
+                // Update active state
+                document.querySelectorAll('.theme-card').forEach(card => {
+                    card.classList.remove('active');
+                });
+                event.currentTarget.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

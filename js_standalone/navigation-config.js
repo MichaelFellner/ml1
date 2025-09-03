@@ -56,13 +56,14 @@ const NAVIGATION_CONFIG = {
                 { id: "gradient-descent-part2", name: "Core Concept 2: Gradient Descent (Part 2)", func: "createGradientDescentPart2" },
                 { id: "gradient-descent-overview", name: "How Gradient Descent Works", func: "createGradientDescentOverview" },
                 { id: "introduction-to-steps", name: "Introduction to Steps", func: "createIntroductionToSteps" },
+                { id: "intro-to-learning-rates", name: "Intro to Learning Rates", func: "createIntroToLearningRates" },
                 //{ id: "step-size-teaching", name: "Step Size Teaching", func: "createStepSizeTeaching" },
                 { id: "pizza-production", name: "Pizza Production Challenge", func: "createPizzaProduction" },
-                { id: "pizza-production-behind-scenes", name: "Pizza: Two-Parameter Math Revealed", func: "createPizzaProductionBehindScenes" },
+                //{ id: "pizza-production-behind-scenes", name: "Pizza: Two-Parameter Math Revealed", func: "createPizzaProductionBehindScenes" },
                 { id: "music-studio-mixer", name: "Music Studio Mixer", func: "createMusicStudioMixer" },
-                { id: "gradient-descent-math-simple", name: "Gradient Math: Simple Case", func: "createGradientDescentMathSimple" },
-                { id: "gradient-descent-math-bias", name: "Gradient Math: Adding Bias", func: "createGradientDescentMathBias" },
-                { id: "gradient-descent-math-multiple", name: "Gradient Math: Multiple Parameters", func: "createGradientDescentMathMultiple" },
+                // { id: "gradient-descent-math-simple", name: "Gradient Math: Simple Case", func: "createGradientDescentMathSimple" },
+                // { id: "gradient-descent-math-bias", name: "Gradient Math: Adding Bias", func: "createGradientDescentMathBias" },
+                // { id: "gradient-descent-math-multiple", name: "Gradient Math: Multiple Parameters", func: "createGradientDescentMathMultiple" },
                 { id: "gradient-descent-math-quiz", name: "Gradient Math Quiz", func: "createGradientDescentMathQuiz" },
                 { id: "gradient-descent-congrats", name: "Gradient Descent Congratulations", func: "createGradientDescentCongrats" }
             ]
@@ -88,8 +89,7 @@ const NAVIGATION_CONFIG = {
                 { id: "final-congrats", name: "Final Congratulations", func: "createFinalCongrats" },
                 { id: "beyond-linear-regression", name: "From Simple to Complex AI", func: "createBeyondLinearRegression" },
                 { id: "next-steps", name: "Your Learning Path Forward", func: "createNextSteps" },
-                { id: "thank-you-feedback", name: "Thank You & Feedback", func: "createThankYouFeedback" },
-                { id: "post-quiz", name: "Legacy Congratulations", func: "createPostQuizCongrats" }
+                { id: "thank-you-feedback", name: "Thank You & Feedback", func: "createThankYouFeedback" }
             ]
         }
     ]

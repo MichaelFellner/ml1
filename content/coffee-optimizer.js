@@ -1,198 +1,614 @@
 /**
- * @fileoverview Coffee optimization simulation for the MLTEACH application.
- * Demonstrates real-world application of optimization concepts.
+ * @fileoverview Coffee Booth Simulation - Interactive coffee formula discovery game
+ * A fun, immersive way to learn optimization through running a campus coffee booth
  */
 
-// Coffee Optimizer - Single Student Focus Design
-// Left: Current student display | Right: Formula, controls, and feedback
-
 /**
- * Creates the coffee shop manual optimizer simulation
+ * Creates the coffee booth simulation
  * @function createCoffeeManualOptimizer
- * @description Interactive simulation for discovering the coffee formula through manual weight adjustment
+ * @description Interactive coffee booth where students learn optimization by serving coffee
  * @returns {void}
  */
 function createCoffeeManualOptimizer() {
     const container = document.getElementById('app');
     container.innerHTML = `
-        <div class="current-level">
-            <div class="level-content celebration" style="padding: 20px; max-width: 1000px; margin: 0 auto;">
-                <h1 style="font-size: 1.8rem; margin: 0 0 15px 0; text-align: center; color: #2c3e50;">4 Variable Challenge: Coffee Formula Discovery</h1>
-                
-                <!-- Explanation Box -->
-                <div style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; padding: 18px; margin-bottom: 20px; color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
-                    <div style="font-size: 0.95rem; line-height: 1.5; text-align: center;">
-                        Find the hidden formula that calculates coffee needs based on <strong>age</strong>, <strong>daily cups</strong>, and <strong>tiredness</strong>.
-                        Adjust the weights until the formula outputs match the target values for all three students!
+        <div class="current-level" style="
+            background: url('pictures/coffee_image.jpg'), linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f39c12 100%);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+        ">
+            <div class="level-content" style="padding: 20px; max-width: 1800px; margin: 0 auto; position: relative; z-index: 1;">
+                <!-- Title with backdrop -->
+                <div style="
+                    background: rgba(0, 0, 0, 0.7);
+                    border-radius: 15px;
+                    padding: 15px 30px;
+                    margin-bottom: -20px;
+                    max-width: 800px;
+                    isolation: isolate;
+                ">
+                    <h1 style="
+                        text-align: center !important;
+                        color: white !important;
+                        margin: 0 0 10px 0 !important;
+                        font-size: 2rem !important;
+                        font-weight: bold !important;
+                        mix-blend-mode: normal !important;
+                        background: none !important;
+                        background-clip: unset !important;
+                        -webkit-background-clip: unset !important;
+                        -webkit-text-fill-color: white !important;
+                    ">4 Variable Challenge: Serve the Right Amount of Coffee!</h1>
+                    <p style="
+                        text-align: center !important;
+                        color: white !important;
+                        margin: 0 !important;
+                        font-size: 1rem !important;
+                        mix-blend-mode: normal !important;
+                        background: none !important;
+                        background-clip: unset !important;
+                        -webkit-background-clip: unset !important;
+                        -webkit-text-fill-color: white !important;
+                    ">
+                        You have a line of students right before their final exams. Each needs a different amount of coffee to study all night. How much coffee they need
+                        depends on their age, how many cups a day they typically drink, and how tired they currently are. Finding a formula without gradient descent
+                        will be super difficult, so feel free to skip or use the hints if you get stuck.
+                    </p>
+                </div>
+                    
+                <!-- Coffee Booth -->
+                <div style="
+                    position: relative;
+                    width: 98%;
+                    max-width: none;
+                    margin: 0 auto 30px;
+                    background: linear-gradient(to bottom, rgba(139,69,19,0.98) 0%, rgba(101,67,33,0.98) 100%);
+                    border-radius: 15px 15px 0 0;
+                    padding: 15px 30px;
+                    box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+                    backdrop-filter: blur(10px);
+                ">
+                    <!-- Booth Awning -->
+                    <div style="
+                        position: absolute;
+                        top: -30px;
+                        left: -20px;
+                        right: -20px;
+                        height: 40px;
+                        background: repeating-linear-gradient(
+                            45deg,
+                            #ff6b6b,
+                            #ff6b6b 20px,
+                            #fff 20px,
+                            #fff 40px
+                        );
+                        border-radius: 15px 15px 0 0;
+                        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                    "></div>
+                        
+                    <!-- Booth Sign with Inline Editable Formula -->
+                    <div style="
+                        background: rgba(255, 255, 255, 0.98);
+                        border-radius: 10px;
+                        padding: 15px 20px;
+                        margin-bottom: 15px;
+                        text-align: center;
+                        box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+                    ">
+                        <div style="font-size: 1.2rem; font-weight: bold; color: #2c3e50; margin-bottom: 12px;">
+                            🧪 Your Coffee Formula
+                        </div>
+                            <div style="
+                                font-family: 'Courier New', monospace;
+                                font-size: 1.15rem;
+                                color: #2c3e50;
+                                background: #f8f9fa;
+                                padding: 12px 20px;
+                                border-radius: 8px;
+                                display: inline-block;
+                                white-space: nowrap;
+                            ">
+                                Coffee = 
+                                <input type="number" id="age-weight" value="0" min="0" max="20" style="
+                                    width: 48px;
+                                    padding: 4px;
+                                    border: 2px solid #3498db;
+                                    border-radius: 5px;
+                                    text-align: center;
+                                    font-family: 'Courier New', monospace;
+                                    font-size: 1.15rem;
+                                    font-weight: bold;
+                                    color: #3498db;
+                                    background: white;
+                                    margin: 0 3px;
+                                ">×Age + 
+                                <input type="number" id="cups-weight" value="0" min="0" max="20" style="
+                                    width: 48px;
+                                    padding: 4px;
+                                    border: 2px solid #e74c3c;
+                                    border-radius: 5px;
+                                    text-align: center;
+                                    font-family: 'Courier New', monospace;
+                                    font-size: 1.15rem;
+                                    font-weight: bold;
+                                    color: #e74c3c;
+                                    background: white;
+                                    margin: 0 3px;
+                                ">×Cups + 
+                                <input type="number" id="tired-weight" value="0" min="0" max="20" style="
+                                    width: 48px;
+                                    padding: 4px;
+                                    border: 2px solid #f39c12;
+                                    border-radius: 5px;
+                                    text-align: center;
+                                    font-family: 'Courier New', monospace;
+                                    font-size: 1.15rem;
+                                    font-weight: bold;
+                                    color: #f39c12;
+                                    background: white;
+                                    margin: 0 3px;
+                                ">×Tired + 
+                                <input type="number" id="base-weight" value="0" min="0" max="100" step="5" style="
+                                    width: 48px;
+                                    padding: 4px;
+                                    border: 2px solid #2ecc71;
+                                    border-radius: 5px;
+                                    text-align: center;
+                                    font-family: 'Courier New', monospace;
+                                    font-size: 1.15rem;
+                                    font-weight: bold;
+                                    color: #2ecc71;
+                                    background: white;
+                                    margin: 0 3px;
+                                ">ml
+                            </div>
+                        <div style="margin-top: 10px; font-size: 0.85rem; color: #7f8c8d;">
+                            💡 Click on any number to edit it directly. Students need ±5ml of their target to be happy!
+                        </div>
+                    </div>
+                        
+                    <!-- Action Button -->
+                    <div style="text-align: center; margin-top: 15px;">
+                        <button id="serve-button" style="
+                                background: linear-gradient(135deg, #667eea, #764ba2);
+                                color: white;
+                                border: none;
+                                padding: 12px 35px;
+                                font-size: 1.1rem;
+                                font-weight: bold;
+                                border-radius: 10px;
+                                cursor: pointer;
+                                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+                                transition: all 0.3s;
+                            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.5)'" 
+                               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.4)'">
+                                🎯 Start Serving!
+                            </button>
+                        <button id="reset-button" style="
+                            display: none;
+                            background: linear-gradient(135deg, #f39c12, #e67e22);
+                            color: white;
+                            border: none;
+                            padding: 12px 35px;
+                            font-size: 1.1rem;
+                            font-weight: bold;
+                            border-radius: 10px;
+                            cursor: pointer;
+                            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
+                            transition: all 0.3s;
+                        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(243, 156, 18, 0.5)'" 
+                           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(243, 156, 18, 0.4)'">
+                            🔄 Try Again
+                        </button>
                     </div>
                 </div>
-                
-                <!-- Main Container -->
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                     <!-- Left Side: Formula & Controls -->
-                    <div style="background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
-                        
-                        <!-- Current Formula -->
-                        <div style="background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 20px; border: 2px solid #e9ecef;">
-                            <div style="color: #7f8c8d; font-size: 0.8rem; margin-bottom: 8px; text-align: center;">CURRENT FORMULA</div>
-                            <div style="font-family: 'Courier New', monospace; font-size: 0.95rem; text-align: center; color: #2c3e50;">
-                                f(x) = <span id="w1-display" style="color: #3498db; font-size: 1.1rem; font-weight: bold;">0</span>×age + 
-                                <span id="w2-display" style="color: #e74c3c; font-size: 1.1rem; font-weight: bold;">0</span>×cups + 
-                                <span id="w3-display" style="color: #f39c12; font-size: 1.1rem; font-weight: bold;">0</span>×tired + 
-                                <span id="bias-display" style="color: #2ecc71; font-size: 1.1rem; font-weight: bold;">0</span>
+                    
+                <!-- Student Line -->
+                <div style="
+                    position: relative;
+                    width: 98%;
+                    max-width: none;
+                    margin-top: -100px;
+                    padding: 15px;
+                    display: flex;
+                    justify-content: space-around;
+                    align-items: flex-end;
+                ">
+                        <!-- Student 1: Joe -->
+                        <div class="student" data-student="0" style="
+                            position: relative;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                        ">
+                            <div class="student-avatar" style="
+                                width: 140px;
+                                height: 160px;
+                                background: linear-gradient(to bottom, #fdbcb4 0%, #f0a0a0 100%);
+                                border-radius: 70px 70px 10px 10px;
+                                position: relative;
+                                box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+                                transition: all 0.3s;
+                                border: 3px solid rgba(255,255,255,0.8);
+                            ">
+                                <!-- Face -->
+                                <div style="
+                                    position: absolute;
+                                    top: 35px;
+                                    left: 50%;
+                                    transform: translateX(-50%);
+                                    font-size: 3.5rem;
+                                ">👨‍🎓</div>
+                                <!-- Name Tag -->
+                                <div style="
+                                    position: absolute;
+                                    bottom: -30px;
+                                    left: 50%;
+                                    transform: translateX(-50%);
+                                    background: white;
+                                    padding: 6px 18px;
+                                    border-radius: 15px;
+                                    font-weight: bold;
+                                    font-size: 1.1rem;
+                                    color: #2c3e50;
+                                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                                    white-space: nowrap;
+                                ">Joe</div>
                             </div>
-                        </div>
-                        
-                        <!-- Compact Controls -->
-                        <div style="background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
-                            <div style="color: #7f8c8d; font-size: 0.8rem; margin-bottom: 12px; text-align: center;">ADJUST WEIGHTS</div>
-                            
-                            <!-- All sliders in compact layout -->
-                            <div style="display: grid; gap: 12px;">
-                                <!-- Age -->
-                                <div style="display: flex; align-items: center; gap: 12px;">
-                                    <div style="width: 60px; font-size: 0.85rem; color: #3498db; font-weight: bold;">Age</div>
-                                    <input type="range" id="w1-slider" min="0" max="10" value="0" step="1" style="flex: 1; height: 6px;">
-                                    <div style="background: #3498db; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.85rem; font-weight: bold; min-width: 25px; text-align: center;" id="w1-value">0</div>
-                                </div>
-                                
-                                <!-- Cups -->
-                                <div style="display: flex; align-items: center; gap: 12px;">
-                                    <div style="width: 60px; font-size: 0.85rem; color: #e74c3c; font-weight: bold;">Cups</div>
-                                    <input type="range" id="w2-slider" min="0" max="15" value="0" step="1" style="flex: 1; height: 6px;">
-                                    <div style="background: #e74c3c; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.85rem; font-weight: bold; min-width: 25px; text-align: center;" id="w2-value">0</div>
-                                </div>
-                                
-                                <!-- Tired -->
-                                <div style="display: flex; align-items: center; gap: 12px;">
-                                    <div style="width: 60px; font-size: 0.85rem; color: #f39c12; font-weight: bold;">Tired</div>
-                                    <input type="range" id="w3-slider" min="0" max="10" value="0" step="1" style="flex: 1; height: 6px;">
-                                    <div style="background: #f39c12; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.85rem; font-weight: bold; min-width: 25px; text-align: center;" id="w3-value">0</div>
-                                </div>
-                                
-                                <!-- Base -->
-                                <div style="display: flex; align-items: center; gap: 12px;">
-                                    <div style="width: 60px; font-size: 0.85rem; color: #2ecc71; font-weight: bold;">Base</div>
-                                    <input type="range" id="bias-slider" min="0" max="40" value="0" step="5" style="flex: 1; height: 6px;">
-                                    <div style="background: #2ecc71; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.85rem; font-weight: bold; min-width: 25px; text-align: center;" id="bias-value">0</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Loss Display -->
-                        <div style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: center;">
-                            <div style="color: #7f8c8d; font-size: 0.8rem; margin-bottom: 8px;">CURRENT STUDENT LOSS</div>
-                            <div id="current-loss" style="font-size: 2rem; font-weight: bold; color: #e74c3c;">161</div>
-                            <div style="color: #7f8c8d; font-size: 0.75rem; margin-top: 5px;">Distance from target</div>
-                        </div>
-                        
-                        <!-- Overall Progress -->
-                        <div style="background: #2c3e50; border-radius: 8px; padding: 15px; color: white;">
-                            <div style="font-size: 0.85rem; margin-bottom: 10px; opacity: 0.9;">Overall Progress</div>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                <span style="font-size: 0.8rem;">Students Solved: <span id="solved-count">0</span>/3</span>
-                                <span style="font-size: 0.8rem;">Total Error: <span id="total-error">492</span></span>
-                            </div>
-                            <div style="height: 8px; background: rgba(0,0,0,0.3); border-radius: 4px; overflow: hidden;">
-                                <div id="progress-bar" style="height: 100%; width: 0%; background: linear-gradient(to right, #e74c3c, #f39c12, #2ecc71); transition: width 0.5s;"></div>
-                            </div>
-                        </div>
-                        
-                        <!-- Hint Buttons -->
-                        <div style="margin-top: 15px;">
-                            <button id="hint-btn-1" class="hint-btn" style="width: 100%; padding: 10px; margin-bottom: 8px; background: white; color: #7f8c8d; border: 2px solid #e9ecef; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s;">
-                                💡 Hint 1: Where to start?
-                            </button>
-                            <div id="hint-text-1" style="display: none; margin-bottom: 10px; padding: 10px; background: #fff3cd; border-radius: 6px; color: #856404; font-size: 0.85rem;">Start with the base value - try setting it to 20</div>
-                            
-                            <button id="hint-btn-2" class="hint-btn" style="width: 100%; padding: 10px; margin-bottom: 8px; background: white; color: #7f8c8d; border: 2px solid #e9ecef; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s;">
-                                💡 Hint 2: What about tiredness?
-                            </button>
-                            <div id="hint-text-2" style="display: none; margin-bottom: 10px; padding: 10px; background: #fff3cd; border-radius: 6px; color: #856404; font-size: 0.85rem;">Tiredness has a small effect - set the weight to 3</div>
-                            
-                            <button id="hint-btn-3" class="hint-btn" style="width: 100%; padding: 10px; background: white; color: #7f8c8d; border: 2px solid #e9ecef; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s;">
-                                💡 Hint 3: Daily cups weight?
-                            </button>
-                            <div id="hint-text-3" style="display: none; margin-bottom: 10px; padding: 10px; background: #fff3cd; border-radius: 6px; color: #856404; font-size: 0.85rem;">Daily cups has the biggest impact - set it to 10 (Age should be 5)</div>
-                        </div>
-                    </div>
-                    <!-- Right Side: Student Display -->
-                    <div style="background: #2c3e50; border-radius: 12px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
-                        
-                        <!-- Student Selector -->
-                        <div style="display: flex; gap: 10px; margin-bottom: 25px;">
-                            <button class="student-btn" data-student="0" style="flex: 1; padding: 10px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s;">
-                                Student A
-                                <div class="student-status" data-student="0" style="font-size: 0.75rem; margin-top: 3px; opacity: 0.9;">⚪ Not solved</div>
-                            </button>
-                            <button class="student-btn" data-student="1" style="flex: 1; padding: 10px; background: #34495e; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s;">
-                                Student B
-                                <div class="student-status" data-student="1" style="font-size: 0.75rem; margin-top: 3px; opacity: 0.9;">⚪ Not solved</div>
-                            </button>
-                            <button class="student-btn" data-student="2" style="flex: 1; padding: 10px; background: #34495e; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s;">
-                                Student C
-                                <div class="student-status" data-student="2" style="font-size: 0.75rem; margin-top: 3px; opacity: 0.9;">⚪ Not solved</div>
-                            </button>
-                        </div>
-                        
-                        <!-- Current Student Display -->
-                        <div id="student-display" style="background: rgba(255,255,255,0.05); border-radius: 10px; padding: 20px;">
-                            <h2 id="student-name" style="color: #ecf0f1; margin: 0 0 20px 0; text-align: center; font-size: 1.3rem;">Student A</h2>
-                            
-                            <!-- Input Parameters -->
-                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px;">
-                                <div style="background: rgba(52,152,219,0.2); border-radius: 8px; padding: 15px; text-align: center; border: 2px solid #3498db;">
-                                    <div style="color: #3498db; font-size: 0.8rem; margin-bottom: 5px;">AGE</div>
-                                    <div id="student-age" style="color: white; font-size: 1.8rem; font-weight: bold;">20</div>
-                                </div>
-                                <div style="background: rgba(231,76,60,0.2); border-radius: 8px; padding: 15px; text-align: center; border: 2px solid #e74c3c;">
-                                    <div style="color: #e74c3c; font-size: 0.8rem; margin-bottom: 5px;">CUPS/DAY</div>
-                                    <div id="student-cups" style="color: white; font-size: 1.8rem; font-weight: bold;">2</div>
-                                </div>
-                                <div style="background: rgba(243,156,18,0.2); border-radius: 8px; padding: 15px; text-align: center; border: 2px solid #f39c12;">
-                                    <div style="color: #f39c12; font-size: 0.8rem; margin-bottom: 5px;">TIREDNESS</div>
-                                    <div id="student-tired" style="color: white; font-size: 1.8rem; font-weight: bold;">7</div>
-                                </div>
-                            </div>
-                            
-                            <!-- Visual Coffee Display -->
-                            <div style="position: relative; height: 200px; background: rgba(0,0,0,0.3); border-radius: 10px; overflow: hidden; margin-bottom: 20px;">
-                                <!-- Target line -->
-                                <div id="target-line" style="position: absolute; bottom: 50%; width: 100%; height: 2px; background: #2ecc71; z-index: 2;">
-                                    <div style="position: absolute; left: 10px; top: -20px; background: #2ecc71; color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.85rem; font-weight: bold;">
-                                        TARGET: <span id="target-value">161</span>ml
+                            <!-- Hover Profile -->
+                            <div class="student-profile" style="
+                                position: absolute;
+                                bottom: 180px;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                background: white;
+                                padding: 15px;
+                                border-radius: 10px;
+                                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+                                opacity: 0;
+                                pointer-events: none;
+                                transition: opacity 0.3s;
+                                white-space: nowrap;
+                                z-index: 10;
+                            ">
+                                <div style="font-weight: bold; color: #2c3e50; margin-bottom: 8px;">Joe's Profile</div>
+                                <div style="font-size: 0.9rem; color: #555; line-height: 1.4;">
+                                    📅 20 years old<br>
+                                    ☕ Drinks 2 cups/day<br>
+                                    😴 Tiredness: 7/10<br>
+                                    <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e0e0e0;">
+                                        🎯 Needs: <span style="font-weight: bold; color: #2ecc71;">161ml</span>
                                     </div>
                                 </div>
-                                
-                                <!-- Current value bar -->
-                                <div id="value-bar" style="position: absolute; bottom: 0; left: 20%; right: 20%; background: linear-gradient(to top, #3498db, #5dade2); transition: height 0.3s ease; height: 0%; border-radius: 5px 5px 0 0;">
-                                    <div id="current-value-label" style="position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: white; padding: 3px 10px; border-radius: 4px; font-weight: bold; white-space: nowrap;">
-                                        0ml
+                            </div>
+                            <!-- Status Indicator -->
+                            <div class="status-indicator" style="
+                                position: absolute;
+                                top: -10px;
+                                right: -10px;
+                                width: 30px;
+                                height: 30px;
+                                border-radius: 50%;
+                                background: #95a5a6;
+                                display: none;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 1.2rem;
+                                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                            ">❓</div>
+                            <!-- Result Display -->
+                            <div class="result-display" style="
+                                position: absolute;
+                                bottom: 180px;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                background: white;
+                                padding: 10px 15px;
+                                border-radius: 8px;
+                                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                                opacity: 0;
+                                pointer-events: none;
+                                transition: opacity 0.3s;
+                                white-space: nowrap;
+                                z-index: 10;
+                                text-align: center;
+                            ">
+                                <div class="result-text" style="font-weight: bold; color: #2c3e50;"></div>
+                                <div class="result-detail" style="font-size: 0.85rem; color: #7f8c8d; margin-top: 4px;"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Student 2: Sarah -->
+                        <div class="student" data-student="1" style="
+                            position: relative;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                        ">
+                            <div class="student-avatar" style="
+                                width: 140px;
+                                height: 160px;
+                                background: linear-gradient(to bottom, #c9b4f4 0%, #a090d0 100%);
+                                border-radius: 70px 70px 10px 10px;
+                                position: relative;
+                                box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+                                transition: all 0.3s;
+                                border: 3px solid rgba(255,255,255,0.8);
+                            ">
+                                <!-- Face -->
+                                <div style="
+                                    position: absolute;
+                                    top: 35px;
+                                    left: 50%;
+                                    transform: translateX(-50%);
+                                    font-size: 3.5rem;
+                                ">👩‍🎓</div>
+                                <!-- Name Tag -->
+                                <div style="
+                                    position: absolute;
+                                    bottom: -30px;
+                                    left: 50%;
+                                    transform: translateX(-50%);
+                                    background: white;
+                                    padding: 6px 18px;
+                                    border-radius: 15px;
+                                    font-weight: bold;
+                                    font-size: 1.1rem;
+                                    color: #2c3e50;
+                                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                                    white-space: nowrap;
+                                ">Sarah</div>
+                            </div>
+                            <!-- Hover Profile -->
+                            <div class="student-profile" style="
+                                position: absolute;
+                                bottom: 180px;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                background: white;
+                                padding: 15px;
+                                border-radius: 10px;
+                                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+                                opacity: 0;
+                                pointer-events: none;
+                                transition: opacity 0.3s;
+                                white-space: nowrap;
+                                z-index: 10;
+                            ">
+                                <div style="font-weight: bold; color: #2c3e50; margin-bottom: 8px;">Sarah's Profile</div>
+                                <div style="font-size: 0.9rem; color: #555; line-height: 1.4;">
+                                    📅 19 years old<br>
+                                    ☕ Drinks 1 cup/day<br>
+                                    😴 Tiredness: 9/10<br>
+                                    <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e0e0e0;">
+                                        🎯 Needs: <span style="font-weight: bold; color: #2ecc71;">152ml</span>
                                     </div>
                                 </div>
-                                
-                                <!-- Grid lines -->
-                                <div style="position: absolute; top: 25%; width: 100%; height: 1px; background: rgba(255,255,255,0.1);"></div>
-                                <div style="position: absolute; top: 75%; width: 100%; height: 1px; background: rgba(255,255,255,0.1);"></div>
                             </div>
-                            
-                            <!-- Result Status -->
-                            <div id="result-status" style="padding: 15px; border-radius: 8px; text-align: center; background: rgba(231,76,60,0.2); border: 2px solid #e74c3c;">
-                                <div id="status-message" style="color: #e74c3c; font-weight: bold; font-size: 1.1rem;">Off by 161ml</div>
-                                <div id="status-detail" style="color: #ecf0f1; font-size: 0.85rem; margin-top: 5px; opacity: 0.8;">Need to increase the output</div>
+                            <!-- Status Indicator -->
+                            <div class="status-indicator" style="
+                                position: absolute;
+                                top: -10px;
+                                right: -10px;
+                                width: 30px;
+                                height: 30px;
+                                border-radius: 50%;
+                                background: #95a5a6;
+                                display: none;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 1.2rem;
+                                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                            ">❓</div>
+                            <!-- Result Display -->
+                            <div class="result-display" style="
+                                position: absolute;
+                                bottom: 180px;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                background: white;
+                                padding: 10px 15px;
+                                border-radius: 8px;
+                                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                                opacity: 0;
+                                pointer-events: none;
+                                transition: opacity 0.3s;
+                                white-space: nowrap;
+                                z-index: 10;
+                                text-align: center;
+                            ">
+                                <div class="result-text" style="font-weight: bold; color: #2c3e50;"></div>
+                                <div class="result-detail" style="font-size: 0.85rem; color: #7f8c8d; margin-top: 4px;"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Student 3: Emma -->
+                        <div class="student" data-student="2" style="
+                            position: relative;
+                            cursor: pointer;
+                            transition: all 0.3s;
+                        ">
+                            <div class="student-avatar" style="
+                                width: 140px;
+                                height: 160px;
+                                background: linear-gradient(to bottom, #b4e7ce 0%, #90c0a0 100%);
+                                border-radius: 70px 70px 10px 10px;
+                                position: relative;
+                                box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+                                transition: all 0.3s;
+                                border: 3px solid rgba(255,255,255,0.8);
+                            ">
+                                <!-- Face -->
+                                <div style="
+                                    position: absolute;
+                                    top: 35px;
+                                    left: 50%;
+                                    transform: translateX(-50%);
+                                    font-size: 3.5rem;
+                                ">👩‍💼</div>
+                                <!-- Name Tag -->
+                                <div style="
+                                    position: absolute;
+                                    bottom: -30px;
+                                    left: 50%;
+                                    transform: translateX(-50%);
+                                    background: white;
+                                    padding: 6px 18px;
+                                    border-radius: 15px;
+                                    font-weight: bold;
+                                    font-size: 1.1rem;
+                                    color: #2c3e50;
+                                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                                    white-space: nowrap;
+                                ">Emma</div>
+                            </div>
+                            <!-- Hover Profile -->
+                            <div class="student-profile" style="
+                                position: absolute;
+                                bottom: 180px;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                background: white;
+                                padding: 15px;
+                                border-radius: 10px;
+                                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+                                opacity: 0;
+                                pointer-events: none;
+                                transition: opacity 0.3s;
+                                white-space: nowrap;
+                                z-index: 10;
+                            ">
+                                <div style="font-weight: bold; color: #2c3e50; margin-bottom: 8px;">Emma's Profile</div>
+                                <div style="font-size: 0.9rem; color: #555; line-height: 1.4;">
+                                    📅 22 years old<br>
+                                    ☕ Drinks 4 cups/day<br>
+                                    😴 Tiredness: 3/10<br>
+                                    <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e0e0e0;">
+                                        🎯 Needs: <span style="font-weight: bold; color: #2ecc71;">179ml</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Status Indicator -->
+                            <div class="status-indicator" style="
+                                position: absolute;
+                                top: -10px;
+                                right: -10px;
+                                width: 30px;
+                                height: 30px;
+                                border-radius: 50%;
+                                background: #95a5a6;
+                                display: none;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 1.2rem;
+                                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                            ">❓</div>
+                            <!-- Result Display -->
+                            <div class="result-display" style="
+                                position: absolute;
+                                bottom: 180px;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                background: white;
+                                padding: 10px 15px;
+                                border-radius: 8px;
+                                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                                opacity: 0;
+                                pointer-events: none;
+                                transition: opacity 0.3s;
+                                white-space: nowrap;
+                                z-index: 10;
+                                text-align: center;
+                            ">
+                                <div class="result-text" style="font-weight: bold; color: #2c3e50;"></div>
+                                <div class="result-detail" style="font-size: 0.85rem; color: #7f8c8d; margin-top: 4px;"></div>
                             </div>
                         </div>
                     </div>
                     
-                   
-                </div>
-                
-                <!-- Success Message -->
-                <div id="success-message" style="display: none; margin-top: 20px; padding: 20px; background: linear-gradient(135deg, #2ecc71, #27ae60); border-radius: 12px; text-align: center; color: white; box-shadow: 0 4px 15px rgba(46,204,113,0.3);">
-                    <h2 style="margin: 0 0 10px 0;">🎉 Perfect! All Students Solved!</h2>
-                    <div style="font-size: 1.1rem; font-family: 'Courier New', monospace;">
-                        The formula is: 5×age + 10×cups + 3×tired + 20
+                <!-- Score Display -->
+                <div id="score-display" style="
+                    display: none;
+                    text-align: center;
+                    margin-top: 30px;
+                    padding: 20px;
+                    background: rgba(255, 255, 255, 0.98);
+                    border-radius: 15px;
+                    max-width: 600px;
+                    margin-left: auto;
+                    margin-right: auto;
+                    box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+                    backdrop-filter: blur(10px);
+                ">
+                    <h2 style="margin: 0 0 10px 0; color: #2c3e50;">Results</h2>
+                    <div id="score-text" style="font-size: 1.1rem; color: #555;"></div>
+                    <div id="perfect-formula" style="
+                        display: none;
+                        margin-top: 15px;
+                        padding: 15px;
+                        background: linear-gradient(135deg, #2ecc71, #27ae60);
+                        color: white;
+                        border-radius: 10px;
+                        font-size: 1.1rem;
+                    ">
+                        🎉 Perfect Formula: 5×Age + 10×Cups + 3×Tiredness + 20ml
                     </div>
+                </div>
+                    
+                <!-- Hints -->
+                <div style="
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-end;
+                    gap: 10px;
+                    z-index: 100;
+                    max-width: 300px;
+                ">
+                    <button class="hint-btn" onclick="showHint(1)" style="
+                        background: rgba(255, 255, 255, 0.95);
+                        border: 2px solid #3498db;
+                        color: #3498db;
+                        padding: 8px 15px;
+                        border-radius: 20px;
+                        cursor: pointer;
+                        font-size: 0.9rem;
+                        transition: all 0.3s;
+                        text-align: left;
+                        white-space: nowrap;
+                        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                        backdrop-filter: blur(5px);
+                    ">💡 Hint 1</button>
+                    <button class="hint-btn" onclick="showHint(2)" style="
+                        background: rgba(255, 255, 255, 0.95);
+                        border: 2px solid #e67e22;
+                        color: #e67e22;
+                        padding: 8px 15px;
+                        border-radius: 20px;
+                        cursor: pointer;
+                        font-size: 0.9rem;
+                        transition: all 0.3s;
+                        text-align: left;
+                        white-space: nowrap;
+                        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                        backdrop-filter: blur(5px);
+                    ">💡 Hint 2</button>
+                    <button class="hint-btn" onclick="showHint(3)" style="
+                        background: rgba(255, 255, 255, 0.95);
+                        border: 2px solid #9b59b6;
+                        color: #9b59b6;
+                        padding: 8px 15px;
+                        border-radius: 20px;
+                        cursor: pointer;
+                        font-size: 0.9rem;
+                        transition: all 0.3s;
+                        text-align: left;
+                        white-space: nowrap;
+                        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                        backdrop-filter: blur(5px);
+                    ">💡 Solution</button>
                 </div>
                 
                 ${createStandardNavigation()}
@@ -200,41 +616,63 @@ function createCoffeeManualOptimizer() {
         </div>
         
         <style>
-            input[type="range"] {
+            /* Number Input Styling */
+            input[type="number"] {
+                -moz-appearance: textfield;
+            }
+            
+            input[type="number"]::-webkit-outer-spin-button,
+            input[type="number"]::-webkit-inner-spin-button {
                 -webkit-appearance: none;
-                background: #e9ecef;
-                border-radius: 3px;
+                margin: 0;
+            }
+            
+            input[type="number"]:focus {
                 outline: none;
+                box-shadow: 0 0 0 3px rgba(0,123,255,0.2);
+                transform: scale(1.05);
             }
             
-            input[type="range"]::-webkit-slider-thumb {
-                -webkit-appearance: none;
-                width: 16px;
-                height: 16px;
-                border-radius: 50%;
-                background: white;
-                cursor: pointer;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-                border: 2px solid #bdc3c7;
+            /* Student Interactions */
+            .student:hover .student-avatar {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                border-color: rgba(255,255,255,1);
             }
             
-            input[type="range"]::-webkit-slider-thumb:hover {
-                transform: scale(1.2);
+            .student:hover .student-profile {
+                opacity: 1 !important;
             }
             
-            #w1-slider::-webkit-slider-thumb { border-color: #3498db; }
-            #w2-slider::-webkit-slider-thumb { border-color: #e74c3c; }
-            #w3-slider::-webkit-slider-thumb { border-color: #f39c12; }
-            #bias-slider::-webkit-slider-thumb { border-color: #2ecc71; }
+            .student.served .result-display {
+                opacity: 1 !important;
+            }
             
-            .student-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            /* Animations */
+            @keyframes bounce {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-10px); }
             }
             
             @keyframes pulse {
-                0%, 100% { opacity: 1; }
-                50% { opacity: 0.7; }
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+            }
+            
+            .serving {
+                animation: bounce 0.5s ease-in-out;
+            }
+            
+            .hint-btn:hover {
+                transform: scale(1.05);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
+                background: rgba(255, 255, 255, 1) !important;
+            }
+            
+            .hint-btn.revealed {
+                background: #f39c12 !important;
+                color: white !important;
+                border-color: #f39c12 !important;
             }
         </style>
     `;
@@ -242,242 +680,239 @@ function createCoffeeManualOptimizer() {
     // Initialize navigation
     initializeNavigation('coffee-manual', 'createCoffeeManualOptimizer');
     
-    // Add interactivity
+    // Setup interactivity
     setTimeout(() => {
-        setupCoffeeOptimizer();
+        setupCoffeeBooth();
     }, 100);
 }
 
 /**
- * Sets up the coffee optimizer interactivity
- * @function setupCoffeeOptimizer
- * @description Initializes controls and logic for the coffee formula discovery simulation
+ * Sets up the coffee booth interactivity
+ * @function setupCoffeeBooth
+ * @description Initializes the coffee booth simulation logic
  * @returns {void}
  */
-function setupCoffeeOptimizer() {
-    // Hidden formula: f(x) = 5*age + 10*coffee + 3*sleepiness + 20
-    const TRUE_W1 = 5;
-    const TRUE_W2 = 10;
-    const TRUE_W3 = 3;
-    const TRUE_BIAS = 20;
-    
+function setupCoffeeBooth() {
+    // Student data - Formula: 5*age + 10*cups + 3*tiredness + 20
     const STUDENTS = [
-        { name: 'Student A', age: 20, cups: 2, tired: 7, target: 161 },  // 5*20 + 10*2 + 3*7 + 20 = 161
-        { name: 'Student B', age: 19, cups: 1, tired: 9, target: 152 },  // 5*19 + 10*1 + 3*9 + 20 = 152
-        { name: 'Student C', age: 22, cups: 4, tired: 3, target: 179 }   // 5*22 + 10*4 + 3*3 + 20 = 179
+        { name: 'Joe', age: 20, cups: 2, tired: 7, target: 161 },
+        { name: 'Sarah', age: 19, cups: 1, tired: 9, target: 152 },
+        { name: 'Emma', age: 22, cups: 4, tired: 3, target: 179 }
     ];
     
-    let currentStudent = 0;
-    let studentsSolved = [false, false, false];
+    let isServing = false;
+    let results = [];
     
-    // Get controls
-    const w1Slider = document.getElementById('w1-slider');
-    const w2Slider = document.getElementById('w2-slider');
-    const w3Slider = document.getElementById('w3-slider');
-    const biasSlider = document.getElementById('bias-slider');
-    const studentButtons = document.querySelectorAll('.student-btn');
+    // Get elements
+    const ageWeight = document.getElementById('age-weight');
+    const cupsWeight = document.getElementById('cups-weight');
+    const tiredWeight = document.getElementById('tired-weight');
+    const baseWeight = document.getElementById('base-weight');
+    const serveButton = document.getElementById('serve-button');
+    const resetButton = document.getElementById('reset-button');
+    const students = document.querySelectorAll('.student');
     
-    // Switch student
-    function switchStudent(index) {
-        currentStudent = index;
+    // Allow Enter key to serve from any input
+    [ageWeight, cupsWeight, tiredWeight, baseWeight].forEach(input => {
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !isServing) {
+                serveCoffee();
+            }
+        });
         
-        // Update button styles
-        studentButtons.forEach((btn, i) => {
-            if (i === index) {
-                btn.style.background = '#667eea';
+        // Select all text on focus for easy editing
+        input.addEventListener('focus', (e) => {
+            e.target.select();
+        });
+        
+        // Apply hover effect on focus
+        input.addEventListener('focus', (e) => {
+            e.target.style.transform = 'scale(1.1)';
+        });
+        
+        input.addEventListener('blur', (e) => {
+            e.target.style.transform = 'scale(1)';
+        });
+    });
+    
+    // Serve coffee to students
+    async function serveCoffee() {
+        if (isServing) return;
+        isServing = true;
+        results = [];
+        
+        // Hide previous results
+        students.forEach(student => {
+            student.classList.remove('served');
+            const indicator = student.querySelector('.status-indicator');
+            indicator.style.display = 'none';
+            const resultDisplay = student.querySelector('.result-display');
+            resultDisplay.style.opacity = '0';
+        });
+        
+        // Hide score display
+        document.getElementById('score-display').style.display = 'none';
+        
+        // Disable controls
+        serveButton.style.display = 'none';
+        ageWeight.disabled = true;
+        cupsWeight.disabled = true;
+        tiredWeight.disabled = true;
+        baseWeight.disabled = true;
+        
+        // Get formula values
+        const w1 = parseInt(ageWeight.value) || 0;
+        const w2 = parseInt(cupsWeight.value) || 0;
+        const w3 = parseInt(tiredWeight.value) || 0;
+        const bias = parseInt(baseWeight.value) || 0;
+        
+        // Serve each student
+        for (let i = 0; i < STUDENTS.length; i++) {
+            const student = STUDENTS[i];
+            const studentEl = students[i];
+            
+            // Animate serving
+            studentEl.classList.add('serving');
+            
+            // Calculate result
+            const served = w1 * student.age + w2 * student.cups + w3 * student.tired + bias;
+            const error = Math.abs(served - student.target);
+            
+            // Determine status (±5ml tolerance for perfect)
+            let status, emoji, color, message;
+            if (error <= 5) {
+                status = 'perfect';
+                emoji = '✅';
+                color = '#2ecc71';
+                message = error === 0 ? 'Perfect!' : `Perfect! (±${error}ml)`;
+            } else if (error < 20) {
+                status = 'close';
+                emoji = '😊';
+                color = '#f39c12';
+                message = `Close! Off by ${error}ml`;
+            } else if (served > student.target + 30) {
+                status = 'overbuzzed';
+                emoji = '🤯';
+                color = '#e74c3c';
+                message = `Overbuzzed! ${error}ml too much`;
+            } else if (served < student.target - 30) {
+                status = 'tired';
+                emoji = '😴';
+                color = '#3498db';
+                message = `Still tired! ${error}ml too little`;
             } else {
-                btn.style.background = '#34495e';
+                status = 'off';
+                emoji = '😐';
+                color = '#95a5a6';
+                message = `Off by ${error}ml`;
             }
-        });
-        
-        // Update student display
-        const student = STUDENTS[index];
-        document.getElementById('student-name').textContent = student.name;
-        document.getElementById('student-age').textContent = student.age;
-        document.getElementById('student-cups').textContent = student.cups;
-        document.getElementById('student-tired').textContent = student.tired;
-        document.getElementById('target-value').textContent = student.target;
-        
-        // Move target line to correct position
-        const targetLine = document.getElementById('target-line');
-        const maxHeight = 250; // Max value we display
-        const targetPercent = (student.target / maxHeight) * 100;
-        targetLine.style.bottom = Math.min(90, Math.max(10, targetPercent)) + '%';
-        
-        updateLive();
-    }
-    
-    // Update everything live
-    function updateLive() {
-        const w1 = parseInt(w1Slider.value);
-        const w2 = parseInt(w2Slider.value);
-        const w3 = parseInt(w3Slider.value);
-        const bias = parseInt(biasSlider.value);
-        
-        // Update formula display
-        document.getElementById('w1-display').textContent = w1;
-        document.getElementById('w2-display').textContent = w2;
-        document.getElementById('w3-display').textContent = w3;
-        document.getElementById('bias-display').textContent = bias;
-        
-        document.getElementById('w1-value').textContent = w1;
-        document.getElementById('w2-value').textContent = w2;
-        document.getElementById('w3-value').textContent = w3;
-        document.getElementById('bias-value').textContent = bias;
-        
-        // Calculate for current student
-        const student = STUDENTS[currentStudent];
-        const result = w1 * student.age + w2 * student.cups + w3 * student.tired + bias;
-        const target = student.target;
-        const error = Math.abs(result - target);
-        
-        // Update value bar
-        const maxHeight = 250;
-        const resultPercent = (result / maxHeight) * 100;
-        
-        const valueBar = document.getElementById('value-bar');
-        valueBar.style.height = Math.min(100, resultPercent) + '%';
-        document.getElementById('current-value-label').textContent = result + 'ml';
-        
-        // Update loss display
-        document.getElementById('current-loss').textContent = error;
-        document.getElementById('current-loss').style.color = 
-            error === 0 ? '#2ecc71' : 
-            error < 10 ? '#f39c12' : '#e74c3c';
-        
-        // Update status
-        const statusMessage = document.getElementById('status-message');
-        const statusDetail = document.getElementById('status-detail');
-        const resultStatus = document.getElementById('result-status');
-        
-        if (error === 0) {
-            statusMessage.textContent = '✓ Perfect!';
-            statusMessage.style.color = '#2ecc71';
-            statusDetail.textContent = 'This student is solved!';
-            resultStatus.style.background = 'rgba(46,204,113,0.2)';
-            resultStatus.style.borderColor = '#2ecc71';
-            valueBar.style.background = 'linear-gradient(to top, #27ae60, #2ecc71)';
             
-            // Mark student as solved
-            if (!studentsSolved[currentStudent]) {
-                studentsSolved[currentStudent] = true;
-                updateStudentStatus(currentStudent, true);
-            }
-        } else if (error < 10) {
-            statusMessage.textContent = `Close! Off by ${error}ml`;
-            statusMessage.style.color = '#f39c12';
-            statusDetail.textContent = result > target ? 'Output too high' : 'Output too low';
-            resultStatus.style.background = 'rgba(243,156,18,0.2)';
-            resultStatus.style.borderColor = '#f39c12';
-            valueBar.style.background = 'linear-gradient(to top, #d68910, #f39c12)';
-        } else {
-            statusMessage.textContent = `Off by ${error}ml`;
-            statusMessage.style.color = '#e74c3c';
-            statusDetail.textContent = result > target ? 'Way too much!' : 'Need more output';
-            resultStatus.style.background = 'rgba(231,76,60,0.2)';
-            resultStatus.style.borderColor = '#e74c3c';
-            valueBar.style.background = result > target ? 
-                'linear-gradient(to top, #c0392b, #e74c3c)' : 
-                'linear-gradient(to top, #5d6d7e, #85929e)';
-        }
-        
-        // Check all students for overall progress
-        let totalError = 0;
-        let solvedCount = 0;
-        
-        STUDENTS.forEach((s, i) => {
-            const r = w1 * s.age + w2 * s.cups + w3 * s.tired + bias;
-            const e = Math.abs(r - s.target);
-            totalError += e;
+            results.push({ name: student.name, status, error });
             
-            if (e === 0) {
-                solvedCount++;
-                if (!studentsSolved[i]) {
-                    studentsSolved[i] = true;
-                    updateStudentStatus(i, true);
-                }
-            } else if (studentsSolved[i]) {
-                studentsSolved[i] = false;
-                updateStudentStatus(i, false);
-            }
-        });
-        
-        // Update overall progress
-        document.getElementById('solved-count').textContent = solvedCount;
-        document.getElementById('total-error').textContent = totalError;
-        
-        const progress = Math.max(0, 100 - (totalError / 492 * 100));
-        document.getElementById('progress-bar').style.width = progress + '%';
-        
-        // Check for win
-        if (solvedCount === 3) {
-            setTimeout(() => {
-                document.getElementById('success-message').style.display = 'block';
-            }, 300);
+            // Update student display
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            const indicator = studentEl.querySelector('.status-indicator');
+            indicator.style.display = 'flex';
+            indicator.style.background = color;
+            indicator.textContent = emoji;
+            
+            const resultText = studentEl.querySelector('.result-text');
+            const resultDetail = studentEl.querySelector('.result-detail');
+            resultText.textContent = message;
+            resultText.style.color = color;
+            resultDetail.textContent = `Served: ${served}ml, Needed: ${student.target}ml`;
+            
+            studentEl.classList.remove('serving');
+            studentEl.classList.add('served');
         }
+        
+        // Show results
+        await new Promise(resolve => setTimeout(resolve, 500));
+        showResults();
+        
+        // Re-enable controls
+        resetButton.style.display = 'inline-block';
+        ageWeight.disabled = false;
+        cupsWeight.disabled = false;
+        tiredWeight.disabled = false;
+        baseWeight.disabled = false;
+        isServing = false;
     }
     
-    // Update student status indicator
-    function updateStudentStatus(index, solved) {
-        const status = document.querySelector(`.student-status[data-student="${index}"]`);
-        if (solved) {
-            status.innerHTML = '✅ Solved!';
-            status.style.color = '#2ecc71';
+    // Show results summary
+    function showResults() {
+        const scoreDisplay = document.getElementById('score-display');
+        const scoreText = document.getElementById('score-text');
+        const perfectFormula = document.getElementById('perfect-formula');
+        
+        const perfect = results.filter(r => r.status === 'perfect').length;
+        const totalError = results.reduce((sum, r) => sum + r.error, 0);
+        
+        let message;
+        if (perfect === 3) {
+            message = `🎉 Amazing! All 3 students got the perfect amount of coffee!`;
+            perfectFormula.style.display = 'block';
+        } else if (perfect >= 2) {
+            message = `Great job! ${perfect}/3 students got perfect coffee. Total error: ${totalError}ml`;
+            perfectFormula.style.display = 'none';
+        } else if (perfect >= 1) {
+            message = `Good effort! ${perfect}/3 students got perfect coffee. Total error: ${totalError}ml`;
+            perfectFormula.style.display = 'none';
+        } else if (totalError < 50) {
+            message = `Very close! Total error: ${totalError}ml. Keep adjusting!`;
+            perfectFormula.style.display = 'none';
         } else {
-            status.innerHTML = '⚪ Not solved';
-            status.style.color = 'white';
+            message = `Keep trying! Total error: ${totalError}ml. Try adjusting the weights.`;
+            perfectFormula.style.display = 'none';
         }
+        
+        scoreText.innerHTML = message;
+        scoreDisplay.style.display = 'block';
     }
     
-    // Event listeners
-    studentButtons.forEach((btn, i) => {
-        btn.addEventListener('click', () => switchStudent(i));
-    });
-    
-    w1Slider.addEventListener('input', updateLive);
-    w2Slider.addEventListener('input', updateLive);
-    w3Slider.addEventListener('input', updateLive);
-    biasSlider.addEventListener('input', updateLive);
-    
-    // Hint button listeners
-    const hintBtn1 = document.getElementById('hint-btn-1');
-    const hintBtn2 = document.getElementById('hint-btn-2');
-    const hintBtn3 = document.getElementById('hint-btn-3');
-    const hintText1 = document.getElementById('hint-text-1');
-    const hintText2 = document.getElementById('hint-text-2');
-    const hintText3 = document.getElementById('hint-text-3');
-    
-    hintBtn1.addEventListener('click', () => {
-        hintText1.style.display = hintText1.style.display === 'none' ? 'block' : 'none';
-        hintBtn1.style.background = hintText1.style.display === 'none' ? 'white' : '#fff3cd';
-    });
-    
-    hintBtn2.addEventListener('click', () => {
-        hintText2.style.display = hintText2.style.display === 'none' ? 'block' : 'none';
-        hintBtn2.style.background = hintText2.style.display === 'none' ? 'white' : '#fff3cd';
-    });
-    
-    hintBtn3.addEventListener('click', () => {
-        hintText3.style.display = hintText3.style.display === 'none' ? 'block' : 'none';
-        hintBtn3.style.background = hintText3.style.display === 'none' ? 'white' : '#fff3cd';
-    });
-    
-    // Hover effects for hint buttons
-    document.querySelectorAll('.hint-btn').forEach(btn => {
-        btn.addEventListener('mouseenter', () => {
-            if (!btn.style.background || btn.style.background === 'white') {
-                btn.style.background = '#f8f9fa';
-            }
+    // Reset function
+    function reset() {
+        // Clear all student states
+        students.forEach(student => {
+            student.classList.remove('served');
+            const indicator = student.querySelector('.status-indicator');
+            indicator.style.display = 'none';
         });
-        btn.addEventListener('mouseleave', () => {
-            const textId = btn.id.replace('btn', 'text');
-            const text = document.getElementById(textId);
-            if (text.style.display === 'none') {
-                btn.style.background = 'white';
-            }
-        });
-    });
+        
+        // Hide score and show serve button
+        document.getElementById('score-display').style.display = 'none';
+        serveButton.style.display = 'inline-block';
+        resetButton.style.display = 'none';
+    }
     
-    // Initialize
-    switchStudent(0);
+    // Button listeners
+    serveButton.addEventListener('click', serveCoffee);
+    resetButton.addEventListener('click', reset);
+    
+    // Hint system with toggle
+    window.showHint = function(level) {
+        const hints = {
+            1: { short: '💡 Hint 1', full: 'Start with the base amount - try 20ml' },
+            2: { short: '💡 Hint 2', full: 'Age weight is 5, Tiredness weight is 3' },
+            3: { short: '💡 Solution', full: 'Formula: 5×Age + 10×Cups + 3×Tiredness + 20ml' }
+        };
+        
+        const btn = event.target;
+        const isRevealed = btn.classList.contains('revealed');
+        
+        if (isRevealed) {
+            // Collapse back
+            btn.classList.remove('revealed');
+            btn.textContent = hints[level].short;
+            btn.style.minWidth = 'auto';
+        } else {
+            // Expand
+            btn.classList.add('revealed');
+            btn.textContent = hints[level].full;
+            btn.style.minWidth = '250px';
+        }
+    };
+    
+    // Initialize - no need for updateDisplay anymore
 }
