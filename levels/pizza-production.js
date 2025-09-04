@@ -974,6 +974,15 @@ window.createPizzaProduction = function() {
             
             if (!gradientContainer || !calcBtn) return;
             
+            // Ensure the button is actually clickable during tutorial
+            // Store original state first
+            calcBtn.dataset.originalOpacity = calcBtn.style.opacity || '0.5';
+            calcBtn.dataset.originalPointerEvents = calcBtn.style.pointerEvents || 'none';
+            
+            // Make sure button is enabled for the tutorial
+            calcBtn.style.opacity = '1';
+            calcBtn.style.pointerEvents = 'auto';
+            
             // Spotlight the gradient container
             this._addSpotlight(gradientContainer);
             
@@ -992,16 +1001,29 @@ window.createPizzaProduction = function() {
             
             this.tutorialElements.push(message);
             
-            // Wait for user to click calculate
-            const clickHandler = () => {
-                console.log('Calculate clicked');
-                calcBtn.removeEventListener('click', clickHandler, true);
+            // Store the click handler as a class property so we can remove it properly
+            if (this.tutorialCalcClickHandler) {
+                calcBtn.removeEventListener('click', this.tutorialCalcClickHandler);
+            }
+            
+            this.tutorialCalcClickHandler = () => {
+                console.log('Calculate clicked in tutorial');
                 
                 // Remove golden border and animation
                 calcBtn.style.border = calcBtn.dataset.originalBorder === 'none' ? '' : calcBtn.dataset.originalBorder;
                 calcBtn.style.animation = calcBtn.dataset.originalAnimation === 'none' ? '' : calcBtn.dataset.originalAnimation;
                 delete calcBtn.dataset.originalBorder;
                 delete calcBtn.dataset.originalAnimation;
+                
+                // Restore original button state (opacity and pointer-events)
+                if (calcBtn.dataset.originalOpacity !== undefined) {
+                    calcBtn.style.opacity = calcBtn.dataset.originalOpacity;
+                    delete calcBtn.dataset.originalOpacity;
+                }
+                if (calcBtn.dataset.originalPointerEvents !== undefined) {
+                    calcBtn.style.pointerEvents = calcBtn.dataset.originalPointerEvents;
+                    delete calcBtn.dataset.originalPointerEvents;
+                }
                 
                 // Remove message and spotlight
                 message.remove();
@@ -1012,8 +1034,14 @@ window.createPizzaProduction = function() {
                 
                 // Move to step 6 immediately
                 this._showTutorialStep6();
+                
+                // Remove the handler after it's done
+                calcBtn.removeEventListener('click', this.tutorialCalcClickHandler);
+                this.tutorialCalcClickHandler = null;
             };
-            calcBtn.addEventListener('click', clickHandler, true);
+            
+            // Add the handler without capture phase to avoid conflicts
+            calcBtn.addEventListener('click', this.tutorialCalcClickHandler);
         }
         
         _showTutorialStep6() {
@@ -1126,10 +1154,13 @@ window.createPizzaProduction = function() {
             
             this.tutorialElements.push(message);
             
-            // Wait for apply button click
-            const clickHandler = () => {
-                console.log('Apply clicked, ending tutorial');
-                applyBtn.removeEventListener('click', clickHandler, true);
+            // Store the click handler as a class property
+            if (this.tutorialApplyClickHandler) {
+                applyBtn.removeEventListener('click', this.tutorialApplyClickHandler);
+            }
+            
+            this.tutorialApplyClickHandler = () => {
+                console.log('Apply clicked, continuing tutorial');
                 
                 // Remove golden border and animation
                 applyBtn.style.border = applyBtn.dataset.originalBorder === 'none' ? '' : applyBtn.dataset.originalBorder;
@@ -1148,8 +1179,14 @@ window.createPizzaProduction = function() {
                 
                 // Show step 8 immediately
                 this._showTutorialStep8();
+                
+                // Remove the handler after it's done
+                applyBtn.removeEventListener('click', this.tutorialApplyClickHandler);
+                this.tutorialApplyClickHandler = null;
             };
-            applyBtn.addEventListener('click', clickHandler, true);
+            
+            // Add the handler without capture phase
+            applyBtn.addEventListener('click', this.tutorialApplyClickHandler);
         }
         
         _showTutorialStep8() {
@@ -1226,6 +1263,15 @@ window.createPizzaProduction = function() {
                     btn.style.animation = btn.dataset.originalAnimation === 'none' ? '' : btn.dataset.originalAnimation;
                     delete btn.dataset.originalBorder;
                     delete btn.dataset.originalAnimation;
+                }
+                // Also restore opacity and pointer-events if they were stored
+                if (btn && btn.dataset.originalOpacity !== undefined) {
+                    btn.style.opacity = btn.dataset.originalOpacity;
+                    delete btn.dataset.originalOpacity;
+                }
+                if (btn && btn.dataset.originalPointerEvents !== undefined) {
+                    btn.style.pointerEvents = btn.dataset.originalPointerEvents;
+                    delete btn.dataset.originalPointerEvents;
                 }
             });
             
@@ -1452,9 +1498,40 @@ window.createPizzaProduction = function() {
 
         
         _endTutorial() {
+            // Clean up any lingering event handlers
+            const calcBtn = document.getElementById('calculate-update-btn');
+            const applyBtn = document.getElementById('apply-gd-btn');
+            
+            if (calcBtn && this.tutorialCalcClickHandler) {
+                calcBtn.removeEventListener('click', this.tutorialCalcClickHandler);
+                this.tutorialCalcClickHandler = null;
+            }
+            
+            if (applyBtn && this.tutorialApplyClickHandler) {
+                applyBtn.removeEventListener('click', this.tutorialApplyClickHandler);
+                this.tutorialApplyClickHandler = null;
+            }
+            
             this._clearTutorial();
             this.tutorialActive = false;
             this.tutorialStep = 0;
+            
+            // Restore button states based on current input values
+            this._checkCalculateButtonState();
+            
+            // Also check if the apply button should be enabled
+            const ageResult = document.getElementById('age-result');
+            const mpgResult = document.getElementById('mpg-result');
+            if (applyBtn && ageResult && mpgResult) {
+                // If there are results displayed, enable the apply button
+                if (ageResult.innerHTML && mpgResult.innerHTML) {
+                    applyBtn.style.opacity = '1';
+                    applyBtn.style.pointerEvents = 'auto';
+                } else {
+                    applyBtn.style.opacity = '0.5';
+                    applyBtn.style.pointerEvents = 'none';
+                }
+            }
         }
     }
     
