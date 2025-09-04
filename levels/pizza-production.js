@@ -37,7 +37,6 @@ window.createPizzaProduction = function() {
             this.learningRate = 0.001; // Hard coded, explicitly shown to user
             this.totalError = 0;
             this.carErrors = { car1: 0, car2: 0, car3: 0 };
-            this.isAnimating = false;
             this.manualTotalError = 0;
             this.ageUpdate = 0;
             this.mpgUpdate = 0;
@@ -59,8 +58,9 @@ window.createPizzaProduction = function() {
             // Setup custom event handlers
             this._setupCustomHandlers();
             
-            // Initialize display
+            // Initialize display and calculate errors
             this._updateTable();
+            this._calculateAndFillErrors();
         }
         
         _generateMainContent() {
@@ -70,8 +70,8 @@ window.createPizzaProduction = function() {
                     <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; padding: 20px 25px; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3); position: relative;">
                         <div style="color: white; font-size: 1.1rem; line-height: 1.6;">
                             <strong style="font-size: 1.2rem;">Welcome to Car Pricing Optimization!</strong><br>
-                            Learn how gradient descent helps us find the perfect pricing formula. Adjust the weights (W_age and W_mpg) to minimize the error between your estimates and the true car prices. 
-                            Click "Buy Cars" to see how well your current formula performs, then use gradient descent to improve it!
+                            Learn how gradient descent helps us find the perfect pricing formula. The table shows how your current formula performs. 
+                            Use gradient descent to adjust the weights (W_age and W_mpg) and minimize the error between your estimates and the true car prices!
                         </div>
                     </div>
                 </div>
@@ -286,153 +286,100 @@ window.createPizzaProduction = function() {
                     
                     <!-- Bottom Section: Cars Table and You Character -->
                     <div style="display: flex; gap: 30px; align-items: stretch;">
-                        <!-- Table -->
-                        <table style="flex-shrink: 0; border-collapse: separate; border-spacing: 0; border: 2px solid #e0e0e0; border-radius: 10px; overflow: hidden;">
-                            <thead>
-                                <tr style="background: #f5f5f5;">
-                                    <th style="padding: 15px; border-right: 1px solid #e0e0e0; font-size: 1.1rem; color: #2c3e50;">Car</th>
-                                    <th style="padding: 15px; border-right: 1px solid #e0e0e0; font-size: 1.1rem; color: #2c3e50;">Age</th>
-                                    <th style="padding: 15px; border-right: 1px solid #e0e0e0; font-size: 1.1rem; color: #2c3e50;">MPG</th>
-                                    <th style="padding: 15px; border-right: 1px solid #e0e0e0; font-size: 1.1rem; color: #2c3e50;">True Cost</th>
-                                    <th style="padding: 15px; border-right: 1px solid #e0e0e0; font-size: 1.1rem; color: #2c3e50;">Your Estimate</th>
-                                    <th style="padding: 15px; font-size: 1.1rem; color: #2c3e50;">Error</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Car 1 -->
-                                <tr id="car1-row" style="background: white; transition: all 0.3s;">
-                                    <td style="padding: 15px; border-right: 1px solid #e0e0e0; border-top: 1px solid #e0e0e0;">
-                                        <div style="display: flex; align-items: center; gap: 10px;">
-                                            <svg width="35" height="20" viewBox="0 0 80 40">
+                        <!-- Table container with independent column divs -->
+                        <div id="cars-table-wrapper" style="display: flex; flex-shrink: 0; border: 2px solid #e0e0e0; border-radius: 10px; background: white;">
+                            <!-- Main table part (Car, Age, MPG, True Cost) -->
+                            <div style="background: white; border-radius: 8px 0 0 8px; overflow: hidden;">
+                                <!-- Header Row -->
+                                <div style="display: flex; background: #f5f5f5; height: 42px;">
+                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; font-size: 0.95rem; color: #2c3e50; font-weight: bold; width: 100px;">Car</div>
+                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; font-size: 0.95rem; color: #2c3e50; font-weight: bold; width: 50px; text-align: center;">Age</div>
+                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; font-size: 0.95rem; color: #2c3e50; font-weight: bold; width: 50px; text-align: center;">MPG</div>
+                                    <div style="padding: 12px; border-right: 2px solid #e0e0e0; font-size: 0.95rem; color: #2c3e50; font-weight: bold; width: 80px; text-align: center;">True Cost</div>
+                                </div>
+                                
+                                <!-- Car 1 Row -->
+                                <div style="display: flex; background: white; border-top: 1px solid #e0e0e0; height: 52px;">
+                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 100px;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <svg width="28" height="16" viewBox="0 0 80 40">
                                                 <rect x="10" y="15" width="60" height="20" rx="5" fill="#3498db"/>
                                                 <rect x="20" y="8" width="30" height="12" rx="3" fill="#5dade2"/>
                                                 <circle cx="25" cy="35" r="5" fill="#333"/>
                                                 <circle cx="55" cy="35" r="5" fill="#333"/>
                                             </svg>
-                                            <span style="font-weight: bold; color: #2c3e50;">Car 1</span>
+                                            <span style="font-weight: bold; color: #2c3e50; font-size: 0.9rem;">Car 1</span>
                                         </div>
-                                    </td>
-                                    <td style="padding: 15px; border-right: 1px solid #e0e0e0; border-top: 1px solid #e0e0e0; text-align: center; font-size: 1.1rem;">5</td>
-                                    <td style="padding: 15px; border-right: 1px solid #e0e0e0; border-top: 1px solid #e0e0e0; text-align: center; font-size: 1.1rem;">20</td>
-                                    <td style="padding: 15px; border-right: 1px solid #e0e0e0; border-top: 1px solid #e0e0e0; text-align: center; font-size: 1.1rem; color: #27ae60; font-weight: bold;">$250</td>
-                                    <td id="car1-estimate" style="padding: 15px; border-right: 1px solid #e0e0e0; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.95rem; color: #3498db;">-</td>
-                                    <td id="car1-error" style="padding: 15px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.95rem;">-</td>
-                                </tr>
+                                    </div>
+                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 50px; text-align: center; font-size: 0.95rem;">5</div>
+                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 50px; text-align: center; font-size: 0.95rem;">20</div>
+                                    <div style="padding: 12px; border-right: 2px solid #e0e0e0; width: 80px; text-align: center; font-size: 0.95rem; color: #27ae60; font-weight: bold;">$250</div>
+                                </div>
                                 
-                                <!-- Car 2 -->
-                                <tr id="car2-row" style="background: white; transition: all 0.3s;">
-                                    <td style="padding: 15px; border-right: 1px solid #e0e0e0; border-top: 1px solid #e0e0e0;">
-                                        <div style="display: flex; align-items: center; gap: 10px;">
-                                            <svg width="35" height="20" viewBox="0 0 80 40">
+                                <!-- Car 2 Row -->
+                                <div style="display: flex; background: white; border-top: 1px solid #e0e0e0; height: 52px;">
+                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 100px;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <svg width="28" height="16" viewBox="0 0 80 40">
                                                 <rect x="10" y="15" width="60" height="20" rx="5" fill="#27ae60"/>
                                                 <rect x="20" y="8" width="30" height="12" rx="3" fill="#52be80"/>
                                                 <circle cx="25" cy="35" r="5" fill="#333"/>
                                                 <circle cx="55" cy="35" r="5" fill="#333"/>
                                             </svg>
-                                            <span style="font-weight: bold; color: #2c3e50;">Car 2</span>
+                                            <span style="font-weight: bold; color: #2c3e50; font-size: 0.9rem;">Car 2</span>
                                         </div>
-                                    </td>
-                                    <td style="padding: 15px; border-right: 1px solid #e0e0e0; border-top: 1px solid #e0e0e0; text-align: center; font-size: 1.1rem;">2</td>
-                                    <td style="padding: 15px; border-right: 1px solid #e0e0e0; border-top: 1px solid #e0e0e0; text-align: center; font-size: 1.1rem;">30</td>
-                                    <td style="padding: 15px; border-right: 1px solid #e0e0e0; border-top: 1px solid #e0e0e0; text-align: center; font-size: 1.1rem; color: #27ae60; font-weight: bold;">$380</td>
-                                    <td id="car2-estimate" style="padding: 15px; border-right: 1px solid #e0e0e0; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.95rem; color: #3498db;">-</td>
-                                    <td id="car2-error" style="padding: 15px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.95rem;">-</td>
-                                </tr>
+                                    </div>
+                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 50px; text-align: center; font-size: 0.95rem;">2</div>
+                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 50px; text-align: center; font-size: 0.95rem;">30</div>
+                                    <div style="padding: 12px; border-right: 2px solid #e0e0e0; width: 80px; text-align: center; font-size: 0.95rem; color: #27ae60; font-weight: bold;">$380</div>
+                                </div>
                                 
-                                <!-- Car 3 -->
-                                <tr id="car3-row" style="background: white; transition: all 0.3s;">
-                                    <td style="padding: 15px; border-right: 1px solid #e0e0e0; border-top: 1px solid #e0e0e0;">
-                                        <div style="display: flex; align-items: center; gap: 10px;">
-                                            <svg width="35" height="20" viewBox="0 0 80 40">
+                                <!-- Car 3 Row -->
+                                <div style="display: flex; background: white; border-top: 1px solid #e0e0e0; height: 52px;">
+                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 100px;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <svg width="28" height="16" viewBox="0 0 80 40">
                                                 <rect x="10" y="15" width="60" height="20" rx="5" fill="#e74c3c"/>
                                                 <rect x="20" y="8" width="30" height="12" rx="3" fill="#ec7063"/>
                                                 <circle cx="25" cy="35" r="5" fill="#333"/>
                                                 <circle cx="55" cy="35" r="5" fill="#333"/>
                                             </svg>
-                                            <span style="font-weight: bold; color: #2c3e50;">Car 3</span>
+                                            <span style="font-weight: bold; color: #2c3e50; font-size: 0.9rem;">Car 3</span>
                                         </div>
-                                    </td>
-                                    <td style="padding: 15px; border-right: 1px solid #e0e0e0; border-top: 1px solid #e0e0e0; text-align: center; font-size: 1.1rem;">8</td>
-                                    <td style="padding: 15px; border-right: 1px solid #e0e0e0; border-top: 1px solid #e0e0e0; text-align: center; font-size: 1.1rem;">25</td>
-                                    <td style="padding: 15px; border-right: 1px solid #e0e0e0; border-top: 1px solid #e0e0e0; text-align: center; font-size: 1.1rem; color: #27ae60; font-weight: bold;">$180</td>
-                                    <td id="car3-estimate" style="padding: 15px; border-right: 1px solid #e0e0e0; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.95rem; color: #3498db;">-</td>
-                                    <td id="car3-error" style="padding: 15px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.95rem;">-</td>
-                                </tr>
+                                    </div>
+                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 50px; text-align: center; font-size: 0.95rem;">8</div>
+                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 50px; text-align: center; font-size: 0.95rem;">25</div>
+                                    <div style="padding: 12px; border-right: 2px solid #e0e0e0; width: 80px; text-align: center; font-size: 0.95rem; color: #27ae60; font-weight: bold;">$180</div>
+                                </div>
                                 
                                 <!-- Sum Row -->
-                                <tr id="sum-row" style="background: linear-gradient(135deg, #fff9e6, #fffdf4); border-top: 2px solid #f39c12;">
-                                    <td style="padding: 15px; border-right: 1px solid #e0e0e0; border-top: 2px solid #f39c12; font-weight: bold; color: #2c3e50;">
+                                <div style="display: flex; background: linear-gradient(135deg, #fff9e6, #fffdf4); border-top: 2px solid #f39c12; height: 52px;">
+                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 100px; font-weight: bold; color: #2c3e50;">
                                         <span style="color: #f39c12;">Σ</span> Sum
-                                    </td>
-                                    <td id="sum-age" style="padding: 15px; border-right: 1px solid #e0e0e0; border-top: 2px solid #f39c12; text-align: center; font-size: 1.1rem; font-weight: bold; color: #f39c12;">15</td>
-                                    <td id="sum-mpg" style="padding: 15px; border-right: 1px solid #e0e0e0; border-top: 2px solid #f39c12; text-align: center; font-size: 1.1rem; font-weight: bold; color: #f39c12;">75</td>
-                                    <td id="sum-true-cost" style="padding: 15px; border-right: 1px solid #e0e0e0; border-top: 2px solid #f39c12; text-align: center; font-size: 1.1rem; font-weight: bold; color: #f39c12;">$810</td>
-                                    <td id="sum-estimate" style="padding: 15px; border-right: 1px solid #e0e0e0; border-top: 2px solid #f39c12; text-align: center; font-size: 1.1rem; font-weight: bold; color: #f39c12;">-</td>
-                                    <td id="sum-error" style="padding: 15px; border-top: 2px solid #f39c12; text-align: center; font-size: 1.1rem; font-weight: bold;">-</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        
-                        <!-- You Character with Buy Cars button -->
-                        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-width: 250px;">
-                            <div id="appraiser-container" style="
-                                width: 200px;
-                                height: 200px;
-                                background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-                                border-radius: 20px;
-                                display: flex;
-                                flex-direction: column;
-                                align-items: center;
-                                justify-content: center;
-                                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-                                position: relative;
-                                overflow: hidden;
-                            ">
-                                <div style="font-size: 1.1rem; font-weight: bold; color: #2c3e50; margin-bottom: 15px;">You</div>
-                                
-                                <!-- Animated Person SVG -->
-                                <svg width="100" height="120" viewBox="0 0 100 120" id="appraiser-svg">
-                                    <!-- Head -->
-                                    <circle cx="50" cy="30" r="18" fill="#fdbcb4" stroke="#333" stroke-width="2"/>
-                                    <!-- Eyes -->
-                                    <circle cx="42" cy="28" r="2" fill="#333"/>
-                                    <circle cx="58" cy="28" r="2" fill="#333"/>
-                                    <!-- Mouth -->
-                                    <path d="M 42 35 Q 50 40 58 35" stroke="#333" stroke-width="2" fill="none" stroke-linecap="round"/>
-                                    <!-- Body -->
-                                    <rect x="35" y="48" width="30" height="40" rx="5" fill="#4a90e2" stroke="#333" stroke-width="2"/>
-                                    <!-- Arms -->
-                                    <rect id="left-arm" x="20" y="55" width="15" height="25" rx="5" fill="#fdbcb4" stroke="#333" stroke-width="2" transform-origin="27 55"/>
-                                    <rect id="right-arm" x="65" y="55" width="15" height="25" rx="5" fill="#fdbcb4" stroke="#333" stroke-width="2" transform-origin="73 55"/>
-                                    <!-- Clipboard -->
-                                    <g id="clipboard" opacity="0">
-                                        <rect x="70" y="60" width="25" height="35" rx="3" fill="#8b6f47" stroke="#333" stroke-width="1"/>
-                                        <rect x="73" y="63" width="19" height="25" fill="white"/>
-                                        <line x1="76" y1="68" x2="89" y2="68" stroke="#333" stroke-width="1"/>
-                                        <line x1="76" y1="73" x2="89" y2="73" stroke="#333" stroke-width="1"/>
-                                        <line x1="76" y1="78" x2="89" y2="78" stroke="#333" stroke-width="1"/>
-                                    </g>
-                                </svg>
-                                
-                                <!-- Money animation container -->
-                                <div id="money-animation" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;"></div>
+                                    </div>
+                                    <div id="sum-age" style="padding: 12px; border-right: 1px solid #e0e0e0; width: 50px; text-align: center; font-size: 0.95rem; font-weight: bold; color: #f39c12;">15</div>
+                                    <div id="sum-mpg" style="padding: 12px; border-right: 1px solid #e0e0e0; width: 50px; text-align: center; font-size: 0.95rem; font-weight: bold; color: #f39c12;">75</div>
+                                    <div id="sum-true-cost" style="padding: 12px; border-right: 2px solid #e0e0e0; width: 80px; text-align: center; font-size: 0.95rem; font-weight: bold; color: #f39c12;">$810</div>
+                                </div>
                             </div>
                             
-                            <button id="buy-cars-btn" style="
-                                margin-top: 15px;
-                                padding: 10px 25px;
-                                background: linear-gradient(135deg, #56ab2f, #a8e063);
-                                color: white;
-                                border: none;
-                                border-radius: 8px;
-                                font-size: 0.95rem;
-                                font-weight: bold;
-                                cursor: pointer;
-                                transition: all 0.3s;
-                                box-shadow: 0 4px 15px rgba(86, 171, 47, 0.3);
-                            ">
-                                Buy Cars
-                            </button>
+                            <!-- Estimate Column (separate for spotlighting) -->
+                            <div id="estimate-column" style="background: white; border-right: 1px solid #e0e0e0; position: relative; z-index: 1;">
+                                <div id="estimate-header" style="padding: 12px; background: #f5f5f5; font-size: 0.95rem; color: #2c3e50; font-weight: bold; text-align: center; height: 42px; box-sizing: border-box;">Your Estimate</div>
+                                <div id="car1-estimate" style="padding: 12px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.85rem; color: #3498db; background: white; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
+                                <div id="car2-estimate" style="padding: 12px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.85rem; color: #3498db; background: white; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
+                                <div id="car3-estimate" style="padding: 12px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.85rem; color: #3498db; background: white; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
+                                <div id="sum-estimate" style="padding: 12px; border-top: 2px solid #f39c12; text-align: center; font-size: 0.95rem; font-weight: bold; color: #f39c12; background: linear-gradient(135deg, #fff9e6, #fffdf4); height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
+                            </div>
+                            
+                            <!-- Error Column (separate for spotlighting) -->
+                            <div id="error-column" style="background: white; border-radius: 0 8px 8px 0; overflow: hidden; position: relative; z-index: 1;">
+                                <div id="error-header" style="padding: 12px; background: #f5f5f5; font-size: 0.95rem; color: #2c3e50; font-weight: bold; text-align: center; height: 42px; box-sizing: border-box;">Error</div>
+                                <div id="car1-error" style="padding: 12px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.85rem; background: white; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
+                                <div id="car2-error" style="padding: 12px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.85rem; background: white; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
+                                <div id="car3-error" style="padding: 12px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.85rem; background: white; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
+                                <div id="sum-error" style="padding: 12px; border-top: 2px solid #f39c12; text-align: center; font-size: 0.95rem; font-weight: bold; background: linear-gradient(135deg, #fff9e6, #fffdf4); height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
+                            </div>
                         </div>
                     </div>
                     
@@ -442,49 +389,7 @@ window.createPizzaProduction = function() {
                 ${typeof createStandardNavigation === 'function' ? createStandardNavigation() : ''}
                 
                 <style>
-                    @keyframes moneyFloat {
-                        0% {
-                            transform: translateY(0) rotate(0deg);
-                            opacity: 1;
-                        }
-                        100% {
-                            transform: translateY(-150px) rotate(360deg);
-                            opacity: 0;
-                        }
-                    }
-                    
-                    .money-bill {
-                        position: absolute;
-                        width: 40px;
-                        height: 20px;
-                        background: linear-gradient(135deg, #85bb65, #6fa855);
-                        border: 2px solid #4a7c3c;
-                        border-radius: 3px;
-                        animation: moneyFloat 1.5s ease-out;
-                        font-size: 12px;
-                        color: white;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-weight: bold;
-                    }
-                    
-                    @keyframes armWave {
-                        0%, 100% { transform: rotate(0deg); }
-                        25% { transform: rotate(-20deg); }
-                        75% { transform: rotate(20deg); }
-                    }
-                    
-                    .appraising {
-                        animation: armWave 1s ease-in-out;
-                    }
-                    
-                    .evaluating {
-                        background: linear-gradient(135deg, #fff, #fffbf0) !important;
-                        box-shadow: 0 0 20px rgba(243, 156, 18, 0.3) !important;
-                    }
-                    
-                    /* New Tutorial System Styles */
+                    /* Tutorial System Styles */
                     /* Simple spotlight using box-shadow for regular elements */
                     .tutorial-spotlight {
                         position: relative !important;
@@ -632,14 +537,6 @@ window.createPizzaProduction = function() {
         }
         
         _setupCustomHandlers() {
-            // Buy Cars button
-            const buyBtn = document.getElementById('buy-cars-btn');
-            if (buyBtn) {
-                this.addEventListenerWithCleanup(buyBtn, 'click', () => {
-                    this._buyCars();
-                });
-            }
-            
             // Calculate Update button
             const calcBtn = document.getElementById('calculate-update-btn');
             if (calcBtn) {
@@ -680,9 +577,10 @@ window.createPizzaProduction = function() {
                 this.addEventListenerWithCleanup(mpgErrorInput, 'input', () => this._checkCalculateButtonState());
             }
             
-            // Update displays
+            // Update displays and recalculate errors
             this._updateTable();
             this._updateCoeffDisplay();
+            this._calculateAndFillErrors();
         }
         
         _checkCalculateButtonState() {
@@ -777,10 +675,7 @@ window.createPizzaProduction = function() {
             }
         }
         
-        async _buyCars() {
-            if (this.isAnimating) return;
-            this.isAnimating = true;
-            
+        _calculateAndFillErrors() {
             const cars = [
                 { id: 'car1', mpg: 20, age: 5, optimal: 250 },
                 { id: 'car2', mpg: 30, age: 2, optimal: 380 },
@@ -789,16 +684,13 @@ window.createPizzaProduction = function() {
             
             this.totalError = 0;
             
-            // Simply calculate errors for each car without animation
+            // Calculate errors for each car
             cars.forEach(car => {
                 const price = this._calculatePrice(car.mpg, car.age);
                 const signedError = price - car.optimal;
                 this.carErrors[car.id] = signedError;
                 this.totalError += signedError;
             });
-            
-            // Update the table to show calculations
-            this._updateTable();
             
             // Auto-fill error inputs with the calculated total error
             const ageErrorInput = document.getElementById('age-error-input');
@@ -808,8 +700,6 @@ window.createPizzaProduction = function() {
                 mpgErrorInput.value = this.totalError.toFixed(0);
                 this._checkCalculateButtonState();
             }
-            
-            this.isAnimating = false;
             
             // Check for success
             const absTotal = Math.abs(this.carErrors.car1) + Math.abs(this.carErrors.car2) + Math.abs(this.carErrors.car3);
@@ -871,9 +761,10 @@ window.createPizzaProduction = function() {
             this.ageCoeff = Math.max(0, Math.min(100, this.ageCoeff + this.ageUpdate));
             this.mpgCoeff = Math.max(0, Math.min(100, this.mpgCoeff + this.mpgUpdate));
             
-            // Update displays
+            // Update displays and recalculate errors
             this._updateTable();
             this._updateCoeffDisplay();
+            this._calculateAndFillErrors();
             
             // Clear the error inputs and results
             const ageErrorInput = document.getElementById('age-error-input');
@@ -934,26 +825,7 @@ window.createPizzaProduction = function() {
             }
         }
         
-        _animateMoney(amount) {
-            const container = document.getElementById('money-animation');
-            if (!container) return;
-            
-            const numBills = Math.min(5, Math.ceil(amount / 100));
-            
-            for (let i = 0; i < numBills; i++) {
-                setTimeout(() => {
-                    const bill = document.createElement('div');
-                    bill.className = 'money-bill';
-                    bill.textContent = '$';
-                    bill.style.left = `${80 + Math.random() * 40}px`;
-                    bill.style.bottom = '20px';
-                    container.appendChild(bill);
-                    
-                    setTimeout(() => bill.remove(), 1500);
-                }, i * 100);
-            }
-        }
-        
+
         _reset() {
             this.ageCoeff = 20;
             this.mpgCoeff = 30;
@@ -963,9 +835,10 @@ window.createPizzaProduction = function() {
             this.mpgUpdate = 0;
             this.carErrors = { car1: 0, car2: 0, car3: 0 };
             
-            // Reset displays
+            // Reset displays and recalculate errors
             this._updateTable();
             this._updateCoeffDisplay();
+            this._calculateAndFillErrors();
             
             // Clear error inputs and results
             const ageErrorInput = document.getElementById('age-error-input');
@@ -1007,60 +880,8 @@ window.createPizzaProduction = function() {
             // Create initial overlay to dim everything
             this._addOverlay();
             
-            // Show first step
-            this._showTutorialStep1();
-        }
-        
-        _showTutorialStep1() {
-            this.tutorialStep = 1;
-            this._clearHighlights();
-            
-            const buyBtn = document.getElementById('buy-cars-btn');
-            if (!buyBtn) return;
-            
-            // Immediately spotlight the button
-            this._addSpotlight(buyBtn);
-            
-            // Add golden border and pulse animation to the button
-            buyBtn.dataset.originalBorder = buyBtn.style.border || 'none';
-            buyBtn.dataset.originalAnimation = buyBtn.style.animation || 'none';
-            buyBtn.style.border = '3px solid #ffd700';
-            buyBtn.style.animation = 'buttonPulse 2s infinite';
-            
-            // Create message without "Got it" button
-            const message = this._createTutorialMessageNoButton(
-                'Step 1: Buy Cars',
-                'Click the "Buy Cars" button to evaluate your pricing formula.',
-                buyBtn
-            );
-            
-            this.tutorialElements.push(message);
-            
-            // Wait for user to click the highlighted button
-            const clickHandler = async () => {
-                console.log('Buy Cars clicked in tutorial');
-                
-                // Remove the temporary click handler
-                buyBtn.removeEventListener('click', clickHandler, true);
-                
-                // Remove golden border and animation
-                buyBtn.style.border = buyBtn.dataset.originalBorder === 'none' ? '' : buyBtn.dataset.originalBorder;
-                buyBtn.style.animation = buyBtn.dataset.originalAnimation === 'none' ? '' : buyBtn.dataset.originalAnimation;
-                delete buyBtn.dataset.originalBorder;
-                delete buyBtn.dataset.originalAnimation;
-                
-                // Remove message and spotlight
-                message.remove();
-                this._removeSpotlight(buyBtn);
-                
-                // Actually run the buy cars function
-                await this._buyCars();
-                
-                // Move to step 2 immediately
-                this._showTutorialStep2();
-            };
-            
-            buyBtn.addEventListener('click', clickHandler, true);
+            // Start directly at step 2 (showing estimate column)
+            this._showTutorialStep2();
         }
         
         _showTutorialStep2() {
@@ -1068,31 +889,21 @@ window.createPizzaProduction = function() {
             this.tutorialStep = 2;
             this._clearHighlights();
             
-            // Get the main table (not the ones in gradient updates)
-            const mainTable = document.querySelector('table[style*="border-collapse: separate"]');
-            if (!mainTable) return;
+            // Spotlight the entire estimate column container
+            const estimateColumn = document.getElementById('estimate-column');
             
-            // Get all estimate cells to spotlight from the main table only
-            const estimateCells = [
-                mainTable.querySelector('thead tr th:nth-child(5)'), // Header
-                document.getElementById('car1-estimate'),
-                document.getElementById('car2-estimate'),
-                document.getElementById('car3-estimate'),
-                document.getElementById('sum-estimate')
-            ].filter(el => el);
+            if (!estimateColumn) return;
             
-            if (estimateCells.length === 0) return;
-            
-            // Use table column spotlight for table cells
-            this._addTableColumnSpotlight(estimateCells);
+            // Use normal spotlight for the column
+            this._addSpotlight(estimateColumn);
             
             const message = this._createTutorialMessage(
                 'Your Estimate',
                 'This column shows how much you paid for each car using your formula.',
-                estimateCells[0],
+                estimateColumn,
                 () => {
                     message.remove();
-                    this._removeTableColumnSpotlight(estimateCells);
+                    this._removeSpotlight(estimateColumn);
                     this._showTutorialStep3();
                 }
             );
@@ -1131,31 +942,21 @@ window.createPizzaProduction = function() {
             this.tutorialStep = 4;
             this._clearHighlights();
             
-            // Get the main table (not the ones in gradient updates)
-            const mainTable = document.querySelector('table[style*="border-collapse: separate"]');
-            if (!mainTable) return;
+            // Spotlight the entire error column container
+            const errorColumn = document.getElementById('error-column');
             
-            // Get all error cells to spotlight from the main table only
-            const errorCells = [
-                mainTable.querySelector('thead tr th:nth-child(6)'), // Header
-                document.getElementById('car1-error'),
-                document.getElementById('car2-error'),
-                document.getElementById('car3-error'),
-                document.getElementById('sum-error')
-            ].filter(el => el);
+            if (!errorColumn) return;
             
-            if (errorCells.length === 0) return;
-            
-            // Use table column spotlight for table cells
-            this._addTableColumnSpotlight(errorCells);
+            // Use normal spotlight for the column
+            this._addSpotlight(errorColumn);
             
             const message = this._createTutorialMessage(
                 'Your Errors',
                 'This column shows how far off your estimates were from the true costs.',
-                errorCells[0],
+                errorColumn,
                 () => {
                     message.remove();
-                    this._removeTableColumnSpotlight(errorCells);
+                    this._removeSpotlight(errorColumn);
                     this._showTutorialStep5();
                 }
             );
@@ -1357,23 +1158,15 @@ window.createPizzaProduction = function() {
             this._clearHighlights();
             
             const functionContainer = document.getElementById('current-function-container');
+            const estimateColumn = document.getElementById('estimate-column');
             
-            // Get all estimate cells to spotlight from the main table
-            const estimateCells = [
-                document.querySelector('table[style*="border-collapse: separate"] thead tr th:nth-child(5)'), // Header
-                document.getElementById('car1-estimate'),
-                document.getElementById('car2-estimate'),
-                document.getElementById('car3-estimate'),
-                document.getElementById('sum-estimate')
-            ].filter(el => el);
-            
-            if (!functionContainer || estimateCells.length === 0) return;
+            if (!functionContainer || !estimateColumn) return;
             
             // Spotlight the function container
             this._addSpotlight(functionContainer);
             
-            // Also highlight the estimate column using the clone method
-            this._addTableColumnSpotlight(estimateCells);
+            // Also highlight the estimate column with secondary spotlight
+            estimateColumn.classList.add('tutorial-spotlight-secondary');
             
             const message = this._createTutorialMessage(
                 'Improved Function',
@@ -1382,7 +1175,7 @@ window.createPizzaProduction = function() {
                 () => {
                     message.remove();
                     this._removeSpotlight(functionContainer);
-                    this._removeTableColumnSpotlight(estimateCells);
+                    estimateColumn.classList.remove('tutorial-spotlight-secondary');
                     this._showTutorialComplete();
                 }
             );
@@ -1425,42 +1218,8 @@ window.createPizzaProduction = function() {
                 el.classList.remove('tutorial-spotlight');
             });
             
-            // Remove any cloned cells if they exist
-            if (this.clonedCells) {
-                // Remove scroll and resize handlers first
-                if (this.scrollHandler) {
-                    window.removeEventListener('scroll', this.scrollHandler, true);
-                    this.scrollHandler = null;
-                }
-                
-                if (this.resizeHandler) {
-                    window.removeEventListener('resize', this.resizeHandler);
-                    this.resizeHandler = null;
-                }
-                
-                // Remove clones
-                this.clonedCells.forEach(clone => {
-                    if (clone && clone.parentNode) {
-                        clone.remove();
-                    }
-                });
-                this.clonedCells = [];
-                this.originalCells = null;
-            }
-            
-            // Restore visibility to any hidden table cells
-            const mainTable = document.querySelector('table[style*="border-collapse: separate"]');
-            if (mainTable) {
-                const allCells = mainTable.querySelectorAll('td, th');
-                allCells.forEach(cell => {
-                    if (cell.style.visibility === 'hidden') {
-                        cell.style.visibility = '';
-                    }
-                });
-            }
-            
             // Remove any button highlights and animations
-            ['buy-cars-btn', 'calculate-update-btn', 'apply-gd-btn'].forEach(btnId => {
+            ['calculate-update-btn', 'apply-gd-btn'].forEach(btnId => {
                 const btn = document.getElementById(btnId);
                 if (btn && btn.dataset.originalBorder !== undefined) {
                     btn.style.border = btn.dataset.originalBorder === 'none' ? '' : btn.dataset.originalBorder;
@@ -1690,118 +1449,7 @@ window.createPizzaProduction = function() {
             }
         }
         
-        _addTableColumnSpotlight(cells) {
-            if (!cells || cells.length === 0) return;
-            
-            // Don't remove the overlay - keep it to dim everything
-            // The overlay should already be there from _addOverlay()
-            
-            // Clone each cell and position it above everything
-            this.clonedCells = [];
-            this.originalCells = cells; // Store reference to original cells
-            
-            // Function to update clone positions
-            const updateClonePositions = () => {
-                this.clonedCells.forEach((clone, index) => {
-                    const originalCell = cells[index];
-                    if (originalCell && clone) {
-                        const rect = originalCell.getBoundingClientRect();
-                        clone.style.left = `${rect.left}px`;
-                        clone.style.top = `${rect.top}px`;
-                        clone.style.width = `${rect.width}px`;
-                        clone.style.height = `${rect.height}px`;
-                    }
-                });
-            };
-            
-            cells.forEach(cell => {
-                if (cell) {
-                    const rect = cell.getBoundingClientRect();
-                    
-                    // Create a clone of the cell
-                    const clone = cell.cloneNode(true);
-                    
-                    // Get computed styles from original
-                    const computedStyle = window.getComputedStyle(cell);
-                    
-                    // Style the clone to appear exactly where the original is
-                    clone.style.cssText = `
-                        position: fixed !important;
-                        left: ${rect.left}px !important;
-                        top: ${rect.top}px !important;
-                        width: ${rect.width}px !important;
-                        height: ${rect.height}px !important;
-                        z-index: 10001 !important;
-                        background: white !important;
-                        box-shadow: 0 0 0 3px #ffd700, 0 0 20px 5px rgba(255, 215, 0, 0.5) !important;
-                        animation: tableColumnPulse 2s infinite !important;
-                        padding: ${computedStyle.padding} !important;
-                        text-align: ${computedStyle.textAlign} !important;
-                        font-size: ${computedStyle.fontSize} !important;
-                        font-weight: ${computedStyle.fontWeight} !important;
-                        font-family: ${computedStyle.fontFamily} !important;
-                        color: ${computedStyle.color} !important;
-                        border: none !important;
-                        margin: 0 !important;
-                        box-sizing: border-box !important;
-                        pointer-events: none !important;
-                    `;
-                    
-                    // Add the clone to the page
-                    document.body.appendChild(clone);
-                    this.clonedCells.push(clone);
-                    
-                    // Hide the original cell
-                    cell.style.visibility = 'hidden';
-                }
-            });
-            
-            // Add scroll listener to update positions
-            this.scrollHandler = () => updateClonePositions();
-            window.addEventListener('scroll', this.scrollHandler, true);
-            
-            // Add resize listener too in case window is resized
-            this.resizeHandler = () => updateClonePositions();
-            window.addEventListener('resize', this.resizeHandler);
-        }
-        
-        _removeTableColumnSpotlight(cells) {
-            if (!cells || cells.length === 0) return;
-            
-            // Remove scroll and resize event listeners
-            if (this.scrollHandler) {
-                window.removeEventListener('scroll', this.scrollHandler, true);
-                this.scrollHandler = null;
-            }
-            
-            if (this.resizeHandler) {
-                window.removeEventListener('resize', this.resizeHandler);
-                this.resizeHandler = null;
-            }
-            
-            // Remove all cloned cells
-            if (this.clonedCells) {
-                this.clonedCells.forEach(clone => {
-                    if (clone && clone.parentNode) {
-                        clone.remove();
-                    }
-                });
-                this.clonedCells = [];
-            }
-            
-            // Clear reference to original cells
-            this.originalCells = null;
-            
-            // Restore visibility to original cells
-            cells.forEach(cell => {
-                if (cell) {
-                    cell.style.visibility = '';
-                }
-            });
-            
-            // The overlay stays since we're still in tutorial mode
-            // No need to re-add it
-        }
+
         
         _endTutorial() {
             this._clearTutorial();
