@@ -1,24 +1,24 @@
 /**
- * Car Pricing Optimization
+ * Bunny Pricing Optimization
  * 
- * Interactive level teaching gradient descent by optimizing car prices
- * Students adjust Age and MPG coefficients to minimize pricing error
+ * Interactive level teaching gradient descent by optimizing bunny prices
+ * Students adjust Age and Weight (kg) coefficients to minimize pricing error
  */
 
 window.createPizzaProduction = function() {
     
-    class CarPricingLevel extends window.InteractiveLevelTemplate {
+    class BunnyPricingLevel extends window.InteractiveLevelTemplate {
         constructor() {
             super({
-                id: 'car-pricing-optimization',
-                name: 'Car Pricing Optimization',
+                id: 'bunny-pricing-optimization',
+                name: 'Bunny Pricing Optimization',
                 type: 'interactive',
                 description: '',
                 targetFunction: { 
-                    // Cars with their attributes and ideal prices
-                    car1: { mpg: 20, age: 5, optimalPrice: 250 },
-                    car2: { mpg: 30, age: 2, optimalPrice: 380 },
-                    car3: { mpg: 25, age: 8, optimalPrice: 180 }
+                    // Bunnies with their attributes and ideal prices
+                    bunny1: { kg: 2.0, age: 5, optimalPrice: 250 },
+                    bunny2: { kg: 3.0, age: 2, optimalPrice: 380 },
+                    bunny3: { kg: 2.5, age: 8, optimalPrice: 180 }
                 },
                 controls: [],
                 validation: {
@@ -33,13 +33,13 @@ window.createPizzaProduction = function() {
             
             // Custom state
             this.ageCoeff = 20;
-            this.mpgCoeff = 30;
-            this.learningRate = 0.001; // Hard coded, explicitly shown to user
+            this.kgCoeff = 30;
+            this.learningRate = 0.001; // Default learning rate
             this.totalError = 0;
-            this.carErrors = { car1: 0, car2: 0, car3: 0 };
+            this.bunnyErrors = { bunny1: 0, bunny2: 0, bunny3: 0 };
             this.manualTotalError = 0;
             this.ageUpdate = 0;
-            this.mpgUpdate = 0;
+            this.kgUpdate = 0;
             
             // Tutorial state
             this.tutorialStep = 0;
@@ -52,7 +52,7 @@ window.createPizzaProduction = function() {
             
             // Initialize navigation
             if (typeof initializeNavigation === 'function') {
-                initializeNavigation('car-pricing-optimization', 'createPizzaProduction');
+                initializeNavigation('bunny-pricing-optimization', 'createPizzaProduction');
             }
             
             // Setup custom event handlers
@@ -69,9 +69,9 @@ window.createPizzaProduction = function() {
                 <div style="max-width: 900px; margin: 20px auto 2px auto; position: relative;">
                     <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; padding: 20px 25px; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3); position: relative;">
                         <div style="color: white; font-size: 1.1rem; line-height: 1.6;">
-                            <strong style="font-size: 1.2rem;">Welcome to Car Pricing Optimization!</strong><br>
+                            <strong style="font-size: 1.2rem;">Welcome to Bunny Pricing Optimization!</strong><br>
                             Learn how gradient descent helps us find the perfect pricing formula. The table shows how your current formula performs. 
-                            Use gradient descent to adjust the weights (W_age and W_mpg) and minimize the error between your estimates and the true car prices!
+                            Use gradient descent to adjust the weights (W_age and W_kg) and minimize the error between your estimates and the true bunny prices!
                         </div>
                     </div>
                 </div>
@@ -101,6 +101,24 @@ window.createPizzaProduction = function() {
                                         pointer-events: none;
                                     ">
                                         Calculate
+                                    </button>
+                                    <button id="autofill-btn" 
+                                    title="Fill error fields with current total error"
+                                    style="
+                                        padding: 6px 12px;
+                                        background: linear-gradient(135deg, #f39c12, #e67e22);
+                                        color: white;
+                                        border: none;
+                                        border-radius: 6px;
+                                        font-size: 0.85rem;
+                                        font-weight: bold;
+                                        cursor: pointer;
+                                        transition: all 0.3s;
+                                        box-shadow: 0 2px 5px rgba(243, 156, 18, 0.3);
+                                    "
+                                    onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(243, 156, 18, 0.4)';"
+                                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 5px rgba(243, 156, 18, 0.3)';">
+                                        Autofill
                                     </button>
                                     <button id="reset-btn" style="
                                         padding: 6px 12px;
@@ -156,12 +174,27 @@ window.createPizzaProduction = function() {
                                                         font-size: 0.9rem;
                                                         text-align: center;
                                                         background: white;
+                                                        -moz-appearance: textfield;
+                                                        appearance: textfield;
                                                     "/>
                                                 </td>
                                                 <td style="padding: 4px 4px; text-align: center; font-size: 1rem; color: #2c3e50;">×</td>
                                                 <td style="padding: 4px 6px; text-align: center; font-size: 1rem; color: #2c3e50; font-weight: bold;">15</td>
                                                 <td style="padding: 4px 4px; text-align: center; font-size: 1rem; color: #2c3e50;">×</td>
-                                                <td style="padding: 4px 6px; text-align: center; font-size: 1rem; color: #2c3e50; font-weight: bold;">0.001</td>
+                                                <td style="padding: 4px 6px; text-align: center;">
+                                                    <input id="age-lr-input" type="number" step="any" placeholder="LR" style="
+                                                        width: 65px;
+                                                        padding: 3px;
+                                                        border: 2px solid #3498db;
+                                                        border-radius: 4px;
+                                                        font-family: monospace;
+                                                        font-size: 0.9rem;
+                                                        text-align: center;
+                                                        background: white;
+                                                        -moz-appearance: textfield;
+                                                        appearance: textfield;
+                                                    "/>
+                                                </td>
                                                 <td style="padding: 4px 10px; text-align: center; font-size: 1rem; color: #3498db; font-weight: bold;">
                                                     <span id="age-result"></span>
                                                 </td>
@@ -171,11 +204,11 @@ window.createPizzaProduction = function() {
                                 </div>
                             </div>
                             
-                            <!-- W_mpg update -->
+                            <!-- W_kg update -->
                             <div style="position: relative; padding: 18px 10px 10px 10px; background: #f8fdf9; border: 2px solid #27ae60; border-radius: 8px;">
                                 <!-- Badge label -->
                                 <div style="position: absolute; top: -10px; left: 12px; background: #27ae60; color: white; padding: 2px 10px; border-radius: 4px; font-weight: bold; font-size: 0.8rem;">
-                                    W_mpg = <span id="wmpg-badge">${this.mpgCoeff}</span>
+                                    W_kg = <span id="wkg-badge">${this.kgCoeff}</span>
                                 </div>
                                 
                                 <div style="display: flex; align-items: center; justify-content: center;">
@@ -187,7 +220,7 @@ window.createPizzaProduction = function() {
                                                 <th style="padding: 4px 4px; text-align: center; font-size: 0.75rem; color: #666; font-weight: normal; border-bottom: 1px solid #ddd;"></th>
                                                 <th style="padding: 4px 6px; text-align: center; font-size: 0.75rem; color: #666; font-weight: normal; border-bottom: 1px solid #ddd;">Error</th>
                                                 <th style="padding: 4px 4px; text-align: center; font-size: 0.75rem; color: #666; font-weight: normal; border-bottom: 1px solid #ddd;"></th>
-                                                <th style="padding: 4px 6px; text-align: center; font-size: 0.75rem; color: #666; font-weight: normal; border-bottom: 1px solid #ddd;">Σ MPG</th>
+                                                <th style="padding: 4px 6px; text-align: center; font-size: 0.75rem; color: #666; font-weight: normal; border-bottom: 1px solid #ddd;">Σ Kg</th>
                                                 <th style="padding: 4px 4px; text-align: center; font-size: 0.75rem; color: #666; font-weight: normal; border-bottom: 1px solid #ddd;"></th>
                                                 <th style="padding: 4px 6px; text-align: center; font-size: 0.75rem; color: #666; font-weight: normal; border-bottom: 1px solid #ddd;">LR</th>
                                                 <th style="padding: 4px 6px; text-align: center; font-size: 0.75rem; color: #666; font-weight: normal;"></th>
@@ -196,11 +229,11 @@ window.createPizzaProduction = function() {
                                         <tbody>
                                             <tr>
                                                 <td style="padding: 4px 6px; text-align: center; font-size: 1rem; color: #2c3e50; font-weight: bold;">
-                                                    <span id="mpg-current">${this.mpgCoeff}</span>
+                                                    <span id="kg-current">${this.kgCoeff}</span>
                                                 </td>
                                                 <td style="padding: 4px 4px; text-align: center; font-size: 1rem; color: #2c3e50;">+</td>
                                                 <td style="padding: 4px 6px; text-align: center;">
-                                                    <input id="mpg-error-input" type="number" step="any" placeholder="error" style="
+                                                    <input id="kg-error-input" type="number" step="any" placeholder="error" style="
                                                         width: 65px;
                                                         padding: 3px;
                                                         border: 2px solid #27ae60;
@@ -209,14 +242,29 @@ window.createPizzaProduction = function() {
                                                         font-size: 0.9rem;
                                                         text-align: center;
                                                         background: white;
+                                                        -moz-appearance: textfield;
+                                                        appearance: textfield;
                                                     "/>
                                                 </td>
                                                 <td style="padding: 4px 4px; text-align: center; font-size: 1rem; color: #2c3e50;">×</td>
-                                                <td style="padding: 4px 6px; text-align: center; font-size: 1rem; color: #2c3e50; font-weight: bold;">75</td>
+                                                <td style="padding: 4px 6px; text-align: center; font-size: 1rem; color: #2c3e50; font-weight: bold;">7.5</td>
                                                 <td style="padding: 4px 4px; text-align: center; font-size: 1rem; color: #2c3e50;">×</td>
-                                                <td style="padding: 4px 6px; text-align: center; font-size: 1rem; color: #2c3e50; font-weight: bold;">0.001</td>
+                                                <td style="padding: 4px 6px; text-align: center;">
+                                                    <input id="kg-lr-input" type="number" step="any" placeholder="LR" style="
+                                                        width: 65px;
+                                                        padding: 3px;
+                                                        border: 2px solid #27ae60;
+                                                        border-radius: 4px;
+                                                        font-family: monospace;
+                                                        font-size: 0.9rem;
+                                                        text-align: center;
+                                                        background: white;
+                                                        -moz-appearance: textfield;
+                                                        appearance: textfield;
+                                                    "/>
+                                                </td>
                                                 <td style="padding: 4px 10px; text-align: center; font-size: 1rem; color: #27ae60; font-weight: bold;">
-                                                    <span id="mpg-result"></span>
+                                                    <span id="kg-result"></span>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -235,8 +283,8 @@ window.createPizzaProduction = function() {
                                         Estimate = 
                                         <span id="function-wage" style="color: #2980b9; font-weight: bold;">${this.ageCoeff}</span>
                                         <span style="color: #666;">×Age</span> + 
-                                        <span id="function-wmpg" style="color: #27ae60; font-weight: bold;">${this.mpgCoeff}</span>
-                                        <span style="color: #666;">×MPG</span>
+                                        <span id="function-wkg" style="color: #27ae60; font-weight: bold;">${this.kgCoeff}</span>
+                                        <span style="color: #666;">× kg</span>
                                     </div>
                                 </div>
                             </div>
@@ -284,71 +332,101 @@ window.createPizzaProduction = function() {
                         
                     </div>
                     
-                    <!-- Bottom Section: Cars Table and You Character -->
-                    <div style="display: flex; gap: 30px; align-items: stretch;">
+                    <!-- Bottom Section: Bunnies Table and Farm -->
+                    <div style="display: flex; gap: 20px; align-items: stretch;">
                         <!-- Table container with independent column divs -->
-                        <div id="cars-table-wrapper" style="display: flex; flex-shrink: 0; border: 2px solid #e0e0e0; border-radius: 10px; background: white;">
-                            <!-- Main table part (Car, Age, MPG, True Cost) -->
+                        <div id="bunnies-table-wrapper" style="display: flex; flex-shrink: 0; border: 2px solid #e0e0e0; border-radius: 10px; background: white;">
+                            <!-- Main table part (Bunny, Age, Weight, True Cost) -->
                             <div style="background: white; border-radius: 8px 0 0 8px; overflow: hidden;">
                                 <!-- Header Row -->
                                 <div style="display: flex; background: #f5f5f5; height: 42px;">
-                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; font-size: 0.95rem; color: #2c3e50; font-weight: bold; width: 100px;">Car</div>
+                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; font-size: 0.95rem; color: #2c3e50; font-weight: bold; width: 100px;">Bunny</div>
                                     <div style="padding: 12px; border-right: 1px solid #e0e0e0; font-size: 0.95rem; color: #2c3e50; font-weight: bold; width: 50px; text-align: center;">Age</div>
-                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; font-size: 0.95rem; color: #2c3e50; font-weight: bold; width: 50px; text-align: center;">MPG</div>
-                                    <div style="padding: 12px; border-right: 2px solid #e0e0e0; font-size: 0.95rem; color: #2c3e50; font-weight: bold; width: 80px; text-align: center;">True Cost</div>
+                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; font-size: 0.95rem; color: #2c3e50; font-weight: bold; width: 60px; text-align: center;">Kg</div>
+                                    <div style="padding: 12px; border-right: 2px solid #e0e0e0; font-size: 0.95rem; color: #2c3e50; font-weight: bold; width: 80px; text-align: center;">Cost</div>
                                 </div>
                                 
-                                <!-- Car 1 Row -->
+                                <!-- Bunny 1 Row -->
                                 <div style="display: flex; background: white; border-top: 1px solid #e0e0e0; height: 52px;">
                                     <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 100px;">
                                         <div style="display: flex; align-items: center; gap: 8px;">
-                                            <svg width="28" height="16" viewBox="0 0 80 40">
-                                                <rect x="10" y="15" width="60" height="20" rx="5" fill="#3498db"/>
-                                                <rect x="20" y="8" width="30" height="12" rx="3" fill="#5dade2"/>
-                                                <circle cx="25" cy="35" r="5" fill="#333"/>
-                                                <circle cx="55" cy="35" r="5" fill="#333"/>
+                                            <svg width="28" height="28" viewBox="0 0 40 40">
+                                                <!-- Bunny body -->
+                                                <ellipse cx="20" cy="25" rx="10" ry="8" fill="#3498db"/>
+                                                <!-- Bunny head -->
+                                                <circle cx="20" cy="16" r="6" fill="#3498db"/>
+                                                <!-- Ears -->
+                                                <ellipse cx="16" cy="10" rx="3" ry="6" fill="#3498db" transform="rotate(-10 16 10)"/>
+                                                <ellipse cx="24" cy="10" rx="3" ry="6" fill="#3498db" transform="rotate(10 24 10)"/>
+                                                <!-- Eyes -->
+                                                <circle cx="18" cy="15" r="1" fill="#000"/>
+                                                <circle cx="22" cy="15" r="1" fill="#000"/>
+                                                <!-- Nose -->
+                                                <ellipse cx="20" cy="18" rx="1.5" ry="1" fill="#ff69b4"/>
+                                                <!-- Tail -->
+                                                <circle cx="10" cy="25" r="3" fill="#fff"/>
                                             </svg>
-                                            <span style="font-weight: bold; color: #2c3e50; font-size: 0.9rem;">Car 1</span>
+                                            <span style="font-weight: bold; color: #2c3e50; font-size: 0.9rem;">1</span>
                                         </div>
                                     </div>
                                     <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 50px; text-align: center; font-size: 0.95rem;">5</div>
-                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 50px; text-align: center; font-size: 0.95rem;">20</div>
+                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 60px; text-align: center; font-size: 0.95rem;">2.0</div>
                                     <div style="padding: 12px; border-right: 2px solid #e0e0e0; width: 80px; text-align: center; font-size: 0.95rem; color: #27ae60; font-weight: bold;">$250</div>
                                 </div>
                                 
-                                <!-- Car 2 Row -->
+                                <!-- Bunny 2 Row -->
                                 <div style="display: flex; background: white; border-top: 1px solid #e0e0e0; height: 52px;">
                                     <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 100px;">
                                         <div style="display: flex; align-items: center; gap: 8px;">
-                                            <svg width="28" height="16" viewBox="0 0 80 40">
-                                                <rect x="10" y="15" width="60" height="20" rx="5" fill="#27ae60"/>
-                                                <rect x="20" y="8" width="30" height="12" rx="3" fill="#52be80"/>
-                                                <circle cx="25" cy="35" r="5" fill="#333"/>
-                                                <circle cx="55" cy="35" r="5" fill="#333"/>
+                                            <svg width="28" height="28" viewBox="0 0 40 40">
+                                                <!-- Bunny body -->
+                                                <ellipse cx="20" cy="25" rx="10" ry="8" fill="#27ae60"/>
+                                                <!-- Bunny head -->
+                                                <circle cx="20" cy="16" r="6" fill="#27ae60"/>
+                                                <!-- Ears -->
+                                                <ellipse cx="16" cy="10" rx="3" ry="6" fill="#27ae60" transform="rotate(-10 16 10)"/>
+                                                <ellipse cx="24" cy="10" rx="3" ry="6" fill="#27ae60" transform="rotate(10 24 10)"/>
+                                                <!-- Eyes -->
+                                                <circle cx="18" cy="15" r="1" fill="#000"/>
+                                                <circle cx="22" cy="15" r="1" fill="#000"/>
+                                                <!-- Nose -->
+                                                <ellipse cx="20" cy="18" rx="1.5" ry="1" fill="#ff69b4"/>
+                                                <!-- Tail -->
+                                                <circle cx="10" cy="25" r="3" fill="#fff"/>
                                             </svg>
-                                            <span style="font-weight: bold; color: #2c3e50; font-size: 0.9rem;">Car 2</span>
+                                            <span style="font-weight: bold; color: #2c3e50; font-size: 0.9rem;">2</span>
                                         </div>
                                     </div>
                                     <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 50px; text-align: center; font-size: 0.95rem;">2</div>
-                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 50px; text-align: center; font-size: 0.95rem;">30</div>
+                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 60px; text-align: center; font-size: 0.95rem;">3.0</div>
                                     <div style="padding: 12px; border-right: 2px solid #e0e0e0; width: 80px; text-align: center; font-size: 0.95rem; color: #27ae60; font-weight: bold;">$380</div>
                                 </div>
                                 
-                                <!-- Car 3 Row -->
+                                <!-- Bunny 3 Row -->
                                 <div style="display: flex; background: white; border-top: 1px solid #e0e0e0; height: 52px;">
                                     <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 100px;">
                                         <div style="display: flex; align-items: center; gap: 8px;">
-                                            <svg width="28" height="16" viewBox="0 0 80 40">
-                                                <rect x="10" y="15" width="60" height="20" rx="5" fill="#e74c3c"/>
-                                                <rect x="20" y="8" width="30" height="12" rx="3" fill="#ec7063"/>
-                                                <circle cx="25" cy="35" r="5" fill="#333"/>
-                                                <circle cx="55" cy="35" r="5" fill="#333"/>
+                                            <svg width="28" height="28" viewBox="0 0 40 40">
+                                                <!-- Bunny body -->
+                                                <ellipse cx="20" cy="25" rx="10" ry="8" fill="#e74c3c"/>
+                                                <!-- Bunny head -->
+                                                <circle cx="20" cy="16" r="6" fill="#e74c3c"/>
+                                                <!-- Ears -->
+                                                <ellipse cx="16" cy="10" rx="3" ry="6" fill="#e74c3c" transform="rotate(-10 16 10)"/>
+                                                <ellipse cx="24" cy="10" rx="3" ry="6" fill="#e74c3c" transform="rotate(10 24 10)"/>
+                                                <!-- Eyes -->
+                                                <circle cx="18" cy="15" r="1" fill="#000"/>
+                                                <circle cx="22" cy="15" r="1" fill="#000"/>
+                                                <!-- Nose -->
+                                                <ellipse cx="20" cy="18" rx="1.5" ry="1" fill="#ff69b4"/>
+                                                <!-- Tail -->
+                                                <circle cx="10" cy="25" r="3" fill="#fff"/>
                                             </svg>
-                                            <span style="font-weight: bold; color: #2c3e50; font-size: 0.9rem;">Car 3</span>
+                                            <span style="font-weight: bold; color: #2c3e50; font-size: 0.9rem;">3</span>
                                         </div>
                                     </div>
                                     <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 50px; text-align: center; font-size: 0.95rem;">8</div>
-                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 50px; text-align: center; font-size: 0.95rem;">25</div>
+                                    <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 60px; text-align: center; font-size: 0.95rem;">2.5</div>
                                     <div style="padding: 12px; border-right: 2px solid #e0e0e0; width: 80px; text-align: center; font-size: 0.95rem; color: #27ae60; font-weight: bold;">$180</div>
                                 </div>
                                 
@@ -358,27 +436,185 @@ window.createPizzaProduction = function() {
                                         <span style="color: #f39c12;">Σ</span> Sum
                                     </div>
                                     <div id="sum-age" style="padding: 12px; border-right: 1px solid #e0e0e0; width: 50px; text-align: center; font-size: 0.95rem; font-weight: bold; color: #f39c12;">15</div>
-                                    <div id="sum-mpg" style="padding: 12px; border-right: 1px solid #e0e0e0; width: 50px; text-align: center; font-size: 0.95rem; font-weight: bold; color: #f39c12;">75</div>
+                                    <div id="sum-kg" style="padding: 12px; border-right: 1px solid #e0e0e0; width: 60px; text-align: center; font-size: 0.95rem; font-weight: bold; color: #f39c12;">7.5</div>
                                     <div id="sum-true-cost" style="padding: 12px; border-right: 2px solid #e0e0e0; width: 80px; text-align: center; font-size: 0.95rem; font-weight: bold; color: #f39c12;">$810</div>
                                 </div>
                             </div>
                             
                             <!-- Estimate Column (separate for spotlighting) -->
                             <div id="estimate-column" style="background: white; border-right: 1px solid #e0e0e0; position: relative; z-index: 1;">
-                                <div id="estimate-header" style="padding: 12px; background: #f5f5f5; font-size: 0.95rem; color: #2c3e50; font-weight: bold; text-align: center; height: 42px; box-sizing: border-box;">Your Estimate</div>
-                                <div id="car1-estimate" style="padding: 12px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.85rem; color: #3498db; background: white; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
-                                <div id="car2-estimate" style="padding: 12px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.85rem; color: #3498db; background: white; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
-                                <div id="car3-estimate" style="padding: 12px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.85rem; color: #3498db; background: white; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
-                                <div id="sum-estimate" style="padding: 12px; border-top: 2px solid #f39c12; text-align: center; font-size: 0.95rem; font-weight: bold; color: #f39c12; background: linear-gradient(135deg, #fff9e6, #fffdf4); height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
+                            <div id="estimate-header" style="padding: 12px; background: #f5f5f5; font-size: 0.95rem; color: #2c3e50; font-weight: bold; text-align: center; height: 42px; box-sizing: border-box;">Your Estimate</div>
+                            <div id="bunny1-estimate" style="padding: 12px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.85rem; color: #3498db; background: white; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
+                            <div id="bunny2-estimate" style="padding: 12px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.85rem; color: #3498db; background: white; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
+                            <div id="bunny3-estimate" style="padding: 12px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.85rem; color: #3498db; background: white; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
+                            <div id="sum-estimate" style="padding: 12px; border-top: 2px solid #f39c12; text-align: center; font-size: 0.95rem; font-weight: bold; color: #f39c12; background: linear-gradient(135deg, #fff9e6, #fffdf4); height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
                             </div>
                             
                             <!-- Error Column (separate for spotlighting) -->
                             <div id="error-column" style="background: white; border-radius: 0 8px 8px 0; overflow: hidden; position: relative; z-index: 1;">
-                                <div id="error-header" style="padding: 12px; background: #f5f5f5; font-size: 0.95rem; color: #2c3e50; font-weight: bold; text-align: center; height: 42px; box-sizing: border-box;">Error</div>
-                                <div id="car1-error" style="padding: 12px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.85rem; background: white; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
-                                <div id="car2-error" style="padding: 12px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.85rem; background: white; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
-                                <div id="car3-error" style="padding: 12px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.85rem; background: white; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
-                                <div id="sum-error" style="padding: 12px; border-top: 2px solid #f39c12; text-align: center; font-size: 0.95rem; font-weight: bold; background: linear-gradient(135deg, #fff9e6, #fffdf4); height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
+                            <div id="error-header" style="padding: 12px; background: #f5f5f5; font-size: 0.95rem; color: #2c3e50; font-weight: bold; text-align: center; height: 42px; box-sizing: border-box;">Error</div>
+                            <div id="bunny1-error" style="padding: 12px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.85rem; background: white; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
+                            <div id="bunny2-error" style="padding: 12px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.85rem; background: white; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
+                            <div id="bunny3-error" style="padding: 12px; border-top: 1px solid #e0e0e0; text-align: center; font-family: monospace; font-size: 0.85rem; background: white; height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
+                            <div id="sum-error" style="padding: 12px; border-top: 2px solid #f39c12; text-align: center; font-size: 0.95rem; font-weight: bold; background: linear-gradient(135deg, #fff9e6, #fffdf4); height: 52px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">-</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Bunny Farm Visualization -->
+                        <div id="bunny-farm-container" style="flex: 1; max-width: 450px; min-width: 350px; height: 260px; background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 40%, #90EE90 40%, #90EE90 100%); border-radius: 15px; padding: 15px; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 2px solid #e0e0e0;">
+                            <!-- Sky elements -->
+                            <div id="weather-container" style="position: absolute; top: 0; left: 0; right: 0; height: 40%; pointer-events: none;">
+                                <!-- Sun/Clouds will be dynamically updated -->
+                                <div id="sun" style="position: absolute; top: 20px; right: 30px; width: 60px; height: 60px; background: radial-gradient(circle, #FFD700, #FFA500); border-radius: 50%; box-shadow: 0 0 40px rgba(255,215,0,0.5); opacity: 0.3; transition: all 1s ease;">
+                                    <div style="position: absolute; inset: -20px; background: radial-gradient(circle, rgba(255,215,0,0.3), transparent); border-radius: 50%; animation: sunPulse 3s infinite;"></div>
+                                </div>
+                                <div id="cloud1" style="position: absolute; top: 15px; left: 50px; opacity: 0.7; transition: all 1s ease;">
+                                    <svg width="80" height="40" viewBox="0 0 80 40">
+                                        <ellipse cx="20" cy="25" rx="15" ry="10" fill="white" opacity="0.8"/>
+                                        <ellipse cx="35" cy="20" rx="18" ry="12" fill="white" opacity="0.8"/>
+                                        <ellipse cx="50" cy="25" rx="15" ry="10" fill="white" opacity="0.8"/>
+                                    </svg>
+                                </div>
+                                <div id="cloud2" style="position: absolute; top: 35px; left: 150px; opacity: 0.7; transition: all 1s ease;">
+                                    <svg width="60" height="30" viewBox="0 0 60 30">
+                                        <ellipse cx="15" cy="20" rx="12" ry="8" fill="white" opacity="0.8"/>
+                                        <ellipse cx="30" cy="15" rx="15" ry="10" fill="white" opacity="0.8"/>
+                                        <ellipse cx="45" cy="20" rx="12" ry="8" fill="white" opacity="0.8"/>
+                                    </svg>
+                                </div>
+                                <!-- Rainbow (hidden initially) -->
+                                <div id="rainbow" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 300px; height: 150px; opacity: 0; transition: opacity 2s ease; pointer-events: none;">
+                                    <svg width="300" height="150" viewBox="0 0 300 150" style="position: absolute;">
+                                        <path d="M 30 150 Q 150 30 270 150" stroke="red" stroke-width="6" fill="none" opacity="0.6"/>
+                                        <path d="M 40 150 Q 150 40 260 150" stroke="orange" stroke-width="6" fill="none" opacity="0.6"/>
+                                        <path d="M 50 150 Q 150 50 250 150" stroke="yellow" stroke-width="6" fill="none" opacity="0.6"/>
+                                        <path d="M 60 150 Q 150 60 240 150" stroke="green" stroke-width="6" fill="none" opacity="0.6"/>
+                                        <path d="M 70 150 Q 150 70 230 150" stroke="blue" stroke-width="6" fill="none" opacity="0.6"/>
+                                        <path d="M 80 150 Q 150 80 220 150" stroke="indigo" stroke-width="6" fill="none" opacity="0.6"/>
+                                        <path d="M 90 150 Q 150 90 210 150" stroke="violet" stroke-width="6" fill="none" opacity="0.6"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            
+                            <!-- Ground elements -->
+                            <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 60%;">
+                                <!-- Flowers container -->
+                                <div id="flowers-container" style="position: absolute; bottom: 0; left: 0; right: 0; height: 100%; pointer-events: none;">
+                                    <!-- Flowers will be dynamically added -->
+                                </div>
+                                
+                                <!-- Bunnies -->
+                                <div id="farm-bunny-1" class="farm-bunny" style="position: absolute; bottom: 20px; left: 40px; transition: all 0.5s ease;">
+                                    <svg width="50" height="50" viewBox="0 0 60 60">
+                                        <g class="bunny-body" style="transform-origin: center bottom;">
+                                            <!-- Shadow -->
+                                            <ellipse cx="30" cy="55" rx="15" ry="3" fill="rgba(0,0,0,0.2)"/>
+                                            <!-- Body -->
+                                            <ellipse cx="30" cy="40" rx="18" ry="15" fill="#FFB6C1" stroke="#FF69B4" stroke-width="1"/>
+                                            <!-- Belly -->
+                                            <ellipse cx="30" cy="42" rx="12" ry="10" fill="#FFF0F5"/>
+                                            <!-- Head -->
+                                            <circle cx="30" cy="25" r="12" fill="#FFB6C1" stroke="#FF69B4" stroke-width="1"/>
+                                            <!-- Ears -->
+                                            <ellipse cx="24" cy="15" rx="4" ry="10" fill="#FFB6C1" stroke="#FF69B4" stroke-width="1" transform="rotate(-15 24 15)"/>
+                                            <ellipse cx="36" cy="15" rx="4" ry="10" fill="#FFB6C1" stroke="#FF69B4" stroke-width="1" transform="rotate(15 36 15)"/>
+                                            <ellipse cx="24" cy="15" rx="2" ry="6" fill="#FFC0CB" transform="rotate(-15 24 15)"/>
+                                            <ellipse cx="36" cy="15" rx="2" ry="6" fill="#FFC0CB" transform="rotate(15 36 15)"/>
+                                            <!-- Eyes -->
+                                            <circle cx="26" cy="24" r="2" fill="black" class="bunny-eye"/>
+                                            <circle cx="34" cy="24" r="2" fill="black" class="bunny-eye"/>
+                                            <circle cx="27" cy="23" r="1" fill="white"/>
+                                            <circle cx="35" cy="23" r="1" fill="white"/>
+                                            <!-- Nose -->
+                                            <ellipse cx="30" cy="28" rx="2" ry="1.5" fill="#FF1493"/>
+                                            <!-- Mouth (changes with mood) -->
+                                            <path class="bunny-mouth" d="M 28 29 Q 30 30 32 29" stroke="#FF1493" stroke-width="1.5" fill="none"/>
+                                            <!-- Tail -->
+                                            <circle cx="15" cy="40" r="5" fill="white"/>
+                                            <!-- Paws -->
+                                            <ellipse cx="22" cy="50" rx="4" ry="3" fill="#FFB6C1"/>
+                                            <ellipse cx="38" cy="50" rx="4" ry="3" fill="#FFB6C1"/>
+                                        </g>
+                                    </svg>
+                                </div>
+                                
+                                <div id="farm-bunny-2" class="farm-bunny" style="position: absolute; bottom: 35px; left: 120px; transition: all 0.5s ease;">
+                                    <svg width="45" height="45" viewBox="0 0 60 60">
+                                        <g class="bunny-body" style="transform-origin: center bottom;">
+                                            <!-- Shadow -->
+                                            <ellipse cx="30" cy="55" rx="15" ry="3" fill="rgba(0,0,0,0.2)"/>
+                                            <!-- Body -->
+                                            <ellipse cx="30" cy="40" rx="18" ry="15" fill="#E6E6FA" stroke="#9370DB" stroke-width="1"/>
+                                            <!-- Belly -->
+                                            <ellipse cx="30" cy="42" rx="12" ry="10" fill="#F8F8FF"/>
+                                            <!-- Head -->
+                                            <circle cx="30" cy="25" r="12" fill="#E6E6FA" stroke="#9370DB" stroke-width="1"/>
+                                            <!-- Ears -->
+                                            <ellipse cx="24" cy="15" rx="4" ry="10" fill="#E6E6FA" stroke="#9370DB" stroke-width="1" transform="rotate(-15 24 15)"/>
+                                            <ellipse cx="36" cy="15" rx="4" ry="10" fill="#E6E6FA" stroke="#9370DB" stroke-width="1" transform="rotate(15 36 15)"/>
+                                            <ellipse cx="24" cy="15" rx="2" ry="6" fill="#DDA0DD" transform="rotate(-15 24 15)"/>
+                                            <ellipse cx="36" cy="15" rx="2" ry="6" fill="#DDA0DD" transform="rotate(15 36 15)"/>
+                                            <!-- Eyes -->
+                                            <circle cx="26" cy="24" r="2" fill="black" class="bunny-eye"/>
+                                            <circle cx="34" cy="24" r="2" fill="black" class="bunny-eye"/>
+                                            <circle cx="27" cy="23" r="1" fill="white"/>
+                                            <circle cx="35" cy="23" r="1" fill="white"/>
+                                            <!-- Nose -->
+                                            <ellipse cx="30" cy="28" rx="2" ry="1.5" fill="#BA55D3"/>
+                                            <!-- Mouth -->
+                                            <path class="bunny-mouth" d="M 28 29 Q 30 30 32 29" stroke="#BA55D3" stroke-width="1.5" fill="none"/>
+                                            <!-- Tail -->
+                                            <circle cx="15" cy="40" r="5" fill="white"/>
+                                            <!-- Paws -->
+                                            <ellipse cx="22" cy="50" rx="4" ry="3" fill="#E6E6FA"/>
+                                            <ellipse cx="38" cy="50" rx="4" ry="3" fill="#E6E6FA"/>
+                                        </g>
+                                    </svg>
+                                </div>
+                                
+                                <div id="farm-bunny-3" class="farm-bunny" style="position: absolute; bottom: 15px; left: 200px; transition: all 0.5s ease;">
+                                    <svg width="48" height="48" viewBox="0 0 60 60">
+                                        <g class="bunny-body" style="transform-origin: center bottom;">
+                                            <!-- Shadow -->
+                                            <ellipse cx="30" cy="55" rx="15" ry="3" fill="rgba(0,0,0,0.2)"/>
+                                            <!-- Body -->
+                                            <ellipse cx="30" cy="40" rx="18" ry="15" fill="#B0E0E6" stroke="#4682B4" stroke-width="1"/>
+                                            <!-- Belly -->
+                                            <ellipse cx="30" cy="42" rx="12" ry="10" fill="#F0FFFF"/>
+                                            <!-- Head -->
+                                            <circle cx="30" cy="25" r="12" fill="#B0E0E6" stroke="#4682B4" stroke-width="1"/>
+                                            <!-- Ears -->
+                                            <ellipse cx="24" cy="15" rx="4" ry="10" fill="#B0E0E6" stroke="#4682B4" stroke-width="1" transform="rotate(-15 24 15)"/>
+                                            <ellipse cx="36" cy="15" rx="4" ry="10" fill="#B0E0E6" stroke="#4682B4" stroke-width="1" transform="rotate(15 36 15)"/>
+                                            <ellipse cx="24" cy="15" rx="2" ry="6" fill="#87CEEB" transform="rotate(-15 24 15)"/>
+                                            <ellipse cx="36" cy="15" rx="2" ry="6" fill="#87CEEB" transform="rotate(15 36 15)"/>
+                                            <!-- Eyes -->
+                                            <circle cx="26" cy="24" r="2" fill="black" class="bunny-eye"/>
+                                            <circle cx="34" cy="24" r="2" fill="black" class="bunny-eye"/>
+                                            <circle cx="27" cy="23" r="1" fill="white"/>
+                                            <circle cx="35" cy="23" r="1" fill="white"/>
+                                            <!-- Nose -->
+                                            <ellipse cx="30" cy="28" rx="2" ry="1.5" fill="#1E90FF"/>
+                                            <!-- Mouth -->
+                                            <path class="bunny-mouth" d="M 28 29 Q 30 30 32 29" stroke="#1E90FF" stroke-width="1.5" fill="none"/>
+                                            <!-- Tail -->
+                                            <circle cx="15" cy="40" r="5" fill="white"/>
+                                            <!-- Paws -->
+                                            <ellipse cx="22" cy="50" rx="4" ry="3" fill="#B0E0E6"/>
+                                            <ellipse cx="38" cy="50" rx="4" ry="3" fill="#B0E0E6"/>
+                                        </g>
+                                    </svg>
+                                </div>
+                                
+                                <!-- Hearts/Stars for celebration (hidden initially) -->
+                                <div id="celebration-container" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;">
+                                    <!-- Will be filled dynamically -->
+                                </div>
+                            </div>
+                            
+                            <!-- Error status display -->
+                            <div id="farm-status" style="position: absolute; bottom: 10px; right: 10px; background: rgba(255,255,255,0.9); padding: 8px 12px; border-radius: 8px; font-size: 0.9rem; font-weight: bold; color: #2c3e50; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <span id="farm-error-text">Error: --</span>
                             </div>
                         </div>
                     </div>
@@ -462,6 +698,123 @@ window.createPizzaProduction = function() {
                         }
                     }
                     
+                    /* Bunny Farm Animations */
+                    @keyframes bunnyHop {
+                        0%, 100% { transform: translateY(0) scaleY(1); }
+                        50% { transform: translateY(-15px) scaleY(0.95); }
+                    }
+                    
+                    @keyframes bunnyJump {
+                        0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+                        25% { transform: translateY(-25px) rotate(-5deg) scale(1.1); }
+                        50% { transform: translateY(-40px) rotate(0deg) scale(1.15); }
+                        75% { transform: translateY(-25px) rotate(5deg) scale(1.1); }
+                    }
+                    
+                    @keyframes bunnySad {
+                        0%, 100% { transform: translateY(0) scaleY(1); }
+                        50% { transform: translateY(2px) scaleY(0.98); }
+                    }
+                    
+                    @keyframes eyeBlink {
+                        0%, 90%, 100% { transform: scaleY(1); }
+                        95% { transform: scaleY(0.1); }
+                    }
+                    
+                    @keyframes sunPulse {
+                        0%, 100% { transform: scale(1); opacity: 1; }
+                        50% { transform: scale(1.1); opacity: 0.8; }
+                    }
+                    
+                    @keyframes cloudDrift {
+                        0% { transform: translateX(0); }
+                        100% { transform: translateX(20px); }
+                    }
+                    
+                    @keyframes flowerGrow {
+                        0% { transform: scale(0) translateY(10px); opacity: 0; }
+                        50% { transform: scale(1.1) translateY(-2px); }
+                        100% { transform: scale(1) translateY(0); opacity: 1; }
+                    }
+                    
+                    @keyframes heartFloat {
+                        0% { 
+                            transform: translateY(0) scale(0) rotate(0deg);
+                            opacity: 0;
+                        }
+                        20% {
+                            transform: translateY(-20px) scale(1) rotate(-5deg);
+                            opacity: 1;
+                        }
+                        40% {
+                            transform: translateY(-40px) scale(1.1) rotate(5deg);
+                        }
+                        60% {
+                            transform: translateY(-60px) scale(1) rotate(-3deg);
+                        }
+                        80% {
+                            transform: translateY(-80px) scale(0.9) rotate(3deg);
+                            opacity: 0.5;
+                        }
+                        100% { 
+                            transform: translateY(-100px) scale(0.8) rotate(0deg);
+                            opacity: 0;
+                        }
+                    }
+                    
+                    @keyframes starSpin {
+                        0% { 
+                            transform: translateY(0) rotate(0deg) scale(0);
+                            opacity: 0;
+                        }
+                        20% {
+                            transform: translateY(-30px) rotate(72deg) scale(1);
+                            opacity: 1;
+                        }
+                        40% {
+                            transform: translateY(-60px) rotate(144deg) scale(1.2);
+                        }
+                        60% {
+                            transform: translateY(-90px) rotate(216deg) scale(1);
+                        }
+                        80% {
+                            transform: translateY(-120px) rotate(288deg) scale(0.8);
+                            opacity: 0.5;
+                        }
+                        100% { 
+                            transform: translateY(-150px) rotate(360deg) scale(0.5);
+                            opacity: 0;
+                        }
+                    }
+                    
+                    @keyframes confettiFall {
+                        0% {
+                            transform: translateY(-100vh) rotate(0deg);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: translateY(100vh) rotate(720deg);
+                            opacity: 0;
+                        }
+                    }
+                    
+                    .farm-bunny .bunny-body {
+                        animation: bunnySad 3s infinite ease-in-out;
+                    }
+                    
+                    .farm-bunny .bunny-eye {
+                        animation: eyeBlink 4s infinite;
+                        transform-origin: center;
+                    }
+                    
+                    .farm-bunny.happy .bunny-body {
+                        animation: bunnyHop 2s infinite ease-in-out;
+                    }
+                    
+                    .farm-bunny.very-happy .bunny-body {
+                        animation: bunnyJump 1.5s infinite ease-in-out;
+                    }
+                    
                     @keyframes slideIn {
                         from { 
                             opacity: 0;
@@ -532,6 +885,13 @@ window.createPizzaProduction = function() {
                     .tutorial-skip:hover {
                         background: rgba(255, 255, 255, 0.3);
                     }
+                    
+                    /* Remove spinner arrows from number inputs */
+                    input[type="number"]::-webkit-inner-spin-button,
+                    input[type="number"]::-webkit-outer-spin-button {
+                        -webkit-appearance: none;
+                        margin: 0;
+                    }
                 </style>
             `;
         }
@@ -553,6 +913,12 @@ window.createPizzaProduction = function() {
                 });
             }
             
+            // Autofill button
+            const autofillBtn = document.getElementById('autofill-btn');
+            if (autofillBtn) {
+                this.addEventListenerWithCleanup(autofillBtn, 'click', () => this._autofillErrors());
+            }
+            
             // Reset button
             const resetBtn = document.getElementById('reset-btn');
             if (resetBtn) {
@@ -565,16 +931,30 @@ window.createPizzaProduction = function() {
                 this.addEventListenerWithCleanup(tutorialBtn, 'click', () => this._startTutorial());
             }
             
-            // Error input handlers
+            // Input handlers for all fields
             const ageErrorInput = document.getElementById('age-error-input');
-            const mpgErrorInput = document.getElementById('mpg-error-input');
+            const kgErrorInput = document.getElementById('kg-error-input');
+            const ageLrInput = document.getElementById('age-lr-input');
+            const kgLrInput = document.getElementById('kg-lr-input');
             
             if (ageErrorInput) {
                 this.addEventListenerWithCleanup(ageErrorInput, 'input', () => this._checkCalculateButtonState());
             }
             
-            if (mpgErrorInput) {
-                this.addEventListenerWithCleanup(mpgErrorInput, 'input', () => this._checkCalculateButtonState());
+            if (kgErrorInput) {
+                this.addEventListenerWithCleanup(kgErrorInput, 'input', () => this._checkCalculateButtonState());
+            }
+            
+            if (ageLrInput) {
+                this.addEventListenerWithCleanup(ageLrInput, 'input', () => this._checkCalculateButtonState());
+                // Set default value
+                ageLrInput.value = this.learningRate;
+            }
+            
+            if (kgLrInput) {
+                this.addEventListenerWithCleanup(kgLrInput, 'input', () => this._checkCalculateButtonState());
+                // Set default value
+                kgLrInput.value = this.learningRate;
             }
             
             // Update displays and recalculate errors
@@ -585,15 +965,19 @@ window.createPizzaProduction = function() {
         
         _checkCalculateButtonState() {
             const ageErrorInput = document.getElementById('age-error-input');
-            const mpgErrorInput = document.getElementById('mpg-error-input');
+            const kgErrorInput = document.getElementById('kg-error-input');
+            const ageLrInput = document.getElementById('age-lr-input');
+            const kgLrInput = document.getElementById('kg-lr-input');
             const calcBtn = document.getElementById('calculate-update-btn');
             
-            if (ageErrorInput && mpgErrorInput && calcBtn) {
+            if (ageErrorInput && kgErrorInput && ageLrInput && kgLrInput && calcBtn) {
                 const ageValue = ageErrorInput.value.trim();
-                const mpgValue = mpgErrorInput.value.trim();
+                const kgValue = kgErrorInput.value.trim();
+                const ageLrValue = ageLrInput.value.trim();
+                const kgLrValue = kgLrInput.value.trim();
                 
-                // Enable button only if both errors are entered
-                if (ageValue !== '' && mpgValue !== '') {
+                // Enable button only if all fields are entered
+                if (ageValue !== '' && kgValue !== '' && ageLrValue !== '' && kgLrValue !== '') {
                     calcBtn.style.opacity = '1';
                     calcBtn.style.pointerEvents = 'auto';
                 } else {
@@ -603,38 +987,298 @@ window.createPizzaProduction = function() {
             }
         }
         
-        _calculatePrice(mpg, age) {
-            return this.ageCoeff * age + this.mpgCoeff * mpg;
+        _calculatePrice(kg, age) {
+            return this.ageCoeff * age + this.kgCoeff * kg;
+        }
+        
+        _updateBunnyFarm() {
+            const absTotal = Math.abs(this.totalError);
+            const farmContainer = document.getElementById('bunny-farm-container');
+            const sun = document.getElementById('sun');
+            const cloud1 = document.getElementById('cloud1');
+            const cloud2 = document.getElementById('cloud2');
+            const rainbow = document.getElementById('rainbow');
+            const farmErrorText = document.getElementById('farm-error-text');
+            const bunny1 = document.getElementById('farm-bunny-1');
+            const bunny2 = document.getElementById('farm-bunny-2');
+            const bunny3 = document.getElementById('farm-bunny-3');
+            const flowersContainer = document.getElementById('flowers-container');
+            const celebrationContainer = document.getElementById('celebration-container');
+            
+            // Update error display
+            if (farmErrorText) {
+                farmErrorText.textContent = `Error: ${absTotal.toFixed(0)}`;
+                farmErrorText.style.color = absTotal === 0 ? '#27ae60' : 
+                                           absTotal < 50 ? '#3498db' : 
+                                           absTotal < 100 ? '#f39c12' : '#e74c3c';
+            }
+            
+            // Clear previous celebrations
+            if (celebrationContainer) {
+                celebrationContainer.innerHTML = '';
+            }
+            
+            // Update bunny states and environment based on error
+            if (absTotal === 0) {
+                // PERFECT! Maximum happiness!
+                [bunny1, bunny2, bunny3].forEach(bunny => {
+                    if (bunny) {
+                        bunny.classList.remove('happy');
+                        bunny.classList.add('very-happy');
+                        // Change mouth to big smile
+                        const mouth = bunny.querySelector('.bunny-mouth');
+                        if (mouth) {
+                            mouth.setAttribute('d', 'M 26 29 Q 30 32 34 29');
+                        }
+                    }
+                });
+                
+                // Perfect weather - bright sun, rainbow, no clouds
+                if (sun) {
+                    sun.style.opacity = '1';
+                    sun.style.transform = 'scale(1.2)';
+                }
+                if (cloud1) cloud1.style.opacity = '0';
+                if (cloud2) cloud2.style.opacity = '0';
+                if (rainbow) rainbow.style.opacity = '1';
+                
+                // Sky gradient - perfect blue
+                if (farmContainer) {
+                    farmContainer.style.background = 'linear-gradient(to bottom, #87CEEB 0%, #ADD8E6 40%, #90EE90 40%, #98FB98 100%)';
+                }
+                
+                // Add maximum flowers
+                this._addFlowers(7);
+                
+                // Trigger celebration
+                this._triggerCelebration();
+                
+            } else if (absTotal < 50) {
+                // Very good - happy bunnies
+                [bunny1, bunny2, bunny3].forEach(bunny => {
+                    if (bunny) {
+                        bunny.classList.add('happy');
+                        bunny.classList.remove('very-happy');
+                        // Happy mouth
+                        const mouth = bunny.querySelector('.bunny-mouth');
+                        if (mouth) {
+                            mouth.setAttribute('d', 'M 28 29 Q 30 31 32 29');
+                        }
+                    }
+                });
+                
+                // Good weather - some sun, few clouds
+                if (sun) {
+                    sun.style.opacity = '0.8';
+                    sun.style.transform = 'scale(1)';
+                }
+                if (cloud1) cloud1.style.opacity = '0.2';
+                if (cloud2) cloud2.style.opacity = '0.2';
+                if (rainbow) rainbow.style.opacity = '0';
+                
+                // Nice sky
+                if (farmContainer) {
+                    farmContainer.style.background = 'linear-gradient(to bottom, #87CEEB 0%, #87CEEB 40%, #90EE90 40%, #90EE90 100%)';
+                }
+                
+                // Add some flowers
+                this._addFlowers(4);
+                
+            } else if (absTotal < 100) {
+                // Okay - neutral bunnies
+                [bunny1, bunny2, bunny3].forEach(bunny => {
+                    if (bunny) {
+                        bunny.classList.remove('happy', 'very-happy');
+                        // Neutral mouth
+                        const mouth = bunny.querySelector('.bunny-mouth');
+                        if (mouth) {
+                            mouth.setAttribute('d', 'M 28 29 Q 30 30 32 29');
+                        }
+                    }
+                });
+                
+                // Cloudy weather
+                if (sun) {
+                    sun.style.opacity = '0.5';
+                    sun.style.transform = 'scale(0.9)';
+                }
+                if (cloud1) cloud1.style.opacity = '0.5';
+                if (cloud2) cloud2.style.opacity = '0.5';
+                if (rainbow) rainbow.style.opacity = '0';
+                
+                // Slightly gray sky
+                if (farmContainer) {
+                    farmContainer.style.background = 'linear-gradient(to bottom, #B0C4DE 0%, #B0C4DE 40%, #90EE90 40%, #8FBC8F 100%)';
+                }
+                
+                // Few flowers
+                this._addFlowers(2);
+                
+            } else {
+                // Bad - sad bunnies
+                [bunny1, bunny2, bunny3].forEach(bunny => {
+                    if (bunny) {
+                        bunny.classList.remove('happy', 'very-happy');
+                        // Sad mouth
+                        const mouth = bunny.querySelector('.bunny-mouth');
+                        if (mouth) {
+                            mouth.setAttribute('d', 'M 28 31 Q 30 29 32 31');
+                        }
+                    }
+                });
+                
+                // Overcast weather
+                if (sun) {
+                    sun.style.opacity = '0.2';
+                    sun.style.transform = 'scale(0.8)';
+                }
+                if (cloud1) {
+                    cloud1.style.opacity = '0.8';
+                    cloud1.style.animation = 'cloudDrift 8s infinite alternate';
+                }
+                if (cloud2) {
+                    cloud2.style.opacity = '0.8';
+                    cloud2.style.animation = 'cloudDrift 10s infinite alternate-reverse';
+                }
+                if (rainbow) rainbow.style.opacity = '0';
+                
+                // Gray sky
+                if (farmContainer) {
+                    farmContainer.style.background = 'linear-gradient(to bottom, #778899 0%, #778899 40%, #808080 40%, #696969 100%)';
+                }
+                
+                // No flowers
+                if (flowersContainer) {
+                    flowersContainer.innerHTML = '';
+                }
+            }
+        }
+        
+        _addFlowers(count) {
+            const flowersContainer = document.getElementById('flowers-container');
+            if (!flowersContainer) return;
+            
+            // Clear existing flowers
+            flowersContainer.innerHTML = '';
+            
+            // Add new flowers
+            for (let i = 0; i < count; i++) {
+                const flower = document.createElement('div');
+                flower.style.cssText = `
+                    position: absolute;
+                    bottom: ${Math.random() * 40}px;
+                    left: ${10 + Math.random() * 80}%;
+                    animation: flowerGrow 1s ease-out ${i * 0.1}s both;
+                `;
+                
+                flower.innerHTML = `
+                    <svg width="25" height="25" viewBox="0 0 30 30">
+                        <circle cx="15" cy="15" r="8" fill="${this._getRandomFlowerColor()}" opacity="0.8"/>
+                        <circle cx="10" cy="10" r="3" fill="#FFE4B5"/>
+                        <circle cx="20" cy="10" r="3" fill="#FFE4B5"/>
+                        <circle cx="10" cy="20" r="3" fill="#FFE4B5"/>
+                        <circle cx="20" cy="20" r="3" fill="#FFE4B5"/>
+                        <circle cx="15" cy="15" r="4" fill="#FFD700"/>
+                        <line x1="15" y1="23" x2="15" y2="30" stroke="#228B22" stroke-width="2"/>
+                    </svg>
+                `;
+                
+                flowersContainer.appendChild(flower);
+            }
+        }
+        
+        _getRandomFlowerColor() {
+            const colors = ['#FF69B4', '#FF1493', '#DA70D6', '#BA55D3', '#9370DB', '#8A2BE2', '#FF6347', '#FF4500'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        _triggerCelebration() {
+            const celebrationContainer = document.getElementById('celebration-container');
+            if (!celebrationContainer) return;
+            
+            // Create hearts and stars
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const isHeart = Math.random() > 0.5;
+                    const elem = document.createElement('div');
+                    elem.style.cssText = `
+                        position: absolute;
+                        bottom: ${Math.random() * 100}px;
+                        left: ${Math.random() * 90}%;
+                        pointer-events: none;
+                        animation: ${isHeart ? 'heartFloat' : 'starSpin'} 3s ease-out forwards;
+                    `;
+                    
+                    if (isHeart) {
+                        elem.innerHTML = `
+                            <svg width="30" height="30" viewBox="0 0 30 30">
+                                <path d="M15 5 C10 0, 0 0, 0 10 C0 20, 15 30, 15 30 C15 30, 30 20, 30 10 C30 0, 20 0, 15 5 Z" 
+                                      fill="#FF1493" opacity="0.8"/>
+                            </svg>
+                        `;
+                    } else {
+                        elem.innerHTML = `
+                            <svg width="30" height="30" viewBox="0 0 30 30">
+                                <path d="M15 0 L18 10 L28 10 L20 16 L23 26 L15 20 L7 26 L10 16 L2 10 L12 10 Z" 
+                                      fill="#FFD700" opacity="0.9"/>
+                            </svg>
+                        `;
+                    }
+                    
+                    celebrationContainer.appendChild(elem);
+                    
+                    // Remove after animation
+                    setTimeout(() => elem.remove(), 3000);
+                }, i * 200);
+            }
+            
+            // Add confetti burst
+            for (let i = 0; i < 20; i++) {
+                const confetti = document.createElement('div');
+                const color = ['#FF69B4', '#FFD700', '#00CED1', '#98FB98', '#FF6347'][Math.floor(Math.random() * 5)];
+                confetti.style.cssText = `
+                    position: fixed;
+                    top: -10px;
+                    left: ${Math.random() * 100}%;
+                    width: 10px;
+                    height: 10px;
+                    background: ${color};
+                    animation: confettiFall 3s linear forwards;
+                    z-index: 10000;
+                `;
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
+            }
         }
         
         _updateTable() {
-            const cars = [
-                { id: 'car1', mpg: 20, age: 5, optimal: 250 },
-                { id: 'car2', mpg: 30, age: 2, optimal: 380 },
-                { id: 'car3', mpg: 25, age: 8, optimal: 180 }
+            const bunnies = [
+                { id: 'bunny1', kg: 2.0, age: 5, optimal: 250 },
+                { id: 'bunny2', kg: 3.0, age: 2, optimal: 380 },
+                { id: 'bunny3', kg: 2.5, age: 8, optimal: 180 }
             ];
             
             let totalEstimate = 0;
             let totalError = 0;
             
-            cars.forEach(car => {
-                const price = this._calculatePrice(car.mpg, car.age);
-                const error = price - car.optimal;
+            bunnies.forEach(bunny => {
+                const price = this._calculatePrice(bunny.kg, bunny.age);
+                const error = price - bunny.optimal;
                 totalEstimate += price;
                 totalError += error;
                 
                 // Note: Coefficient displays are updated separately
                 
                 // Update estimate cell with colored coefficients
-                const estimateEl = document.getElementById(`${car.id}-estimate`);
+                const estimateEl = document.getElementById(`${bunny.id}-estimate`);
                 if (estimateEl) {
-                    estimateEl.innerHTML = `${car.age}×<span style="color: #2980b9; font-weight: bold;">${this.ageCoeff.toFixed(0)}</span> + ${car.mpg}×<span style="color: #27ae60; font-weight: bold;">${this.mpgCoeff.toFixed(0)}</span> = <strong>${price.toFixed(0)}</strong>`;
+                    estimateEl.innerHTML = `${bunny.age}×<span style="color: #2980b9; font-weight: bold;">${this.ageCoeff.toFixed(0)}</span> + ${bunny.kg}×<span style="color: #27ae60; font-weight: bold;">${this.kgCoeff.toFixed(0)}</span> = <strong>${price.toFixed(0)}</strong>`;
                 }
                 
                 // Update error cell with calculation
-                const errorEl = document.getElementById(`${car.id}-error`);
+                const errorEl = document.getElementById(`${bunny.id}-error`);
                 if (errorEl) {
-                    errorEl.innerHTML = `${price.toFixed(0)} - ${car.optimal} = <strong>${error > 0 ? '+' : ''}${error.toFixed(0)}</strong>`;
+                    errorEl.innerHTML = `${price.toFixed(0)} - ${bunny.optimal} = <strong>${error > 0 ? '+' : ''}${error.toFixed(0)}</strong>`;
                     errorEl.style.color = Math.abs(error) < 20 ? '#27ae60' : 
                                          Math.abs(error) < 50 ? '#f39c12' : '#e74c3c';
                 }
@@ -659,9 +1303,9 @@ window.createPizzaProduction = function() {
                 wageBadge.textContent = this.ageCoeff.toFixed(1);
             }
             
-            const wmpgBadge = document.getElementById('wmpg-badge');
-            if (wmpgBadge) {
-                wmpgBadge.textContent = this.mpgCoeff.toFixed(1);
+            const wkgBadge = document.getElementById('wkg-badge');
+            if (wkgBadge) {
+                wkgBadge.textContent = this.kgCoeff.toFixed(1);
             }
             
             const functionWage = document.getElementById('function-wage');
@@ -669,40 +1313,46 @@ window.createPizzaProduction = function() {
                 functionWage.textContent = this.ageCoeff.toFixed(1);
             }
             
-            const functionWmpg = document.getElementById('function-wmpg');
-            if (functionWmpg) {
-                functionWmpg.textContent = this.mpgCoeff.toFixed(1);
+            const functionWkg = document.getElementById('function-wkg');
+            if (functionWkg) {
+                functionWkg.textContent = this.kgCoeff.toFixed(1);
             }
         }
         
         _calculateAndFillErrors() {
-            const cars = [
-                { id: 'car1', mpg: 20, age: 5, optimal: 250 },
-                { id: 'car2', mpg: 30, age: 2, optimal: 380 },
-                { id: 'car3', mpg: 25, age: 8, optimal: 180 }
+            const bunnies = [
+                { id: 'bunny1', kg: 2.0, age: 5, optimal: 250 },
+                { id: 'bunny2', kg: 3.0, age: 2, optimal: 380 },
+                { id: 'bunny3', kg: 2.5, age: 8, optimal: 180 }
             ];
             
             this.totalError = 0;
             
-            // Calculate errors for each car
-            cars.forEach(car => {
-                const price = this._calculatePrice(car.mpg, car.age);
-                const signedError = price - car.optimal;
-                this.carErrors[car.id] = signedError;
+            // Calculate errors for each bunny
+            bunnies.forEach(bunny => {
+                const price = this._calculatePrice(bunny.kg, bunny.age);
+                const signedError = price - bunny.optimal;
+                this.bunnyErrors[bunny.id] = signedError;
                 this.totalError += signedError;
             });
             
-            // Auto-fill error inputs with the calculated total error
-            const ageErrorInput = document.getElementById('age-error-input');
-            const mpgErrorInput = document.getElementById('mpg-error-input');
-            if (ageErrorInput && mpgErrorInput) {
-                ageErrorInput.value = this.totalError.toFixed(0);
-                mpgErrorInput.value = this.totalError.toFixed(0);
-                this._checkCalculateButtonState();
+            // Auto-fill learning rate inputs if empty
+            const ageLrInput = document.getElementById('age-lr-input');
+            const kgLrInput = document.getElementById('kg-lr-input');
+            if (ageLrInput && !ageLrInput.value) {
+                ageLrInput.value = this.learningRate;
+            }
+            if (kgLrInput && !kgLrInput.value) {
+                kgLrInput.value = this.learningRate;
             }
             
+            this._checkCalculateButtonState();
+            
+            // Update the bunny farm with the new error
+            this._updateBunnyFarm();
+            
             // Check for success
-            const absTotal = Math.abs(this.carErrors.car1) + Math.abs(this.carErrors.car2) + Math.abs(this.carErrors.car3);
+            const absTotal = Math.abs(this.bunnyErrors.bunny1) + Math.abs(this.bunnyErrors.bunny2) + Math.abs(this.bunnyErrors.bunny3);
             if (absTotal < 30) {
                 this.completeLevel({
                     score: 100,
@@ -713,26 +1363,30 @@ window.createPizzaProduction = function() {
         
         _calculateUpdate() {
             const ageErrorInput = document.getElementById('age-error-input');
-            const mpgErrorInput = document.getElementById('mpg-error-input');
+            const kgErrorInput = document.getElementById('kg-error-input');
+            const ageLrInput = document.getElementById('age-lr-input');
+            const kgLrInput = document.getElementById('kg-lr-input');
             
-            if (!ageErrorInput || !mpgErrorInput) return;
+            if (!ageErrorInput || !kgErrorInput || !ageLrInput || !kgLrInput) return;
             
             const ageError = parseFloat(ageErrorInput.value) || 0;
-            const mpgError = parseFloat(mpgErrorInput.value) || 0;
+            const kgError = parseFloat(kgErrorInput.value) || 0;
+            const ageLr = parseFloat(ageLrInput.value) || 0;
+            const kgLr = parseFloat(kgLrInput.value) || 0;
             
             // Calculate updates
             const ageSum = 15; // 5 + 2 + 8
-            const mpgSum = 75; // 20 + 30 + 25
+            const kgSum = 7.5; // 2.0 + 3.0 + 2.5
             
             // For age coefficient
             const ageSign = ageError > 0 ? -1 : 1;
             const absAgeError = Math.abs(ageError);
-            this.ageUpdate = ageSign * absAgeError * ageSum * this.learningRate;
+            this.ageUpdate = ageSign * absAgeError * ageSum * ageLr;
             
-            // For mpg coefficient
-            const mpgSign = mpgError > 0 ? -1 : 1;
-            const absMpgError = Math.abs(mpgError);
-            this.mpgUpdate = mpgSign * absMpgError * mpgSum * this.learningRate;
+            // For kg coefficient
+            const kgSign = kgError > 0 ? -1 : 1;
+            const absKgError = Math.abs(kgError);
+            this.kgUpdate = kgSign * absKgError * kgSum * kgLr;
             
             // Update age result display
             const ageResult = document.getElementById('age-result');
@@ -741,11 +1395,11 @@ window.createPizzaProduction = function() {
                 ageResult.innerHTML = `= ${newAgeValue.toFixed(3)}`;
             }
             
-            // Update mpg result display
-            const mpgResult = document.getElementById('mpg-result');
-            if (mpgResult) {
-                const newMpgValue = this.mpgCoeff + this.mpgUpdate;
-                mpgResult.innerHTML = `= ${newMpgValue.toFixed(3)}`;
+            // Update kg result display
+            const kgResult = document.getElementById('kg-result');
+            if (kgResult) {
+                const newKgValue = this.kgCoeff + this.kgUpdate;
+                kgResult.innerHTML = `= ${newKgValue.toFixed(3)}`;
             }
             
             // Enable Apply GD button
@@ -759,23 +1413,26 @@ window.createPizzaProduction = function() {
         _applyGradientDescent() {
             // Apply the calculated updates
             this.ageCoeff = Math.max(0, Math.min(100, this.ageCoeff + this.ageUpdate));
-            this.mpgCoeff = Math.max(0, Math.min(100, this.mpgCoeff + this.mpgUpdate));
+            this.kgCoeff = Math.max(0, Math.min(100, this.kgCoeff + this.kgUpdate));
             
             // Update displays and recalculate errors
             this._updateTable();
             this._updateCoeffDisplay();
             this._calculateAndFillErrors();
             
-            // Clear the error inputs and results
+            // Clear all inputs and results but keep learning rates
             const ageErrorInput = document.getElementById('age-error-input');
-            const mpgErrorInput = document.getElementById('mpg-error-input');
+            const kgErrorInput = document.getElementById('kg-error-input');
+            const ageLrInput = document.getElementById('age-lr-input');
+            const kgLrInput = document.getElementById('kg-lr-input');
             const ageResult = document.getElementById('age-result');
-            const mpgResult = document.getElementById('mpg-result');
+            const kgResult = document.getElementById('kg-result');
             
             if (ageErrorInput) ageErrorInput.value = '';
-            if (mpgErrorInput) mpgErrorInput.value = '';
+            if (kgErrorInput) kgErrorInput.value = '';
+            // Keep the learning rates for next iteration
             if (ageResult) ageResult.innerHTML = '';
-            if (mpgResult) mpgResult.innerHTML = '';
+            if (kgResult) kgResult.innerHTML = '';
             
             // Disable both buttons again
             const calcBtn = document.getElementById('calculate-update-btn');
@@ -798,9 +1455,9 @@ window.createPizzaProduction = function() {
                 ageCurrent.textContent = this.ageCoeff.toFixed(1);
             }
             
-            const mpgCurrent = document.getElementById('mpg-current');
-            if (mpgCurrent) {
-                mpgCurrent.textContent = this.mpgCoeff.toFixed(1);
+            const kgCurrent = document.getElementById('kg-current');
+            if (kgCurrent) {
+                kgCurrent.textContent = this.kgCoeff.toFixed(1);
             }
             
             // Also update the badge displays and function display
@@ -809,9 +1466,9 @@ window.createPizzaProduction = function() {
                 wageBadge.textContent = this.ageCoeff.toFixed(1);
             }
             
-            const wmpgBadge = document.getElementById('wmpg-badge');
-            if (wmpgBadge) {
-                wmpgBadge.textContent = this.mpgCoeff.toFixed(1);
+            const wkgBadge = document.getElementById('wkg-badge');
+            if (wkgBadge) {
+                wkgBadge.textContent = this.kgCoeff.toFixed(1);
             }
             
             const functionWage = document.getElementById('function-wage');
@@ -819,37 +1476,55 @@ window.createPizzaProduction = function() {
                 functionWage.textContent = this.ageCoeff.toFixed(1);
             }
             
-            const functionWmpg = document.getElementById('function-wmpg');
-            if (functionWmpg) {
-                functionWmpg.textContent = this.mpgCoeff.toFixed(1);
+            const functionWkg = document.getElementById('function-wkg');
+            if (functionWkg) {
+                functionWkg.textContent = this.kgCoeff.toFixed(1);
             }
         }
         
 
+        _autofillErrors() {
+            // Autofill error inputs with the current total error
+            const ageErrorInput = document.getElementById('age-error-input');
+            const kgErrorInput = document.getElementById('kg-error-input');
+            
+            if (ageErrorInput && kgErrorInput) {
+                ageErrorInput.value = this.totalError.toFixed(0);
+                kgErrorInput.value = this.totalError.toFixed(0);
+                
+                // Check button state after autofilling
+                this._checkCalculateButtonState();
+            }
+        }
+        
         _reset() {
             this.ageCoeff = 20;
-            this.mpgCoeff = 30;
+            this.kgCoeff = 30;
             this.totalError = 0;
             this.manualTotalError = 0;
             this.ageUpdate = 0;
-            this.mpgUpdate = 0;
-            this.carErrors = { car1: 0, car2: 0, car3: 0 };
+            this.kgUpdate = 0;
+            this.bunnyErrors = { bunny1: 0, bunny2: 0, bunny3: 0 };
             
             // Reset displays and recalculate errors
             this._updateTable();
             this._updateCoeffDisplay();
             this._calculateAndFillErrors();
             
-            // Clear error inputs and results
+            // Clear all inputs and results
             const ageErrorInput = document.getElementById('age-error-input');
-            const mpgErrorInput = document.getElementById('mpg-error-input');
+            const kgErrorInput = document.getElementById('kg-error-input');
+            const ageLrInput = document.getElementById('age-lr-input');
+            const kgLrInput = document.getElementById('kg-lr-input');
             const ageResult = document.getElementById('age-result');
-            const mpgResult = document.getElementById('mpg-result');
+            const kgResult = document.getElementById('kg-result');
             
             if (ageErrorInput) ageErrorInput.value = '';
-            if (mpgErrorInput) mpgErrorInput.value = '';
+            if (kgErrorInput) kgErrorInput.value = '';
+            if (ageLrInput) ageLrInput.value = this.learningRate;
+            if (kgLrInput) kgLrInput.value = this.learningRate;
             if (ageResult) ageResult.innerHTML = '';
-            if (mpgResult) mpgResult.innerHTML = '';
+            if (kgResult) kgResult.innerHTML = '';
             
             // Reset button states
             const calcBtn = document.getElementById('calculate-update-btn');
@@ -899,7 +1574,7 @@ window.createPizzaProduction = function() {
             
             const message = this._createTutorialMessage(
                 'Your Estimate',
-                'This column shows how much you paid for each car using your formula.',
+                'This column shows how much you paid for each bunny using your formula.',
                 estimateColumn,
                 () => {
                     message.remove();
@@ -1051,16 +1726,16 @@ window.createPizzaProduction = function() {
             
             const gradientContainer = document.getElementById('gradient-updates-container');
             const ageResult = document.getElementById('age-result');
-            const mpgResult = document.getElementById('mpg-result');
+            const kgResult = document.getElementById('kg-result');
             
-            if (!gradientContainer || !ageResult || !mpgResult) return;
+            if (!gradientContainer || !ageResult || !kgResult) return;
             
             // Keep gradient container spotlighted
             this._addSpotlight(gradientContainer);
             
             // Store original styles
             this.ageResultOriginalStyle = ageResult.getAttribute('style') || '';
-            this.mpgResultOriginalStyle = mpgResult.getAttribute('style') || '';
+            this.kgResultOriginalStyle = kgResult.getAttribute('style') || '';
             
             // Add special highlighting to the result values
             ageResult.style.cssText += `
@@ -1076,7 +1751,7 @@ window.createPizzaProduction = function() {
                 display: inline-block !important;
             `;
             
-            mpgResult.style.cssText += `
+            kgResult.style.cssText += `
                 color: #27ae60 !important;
                 font-weight: bold !important;
                 text-shadow: 0 0 10px rgba(39, 174, 96, 0.5) !important;
@@ -1096,7 +1771,7 @@ window.createPizzaProduction = function() {
                 () => {
                     // Restore original styles
                     ageResult.setAttribute('style', this.ageResultOriginalStyle);
-                    mpgResult.setAttribute('style', this.mpgResultOriginalStyle);
+                    kgResult.setAttribute('style', this.kgResultOriginalStyle);
                     
                     message.remove();
                     this._removeSpotlight(gradientContainer);
@@ -1277,12 +1952,12 @@ window.createPizzaProduction = function() {
             
             // Clean up any result highlights from step 6
             const ageResult = document.getElementById('age-result');
-            const mpgResult = document.getElementById('mpg-result');
+            const kgResult = document.getElementById('kg-result');
             if (ageResult && this.ageResultOriginalStyle !== undefined) {
                 ageResult.setAttribute('style', this.ageResultOriginalStyle || '');
             }
-            if (mpgResult && this.mpgResultOriginalStyle !== undefined) {
-                mpgResult.setAttribute('style', this.mpgResultOriginalStyle || '');
+            if (kgResult && this.kgResultOriginalStyle !== undefined) {
+                kgResult.setAttribute('style', this.kgResultOriginalStyle || '');
             }
             
             // Remove secondary spotlight class
@@ -1521,10 +2196,10 @@ window.createPizzaProduction = function() {
             
             // Also check if the apply button should be enabled
             const ageResult = document.getElementById('age-result');
-            const mpgResult = document.getElementById('mpg-result');
-            if (applyBtn && ageResult && mpgResult) {
+            const kgResult = document.getElementById('kg-result');
+            if (applyBtn && ageResult && kgResult) {
                 // If there are results displayed, enable the apply button
-                if (ageResult.innerHTML && mpgResult.innerHTML) {
+                if (ageResult.innerHTML && kgResult.innerHTML) {
                     applyBtn.style.opacity = '1';
                     applyBtn.style.pointerEvents = 'auto';
                 } else {
@@ -1535,9 +2210,9 @@ window.createPizzaProduction = function() {
         }
     }
     
-    const level = new CarPricingLevel();
+    const level = new BunnyPricingLevel();
     level.create().catch(error => {
-        console.error('Failed to create Car Pricing level:', error);
+        console.error('Failed to create Bunny Pricing level:', error);
     });
     
     return level;
