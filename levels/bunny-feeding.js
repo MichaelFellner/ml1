@@ -44,7 +44,13 @@ function clamp(value, min, max) {
 function formatNumber(num, decimals = 1) {
     if (typeof num !== 'number' || isNaN(num)) return String(num);
     if (!isFinite(num)) return num > 0 ? '∞' : '-∞';
-    return num.toFixed(decimals).replace(/\.?0+$/, '');
+    // Only remove trailing zeros after a decimal point, not from integers
+    const formatted = num.toFixed(decimals);
+    // If decimals > 0, remove unnecessary trailing zeros after decimal
+    if (decimals > 0) {
+        return formatted.replace(/\.?0+$/, '');
+    }
+    return formatted;
 }
 
 function calculateAccuracy(actual, expected) {

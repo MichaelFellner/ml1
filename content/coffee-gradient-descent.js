@@ -485,7 +485,36 @@ function createCoffeeGradientDescent() {
                         </div>
                     </div>
                     
-               
+                <!-- Success Message -->
+                <div id="success-message" style="
+                    display: none;
+                    text-align: center;
+                    margin-top: 30px;
+                    padding: 20px;
+                    background: linear-gradient(135deg, rgba(46, 204, 113, 0.98), rgba(39, 174, 96, 0.98));
+                    border-radius: 15px;
+                    max-width: 600px;
+                    margin-left: auto;
+                    margin-right: auto;
+                    box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+                    color: white;
+                ">
+                    <h2 style="margin: 0 0 10px 0; color: white;">🎉 Perfect Formula Found!</h2>
+                    <div style="font-size: 1.1rem; margin-bottom: 10px;">
+                        All students got their perfect coffee in <span id="final-steps" style="font-weight: bold; font-size: 1.3rem;">0</span> steps!
+                    </div>
+                    <div style="
+                        font-family: 'Courier New', monospace;
+                        font-size: 1.2rem;
+                        background: rgba(255, 255, 255, 0.2);
+                        padding: 10px 20px;
+                        border-radius: 8px;
+                        display: inline-block;
+                        margin-top: 10px;
+                    ">
+                        <span id="final-formula">Formula</span>
+                    </div>
+                </div>
                 
                 ${createStandardNavigation()}
             </div>
@@ -716,10 +745,20 @@ function setupGradientDescent() {
             
             // Show success message
             setTimeout(() => {
-                document.getElementById('success-message').style.display = 'block';
-                document.getElementById('final-steps').textContent = stepCount;
-                document.getElementById('final-formula').textContent = 
-                    `${w1.toFixed(1)}×Age + ${w2.toFixed(1)}×Cups + ${w3.toFixed(1)}×Tiredness + ${bias.toFixed(1)}ml`;
+                const successMsg = document.getElementById('success-message');
+                const finalSteps = document.getElementById('final-steps');
+                const finalFormula = document.getElementById('final-formula');
+                
+                if (successMsg) {
+                    successMsg.style.display = 'block';
+                }
+                if (finalSteps) {
+                    finalSteps.textContent = stepCount;
+                }
+                if (finalFormula) {
+                    finalFormula.textContent = 
+                        `${w1.toFixed(1)}×Age + ${w2.toFixed(1)}×Cups + ${w3.toFixed(1)}×Tiredness + ${bias.toFixed(1)}ml`;
+                }
             }, 2000);
         }
     }
@@ -830,7 +869,10 @@ function setupGradientDescent() {
         bias = Math.random() * 0.1;
         stepCount = 0;
         hasServed = false;
-        document.getElementById('success-message').style.display = 'none';
+        const successMsg = document.getElementById('success-message');
+        if (successMsg) {
+            successMsg.style.display = 'none';
+        }
         
         // Clear student displays
         studentElements.forEach(student => {

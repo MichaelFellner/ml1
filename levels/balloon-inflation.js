@@ -384,6 +384,11 @@ function setupBalloonLevel() {
             currentW = Math.round(currentW * 10) / 10; // Round to 0.1
             currentW = clamp(currentW, 0, MAX_W);
             
+            // Reset balloon if it's inflated when pump is moved
+            if (balloonInflated) {
+                resetBalloon();
+            }
+            
             updateDisplay();
         });
         
@@ -413,6 +418,11 @@ function setupBalloonLevel() {
             currentW = ((PUMP_MAX_Y - newY) / PUMP_RANGE) * MAX_W;
             currentW = Math.round(currentW * 10) / 10;
             currentW = clamp(currentW, 0, MAX_W);
+            
+            // Reset balloon if it's inflated when pump is moved
+            if (balloonInflated) {
+                resetBalloon();
+            }
             
             updateDisplay();
         });
@@ -533,7 +543,7 @@ function setupBalloonLevel() {
             glowColor = '#4ade80';
             lossElement.style.textShadow = `0 0 10px ${glowColor}, 0 0 20px ${glowColor}, 0 0 30px gold`;
             // Add sparkle effect
-            lossElement.innerHTML = `✨ ${formatNumber(loss, 2)} ✨`;
+            lossElement.innerHTML = `${formatNumber(loss, 2)}`;
         } else if (lossRatio < 0.3) {
             // Close to perfect - greenish
             glowColor = `rgb(${Math.round(74 + lossRatio * 500)}, ${Math.round(222 - lossRatio * 100)}, 128)`;
@@ -815,6 +825,12 @@ function setupBalloonLevel() {
         wIncreaseBtn.addEventListener('click', () => {
             currentW = Math.min(currentW + 0.1, MAX_W);
             currentW = Math.round(currentW * 10) / 10; // Round to 0.1
+            
+            // Reset balloon if it's inflated when w is changed
+            if (balloonInflated) {
+                resetBalloon();
+            }
+            
             updatePumpPosition();
             updateDisplay();
         });
@@ -832,6 +848,12 @@ function setupBalloonLevel() {
         wDecreaseBtn.addEventListener('click', () => {
             currentW = Math.max(currentW - 0.1, 0);
             currentW = Math.round(currentW * 10) / 10; // Round to 0.1
+            
+            // Reset balloon if it's inflated when w is changed
+            if (balloonInflated) {
+                resetBalloon();
+            }
+            
             updatePumpPosition();
             updateDisplay();
         });

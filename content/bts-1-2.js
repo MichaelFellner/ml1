@@ -307,7 +307,7 @@ function createBehindTheScenesLevel1() {
                 <h1 style="font-size: 1.9rem; margin: 0 !important; padding: 0 !important; background: linear-gradient(45deg, #667eea, #764ba2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2;">Alternative Loss Functions</h1>
                 
                 <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 10px; margin: 4px 0 !important; display: block !important;">
-                    <p style="color: #555; font-size: 0.95rem; line-height: 1.4; margin: 0 !important; padding: 0 !important;">Loss functions can come in other forms too. We just witnessed "absolute loss" where loss is equal to the absolte distance the current guess is from the true value. But loss can also be calculated using the formula: <b>(Guess - True)²</b>. This 
+                    <p style="color: #555; font-size: 0.95rem; line-height: 1.4; margin: 0 !important; padding: 0 !important;">Loss functions can come in other forms too. We just witnessed "absolute loss" where loss is equal to the absolute distance that the current guess is from the true value. But loss can also be calculated using the formula: <b>(Guess - True)²</b>. This 
                     is known as <strong>mean squared error loss</strong>.</p>
                 </div>
                 
@@ -580,7 +580,6 @@ function createBehindTheScenesBalloon() {
                             <input type="range" id="w-slider" min="0" max="10" value="3" step="0.5" style="width: 100%; height: 8px; border-radius: 4px; background: #ddd; outline: none;">
                             <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #999; margin-top: 5px;">
                                 <span>0</span>
-                                <span>Target: 7</span>
                                 <span>10</span>
                             </div>
                         </div>
@@ -928,7 +927,7 @@ function createBehindTheScenesBunny() {
                                 🎯 Animate to Target
                             </button>
                             <button id="gradient-step-btn" style="padding: 8px 16px; background: #2dd573; color: white; border: none; border-radius: 5px; font-size: 0.9rem; cursor: pointer; transition: all 0.3s;">
-                                📉 Gradient Step
+                                📉 Gradient Descent
                             </button>
                             <button id="reset-btn-bunny" style="padding: 8px 16px; background: #666; color: white; border: none; border-radius: 5px; font-size: 0.9rem; cursor: pointer; transition: all 0.3s;">
                                 🔄 Reset

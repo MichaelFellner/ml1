@@ -64,35 +64,6 @@ window.createGradientDescentMathQuiz = function() {
                         { id: 'age_update', label: 'W_age update (TotalError × SumAge × LR)', answer: 0.08, hint: '10 × 8 × 0.001' },
                         { id: 'kg_update', label: 'W_kg update (TotalError × SumKg × LR)', answer: 0.05, hint: '10 × 5 × 0.001' }
                     ]
-                },
-                {
-                    id: 'three-bunnies',
-                    title: 'Problem 3: Three Bunnies (Like the Activity!)',
-                    context: 'This is similar to what you did in the bunny pricing activity!',
-                    function: 'Price = W_age × Age + W_kg × Kg',
-                    bunnies: [
-                        { name: 'Bunny 1', age: 5, kg: 2.0, true_price: 250 },
-                        { name: 'Bunny 2', age: 2, kg: 3.0, true_price: 380 },
-                        { name: 'Bunny 3', age: 8, kg: 2.5, true_price: 180 }
-                    ],
-                    given: {
-                        w_age: 20,
-                        w_kg: 30,
-                        lr: 0.001
-                    },
-                    questions: [
-                        { id: 'bunny1_estimate', label: 'Bunny 1 estimate', answer: 160, hint: '20×5 + 30×2' },
-                        { id: 'bunny1_error', label: 'Bunny 1 error', answer: -90, hint: '160 - 250' },
-                        { id: 'bunny2_estimate', label: 'Bunny 2 estimate', answer: 130, hint: '20×2 + 30×3' },
-                        { id: 'bunny2_error', label: 'Bunny 2 error', answer: -250, hint: '130 - 380' },
-                        { id: 'bunny3_estimate', label: 'Bunny 3 estimate', answer: 235, hint: '20×8 + 30×2.5' },
-                        { id: 'bunny3_error', label: 'Bunny 3 error', answer: 55, hint: '235 - 180' },
-                        { id: 'total_error', label: 'Total error (sum)', answer: -285, hint: '-90 + (-250) + 55' },
-                        { id: 'age_update', label: 'W_age update (Error × 15 × LR)', answer: -4.275, hint: '-285 × 15 × 0.001' },
-                        { id: 'kg_update', label: 'W_kg update (Error × 7.5 × LR)', answer: -2.1375, hint: '-285 × 7.5 × 0.001' },
-                        { id: 'w_age_new', label: 'New W_age', answer: 15.725, hint: '20 + (-4.275)' },
-                        { id: 'w_kg_new', label: 'New W_kg', answer: 27.8625, hint: '30 + (-2.1375)' }
-                    ]
                 }
             ];
             
@@ -120,7 +91,7 @@ window.createGradientDescentMathQuiz = function() {
                     <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                         <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
                             <span style="color: #666;">Progress</span>
-                            <span style="color: #667eea; font-weight: bold;"><span id="current-problem">1</span> / 3</span>
+                            <span style="color: #667eea; font-weight: bold;"><span id="current-problem">1</span> / 2</span>
                         </div>
                         <div style="background: #f0f0f0; height: 8px; border-radius: 4px; overflow: hidden;">
                             <div id="progress-bar" style="width: 33%; background: linear-gradient(135deg, #667eea, #764ba2); height: 100%; transition: width 0.3s;"></div>

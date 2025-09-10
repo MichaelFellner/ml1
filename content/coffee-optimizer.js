@@ -210,7 +210,7 @@ function createCoffeeManualOptimizer() {
                     position: relative;
                     width: 98%;
                     max-width: none;
-                    margin-top: -100px;
+                    margin-top: -60px;
                     padding: 15px;
                     display: flex;
                     justify-content: space-around;

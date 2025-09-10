@@ -67,7 +67,7 @@ window.createPizzaProduction = function() {
             return `
                 <!-- Info Bubble -->
                 <div style="max-width: 900px; margin: 20px auto 2px auto; position: relative;">
-                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; padding: 20px 25px; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3); position: relative;">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; padding: 20px 25px; margin-bottom:-60px; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3); position: relative;">
                         <div style="color: white; font-size: 1.1rem; line-height: 1.6;">
                             <strong style="font-size: 1.2rem;">Welcome to Bunny Pricing Optimization!</strong><br>
                             Learn how gradient descent helps us find the perfect pricing formula. The table shows how your current formula performs. 
@@ -343,7 +343,7 @@ window.createPizzaProduction = function() {
                                     <div style="padding: 12px; border-right: 1px solid #e0e0e0; font-size: 0.95rem; color: #2c3e50; font-weight: bold; width: 100px;">Bunny</div>
                                     <div style="padding: 12px; border-right: 1px solid #e0e0e0; font-size: 0.95rem; color: #2c3e50; font-weight: bold; width: 50px; text-align: center;">Age</div>
                                     <div style="padding: 12px; border-right: 1px solid #e0e0e0; font-size: 0.95rem; color: #2c3e50; font-weight: bold; width: 60px; text-align: center;">Kg</div>
-                                    <div style="padding: 12px; border-right: 2px solid #e0e0e0; font-size: 0.95rem; color: #2c3e50; font-weight: bold; width: 80px; text-align: center;">Cost</div>
+                                    <div style="padding: 12px; border-right: 2px solid #e0e0e0; font-size: 0.95rem; color: #2c3e50; font-weight: bold; width: 80px; text-align: center;">Hay</div>
                                 </div>
                                 
                                 <!-- Bunny 1 Row -->
@@ -371,7 +371,7 @@ window.createPizzaProduction = function() {
                                     </div>
                                     <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 50px; text-align: center; font-size: 0.95rem;">5</div>
                                     <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 60px; text-align: center; font-size: 0.95rem;">2.0</div>
-                                    <div style="padding: 12px; border-right: 2px solid #e0e0e0; width: 80px; text-align: center; font-size: 0.95rem; color: #27ae60; font-weight: bold;">$250</div>
+                                    <div style="padding: 12px; border-right: 2px solid #e0e0e0; width: 80px; text-align: center; font-size: 0.95rem; color: #27ae60; font-weight: bold;">250</div>
                                 </div>
                                 
                                 <!-- Bunny 2 Row -->
@@ -399,7 +399,7 @@ window.createPizzaProduction = function() {
                                     </div>
                                     <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 50px; text-align: center; font-size: 0.95rem;">2</div>
                                     <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 60px; text-align: center; font-size: 0.95rem;">3.0</div>
-                                    <div style="padding: 12px; border-right: 2px solid #e0e0e0; width: 80px; text-align: center; font-size: 0.95rem; color: #27ae60; font-weight: bold;">$380</div>
+                                    <div style="padding: 12px; border-right: 2px solid #e0e0e0; width: 80px; text-align: center; font-size: 0.95rem; color: #27ae60; font-weight: bold;">380</div>
                                 </div>
                                 
                                 <!-- Bunny 3 Row -->
@@ -427,7 +427,7 @@ window.createPizzaProduction = function() {
                                     </div>
                                     <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 50px; text-align: center; font-size: 0.95rem;">8</div>
                                     <div style="padding: 12px; border-right: 1px solid #e0e0e0; width: 60px; text-align: center; font-size: 0.95rem;">2.5</div>
-                                    <div style="padding: 12px; border-right: 2px solid #e0e0e0; width: 80px; text-align: center; font-size: 0.95rem; color: #27ae60; font-weight: bold;">$180</div>
+                                    <div style="padding: 12px; border-right: 2px solid #e0e0e0; width: 80px; text-align: center; font-size: 0.95rem; color: #27ae60; font-weight: bold;">180</div>
                                 </div>
                                 
                                 <!-- Sum Row -->
@@ -437,7 +437,7 @@ window.createPizzaProduction = function() {
                                     </div>
                                     <div id="sum-age" style="padding: 12px; border-right: 1px solid #e0e0e0; width: 50px; text-align: center; font-size: 0.95rem; font-weight: bold; color: #f39c12;">15</div>
                                     <div id="sum-kg" style="padding: 12px; border-right: 1px solid #e0e0e0; width: 60px; text-align: center; font-size: 0.95rem; font-weight: bold; color: #f39c12;">7.5</div>
-                                    <div id="sum-true-cost" style="padding: 12px; border-right: 2px solid #e0e0e0; width: 80px; text-align: center; font-size: 0.95rem; font-weight: bold; color: #f39c12;">$810</div>
+                                    <div id="sum-true-cost" style="padding: 12px; border-right: 2px solid #e0e0e0; width: 80px; text-align: center; font-size: 0.95rem; font-weight: bold; color: #f39c12;">810</div>
                                 </div>
                             </div>
                             

@@ -125,7 +125,7 @@ function createIntroduction() {
                     <!-- Animated carousel on the right side only -->
                     <div style="flex: 1; min-width: 400px; max-width: 400px;">
                         <div id="aiExamples" style="background: rgba(255,255,255,0.5); border-radius: 15px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); height: 120px;">
-                            <h3 style="color: #333; margin-bottom: 15px; font-size: 1.2rem;">🤖 Examples of AI Using It:</h3>
+                            <h3 style="color: #333; margin-bottom: 15px; font-size: 1.2rem;">🤖 Examples of AI Trained With Gradient Descent:</h3>
                             <div id="exampleCarousel" style="position: relative; height: 50px; width: 360px; margin: 0 auto;">
                                 <span id="currentExample" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); transition: opacity 0.5s ease; width: 100%; text-align: center; font-size: 1.05rem; color: #444;">📱 Your phone predicting the next word</span>
                             </div>

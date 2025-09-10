@@ -287,13 +287,13 @@ function setupLevel1() {
             robotGlow.style.width = '250px';
             robotGlow.style.height = '250px';
             robotGlow.style.background = 'radial-gradient(circle, rgba(255,215,0,0.8), rgba(255,105,180,0.6), rgba(138,43,226,0.4), transparent)';
-            robotGlow.style.boxShadow = '0 0 80px rgba(255,215,0,0.8), 0 0 120px rgba(255,105,180,0.6)';
+            robotGlow.style.boxShadow = '0 0 80px rgba(255, 231, 94, 0.8), 0 0 120px rgba(255,105,180,0.6)';
             robotGlow.style.animation = 'glow-pulse 0.8s infinite';
             robotImg.style.transform = 'scale(1.15) rotate(5deg)';
-            hintText.innerHTML = '<strong style="color: #FFD700;">⭐ PERFECT! You found f(x) = target! ⭐</strong>';
+            hintText.innerHTML = '<strong style="color: #00ff2fff;">⭐ PERFECT! You found f(x) = target! ⭐</strong>';
             robotStatus.innerHTML = '🎯 <strong>Loss = 0!</strong> Optimal solution found!';
-            robotStatus.style.color = '#FFD700';
-            lossValueEl.style.color = '#FFD700';
+            robotStatus.style.color = '#1aff00ff';
+            lossValueEl.style.color = '#00ff04ff';
             dialHandle.style.fill = '#FFD700';
             dialHandle.style.stroke = '#FFA500';
         } else if (loss <= 3) {

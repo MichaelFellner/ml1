@@ -115,8 +115,8 @@ window.createTrainingDataIntro = function() {
                             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; 
                                  font-size: 0.9rem; margin-bottom: 10px;">
                                 <!-- Header -->
-                                <div class="data-cell header-cell">Bunnies</div>
-                                <div class="data-cell header-cell">Days</div>
+                                <div class="data-cell header-cell">Age</div>
+                                <div class="data-cell header-cell">Weight</div>
                                 <div class="data-cell header-cell">Hay (kg)</div>
                                 <!-- Data rows -->
                                 <div class="data-cell">3</div>

@@ -25,7 +25,7 @@ window.createIntroductionToSteps = function() {
                 type: 'interactive',
                 description: '',
                 targetFunction: { 
-                    w: 7040  // The true function is y = 7040x
+                    w: 7000  // The true function is y = 7000x
                 },
                 controls: [
                     {
@@ -38,12 +38,12 @@ window.createIntroductionToSteps = function() {
                     }
                 ],
                 validation: {
-                    tolerance: 0.002,  // ±2 tolerance on 7040 means 0.02% tolerance
+                    tolerance: 0.002,  // ±2 tolerance on 7000 means 0.02% tolerance
                     customValidator: function(params, target) {
                         // We're testing with x = 1 (balloon size 1)
                         const x = 1;
                         const prediction = params.w * x;
-                        const trueValue = target.w * x;  // 7040 * 1 = 7040
+                        const trueValue = target.w * x;  // 7000 * 1 = 7000
                         const tolerance = 10;
                         
                         const isCorrect = Math.abs(params.w - target.w) <= tolerance;
@@ -73,7 +73,7 @@ window.createIntroductionToSteps = function() {
             });
             
             // Custom state for this level
-            this.learningRate = 0.1;  // Learning rate for discovering w = 7040
+            this.learningRate = 0.1;  // Learning rate for discovering w = 7000
             this.lastError = null;
             this.canUpdate = false;
             this.updateCount = 0;
@@ -103,7 +103,7 @@ window.createIntroductionToSteps = function() {
                             Use gradient descent to find the true weight w! The pump shows your current function y = w·x. 
                             Test different x values to see how well your w predicts the true outputs. The gradient descent formula 
                             <code style="background: rgba(0,0,0,0.05); padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', monospace;">w_new = w - α × gradient</code> 
-                            automatically adjusts w based on the error. Keep updating until you discover that the true function is y = 7040x!
+                            automatically adjusts w based on the error. Keep updating until you discover that the true function is y = 7000x!
                         </div>
                     </div>
                     
@@ -305,7 +305,7 @@ window.createIntroductionToSteps = function() {
                             
                             <!-- Target Display -->
                             <div style="text-align: center; margin-bottom: 15px;">
-                                <div style="font-size: 0.9rem; color: #666;">True value for x=<span id="target-x">1</span>: <span id="true-value">7040</span></div>
+                                <div style="font-size: 0.9rem; color: #666;">True value for x=<span id="target-x">1</span>: <span id="true-value">7000</span></div>
                                 <div style="font-size: 0.8rem; color: #999; margin-top: 5px;">Goal: Find w such that y = w·x matches all true values</div>
                             </div>
                             
@@ -505,13 +505,13 @@ window.createIntroductionToSteps = function() {
             
             // Balloon animation based on status
             if (validation.status === 'perfect') {
-                // Rainbow balloon for perfect - found w = 7040!
+                // Rainbow balloon for perfect - found w = 7000!
                 balloonSize = 70;
                 balloon.style.fontSize = `${balloonSize}px`;
                 balloon.style.opacity = '1';
                 balloon.textContent = '🎈';
                 balloon.style.animation = 'rainbowPulse 2s infinite';
-                statusText.innerHTML = `<span style="color: #2dd573; font-weight: bold; font-size: 1rem;">🎉 Perfect! You found w = 7040!</span>`;
+                statusText.innerHTML = `<span style="color: #2dd573; font-weight: bold; font-size: 1rem;">🎉 Perfect! You found w = 7000!</span>`;
                 
                 // Complete level
                 this.completeLevel({

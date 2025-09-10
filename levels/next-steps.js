@@ -44,7 +44,6 @@ window.createNextSteps = function() {
                             </h3>
                             <p style="font-size: 1.05rem; color: #555; line-height: 1.8; margin-bottom: 15px;">
                                 Python can do everything we just learned in just a <strong>few lines of code</strong>! 
-                                What took us dozens of lines of JavaScript can be done incredibly simply:
                             </p>
                             
                             <!-- Code example -->
