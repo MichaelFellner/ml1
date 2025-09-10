@@ -13,7 +13,7 @@ window.createRealWorldData1 = function() {
                 id: 'real-world-data-1',
                 name: 'Real World: California Housing Prices',
                 type: 'interactive',
-                description: 'Predict California housing prices using real census data',
+                description: '',
                 instructions: '',
                 concepts: ['Real Data', 'Feature Selection', 'Linear Regression', 'Data Normalization'],
                 difficulty: 'intermediate',
@@ -35,13 +35,13 @@ window.createRealWorldData1 = function() {
             this.allData = [];
             this.trainingData = [];
             this.testData = [];
-            this.selectedFeatures = ['median_income', 'housing_median_age', 'total_rooms', 'households'];
+            this.selectedFeatures = ['median_income', 'housing_median_age', 'total_rooms', 'total_bedrooms', 'households'];
             this.weights = {};
             this.bias = 0;
             
             // Training parameters
             this.trainingPercentage = 0.7;
-            this.learningRate = 0.00001;
+            this.learningRate = 0.01;
             this.maxIterations = 100;
             this.currentIteration = 0;
             this.isTraining = false;
@@ -68,7 +68,10 @@ window.createRealWorldData1 = function() {
             
             // Initial display update
             setTimeout(() => {
+                // Ensure weights are initialized for selected features
+                this.initializeWeights();
                 this.updateDisplay();
+                this.setupColumnClickListeners();
                 this.updateFeatureSelection();
             }, 100);
         }
@@ -116,10 +119,11 @@ window.createRealWorldData1 = function() {
                                                 'total_bedrooms', 'population', 'households', 
                                                 'longitude', 'latitude', 'ocean_proximity_encoded'];
                         
-                        // Initialize weights
+                        // Initialize weights with small random values
                         this.dataset.features.forEach(feature => {
-                            this.weights[feature] = 0.01;
+                            this.weights[feature] = (Math.random() - 0.5) * 0.1;
                         });
+                        this.bias = 1.5;
                         
                         console.log(`Loaded ${this.allData.length} housing records`);
                     }
@@ -178,10 +182,11 @@ window.createRealWorldData1 = function() {
                 });
             }
             
-            // Initialize weights
+            // Initialize weights with small random values
             this.dataset.features.forEach(feature => {
-                this.weights[feature] = 0.01;
+                this.weights[feature] = (Math.random() - 0.5) * 0.1;
             });
+            this.bias = 1.5;
         }
         
         splitData() {
@@ -220,12 +225,7 @@ window.createRealWorldData1 = function() {
         }
         
         setupControlListeners() {
-            // Feature selection
-            const updateFeatures = () => {
-                const checkboxes = document.querySelectorAll('.feature-checkbox:checked');
-                this.selectedFeatures = Array.from(checkboxes).map(cb => cb.value);
-                this.resetModel();
-            };
+            // Feature selection removed from here - handled by column clicks
             
             // Training percentage selection
             const percentButtons = document.querySelectorAll('.percent-btn');
@@ -243,14 +243,6 @@ window.createRealWorldData1 = function() {
                 });
             });
             
-            // Iterations control
-            const iterationsInput = document.getElementById('iterations-input');
-            if (iterationsInput) {
-                this.addEventListenerWithCleanup(iterationsInput, 'change', (e) => {
-                    this.maxIterations = parseInt(e.target.value) || 100;
-                });
-            }
-            
             // Learning rate control
             const learningRateInput = document.getElementById('learning-rate-input');
             if (learningRateInput) {
@@ -265,14 +257,9 @@ window.createRealWorldData1 = function() {
                 this.addEventListenerWithCleanup(startBtn, 'click', () => {
                     if (!this.isTraining) {
                         this.startTraining();
+                    } else {
+                        this.stopTraining();
                     }
-                });
-            }
-            
-            const stopBtn = document.getElementById('stop-training');
-            if (stopBtn) {
-                this.addEventListenerWithCleanup(stopBtn, 'click', () => {
-                    this.stopTraining();
                 });
             }
             
@@ -283,48 +270,61 @@ window.createRealWorldData1 = function() {
                 });
             }
             
-            const testBtn = document.getElementById('test-model');
-            if (testBtn) {
-                this.addEventListenerWithCleanup(testBtn, 'click', () => {
-                    this.testModel();
+            // Test button removed - testing happens automatically
+        }
+        
+        setupColumnClickListeners() {
+            // Setup click listeners for column headers
+            const headers = document.querySelectorAll('.feature-column');
+            headers.forEach(header => {
+                this.addEventListenerWithCleanup(header, 'click', (e) => {
+                    if (this.isTraining) return;
+                    
+                    const feature = header.dataset.feature;
+                    if (!feature) return;
+                    
+                    // Toggle feature selection
+                    const index = this.selectedFeatures.indexOf(feature);
+                    if (index > -1) {
+                        this.selectedFeatures.splice(index, 1);
+                    } else {
+                        this.selectedFeatures.push(feature);
+                    }
+                    
+                    this.resetModel();
+                    this.updateDisplay();
+                    this.updateFeatureSelection();
                 });
-            }
+            });
         }
         
         updateFeatureSelection() {
-            const container = document.getElementById('feature-selection');
-            if (!container) return;
-            
-            const checkboxes = this.dataset.features.map(feature => {
+            // Update visual indicators for selected columns
+            const headers = document.querySelectorAll('.feature-column');
+            headers.forEach(header => {
+                const feature = header.dataset.feature;
+                if (!feature) return;
+                
                 const isSelected = this.selectedFeatures.includes(feature);
-                return `
-                    <label style="display: flex; align-items: center; margin: 5px 0; cursor: pointer;">
-                        <input 
-                            type="checkbox" 
-                            class="feature-checkbox"
-                            value="${feature}"
-                            ${isSelected ? 'checked' : ''}
-                            style="margin-right: 8px;"
-                        >
-                        <span style="font-size: 0.85em;">${feature.replace(/_/g, ' ')}</span>
-                    </label>
-                `;
-            }).join('');
-            
-            container.innerHTML = checkboxes;
-            
-            // Add event listeners
-            container.querySelectorAll('.feature-checkbox').forEach(checkbox => {
-                this.addEventListenerWithCleanup(checkbox, 'change', () => {
-                    if (this.isTraining) {
-                        checkbox.checked = !checkbox.checked;
-                        return;
-                    }
-                    const checkboxes = document.querySelectorAll('.feature-checkbox:checked');
-                    this.selectedFeatures = Array.from(checkboxes).map(cb => cb.value);
-                    this.resetModel();
-                    this.updateDisplay();
-                });
+                const originalText = header.textContent.replace(' ✓', '').replace(' ✗', '');
+                
+                if (isSelected) {
+                    header.classList.add('selected');
+                    header.style.background = '#f5f5f5';
+                    header.style.color = '#333';
+                    header.style.fontWeight = 'normal';
+                    header.style.textDecoration = 'none';
+                    header.innerHTML = originalText;
+                    header.title = 'Click to exclude this feature';
+                } else {
+                    header.classList.remove('selected');
+                    header.style.background = '#f5f5f5';
+                    header.style.color = '#999';
+                    header.style.fontWeight = 'normal';
+                    header.style.textDecoration = 'line-through';
+                    header.innerHTML = originalText;
+                    header.title = 'Click to include this feature';
+                }
             });
         }
         
@@ -336,11 +336,15 @@ window.createRealWorldData1 = function() {
             return prediction;
         }
         
-        calculateLoss(data) {
+        calculateLoss(data, useNormalization = false) {
             let totalError = 0;
-            data.forEach(row => {
+            const dataToUse = useNormalization && this.normStats ? 
+                this.normalizeFeatures(data).data : data;
+            
+            dataToUse.forEach((row, idx) => {
                 const prediction = this.calculatePrediction(row);
-                const error = row[this.dataset.target] - prediction;
+                const actual = data[idx][this.dataset.target];
+                const error = actual - prediction;
                 totalError += error * error;
             });
             return totalError / data.length;
@@ -414,8 +418,8 @@ window.createRealWorldData1 = function() {
                     this.weights[feature] = (this.weights[feature] || 0) - this.learningRate * gradients[feature];
                 });
                 
-                // Calculate loss
-                const loss = this.calculateLoss(normalizedTrain);
+                // Calculate loss on normalized data
+                const loss = this.calculateLoss(normalizedTrain, false);  // false because data is already normalized
                 this.trainingHistory.push({ iteration: this.currentIteration, loss });
                 
                 // Restore original data
@@ -442,387 +446,373 @@ window.createRealWorldData1 = function() {
             this.updateButtonStates();
         }
         
-        resetModel() {
+        initializeWeights() {
+            // Initialize weights with small random values for better starting point
             this.selectedFeatures.forEach(feature => {
-                this.weights[feature] = 0.01;
+                if (this.weights[feature] === undefined || this.weights[feature] === 0.01) {
+                    this.weights[feature] = (Math.random() - 0.5) * 0.1;
+                }
             });
-            this.bias = 0;
+            if (this.bias === 0) {
+                this.bias = 1.5; // Start with a reasonable bias for housing prices
+            }
+        }
+        
+        resetModel() {
+            // Reset weights for all features
+            this.dataset.features.forEach(feature => {
+                this.weights[feature] = (Math.random() - 0.5) * 0.1;
+            });
+            this.bias = 1.5; // Start with a reasonable bias for housing prices
             this.currentIteration = 0;
             this.trainingHistory = [];
             this.testResults = null;
+            this.normStats = null; // Clear normalization stats on reset
             this.updateDisplay();
         }
         
-        testModel() {
-            if (this.testData.length === 0 || this.selectedFeatures.length === 0) return;
+        updateButtonStates() {
+            const startBtn = document.getElementById('start-training');
+            if (startBtn) {
+                if (this.isTraining) {
+                    startBtn.textContent = 'Stop Training';
+                    startBtn.style.background = '#ff9800';
+                } else {
+                    startBtn.textContent = 'Run 100 iterations of gradient descent on the training data';
+                    startBtn.style.background = '#4caf50';
+                }
+            }
+            document.getElementById('reset-model').disabled = this.isTraining;
+            document.querySelectorAll('.percent-btn').forEach(btn => btn.disabled = this.isTraining);
+            document.getElementById('learning-rate-input').disabled = this.isTraining;
+            // Update clickable column states
+            document.querySelectorAll('.feature-column').forEach(header => {
+                header.style.pointerEvents = this.isTraining ? 'none' : 'auto';
+                header.style.opacity = this.isTraining ? '0.7' : '1';
+            });
+        }
+        
+        updateDisplay() {
+            // Update data counts in headers
+            const trainDataCount = document.getElementById('train-data-count');
+            if (trainDataCount) trainDataCount.textContent = this.trainingData.length;
             
-            // Normalize test data using training stats
-            const normalizedTest = [];
-            this.testData.forEach(row => {
-                const normRow = { ...row };
-                this.selectedFeatures.forEach(feature => {
-                    if (this.normStats && this.normStats[feature]) {
+            const testDataCount = document.getElementById('test-data-count');
+            if (testDataCount) testDataCount.textContent = this.testData.length;
+            
+            const trainFeaturesCount = document.getElementById('train-features-count');
+            if (trainFeaturesCount) trainFeaturesCount.textContent = this.selectedFeatures.length;
+            
+            const testFeaturesCount = document.getElementById('test-features-count');
+            if (testFeaturesCount) testFeaturesCount.textContent = this.selectedFeatures.length;
+            
+            // Update data preview
+            this.updateDataPreview();
+        }
+        
+        updateDataPreview() {
+            // Update training spreadsheet
+            this.updateSpreadsheet('train-spreadsheet-tbody', this.trainingData.slice(0, 20), 'train');
+            
+            // Update test spreadsheet
+            this.updateSpreadsheet('test-spreadsheet-tbody', this.testData.slice(0, 20), 'test');
+            
+            // Update average loss rows
+            this.updateAverageLoss();
+        }
+        
+        updateSpreadsheet(tbodyId, data, type) {
+            const tbody = document.getElementById(tbodyId);
+            if (!tbody) return;
+            
+            const rows = data.map((row, idx) => {
+                // Apply normalization consistently if model has been trained
+                let prediction;
+                if (this.normStats) {
+                    // Normalize the row using the stored stats from training
+                    const normRow = {};
+                    this.selectedFeatures.forEach(feature => {
                         normRow[feature] = (row[feature] - this.normStats[feature].mean) / this.normStats[feature].std;
+                    });
+                    normRow[this.dataset.target] = row[this.dataset.target];
+                    prediction = this.calculatePrediction(normRow);
+                } else {
+                    prediction = this.calculatePrediction(row);
+                }
+                const actual = row[this.dataset.target];
+                const loss = Math.pow(prediction - actual, 2).toFixed(2);
+                const lossColor = parseFloat(loss) < 0.5 ? '#4caf50' : 
+                                 parseFloat(loss) < 2 ? '#ff9800' : '#f44336';
+                
+                // Use dollar sign as string concatenation to avoid template literal issues
+                const actualPrice = '$' + (actual * 100).toFixed(0) + 'k';
+                const predictedPrice = '$' + (prediction * 100).toFixed(0) + 'k';
+                
+                // Helper function to check if feature is selected
+                const isFeatureSelected = (feature) => this.selectedFeatures.includes(feature);
+                const getCellStyle = (feature) => {
+                    const baseStyle = "padding: 4px; text-align: center; font-size: 0.75em;";
+                    if (isFeatureSelected(feature)) {
+                        return baseStyle;
                     }
-                });
-                normalizedTest.push(normRow);
-            });
+                    return baseStyle + " opacity: 0.4; text-decoration: line-through;";
+                };
+                
+                return `
+                    <tr>
+                        <td style="padding: 4px; text-align: center; font-size: 0.75em; border-right: 1px solid #e0e0e0;">${idx + 1}</td>
+                        <td style="${getCellStyle('median_income')}">${row.median_income.toFixed(2)}</td>
+                        <td style="${getCellStyle('housing_median_age')}">${row.housing_median_age}</td>
+                        <td style="${getCellStyle('total_rooms')}">${row.total_rooms}</td>
+                        <td style="${getCellStyle('total_bedrooms')}">${row.total_bedrooms || 'N/A'}</td>
+                        <td style="${getCellStyle('population')}">${row.population}</td>
+                        <td style="${getCellStyle('households')}">${row.households}</td>
+                        <td style="${getCellStyle('longitude')}">${row.longitude.toFixed(2)}</td>
+                        <td style="${getCellStyle('latitude')}">${row.latitude.toFixed(2)}</td>
+                        <td style="padding: 6px; text-align: center; background: rgba(234,179,8,0.1); font-weight: bold; font-size: 0.8em;">
+                            ${actualPrice}
+                        </td>
+                        <td style="padding: 6px; text-align: center; background: rgba(102,126,234,0.1); font-weight: bold; font-size: 0.8em;">
+                            ${predictedPrice}
+                        </td>
+                        <td style="padding: 6px; text-align: center; color: ${lossColor}; font-weight: bold; font-size: 0.8em; border-left: 1px solid #e0e0e0;">
+                            ${loss}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
             
-            let totalError = 0;
-            let totalPercentError = 0;
+            tbody.innerHTML = rows || '<tr><td colspan="12" style="text-align: center; padding: 20px;">No data loaded</td></tr>';
+        }
+        
+        updateAverageLoss() {
+            // Calculate and update average loss for training data
+            // Use normalization if model was trained (normStats exists)
+            const trainLoss = this.calculateLoss(this.trainingData, !!this.normStats);
+            const trainAvgCell = document.getElementById('train-avg-loss');
+            if (trainAvgCell) {
+                trainAvgCell.textContent = trainLoss.toFixed(2);
+                const color = trainLoss < 0.5 ? '#4caf50' : trainLoss < 2 ? '#ff9800' : '#f44336';
+                trainAvgCell.style.color = color;
+            }
             
-            normalizedTest.forEach((row, idx) => {
-                const prediction = this.calculatePrediction(row);
-                const actual = this.testData[idx][this.dataset.target];
-                const error = Math.abs(actual - prediction);
-                totalError += error;
-                totalPercentError += (error / Math.abs(actual)) * 100;
-            });
+            // Calculate and update average loss for test data
+            const testLoss = this.calculateLoss(this.testData, !!this.normStats);
+            const testAvgCell = document.getElementById('test-avg-loss');
+            if (testAvgCell) {
+                testAvgCell.textContent = testLoss.toFixed(2);
+                const color = testLoss < 0.5 ? '#4caf50' : testLoss < 2 ? '#ff9800' : '#f44336';
+                testAvgCell.style.color = color;
+            }
             
-            const avgError = totalError / this.testData.length;
-            const avgPercentError = totalPercentError / this.testData.length;
-            const trainLoss = this.calculateLoss(this.trainingData);
-            const testLoss = this.calculateLoss(this.testData);
-            
-            this.testResults = {
-                avgError: (avgError * 100).toFixed(0), // Convert back to thousands
-                avgPercentError: avgPercentError.toFixed(1),
-                trainLoss: trainLoss.toFixed(4),
-                testLoss: testLoss.toFixed(4),
-                testSize: this.testData.length
-            };
-            
-            this.updateDisplay();
-            
-            // Check for success
-            if (avgPercentError < 25 && this.trainingPercentage >= 0.7) {
+            // Check for success automatically
+            if (testLoss < 1.5 && this.trainingPercentage >= 0.7 && this.currentIteration > 0) {
                 if (!this.completed) {
                     this.completed = true;
+                    const score = Math.round(100 - (testLoss * 20));
                     this.showSuccess('🎉 Excellent! Your model performs well on California housing data!', 5000);
                     setTimeout(() => {
                         this.completeLevel({ 
-                            score: Math.round(100 - avgPercentError),
+                            score: Math.max(0, Math.min(100, score)),
                             datasetSize: this.allData.length,
-                            avgError: avgPercentError
+                            testLoss: testLoss
                         });
                     }, 2000);
                 }
             }
         }
         
-        updateButtonStates() {
-            document.getElementById('start-training').disabled = this.isTraining;
-            document.getElementById('stop-training').disabled = !this.isTraining;
-            document.getElementById('reset-model').disabled = this.isTraining;
-            document.getElementById('test-model').disabled = this.isTraining;
-            document.querySelectorAll('.percent-btn').forEach(btn => btn.disabled = this.isTraining);
-            document.getElementById('iterations-input').disabled = this.isTraining;
-            document.getElementById('learning-rate-input').disabled = this.isTraining;
-            document.querySelectorAll('.feature-checkbox').forEach(cb => cb.disabled = this.isTraining);
-        }
-        
-        updateDisplay() {
-            // Update stats
-            document.getElementById('train-size').textContent = this.trainingData.length;
-            document.getElementById('test-size').textContent = this.testData.length;
-            document.getElementById('current-iteration').textContent = this.currentIteration;
-            document.getElementById('selected-features-count').textContent = this.selectedFeatures.length;
-            
-            // Update data preview
-            this.updateDataPreview();
-            
-            // Update test results
-            this.updateTestResults();
-        }
-        
-        updateDataPreview() {
-            const tbody = document.getElementById('data-preview-tbody');
-            if (!tbody) return;
-            
-            const previewData = this.trainingData.slice(0, 5);
-            const rows = previewData.map((row, idx) => {
-                const prediction = this.normStats ? 
-                    this.calculatePrediction(this.normalizeFeatures([row]).data[0]) : 
-                    this.calculatePrediction(row);
-                const actual = row[this.dataset.target];
-                const error = ((prediction - actual) / actual * 100).toFixed(1);
-                const errorColor = Math.abs(error) < 15 ? '#4caf50' : 
-                                  Math.abs(error) < 30 ? '#ff9800' : '#f44336';
-                
-                return `
-                    <tr>
-                        <td style="padding: 6px; text-align: center; font-size: 0.8em;">${idx + 1}</td>
-                        <td style="padding: 6px; text-align: center; font-size: 0.8em;">${row.median_income.toFixed(2)}</td>
-                        <td style="padding: 6px; text-align: center; font-size: 0.8em;">${row.housing_median_age}</td>
-                        <td style="padding: 6px; text-align: center; font-size: 0.8em;">${row.total_rooms}</td>
-                        <td style="padding: 6px; text-align: center; background: rgba(234,179,8,0.1); font-weight: bold; font-size: 0.8em;">
-                            $${(actual * 100).toFixed(0)}k
-                        </td>
-                        <td style="padding: 6px; text-align: center; background: rgba(102,126,234,0.1); font-weight: bold; font-size: 0.8em;">
-                            $${(prediction * 100).toFixed(0)}k
-                        </td>
-                        <td style="padding: 6px; text-align: center; color: ${errorColor}; font-weight: bold; font-size: 0.8em;">
-                            ${error}%
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-            
-            tbody.innerHTML = rows || '<tr><td colspan="7" style="text-align: center; padding: 20px;">No data loaded</td></tr>';
-        }
-        
-        updateTestResults() {
-            const resultsDiv = document.getElementById('test-results-display');
-            if (!resultsDiv) return;
-            
-            if (this.testResults) {
-                const performanceColor = this.testResults.avgPercentError < 20 ? '#4caf50' : 
-                                       this.testResults.avgPercentError < 35 ? '#ff9800' : '#f44336';
-                
-                resultsDiv.innerHTML = `
-                    <h3 style="margin: 0 0 15px 0; color: #333;">Test Results</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                        <div style="text-align: center; padding: 10px; background: #f5f5f5; border-radius: 8px;">
-                            <div style="font-size: 0.9em; color: #666;">Avg Error</div>
-                            <div style="font-size: 1.5em; font-weight: bold; color: ${performanceColor};">
-                                ${this.testResults.avgPercentError}%
-                            </div>
-                            <div style="font-size: 0.8em; color: #999;">≈$${this.testResults.avgError}k</div>
-                        </div>
-                        <div style="text-align: center; padding: 10px; background: #f5f5f5; border-radius: 8px;">
-                            <div style="font-size: 0.9em; color: #666;">Test Samples</div>
-                            <div style="font-size: 1.5em; font-weight: bold; color: #333;">
-                                ${this.testResults.testSize}
-                            </div>
-                        </div>
-                    </div>
-                    <div style="margin-top: 10px; padding: 10px; background: #e3f2fd; border-radius: 8px;">
-                        <p style="margin: 0; color: #1976d2; font-size: 0.85em;">
-                            <strong>Train Loss:</strong> ${this.testResults.trainLoss} | 
-                            <strong>Test Loss:</strong> ${this.testResults.testLoss}
-                        </p>
-                    </div>
-                `;
-            } else {
-                resultsDiv.innerHTML = `
-                    <div style="text-align: center; color: #999; padding: 30px;">
-                        <p>Train the model first, then test it!</p>
-                    </div>
-                `;
-            }
-        }
-        
         _generateMainContent() {
             return `
-                <div style="max-height: 90vh; display: flex; flex-direction: column; gap: 10px; padding: 10px;">
+                <div style="width: 100%; margin: 0 auto; box-sizing: border-box;">
+                <div style="height: 100vh; display: flex; flex-direction: column; gap: 10px; padding: 10px; box-sizing: border-box; overflow-x: hidden;">
                     <!-- Header -->
-                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; padding: 15px;">
-                        <h2 style="margin: 0 0 5px 0;">${this.dataset.name}</h2>
-                        <p style="margin: 0; opacity: 0.9; font-size: 0.9em;">${this.dataset.description}</p>
-                        <p style="margin: 5px 0 0 0; opacity: 0.8; font-size: 0.85em;">
-                            📊 Dataset: ${this.dataset.source} | 
-                            📁 File: ${this.dataset.filename}
-                        </p>
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; padding: 12px;">
+                        <h2 style="margin: 0 0 5px 0; font-size: 1.4em;">${this.dataset.name}</h2>
+                        <p style="margin: 0; opacity: 0.9; font-size: 0.85em;">${this.dataset.description}</p>
                     </div>
                     
-                    <!-- Info Box -->
-                    <div style="background: #fff3cd; border-radius: 8px; padding: 10px;">
-                        <p style="margin: 0; color: #856404; font-size: 0.85em;">
-                            <strong>📥 To use real data:</strong> Download the California Housing dataset from 
-                            <a href="https://raw.githubusercontent.com/ageron/handson-ml/master/datasets/housing/housing.csv" target="_blank" style="color: #0066cc;">GitHub</a> or 
-                            <a href="https://www.kaggle.com/datasets/camnugent/california-housing-prices" target="_blank" style="color: #0066cc;">Kaggle</a>, 
-                            rename it to <code>housing.csv</code>, and place it in the project folder.
-                        </p>
+                    <!-- Instructions -->
+                    <div style="background: #e3f2fd; border-radius: 8px; padding: 10px; color: #1976d2; font-size: 0.85em;">
+                        <strong>👉 Click on column headers</strong> (Income, Age, Rooms, etc.) to toggle which features are used for training. Unselected columns will be greyed out.
                     </div>
                     
-                    <!-- Controls -->
-                    <div style="background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;">
-                            <!-- Training Data Percentage -->
-                            <div>
-                                <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #555; font-size: 0.9em;">
-                                    Training Data:
-                                </label>
-                                <div style="display: flex; gap: 5px;">
-                                    <button class="percent-btn" data-percent="0.5" style="
-                                        flex: 1;
-                                        padding: 6px;
-                                        background: #e0e0e0;
-                                        border: none;
+                    <!-- Controls Row -->
+                    <div style="width: 100%; box-sizing: border-box;">
+                        <!-- Training Controls -->
+                        <div style="background: white; border-radius: 8px; padding: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); box-sizing: border-box;">
+                            <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                                <!-- Training Data Percentage -->
+                                <div>
+                                    <label style="display: block; margin-bottom: 6px; font-weight: bold; color: #555; font-size: 0.85em;">
+                                        Training Data:
+                                    </label>
+                                    <div style="display: flex; gap: 5px;">
+                                        <button class="percent-btn" data-percent="0.5" style="
+                                            padding: 5px 10px;
+                                            background: #e0e0e0;
+                                            border: none;
+                                            border-radius: 4px;
+                                            cursor: pointer;
+                                            font-size: 0.85em;
+                                        ">50%</button>
+                                        <button class="percent-btn active" data-percent="0.7" style="
+                                            padding: 5px 10px;
+                                            background: #667eea;
+                                            color: white;
+                                            border: none;
+                                            border-radius: 4px;
+                                            cursor: pointer;
+                                            font-size: 0.85em;
+                                        ">70%</button>
+                                        <button class="percent-btn" data-percent="0.8" style="
+                                            padding: 5px 10px;
+                                            background: #e0e0e0;
+                                            border: none;
+                                            border-radius: 4px;
+                                            cursor: pointer;
+                                            font-size: 0.85em;
+                                        ">80%</button>
+                                    </div>
+                                </div>
+                                
+
+                                
+                                <!-- Learning Rate -->
+                                <div>
+                                    <label style="display: block; margin-bottom: 6px; font-weight: bold; color: #555; font-size: 0.85em;">
+                                        Learning Rate:
+                                    </label>
+                                    <input type="number" id="learning-rate-input" value="0.01" min="0.000001" max="1" step="0.000001" style="
+                                        width: 100px;
+                                        padding: 5px;
+                                        border: 1px solid #ddd;
                                         border-radius: 4px;
-                                        cursor: pointer;
                                         font-size: 0.85em;
-                                    ">50%</button>
-                                    <button class="percent-btn active" data-percent="0.7" style="
-                                        flex: 1;
-                                        padding: 6px;
-                                        background: #667eea;
+                                    ">
+                                </div>
+                                
+                                <!-- Buttons -->
+                                <div style="display: flex; gap: 5px; margin-left: auto;">
+                                    <button id="start-training" style="
+                                        padding: 8px 16px;
+                                        background: #4caf50;
                                         color: white;
                                         border: none;
                                         border-radius: 4px;
+                                        font-weight: bold;
                                         cursor: pointer;
-                                        font-size: 0.85em;
-                                    ">70%</button>
-                                    <button class="percent-btn" data-percent="0.8" style="
-                                        flex: 1;
-                                        padding: 6px;
-                                        background: #e0e0e0;
+                                    ">Run 100 iterations of gradient descent on the training data</button>
+                                    <button id="reset-model" style="
+                                        padding: 8px 16px;
+                                        background: #9e9e9e;
+                                        color: white;
                                         border: none;
                                         border-radius: 4px;
+                                        font-weight: bold;
                                         cursor: pointer;
-                                        font-size: 0.85em;
-                                    ">80%</button>
+                                    ">Reset</button>
                                 </div>
-                            </div>
-                            
-                            <!-- Iterations -->
-                            <div>
-                                <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #555; font-size: 0.9em;">
-                                    Iterations:
-                                </label>
-                                <input type="number" id="iterations-input" value="100" min="10" max="1000" step="10" style="
-                                    width: 100%;
-                                    padding: 6px;
-                                    border: 1px solid #ddd;
-                                    border-radius: 4px;
-                                    font-size: 0.9em;
-                                ">
-                            </div>
-                            
-                            <!-- Learning Rate -->
-                            <div>
-                                <label style="display: block; margin-bottom: 8px; font-weight: bold; color: #555; font-size: 0.9em;">
-                                    Learning Rate:
-                                </label>
-                                <input type="number" id="learning-rate-input" value="0.00001" min="0.000001" max="1" step="0.000001" style="
-                                    width: 100%;
-                                    padding: 6px;
-                                    border: 1px solid #ddd;
-                                    border-radius: 4px;
-                                    font-size: 0.9em;
-                                ">
-                            </div>
-                            
-                            <!-- Buttons -->
-                            <div style="display: flex; gap: 5px; align-items: flex-end;">
-                                <button id="start-training" style="
-                                    flex: 1;
-                                    padding: 8px;
-                                    background: #4caf50;
-                                    color: white;
-                                    border: none;
-                                    border-radius: 4px;
-                                    font-weight: bold;
-                                    cursor: pointer;
-                                ">Train</button>
-                                <button id="stop-training" disabled style="
-                                    flex: 1;
-                                    padding: 8px;
-                                    background: #ff9800;
-                                    color: white;
-                                    border: none;
-                                    border-radius: 4px;
-                                    font-weight: bold;
-                                    cursor: pointer;
-                                ">Stop</button>
-                                <button id="reset-model" style="
-                                    flex: 1;
-                                    padding: 8px;
-                                    background: #9e9e9e;
-                                    color: white;
-                                    border: none;
-                                    border-radius: 4px;
-                                    font-weight: bold;
-                                    cursor: pointer;
-                                ">Reset</button>
-                                <button id="test-model" style="
-                                    flex: 1;
-                                    padding: 8px;
-                                    background: #2196f3;
-                                    color: white;
-                                    border: none;
-                                    border-radius: 4px;
-                                    font-weight: bold;
-                                    cursor: pointer;
-                                ">Test</button>
-                            </div>
-                        </div>
-                        
-                        <!-- Stats Bar -->
-                        <div style="display: flex; justify-content: space-around; margin-top: 15px; padding-top: 15px; border-top: 1px solid #e0e0e0;">
-                            <div style="text-align: center;">
-                                <div style="font-size: 0.8em; color: #666;">Training</div>
-                                <div id="train-size" style="font-size: 1.2em; font-weight: bold; color: #333;">0</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 0.8em; color: #666;">Test</div>
-                                <div id="test-size" style="font-size: 1.2em; font-weight: bold; color: #333;">0</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 0.8em; color: #666;">Features</div>
-                                <div id="selected-features-count" style="font-size: 1.2em; font-weight: bold; color: #333;">4</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <div style="font-size: 0.8em; color: #666;">Iteration</div>
-                                <div id="current-iteration" style="font-size: 1.2em; font-weight: bold; color: #333;">0</div>
+                                
+
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Main Content Area -->
-                    <div style="display: flex; gap: 10px; flex: 1; min-height: 0;">
-                        <!-- Left: Feature Selection -->
-                        <div style="width: 200px;">
-                            <div style="background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                                <h3 style="margin: 0 0 10px 0; color: #333; font-size: 1em;">Select Features</h3>
-                                <div id="feature-selection" style="max-height: 300px; overflow-y: auto;">
-                                    <!-- Feature checkboxes will be inserted here -->
-                                </div>
+                    <!-- Training Spreadsheet -->
+                    <div style="flex: 1; display: flex; flex-direction: column; min-height: 0; width: 100%; box-sizing: border-box;">
+                        <div style="background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; height: 48%; width: 100%; box-sizing: border-box;">
+                            <div style="padding: 10px; background: linear-gradient(90deg, #667eea, #764ba2); color: white; font-weight: bold; font-size: 0.9em;">
+                                Training Data: <span id="train-data-count">${this.trainingData.length}</span> rows · <span id="train-features-count">${this.selectedFeatures.length}</span> selected features
+                            </div>
+                            <div style="flex: 1; overflow: auto; position: relative; width: 100%; box-sizing: border-box;">
+                                <table style="width: 100%; border-collapse: collapse; font-size: 0.85em; table-layout: auto;">
+                                    <thead style="background: #f5f5f5; position: sticky; top: 0; z-index: 10;">
+                                        <tr>
+                                            <th style="padding: 8px; text-align: center; font-size: 0.8em; border-right: 1px solid #e0e0e0;">#</th>
+                                            <th class="feature-column" data-feature="median_income" style="padding: 8px; text-align: center; font-size: 0.8em; cursor: pointer; user-select: none; transition: all 0.2s;">Income</th>
+                                            <th class="feature-column" data-feature="housing_median_age" style="padding: 8px; text-align: center; font-size: 0.8em; cursor: pointer; user-select: none; transition: all 0.2s;">Age</th>
+                                            <th class="feature-column" data-feature="total_rooms" style="padding: 8px; text-align: center; font-size: 0.8em; cursor: pointer; user-select: none; transition: all 0.2s;">Rooms</th>
+                                            <th class="feature-column" data-feature="total_bedrooms" style="padding: 8px; text-align: center; font-size: 0.8em; cursor: pointer; user-select: none; transition: all 0.2s;">Bedrooms</th>
+                                            <th class="feature-column" data-feature="population" style="padding: 8px; text-align: center; font-size: 0.8em; cursor: pointer; user-select: none; transition: all 0.2s;">Population</th>
+                                            <th class="feature-column" data-feature="households" style="padding: 8px; text-align: center; font-size: 0.8em; cursor: pointer; user-select: none; transition: all 0.2s;">Households</th>
+                                            <th class="feature-column" data-feature="longitude" style="padding: 8px; text-align: center; font-size: 0.8em; cursor: pointer; user-select: none; transition: all 0.2s;">Longitude</th>
+                                            <th class="feature-column" data-feature="latitude" style="padding: 8px; text-align: center; font-size: 0.8em; cursor: pointer; user-select: none; transition: all 0.2s;">Latitude</th>
+                                            <th style="padding: 8px; text-align: center; font-size: 0.8em; background: rgba(234,179,8,0.1);">Actual Price</th>
+                                            <th style="padding: 8px; text-align: center; font-size: 0.8em; background: rgba(102,126,234,0.1);">Predicted</th>
+                                            <th style="padding: 8px; text-align: center; font-size: 0.8em; border-left: 1px solid #e0e0e0;">Loss</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="train-spreadsheet-tbody">
+                                        <!-- Data rows will be inserted here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div style="background: #333; color: white; padding: 8px; position: sticky; bottom: 0;">
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <tr>
+                                        <td style="padding: 4px; text-align: right; font-weight: bold; font-size: 0.9em;">Average Train Loss:</td>
+                                        <td id="train-avg-loss" style="padding: 4px; text-align: left; font-weight: bold; font-size: 1.1em; color: #4caf50;">0.00</td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                         
-                        <!-- Center: Data Preview -->
-                        <div style="flex: 1;">
-                            <div style="background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow: hidden;">
-                                <div style="padding: 10px; background: #f5f5f5; font-weight: bold; font-size: 0.9em;">
-                                    Training Data Preview (First 5 rows)
-                                </div>
-                                <div style="overflow: auto; max-height: 250px;">
-                                    <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
-                                        <thead style="background: #667eea; color: white; position: sticky; top: 0;">
-                                            <tr>
-                                                <th style="padding: 8px; text-align: center; font-size: 0.8em;">#</th>
-                                                <th style="padding: 8px; text-align: center; font-size: 0.8em;">Income</th>
-                                                <th style="padding: 8px; text-align: center; font-size: 0.8em;">Age</th>
-                                                <th style="padding: 8px; text-align: center; font-size: 0.8em;">Rooms</th>
-                                                <th style="padding: 8px; text-align: center; font-size: 0.8em; background: rgba(0,0,0,0.1);">Actual</th>
-                                                <th style="padding: 8px; text-align: center; font-size: 0.8em;">Predicted</th>
-                                                <th style="padding: 8px; text-align: center; font-size: 0.8em;">Error%</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="data-preview-tbody">
-                                            <!-- Data rows will be inserted here -->
-                                        </tbody>
-                                    </table>
-                                </div>
+                        <!-- Test Spreadsheet -->
+                        <div style="background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; height: 48%; margin-top: 10px; width: 100%; box-sizing: border-box;">
+                            <div style="padding: 10px; background: linear-gradient(90deg, #2196f3, #00bcd4); color: white; font-weight: bold; font-size: 0.9em;">
+                                Test Data: <span id="test-data-count">${this.testData.length}</span> rows · <span id="test-features-count">${this.selectedFeatures.length}</span> selected features
                             </div>
-                        </div>
-                        
-                        <!-- Right: Test Results -->
-                        <div style="width: 280px;">
-                            <div style="background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                                <div id="test-results-display">
-                                    <!-- Test results will be displayed here -->
-                                </div>
+                            <div style="flex: 1; overflow: auto; position: relative; width: 100%; box-sizing: border-box;">
+                                <table style="width: 100%; border-collapse: collapse; font-size: 0.85em; table-layout: auto;">
+                                    <thead style="background: #f5f5f5; position: sticky; top: 0; z-index: 10;">
+                                        <tr>
+                                            <th style="padding: 8px; text-align: center; font-size: 0.8em; border-right: 1px solid #e0e0e0;">#</th>
+                                            <th class="feature-column" data-feature="median_income" style="padding: 8px; text-align: center; font-size: 0.8em; cursor: pointer; user-select: none; transition: all 0.2s;">Income</th>
+                                            <th class="feature-column" data-feature="housing_median_age" style="padding: 8px; text-align: center; font-size: 0.8em; cursor: pointer; user-select: none; transition: all 0.2s;">Age</th>
+                                            <th class="feature-column" data-feature="total_rooms" style="padding: 8px; text-align: center; font-size: 0.8em; cursor: pointer; user-select: none; transition: all 0.2s;">Rooms</th>
+                                            <th class="feature-column" data-feature="total_bedrooms" style="padding: 8px; text-align: center; font-size: 0.8em; cursor: pointer; user-select: none; transition: all 0.2s;">Bedrooms</th>
+                                            <th class="feature-column" data-feature="population" style="padding: 8px; text-align: center; font-size: 0.8em; cursor: pointer; user-select: none; transition: all 0.2s;">Population</th>
+                                            <th class="feature-column" data-feature="households" style="padding: 8px; text-align: center; font-size: 0.8em; cursor: pointer; user-select: none; transition: all 0.2s;">Households</th>
+                                            <th class="feature-column" data-feature="longitude" style="padding: 8px; text-align: center; font-size: 0.8em; cursor: pointer; user-select: none; transition: all 0.2s;">Longitude</th>
+                                            <th class="feature-column" data-feature="latitude" style="padding: 8px; text-align: center; font-size: 0.8em; cursor: pointer; user-select: none; transition: all 0.2s;">Latitude</th>
+                                            <th style="padding: 8px; text-align: center; font-size: 0.8em; background: rgba(234,179,8,0.1);">Actual Price</th>
+                                            <th style="padding: 8px; text-align: center; font-size: 0.8em; background: rgba(102,126,234,0.1);">Predicted</th>
+                                            <th style="padding: 8px; text-align: center; font-size: 0.8em; border-left: 1px solid #e0e0e0;">Loss</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="test-spreadsheet-tbody">
+                                        <!-- Data rows will be inserted here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div style="background: #333; color: white; padding: 8px; position: sticky; bottom: 0;">
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <tr>
+                                        <td style="padding: 4px; text-align: right; font-weight: bold; font-size: 0.9em;">Average Test Loss:</td>
+                                        <td id="test-avg-loss" style="padding: 4px; text-align: left; font-weight: bold; font-size: 1.1em; color: #4caf50;">0.00</td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
+                </div>
                 
                 <!-- Standard navigation -->
-                ${typeof createStandardNavigation === 'function' ? createStandardNavigation() : ''}
+                <div style="width: 100%; box-sizing: border-box;">
+                    ${typeof createStandardNavigation === 'function' ? createStandardNavigation() : ''}
+                </div>
                 
                 <style>
+                    body {
+                        margin: 0;
+                        padding: 0;
+                        box-sizing: border-box;
+                    }
+                    * {
+                        box-sizing: border-box;
+                    }
                     .percent-btn.active {
                         background: #667eea !important;
                         color: white !important;
@@ -842,6 +832,18 @@ window.createRealWorldData1 = function() {
                         padding: 2px 4px;
                         border-radius: 3px;
                         font-family: monospace;
+                    }
+                    #train-spreadsheet-tbody tr:hover,
+                    #test-spreadsheet-tbody tr:hover {
+                        background: rgba(0,0,0,0.03);
+                    }
+                    .feature-column {
+                        position: relative;
+                        transition: all 0.2s ease;
+                    }
+                    .feature-column:hover {
+                        background: #e8e8e8 !important;
+                        transform: scale(1.02);
                     }
                 </style>
             `;

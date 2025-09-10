@@ -1,7 +1,7 @@
 /**
- * Gradient Descent Math Quiz
+ * Gradient Descent Math Quiz - Bunny Pricing Edition
  * 
- * Quiz level where users calculate parameter updates themselves
+ * Quiz level testing concepts from the Bunny Pricing Optimization activity
  */
 
 window.createGradientDescentMathQuiz = function() {
@@ -10,72 +10,88 @@ window.createGradientDescentMathQuiz = function() {
         constructor() {
             super({
                 id: 'gradient-descent-math-quiz',
-                name: 'Gradient Descent Math Quiz',
+                name: 'Bunny Pricing Math Quiz',
                 type: 'interactive',
-                description: 'Test your understanding by calculating parameter updates'
+                description: ''
             });
             
             this.currentProblem = 0;
             this.problems = [
                 {
-                    id: 'simple',
-                    title: 'Problem 1: Simple Weight Update',
-                    function: 'f(x) = w × x',
+                    id: 'single-bunny',
+                    title: 'Problem 1: Single Bunny Price Update',
+                    context: 'You have ONE bunny to price using: Price = W_age × Age + W_kg × Weight',
+                    function: 'Price = W_age × Age + W_kg × Kg',
                     given: {
-                        x: 4,
-                        y_true: 20,
-                        w: 3,
-                        lr: 0.1
+                        age: 4,
+                        kg: 2.5,
+                        true_price: 200,
+                        w_age: 30,
+                        w_kg: 40,
+                        lr: 0.01
                     },
                     questions: [
-                        { id: 'prediction', label: 'Prediction', answer: 12 },
-                        { id: 'error', label: 'Error', answer: -8 },
-                        { id: 'gradient', label: 'Gradient (2×error×x)', answer: -64 },
-                        { id: 'w_new', label: 'New weight', answer: 9.4 }
+                        { id: 'estimate', label: 'Your price estimate', answer: 220, hint: '30×4 + 40×2.5' },
+                        { id: 'error', label: 'Error (Estimate - True)', answer: 20, hint: '220 - 200' },
+                        { id: 'age_update', label: 'Age coefficient update (Error × Age × LR)', answer: 0.8, hint: '20 × 4 × 0.01' },
+                        { id: 'kg_update', label: 'Kg coefficient update (Error × Kg × LR)', answer: 0.5, hint: '20 × 2.5 × 0.01' },
+                        { id: 'w_age_new', label: 'New W_age (Old + Update)', answer: 30.8, hint: '30 + 0.8' },
+                        { id: 'w_kg_new', label: 'New W_kg (Old + Update)', answer: 40.5, hint: '40 + 0.5' }
                     ]
                 },
                 {
-                    id: 'with-bias',
-                    title: 'Problem 2: Weight and Bias Update',
-                    function: 'f(x) = w × x + b',
+                    id: 'two-bunnies',
+                    title: 'Problem 2: Two Bunnies Total Error',
+                    context: 'Calculate the TOTAL error for TWO bunnies, then the updates',
+                    function: 'Price = W_age × Age + W_kg × Kg',
+                    bunnies: [
+                        { name: 'Bunny 1', age: 3, kg: 2.0, true_price: 150 },
+                        { name: 'Bunny 2', age: 5, kg: 3.0, true_price: 250 }
+                    ],
                     given: {
-                        x: 3,
-                        y_true: 17,
-                        w: 4,
-                        b: 2,
-                        lr: 0.05
+                        w_age: 20,
+                        w_kg: 50,
+                        lr: 0.001
                     },
                     questions: [
-                        { id: 'prediction', label: 'Prediction', answer: 14 },
-                        { id: 'error', label: 'Error', answer: -3 },
-                        { id: 'gradient_w', label: 'Weight gradient', answer: -18 },
-                        { id: 'gradient_b', label: 'Bias gradient', answer: -6 },
-                        { id: 'w_new', label: 'New weight', answer: 4.9 },
-                        { id: 'b_new', label: 'New bias', answer: 2.3 }
+                        { id: 'bunny1_estimate', label: 'Bunny 1 estimate', answer: 160, hint: '20×3 + 50×2' },
+                        { id: 'bunny1_error', label: 'Bunny 1 error', answer: 10, hint: '160 - 150' },
+                        { id: 'bunny2_estimate', label: 'Bunny 2 estimate', answer: 250, hint: '20×5 + 50×3' },
+                        { id: 'bunny2_error', label: 'Bunny 2 error', answer: 0, hint: '250 - 250' },
+                        { id: 'total_error', label: 'Total error (sum)', answer: 10, hint: '10 + 0' },
+                        { id: 'sum_age', label: 'Sum of ages', answer: 8, hint: '3 + 5' },
+                        { id: 'sum_kg', label: 'Sum of weights', answer: 5, hint: '2 + 3' },
+                        { id: 'age_update', label: 'W_age update (TotalError × SumAge × LR)', answer: 0.08, hint: '10 × 8 × 0.001' },
+                        { id: 'kg_update', label: 'W_kg update (TotalError × SumKg × LR)', answer: 0.05, hint: '10 × 5 × 0.001' }
                     ]
                 },
                 {
-                    id: 'multiple',
-                    title: 'Problem 3: Multiple Parameters',
-                    function: 'f(x) = w1×x1 + w2×x2 + b',
+                    id: 'three-bunnies',
+                    title: 'Problem 3: Three Bunnies (Like the Activity!)',
+                    context: 'This is similar to what you did in the bunny pricing activity!',
+                    function: 'Price = W_age × Age + W_kg × Kg',
+                    bunnies: [
+                        { name: 'Bunny 1', age: 5, kg: 2.0, true_price: 250 },
+                        { name: 'Bunny 2', age: 2, kg: 3.0, true_price: 380 },
+                        { name: 'Bunny 3', age: 8, kg: 2.5, true_price: 180 }
+                    ],
                     given: {
-                        x1: 2,
-                        x2: 5,
-                        y_true: 30,
-                        w1: 3,
-                        w2: 4,
-                        b: 1,
-                        lr: 0.02
+                        w_age: 20,
+                        w_kg: 30,
+                        lr: 0.001
                     },
                     questions: [
-                        { id: 'prediction', label: 'Prediction (w1×x1 + w2×x2 + b)', answer: 27 },
-                        { id: 'error', label: 'Error', answer: -3 },
-                        { id: 'gradient_w1', label: 'Gradient w1 (2×error×x1)', answer: -12 },
-                        { id: 'gradient_w2', label: 'Gradient w2 (2×error×x2)', answer: -30 },
-                        { id: 'gradient_b', label: 'Gradient bias', answer: -6 },
-                        { id: 'w1_new', label: 'New w1', answer: 3.24 },
-                        { id: 'w2_new', label: 'New w2', answer: 4.6 },
-                        { id: 'b_new', label: 'New bias', answer: 1.12 }
+                        { id: 'bunny1_estimate', label: 'Bunny 1 estimate', answer: 160, hint: '20×5 + 30×2' },
+                        { id: 'bunny1_error', label: 'Bunny 1 error', answer: -90, hint: '160 - 250' },
+                        { id: 'bunny2_estimate', label: 'Bunny 2 estimate', answer: 130, hint: '20×2 + 30×3' },
+                        { id: 'bunny2_error', label: 'Bunny 2 error', answer: -250, hint: '130 - 380' },
+                        { id: 'bunny3_estimate', label: 'Bunny 3 estimate', answer: 235, hint: '20×8 + 30×2.5' },
+                        { id: 'bunny3_error', label: 'Bunny 3 error', answer: 55, hint: '235 - 180' },
+                        { id: 'total_error', label: 'Total error (sum)', answer: -285, hint: '-90 + (-250) + 55' },
+                        { id: 'age_update', label: 'W_age update (Error × 15 × LR)', answer: -4.275, hint: '-285 × 15 × 0.001' },
+                        { id: 'kg_update', label: 'W_kg update (Error × 7.5 × LR)', answer: -2.1375, hint: '-285 × 7.5 × 0.001' },
+                        { id: 'w_age_new', label: 'New W_age', answer: 15.725, hint: '20 + (-4.275)' },
+                        { id: 'w_kg_new', label: 'New W_kg', answer: 27.8625, hint: '30 + (-2.1375)' }
                     ]
                 }
             ];
@@ -100,12 +116,6 @@ window.createGradientDescentMathQuiz = function() {
         _generateMainContent() {
             return `
                 <div style="max-height: 80vh; display: flex; flex-direction: column; gap: 20px; padding: 20px;">
-                    <!-- Title -->
-                    <div style="text-align: center;">
-                        <h2 style="color: #333; margin: 0;">🎯 Gradient Descent Math Quiz</h2>
-                        <p style="color: #666; margin-top: 10px;">Calculate the parameter updates step by step!</p>
-                    </div>
-                    
                     <!-- Progress Bar -->
                     <div style="background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                         <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
@@ -123,16 +133,38 @@ window.createGradientDescentMathQuiz = function() {
                         <div style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                             <h3 id="problem-title" style="color: #667eea; margin: 0 0 15px 0;">Problem 1: Simple Weight Update</h3>
                             
+                            <!-- Context -->
+                            <div id="problem-context" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; display: none;">
+                                <p style="color: #666; margin: 0; font-size: 0.95rem;"></p>
+                            </div>
+                            
                             <!-- Function -->
-                            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                                <div style="font-family: 'Courier New', monospace; font-size: 1.1rem; color: #333; text-align: center;">
-                                    <span id="function-display">f(x) = w × x</span>
+                            <div style="background: linear-gradient(135deg, #667eea, #764ba2); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                                <div style="font-family: 'Courier New', monospace; font-size: 1.1rem; color: white; text-align: center;">
+                                    <span id="function-display">Price = W_age × Age + W_kg × Kg</span>
                                 </div>
+                            </div>
+                            
+                            <!-- Bunny Data Table (for multi-bunny problems) -->
+                            <div id="bunny-data" style="background: white; border: 2px solid #e0e0e0; border-radius: 8px; margin-bottom: 15px; display: none;">
+                                <table style="width: 100%; border-collapse: collapse;">
+                                    <thead>
+                                        <tr style="background: #f5f5f5;">
+                                            <th style="padding: 10px; border-bottom: 2px solid #e0e0e0;">🐰</th>
+                                            <th style="padding: 10px; border-bottom: 2px solid #e0e0e0;">Age</th>
+                                            <th style="padding: 10px; border-bottom: 2px solid #e0e0e0;">Kg</th>
+                                            <th style="padding: 10px; border-bottom: 2px solid #e0e0e0;">True Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bunny-data-body">
+                                        <!-- Will be filled dynamically -->
+                                    </tbody>
+                                </table>
                             </div>
                             
                             <!-- Given Values -->
                             <div style="background: #f0f7ff; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                                <h4 style="color: #333; margin: 0 0 10px 0;">📋 Given:</h4>
+                                <h4 style="color: #333; margin: 0 0 10px 0;">📋 Given Parameters:</h4>
                                 <div id="given-values" style="font-family: 'Courier New', monospace; line-height: 1.8;">
                                     <!-- Will be filled dynamically -->
                                 </div>
@@ -140,13 +172,13 @@ window.createGradientDescentMathQuiz = function() {
                             
                             <!-- Hints -->
                             <div style="background: #fff9e6; padding: 15px; border-radius: 8px;">
-                                <h4 style="color: #f39c12; margin: 0 0 10px 0;">💡 Remember:</h4>
+                                <h4 style="color: #f39c12; margin: 0 0 10px 0;">💡 Key Formulas:</h4>
                                 <div style="font-size: 0.9rem; color: #666; line-height: 1.6;">
-                                    <div>• Error = Prediction - Target</div>
-                                    <div>• Gradient = 2 × Error × Input</div>
-                                    <div>• New = Old - LearningRate × Gradient</div>
-                                    <div style="margin-top: 8px; color: #999; font-size: 0.85rem;">
-                                        Round to 2 decimal places
+                                    <div>• <strong>Error</strong> = Estimate - True Price</div>
+                                    <div>• <strong>Update</strong> = Error × Feature × Learning Rate</div>
+                                    <div>• <strong>New Weight</strong> = Old Weight + Update</div>
+                                    <div style="margin-top: 8px; padding: 8px; background: #fff3cd; border-radius: 4px;">
+                                        <strong>🎯 Tip:</strong> Click on any answer field to see a hint!
                                     </div>
                                 </div>
                             </div>
@@ -284,12 +316,45 @@ window.createGradientDescentMathQuiz = function() {
             document.getElementById('problem-title').textContent = problem.title;
             document.getElementById('function-display').textContent = problem.function;
             
-            // Update given values
+            // Show context if available
+            const contextEl = document.getElementById('problem-context');
+            if (contextEl && problem.context) {
+                contextEl.style.display = 'block';
+                contextEl.querySelector('p').textContent = problem.context;
+            } else if (contextEl) {
+                contextEl.style.display = 'none';
+            }
+            
+            // Show bunny data table for multi-bunny problems
+            const bunnyDataEl = document.getElementById('bunny-data');
+            const bunnyDataBody = document.getElementById('bunny-data-body');
+            if (problem.bunnies && bunnyDataEl && bunnyDataBody) {
+                bunnyDataEl.style.display = 'block';
+                bunnyDataBody.innerHTML = problem.bunnies.map((bunny, i) => `
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;">${bunny.name}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; text-align: center;">${bunny.age}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; text-align: center;">${bunny.kg}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e0e0e0; text-align: center; color: #27ae60; font-weight: bold;">${bunny.true_price}</td>
+                    </tr>
+                `).join('');
+            } else if (bunnyDataEl) {
+                bunnyDataEl.style.display = 'none';
+            }
+            
+            // Update given values (filter out data that's in the bunny table)
             const givenEl = document.getElementById('given-values');
             if (givenEl) {
                 let givenHTML = '';
                 for (const [key, value] of Object.entries(problem.given)) {
-                    const displayKey = key === 'lr' ? 'α' : key === 'y_true' ? 'target' : key;
+                    let displayKey = key;
+                    if (key === 'lr') displayKey = 'Learning Rate (α)';
+                    else if (key === 'w_age') displayKey = 'W_age';
+                    else if (key === 'w_kg') displayKey = 'W_kg';
+                    else if (key === 'age') displayKey = 'Age';
+                    else if (key === 'kg') displayKey = 'Weight (kg)';
+                    else if (key === 'true_price') displayKey = 'True Price';
+                    
                     givenHTML += `<div>${displayKey} = <span style="color: #667eea; font-weight: bold;">${value}</span></div>`;
                 }
                 givenEl.innerHTML = givenHTML;
@@ -298,11 +363,25 @@ window.createGradientDescentMathQuiz = function() {
             // Create question inputs
             const questionsEl = document.getElementById('questions-container');
             if (questionsEl) {
-                questionsEl.innerHTML = problem.questions.map(q => `
-                    <div style="background: #f8f9fa; padding: 12px; border-radius: 8px;">
-                        <label style="display: block; color: #666; font-size: 0.9rem; margin-bottom: 5px;">
-                            ${q.label}:
-                        </label>
+                questionsEl.innerHTML = problem.questions.map((q, index) => `
+                    <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; position: relative;">
+                        <div style="display: flex; justify-content: space-between; align-items: start;">
+                            <label style="display: block; color: #666; font-size: 0.9rem; margin-bottom: 5px; flex: 1;">
+                                <span style="color: #667eea; font-weight: bold;">${index + 1}.</span> ${q.label}:
+                            </label>
+                            ${q.hint ? `
+                                <button class="hint-btn" data-hint="${q.hint.replace(/"/g, '&quot;')}" style="
+                                    background: #667eea;
+                                    color: white;
+                                    border: none;
+                                    border-radius: 4px;
+                                    padding: 2px 8px;
+                                    font-size: 0.75rem;
+                                    cursor: pointer;
+                                    margin-left: 10px;
+                                ">Hint</button>
+                            ` : ''}
+                        </div>
                         <input type="number" 
                             id="answer-${q.id}" 
                             data-question="${q.id}"
@@ -317,8 +396,37 @@ window.createGradientDescentMathQuiz = function() {
                             "
                             placeholder="Enter your answer">
                         <div id="feedback-${q.id}" style="margin-top: 5px; font-size: 0.85rem;"></div>
+                        <div id="hint-${q.id}" style="
+                            display: none;
+                            margin-top: 8px;
+                            padding: 8px;
+                            background: #e3f2fd;
+                            border-left: 3px solid #667eea;
+                            border-radius: 4px;
+                            font-size: 0.85rem;
+                            color: #1976d2;
+                        "></div>
                     </div>
                 `).join('');
+                
+                // Add hint button listeners
+                document.querySelectorAll('.hint-btn').forEach(btn => {
+                    this.addEventListenerWithCleanup(btn, 'click', (e) => {
+                        const hint = e.target.getAttribute('data-hint');
+                        const questionDiv = e.target.closest('div[style]');
+                        const hintDiv = questionDiv.querySelector('[id^="hint-"]');
+                        if (hintDiv) {
+                            if (hintDiv.style.display === 'none') {
+                                hintDiv.textContent = `💡 Hint: ${hint}`;
+                                hintDiv.style.display = 'block';
+                                e.target.textContent = 'Hide';
+                            } else {
+                                hintDiv.style.display = 'none';
+                                e.target.textContent = 'Hint';
+                            }
+                        }
+                    });
+                });
                 
                 // Add input listeners
                 problem.questions.forEach(q => {
@@ -363,15 +471,29 @@ window.createGradientDescentMathQuiz = function() {
                 if (input && feedbackEl) {
                     const userAnswer = parseFloat(input.value) || 0;
                     const correctAnswer = q.answer;
-                    const tolerance = 0.01; // Allow small rounding differences
+                    
+                    // More forgiving tolerance for decimal answers
+                    const tolerance = Math.abs(correctAnswer) * 0.02 + 0.1; // 2% of answer + 0.1 base tolerance
                     
                     if (Math.abs(userAnswer - correctAnswer) <= tolerance) {
                         correct++;
                         input.style.borderColor = '#2dd573';
-                        feedbackEl.innerHTML = '<span style="color: #2dd573;">✓ Correct!</span>';
+                        input.style.background = '#f0fff4';
+                        feedbackEl.innerHTML = '<span style="color: #2dd573; font-weight: bold;">✓ Correct! 🎉</span>';
                     } else {
                         input.style.borderColor = '#e53e3e';
-                        feedbackEl.innerHTML = `<span style="color: #e53e3e;">✗ Correct answer: ${correctAnswer}</span>`;
+                        input.style.background = '#fff5f5';
+                        const difference = Math.abs(userAnswer - correctAnswer);
+                        let message = `<span style="color: #e53e3e;">✗ Expected: ${correctAnswer}</span>`;
+                        
+                        // Provide encouraging feedback based on how close they were
+                        if (difference < 1) {
+                            message += `<br><span style="color: #f39c12; font-size: 0.8rem;">Very close! Check your calculation.</span>`;
+                        } else if (difference < 10) {
+                            message += `<br><span style="color: #e74c3c; font-size: 0.8rem;">You're in the right direction!</span>`;
+                        }
+                        
+                        feedbackEl.innerHTML = message;
                     }
                 }
             });
@@ -401,24 +523,37 @@ window.createGradientDescentMathQuiz = function() {
             const feedbackEl = document.getElementById('feedback');
             if (feedbackEl) {
                 const percentage = Math.round((score.correct / score.total) * 100);
-                let message, bgColor;
+                let message, bgColor, bunnyReaction;
                 
                 if (percentage === 100) {
-                    message = '🎉 Perfect! All answers correct!';
-                    bgColor = 'rgba(45,213,115,0.1)';
+                    message = 'Perfect! The bunnies are thrilled!';
+                    bgColor = 'linear-gradient(135deg, rgba(45,213,115,0.1), rgba(45,213,115,0.2))';
+                    bunnyReaction = '🐰🎉';
                 } else if (percentage >= 70) {
-                    message = '👍 Good job! Most answers correct.';
-                    bgColor = 'rgba(255,193,7,0.1)';
+                    message = 'Great job! The bunnies are happy!';
+                    bgColor = 'linear-gradient(135deg, rgba(255,193,7,0.1), rgba(255,193,7,0.2))';
+                    bunnyReaction = '🐰👍';
                 } else {
-                    message = '📚 Review the calculations and try again.';
-                    bgColor = 'rgba(229,62,62,0.1)';
+                    message = 'Keep trying! The bunnies are cheering for you!';
+                    bgColor = 'linear-gradient(135deg, rgba(229,62,62,0.1), rgba(229,62,62,0.2))';
+                    bunnyReaction = '🐰💪';
                 }
                 
                 feedbackEl.style.background = bgColor;
                 feedbackEl.style.display = 'block';
+                feedbackEl.style.border = '2px solid rgba(102, 126, 234, 0.2)';
                 feedbackEl.innerHTML = `
-                    <div style="font-weight: bold; margin-bottom: 5px;">${message}</div>
-                    <div style="color: #666;">Score: ${score.correct}/${score.total} (${percentage}%)</div>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+                        <span style="font-size: 1.5rem;">${bunnyReaction}</span>
+                        <span style="font-weight: bold; color: #333;">${message}</span>
+                    </div>
+                    <div style="color: #666; font-size: 0.9rem;">Score: ${score.correct}/${score.total} questions correct (${percentage}%)</div>
+                    ${percentage < 100 ? `
+                        <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(0,0,0,0.1);">
+                            <span style="color: #667eea; font-size: 0.85rem; font-weight: bold;">💡 Tip:</span>
+                            <span style="color: #666; font-size: 0.85rem;"> Click the "Hint" buttons to see calculation steps!</span>
+                        </div>
+                    ` : ''}
                 `;
             }
         }
@@ -440,20 +575,26 @@ window.createGradientDescentMathQuiz = function() {
             if (scoreEl && finalScoreEl) {
                 scoreEl.style.display = 'block';
                 
-                let message;
+                let message, bunnyEmoji;
                 if (percentage === 100) {
-                    message = '🏆 Perfect Score! You\'ve mastered gradient descent math!';
+                    message = 'Perfect Score! The bunnies are doing backflips of joy!';
+                    bunnyEmoji = '🐰🎉🏆';
                 } else if (percentage >= 80) {
-                    message = '🌟 Great Work! You understand the concepts well!';
+                    message = 'Excellent! The bunnies are hopping with happiness!';
+                    bunnyEmoji = '🐰🌟✨';
                 } else if (percentage >= 60) {
-                    message = '👍 Good Effort! Keep practicing!';
+                    message = 'Good job! The bunnies are pleased with your progress!';
+                    bunnyEmoji = '🐰👍🌼';
                 } else {
-                    message = '📚 Keep Learning! Review the examples and try again.';
+                    message = 'Keep practicing! The bunnies believe in you!';
+                    bunnyEmoji = '🐰💪📚';
                 }
                 
                 finalScoreEl.innerHTML = `
-                    <div>${message}</div>
-                    <div style="margin-top: 10px;">Final Score: ${totalCorrect}/${totalQuestions} (${percentage}%)</div>
+                    <div style="font-size: 2rem; margin-bottom: 10px;">${bunnyEmoji}</div>
+                    <div style="font-size: 1.2rem; margin-bottom: 15px;">${message}</div>
+                    <div style="font-size: 1.8rem; font-weight: bold;">${totalCorrect}/${totalQuestions}</div>
+                    <div style="font-size: 1rem; opacity: 0.9;">(${percentage}% Correct)</div>
                 `;
                 
                 // Complete the level

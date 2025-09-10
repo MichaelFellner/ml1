@@ -12,7 +12,7 @@ window.createTrainingDataSpreadsheet = function() {
                 id: 'training-data-spreadsheet',
                 name: 'Training Data Spreadsheet',
                 type: 'demonstration',
-                description: 'Explore what training data looks like in practice',
+                description: '',
                 instructions: '',  // Empty instructions to avoid undefined
                 concepts: ['Training Data', 'Features', 'Targets'],
                 difficulty: 'beginner',
@@ -73,15 +73,22 @@ window.createTrainingDataSpreadsheet = function() {
             `).join('');
             
             return `
-                <div style="max-height: 85vh; display: flex; flex-direction: column; gap: 10px; padding: 15px;">
+                <div style="max-height: 50vh; display: flex; flex-direction: column; gap: 10px; padding: 15px;">
                     <!-- Header -->
                     <div style="text-align: center;">
                         <h2 style="margin: 10px 0 5px 0; color: #333;">Training Data: 50 Examples</h2>
                         <p style="color: #666; margin: 5px 0; font-size: 0.95em;">This is what training data looks like - many examples with inputs (features) and correct outputs (targets)</p>
                     </div>
                     
+                    <!-- Info Bubble -->
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 12px 16px; color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 2px;">
+                        <p style="margin: 0; font-size: 0.9em; text-align: center;">
+                            💡 <strong>Each row is one training example.</strong> The model will learn patterns from these examples to predict the target value from the features.
+                        </p>
+                    </div>
+                    
                     <!-- Spreadsheet Container -->
-                    <div style="flex: 1; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; min-height: 500px;">
+                    <div style="flex: 1; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; min-height: 300px;">
                         <!-- Table wrapper with scroll -->
                         <div style="flex: 1; overflow-y: auto; overflow-x: auto;">
                             <table style="width: 100%; border-collapse: collapse; font-family: 'Monaco', 'Courier New', monospace;">

@@ -13,7 +13,7 @@ window.createTrainingDataGradientDescent = function() {
                 id: 'training-data-gradient-descent',
                 name: 'Gradient Descent Weight Optimizer',
                 type: 'interactive',
-                description: 'Use gradient descent to automatically find optimal weights',
+                description: '',
                 instructions: '',  // Empty to avoid undefined
                 concepts: ['Gradient Descent', 'Learning Rate', 'Convergence', 'Training'],
                 difficulty: 'intermediate',
@@ -94,7 +94,6 @@ window.createTrainingDataGradientDescent = function() {
                     e.target.classList.add('active');
                     // Update learning rate
                     this.learningRate = parseFloat(e.target.dataset.rate);
-                    document.getElementById('current-learning-rate').textContent = this.learningRate;
                 });
             });
             
@@ -361,45 +360,63 @@ window.createTrainingDataGradientDescent = function() {
             
             return `
                 <div style="max-height: 90vh; display: flex; flex-direction: column; gap: 10px; padding: 10px;">
+                    <!-- Info Bubble -->
+                    <div style="
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                        padding: 8px 12px;
+                        border-radius: 12px 12px 0 0;
+                        margin-bottom: -2px;
+                        font-size: 0.85em;
+                        text-align: center;
+                        position: relative;
+                        box-shadow: 0 -2px 8px rgba(102, 126, 234, 0.2);
+                    ">
+                        💡 <strong>Tip:</strong> Watch how different learning rates affect training speed. Too large and it overshoots, too small and it's slow!
+                    </div>
                     <!-- Compact Header with Controls -->
-                    <div style="background: white; border-radius: 8px; padding: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <div style="background: white; border-radius: 0 0 8px 8px; padding: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                             <!-- Learning Rate Selection -->
                             <div style="display: flex; gap: 10px; align-items: center;">
                                 <span style="font-weight: bold; color: #555; font-size: 0.9em;">Learning Rate:</span>
                                 <button class="learning-rate-btn" data-rate="1" style="
-                                    padding: 6px 12px;
-                                    background: #ff6b6b;
-                                    color: white;
-                                    border: none;
-                                    border-radius: 6px;
+                                    padding: 8px 14px;
+                                    background: #e0e0e0;
+                                    color: #666;
+                                    border: 2px solid transparent;
+                                    border-radius: 20px;
                                     font-size: 0.85em;
                                     cursor: pointer;
                                     transition: all 0.3s;
+                                    font-weight: 500;
                                 ">
                                     Large (1)
                                 </button>
                                 <button class="learning-rate-btn active" data-rate="0.01" style="
-                                    padding: 6px 12px;
+                                    padding: 8px 14px;
                                     background: #4ecdc4;
                                     color: white;
-                                    border: none;
-                                    border-radius: 6px;
+                                    border: 2px solid #4ecdc4;
+                                    border-radius: 20px;
                                     font-size: 0.85em;
                                     cursor: pointer;
                                     transition: all 0.3s;
+                                    font-weight: 500;
+                                    box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
                                 ">
                                     Medium (0.01)
                                 </button>
                                 <button class="learning-rate-btn" data-rate="0.001" style="
-                                    padding: 6px 12px;
-                                    background: #95e77e;
-                                    color: white;
-                                    border: none;
-                                    border-radius: 6px;
+                                    padding: 8px 14px;
+                                    background: #e0e0e0;
+                                    color: #666;
+                                    border: 2px solid transparent;
+                                    border-radius: 20px;
                                     font-size: 0.85em;
                                     cursor: pointer;
                                     transition: all 0.3s;
+                                    font-weight: 500;
                                 ">
                                     Small (0.001)
                                 </button>
@@ -468,10 +485,6 @@ window.createTrainingDataGradientDescent = function() {
                                 <span style="font-size: 0.75em; color: #666;">w₃</span>
                                 <div id="w3-display" style="font-size: 1.1em; font-weight: bold; color: #667eea;">1.00</div>
                             </div>
-                            <div style="text-align: center;">
-                                <span style="font-size: 0.75em; color: #666;">α</span>
-                                <div id="current-learning-rate" style="font-size: 1.1em; font-weight: bold; color: #ff9800;">0.01</div>
-                            </div>
                         </div>
                     </div>
                     
@@ -516,22 +529,57 @@ window.createTrainingDataGradientDescent = function() {
                 ${typeof createStandardNavigation === 'function' ? createStandardNavigation() : ''}
                 
                 <style>
-                    .learning-rate-btn:hover:not(:disabled) {
-                        transform: translateY(-1px);
-                        box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+                    .learning-rate-btn {
+                        position: relative;
                     }
+                    
+                    .learning-rate-btn:not(.active) {
+                        background: #e0e0e0 !important;
+                        color: #666 !important;
+                        border: 2px solid transparent !important;
+                    }
+                    
+                    .learning-rate-btn:hover:not(:disabled):not(.active) {
+                        background: #d0d0d0 !important;
+                        transform: translateY(-1px);
+                    }
+                    
                     .learning-rate-btn.active {
                         transform: scale(1.05);
-                        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                        font-weight: 600 !important;
                     }
+                    
+                    .learning-rate-btn.active[data-rate="1"] {
+                        background: #ff6b6b !important;
+                        color: white !important;
+                        border: 2px solid #ff6b6b !important;
+                        box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.2) !important;
+                    }
+                    
+                    .learning-rate-btn.active[data-rate="0.01"] {
+                        background: #4ecdc4 !important;
+                        color: white !important;
+                        border: 2px solid #4ecdc4 !important;
+                        box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2) !important;
+                    }
+                    
+                    .learning-rate-btn.active[data-rate="0.001"] {
+                        background: #95e77e !important;
+                        color: white !important;
+                        border: 2px solid #95e77e !important;
+                        box-shadow: 0 0 0 3px rgba(149, 231, 126, 0.2) !important;
+                    }
+                    
                     .learning-rate-btn:disabled {
                         opacity: 0.5;
                         cursor: not-allowed;
                     }
+                    
                     button:not(:disabled):hover {
                         transform: translateY(-1px);
                         box-shadow: 0 3px 8px rgba(0,0,0,0.2);
                     }
+                    
                     button:disabled {
                         opacity: 0.5;
                         cursor: not-allowed;

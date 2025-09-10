@@ -60,7 +60,7 @@ const NAVIGATION_CONFIG = {
                 //{ id: "step-size-teaching", name: "Step Size Teaching", func: "createStepSizeTeaching" },
                 { id: "pizza-production", name: "Pizza Production Challenge", func: "createPizzaProduction" },
                 //{ id: "pizza-production-behind-scenes", name: "Pizza: Two-Parameter Math Revealed", func: "createPizzaProductionBehindScenes" },
-                { id: "music-studio-mixer", name: "Music Studio Mixer", func: "createMusicStudioMixer" },
+                //{ id: "music-studio-mixer", name: "Music Studio Mixer", func: "createMusicStudioMixer" },
                 // { id: "gradient-descent-math-simple", name: "Gradient Math: Simple Case", func: "createGradientDescentMathSimple" },
                 // { id: "gradient-descent-math-bias", name: "Gradient Math: Adding Bias", func: "createGradientDescentMathBias" },
                 // { id: "gradient-descent-math-multiple", name: "Gradient Math: Multiple Parameters", func: "createGradientDescentMathMultiple" },
@@ -77,10 +77,12 @@ const NAVIGATION_CONFIG = {
                 { id: "training-data-gradient-descent", name: "Gradient Descent Weight Optimizer", func: "createTrainingDataGradientDescent" },
                 { id: "training-test-data-explanation", name: "Training vs Test Data", func: "createTrainingTestDataExplanation" },
                 { id: "training-data-size-impact", name: "Training Data Size Impact", func: "createTrainingDataSizeImpact" },
+                { id: "training-data-size-impact-250", name: "Training Data Size Impact (250 Rows)", func: "createTrainingDataSizeImpact250" },
                 { id: "training-features-explanation", name: "Understanding Training Features", func: "createTrainingFeaturesExplanation" },
+                { id: "real-world-intro", name: "Real World Introduction", func: "createRealWorldIntro" },
                 { id: "real-world-data-1", name: "Real World: California Housing", func: "createRealWorldData1" },
-                { id: "real-world-data-2", name: "Real World: Bike Sharing", func: "createRealWorldData2" },
-                { id: "training-data-quiz", name: "Training Data Quiz", func: "createTrainingDataQuiz" }
+                //{ id: "real-world-data-2", name: "Real World: Bike Sharing", func: "createRealWorldData2" },
+                //{ id: "training-data-quiz", name: "Training Data Quiz", func: "createTrainingDataQuiz" }
             ]
         },
         {

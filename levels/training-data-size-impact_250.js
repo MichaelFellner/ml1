@@ -5,13 +5,13 @@
  * Users can train on different dataset sizes and test on unseen data
  */
 
-window.createTrainingDataSizeImpact = function() {
+window.createTrainingDataSizeImpact250 = function() {
     
     class TrainingDataSizeImpactLevel extends window.BaseLevelTemplate {
         constructor() {
             super({
-                id: 'training-data-size-impact',
-                name: 'Training Data Size Impact',
+                id: 'training-data-size-impact-250',
+                name: 'Training Data Size Impact (250 Rows)',
                 type: 'interactive',
                 description: '',
                 instructions: '',
@@ -23,7 +23,7 @@ window.createTrainingDataSizeImpact = function() {
             
             this.trainingData = [];
             this.testData = [];
-            this.currentDataSize = 5;
+            this.currentDataSize = 250;
             this.isTraining = false;
             this.animationFrame = null;
             
@@ -48,12 +48,12 @@ window.createTrainingDataSizeImpact = function() {
             // Generate test data (1000 rows)
             this.generateTestData();
             
-            // Generate initial training data (always 5 rows)
-            this.generateTrainingData(5);
+            // Generate initial training data (always 250 rows)
+            this.generateTrainingData(250);
             
             // Initialize navigation
             if (typeof initializeNavigation === 'function') {
-                initializeNavigation('training-data-size-impact', 'createTrainingDataSizeImpact');
+                initializeNavigation('training-data-size-impact-250', 'createTrainingDataSizeImpact250');
             }
             
             // Setup control listeners
@@ -236,7 +236,7 @@ window.createTrainingDataSizeImpact = function() {
                 this.currentIteration++;
                 
                 // Continue training
-                const delay = 100; // Always 100ms delay for 5 rows
+                const delay = 30; // Faster delay for 250 rows
                 this.animationFrame = setTimeout(train, delay);
             };
             
@@ -313,11 +313,11 @@ window.createTrainingDataSizeImpact = function() {
             
             const accuracy = (correctPredictions / this.testData.length) * 100;
             
-            // Check for success (with only 5 data points, success is achieved if accuracy > 40%)
-            if (accuracy > 40) {
+            // Check for success (with 250 data points, success is achieved if accuracy > 90%)
+            if (accuracy > 90) {
                 if (!this.completed) {
                     this.completed = true;
-                    this.showSuccess('🎉 Good job! You managed to train a model with only 5 data points!', 5000);
+                    this.showSuccess('🎉 Excellent! Your model generalizes well with sufficient training data!', 5000);
                     setTimeout(() => {
                         this.completeLevel({ 
                             score: Math.round(accuracy),
@@ -336,8 +336,9 @@ window.createTrainingDataSizeImpact = function() {
             
             let totalError = 0;
             
-            // Show all 5 rows
-            const rows = this.trainingData.map(row => {
+            // Show only first 10 rows of 250
+            const visibleRows = this.trainingData.slice(0, Math.min(this.trainingData.length, 10));
+            const rows = visibleRows.map(row => {
                 const w1x1 = (this.weights.w1 * row.x1).toFixed(1);
                 const w2x2 = (this.weights.w2 * row.x2).toFixed(1);
                 const w3x3 = (this.weights.w3 * row.x3).toFixed(1);
@@ -365,7 +366,16 @@ window.createTrainingDataSizeImpact = function() {
                 `;
             }).join('');
             
-            tbody.innerHTML = rows;
+            // Add ellipsis row since we have 250 rows total
+            const ellipsisRow = this.trainingData.length > 10 ? `
+                <tr>
+                    <td colspan="10" style="padding: 10px; text-align: center; color: #999; font-style: italic;">
+                        ... and ${this.trainingData.length - 10} more rows ...
+                    </td>
+                </tr>
+            ` : '';
+            
+            tbody.innerHTML = rows + ellipsisRow;
             
             // Calculate total error for all data
             let fullTotalError = 0;
@@ -405,7 +415,7 @@ window.createTrainingDataSizeImpact = function() {
                     <!-- Bubble text on top -->
                     <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 12px 20px; box-shadow: 0 3px 10px rgba(0,0,0,0.2); margin-bottom: 5px;">
                         <p style="margin: 0; color: white; font-size: 0.95em; text-align: center; font-weight: 500;">
-                            📊 Watch how a model learns from just 5 data points! Train the model and test it on 1000 unseen examples.
+                            📊 Now with 250 training examples! See how more data dramatically improves model performance.
                         </p>
                     </div>
                     
@@ -453,7 +463,7 @@ window.createTrainingDataSizeImpact = function() {
                         <div style="display: flex; justify-content: space-around; margin-top: 10px; padding-top: 10px; border-top: 1px solid #e0e0e0; width: 100%;">
                             <div style="text-align: center;">
                                 <span style="font-size: 0.75em; color: #666;">Dataset</span>
-                                <div id="dataset-size" style="font-size: 1.1em; font-weight: bold; color: #333;">5</div>
+                                <div id="dataset-size" style="font-size: 1.1em; font-weight: bold; color: #333;">250</div>
                             </div>
                             <div style="text-align: center;">
                                 <span style="font-size: 0.75em; color: #666;">Iteration</span>
@@ -483,7 +493,7 @@ window.createTrainingDataSizeImpact = function() {
                         <!-- Left: Training Spreadsheet -->
                         <div style="flex: 1.5; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column;">
                             <div style="padding: 10px; background: #667eea; color: white; font-weight: bold; text-align: center;">
-                                Training Data (5 Rows)
+                                Training Data (250 Rows)
                             </div>
                             <div style="flex: 1; overflow-y: auto; overflow-x: auto;">
                                 <table style="width: 100%; border-collapse: collapse; font-family: 'Monaco', 'Courier New', monospace;">
@@ -589,5 +599,5 @@ window.createTrainingDataSizeImpact = function() {
 
 // Export for modules if needed
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = window.createTrainingDataSizeImpact;
+    module.exports = window.createTrainingDataSizeImpact250;
 }

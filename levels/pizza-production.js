@@ -461,9 +461,9 @@ window.createPizzaProduction = function() {
                         </div>
                         
                         <!-- Bunny Farm Visualization -->
-                        <div id="bunny-farm-container" style="flex: 1; max-width: 450px; min-width: 350px; height: 260px; background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 40%, #90EE90 40%, #90EE90 100%); border-radius: 15px; padding: 15px; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 2px solid #e0e0e0;">
+                        <div id="bunny-farm-container" style="flex: 1; max-width: 450px; min-width: 350px; height: 260px; background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 40%, #90EE90 40%, #90EE90 100%); border-radius: 15px; padding: 15px; padding-top: 35px; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 2px solid #e0e0e0;">
                             <!-- Sky elements -->
-                            <div id="weather-container" style="position: absolute; top: 0; left: 0; right: 0; height: 40%; pointer-events: none;">
+                            <div id="weather-container" style="position: absolute; top: 0; left: 0; right: 0; height: 45%; pointer-events: none; z-index: 0;">
                                 <!-- Sun/Clouds will be dynamically updated -->
                                 <div id="sun" style="position: absolute; top: 20px; right: 30px; width: 60px; height: 60px; background: radial-gradient(circle, #FFD700, #FFA500); border-radius: 50%; box-shadow: 0 0 40px rgba(255,215,0,0.5); opacity: 0.3; transition: all 1s ease;">
                                     <div style="position: absolute; inset: -20px; background: radial-gradient(circle, rgba(255,215,0,0.3), transparent); border-radius: 50%; animation: sunPulse 3s infinite;"></div>
@@ -497,15 +497,15 @@ window.createPizzaProduction = function() {
                             </div>
                             
                             <!-- Ground elements -->
-                            <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 60%;">
+                            <div style="position: absolute; bottom: 0; left: 0; right: 0; top: 35%; overflow: visible; z-index: 1;">
                                 <!-- Flowers container -->
                                 <div id="flowers-container" style="position: absolute; bottom: 0; left: 0; right: 0; height: 100%; pointer-events: none;">
                                     <!-- Flowers will be dynamically added -->
                                 </div>
                                 
                                 <!-- Bunnies -->
-                                <div id="farm-bunny-1" class="farm-bunny" style="position: absolute; bottom: 20px; left: 40px; transition: all 0.5s ease;">
-                                    <svg width="50" height="50" viewBox="0 0 60 60">
+                                <div id="farm-bunny-1" class="farm-bunny" style="position: absolute; bottom: 15px; left: 40px; transition: all 0.5s ease; z-index: 20;">
+                                    <svg width="50" height="50" viewBox="0 0 60 60" style="overflow: visible;">
                                         <g class="bunny-body" style="transform-origin: center bottom;">
                                             <!-- Shadow -->
                                             <ellipse cx="30" cy="55" rx="15" ry="3" fill="rgba(0,0,0,0.2)"/>
@@ -538,8 +538,8 @@ window.createPizzaProduction = function() {
                                     </svg>
                                 </div>
                                 
-                                <div id="farm-bunny-2" class="farm-bunny" style="position: absolute; bottom: 35px; left: 120px; transition: all 0.5s ease;">
-                                    <svg width="45" height="45" viewBox="0 0 60 60">
+                                <div id="farm-bunny-2" class="farm-bunny" style="position: absolute; bottom: 25px; left: 120px; transition: all 0.5s ease; z-index: 25;">
+                                    <svg width="45" height="45" viewBox="0 0 60 60" style="overflow: visible;">
                                         <g class="bunny-body" style="transform-origin: center bottom;">
                                             <!-- Shadow -->
                                             <ellipse cx="30" cy="55" rx="15" ry="3" fill="rgba(0,0,0,0.2)"/>
@@ -572,8 +572,8 @@ window.createPizzaProduction = function() {
                                     </svg>
                                 </div>
                                 
-                                <div id="farm-bunny-3" class="farm-bunny" style="position: absolute; bottom: 15px; left: 200px; transition: all 0.5s ease;">
-                                    <svg width="48" height="48" viewBox="0 0 60 60">
+                                <div id="farm-bunny-3" class="farm-bunny" style="position: absolute; bottom: 10px; left: 200px; transition: all 0.5s ease; z-index: 10;">
+                                    <svg width="48" height="48" viewBox="0 0 60 60" style="overflow: visible;">
                                         <g class="bunny-body" style="transform-origin: center bottom;">
                                             <!-- Shadow -->
                                             <ellipse cx="30" cy="55" rx="15" ry="3" fill="rgba(0,0,0,0.2)"/>
@@ -612,10 +612,7 @@ window.createPizzaProduction = function() {
                                 </div>
                             </div>
                             
-                            <!-- Error status display -->
-                            <div id="farm-status" style="position: absolute; bottom: 10px; right: 10px; background: rgba(255,255,255,0.9); padding: 8px 12px; border-radius: 8px; font-size: 0.9rem; font-weight: bold; color: #2c3e50; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                                <span id="farm-error-text">Error: --</span>
-                            </div>
+                            <!-- Removed error display -->
                         </div>
                     </div>
                     
@@ -700,15 +697,23 @@ window.createPizzaProduction = function() {
                     
                     /* Bunny Farm Animations */
                     @keyframes bunnyHop {
-                        0%, 100% { transform: translateY(0) scaleY(1); }
-                        50% { transform: translateY(-15px) scaleY(0.95); }
+                        0%, 100% { transform: translateY(0px) scaleY(1); }
+                        50% { transform: translateY(-10px) scaleY(0.95); }
                     }
                     
                     @keyframes bunnyJump {
-                        0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
-                        25% { transform: translateY(-25px) rotate(-5deg) scale(1.1); }
-                        50% { transform: translateY(-40px) rotate(0deg) scale(1.15); }
-                        75% { transform: translateY(-25px) rotate(5deg) scale(1.1); }
+                        0%, 100% { 
+                            transform: translateY(0px) rotate(0deg) scale(1);
+                        }
+                        25% { 
+                            transform: translateY(-8px) rotate(-5deg) scale(1.05);
+                        }
+                        50% { 
+                            transform: translateY(-12px) rotate(0deg) scale(1.1);
+                        }
+                        75% { 
+                            transform: translateY(-8px) rotate(5deg) scale(1.05);
+                        }
                     }
                     
                     @keyframes bunnySad {
@@ -798,8 +803,14 @@ window.createPizzaProduction = function() {
                         }
                     }
                     
+                    .farm-bunny {
+                        overflow: visible;
+                        position: absolute;
+                    }
+                    
                     .farm-bunny .bunny-body {
                         animation: bunnySad 3s infinite ease-in-out;
+                        transform-origin: center bottom;
                     }
                     
                     .farm-bunny .bunny-eye {
@@ -813,6 +824,7 @@ window.createPizzaProduction = function() {
                     
                     .farm-bunny.very-happy .bunny-body {
                         animation: bunnyJump 1.5s infinite ease-in-out;
+                        transform-origin: center bottom;
                     }
                     
                     @keyframes slideIn {
@@ -998,160 +1010,166 @@ window.createPizzaProduction = function() {
             const cloud1 = document.getElementById('cloud1');
             const cloud2 = document.getElementById('cloud2');
             const rainbow = document.getElementById('rainbow');
-            const farmErrorText = document.getElementById('farm-error-text');
             const bunny1 = document.getElementById('farm-bunny-1');
             const bunny2 = document.getElementById('farm-bunny-2');
             const bunny3 = document.getElementById('farm-bunny-3');
             const flowersContainer = document.getElementById('flowers-container');
             const celebrationContainer = document.getElementById('celebration-container');
             
-            // Update error display
-            if (farmErrorText) {
-                farmErrorText.textContent = `Error: ${absTotal.toFixed(0)}`;
-                farmErrorText.style.color = absTotal === 0 ? '#27ae60' : 
-                                           absTotal < 50 ? '#3498db' : 
-                                           absTotal < 100 ? '#f39c12' : '#e74c3c';
-            }
-            
             // Clear previous celebrations
             if (celebrationContainer) {
                 celebrationContainer.innerHTML = '';
             }
             
-            // Update bunny states and environment based on error
+            // Calculate continuous values based on error (0 to 300+ range)
+            const normalizedError = Math.min(absTotal / 300, 1); // Normalize to 0-1
+            const inverseError = 1 - normalizedError; // Inverted for positive effects
+            
+            // CONTINUOUS EFFECTS
+            
+            // Sun opacity and scale (continuous)
+            if (sun) {
+                const sunOpacity = 0.2 + (inverseError * 0.8); // 0.2 to 1.0
+                const sunScale = 0.8 + (inverseError * 0.4); // 0.8 to 1.2
+                sun.style.opacity = sunOpacity.toFixed(2);
+                sun.style.transform = `scale(${sunScale.toFixed(2)})`;
+            }
+            
+            // Cloud opacity (continuous)
+            if (cloud1 && cloud2) {
+                const cloudOpacity = normalizedError * 0.8; // 0 to 0.8
+                cloud1.style.opacity = cloudOpacity.toFixed(2);
+                cloud2.style.opacity = cloudOpacity.toFixed(2);
+                
+                // Add drift animation for higher errors
+                if (cloudOpacity > 0.5) {
+                    cloud1.style.animation = 'cloudDrift 8s infinite alternate';
+                    cloud2.style.animation = 'cloudDrift 10s infinite alternate-reverse';
+                } else {
+                    cloud1.style.animation = '';
+                    cloud2.style.animation = '';
+                }
+            }
+            
+            // Sky and grass colors (continuous gradient)
+            if (farmContainer) {
+                // Sky color interpolation
+                const skyBrightness = 135 - (normalizedError * 60); // 135 to 75
+                const skyHue = 210 - (normalizedError * 20); // 210 (blue) to 190 (grayish blue)
+                const skySaturation = 70 - (normalizedError * 50); // 70 to 20
+                
+                // Grass color interpolation
+                const grassHue = 120 - (normalizedError * 20); // 120 (green) to 100 (dull green)
+                const grassSaturation = 80 - (normalizedError * 40); // 80 to 40
+                const grassLightness = 65 - (normalizedError * 25); // 65 to 40
+                
+                farmContainer.style.background = `linear-gradient(to bottom, 
+                    hsl(${skyHue}, ${skySaturation}%, ${skyBrightness - 20}%) 0%, 
+                    hsl(${skyHue}, ${skySaturation}%, ${skyBrightness}%) 40%, 
+                    hsl(${grassHue}, ${grassSaturation}%, ${grassLightness}%) 40%, 
+                    hsl(${grassHue}, ${grassSaturation - 10}%, ${grassLightness - 5}%) 100%)`;
+            }
+            
+            // Flower count (continuous with rounding)
+            const flowerCount = Math.round(7 * inverseError); // 0 to 7 flowers
+            this._addFlowers(flowerCount);
+            
+            // Bunny animation speed (continuous)
+            const animationDuration = 1.5 + (normalizedError * 2); // 1.5s to 3.5s
+            [bunny1, bunny2, bunny3].forEach(bunny => {
+                if (bunny) {
+                    const bunnyBody = bunny.querySelector('.bunny-body');
+                    if (bunnyBody) {
+                        bunnyBody.style.animationDuration = `${animationDuration}s`;
+                    }
+                }
+            });
+            
+            // DISCRETE EFFECTS (based on error thresholds)
+            
+            // Check if disco should stop
+            if (absTotal > 2) {
+                this._stopDiscoEffect();
+            }
+            
+            // Special perfect state
             if (absTotal === 0) {
-                // PERFECT! Maximum happiness!
+                // Rainbow appears only at perfection
+                if (rainbow) rainbow.style.opacity = '1';
+                
+                // Trigger celebration
+                this._triggerCelebration();
+                
+                // All bunnies very happy
                 [bunny1, bunny2, bunny3].forEach(bunny => {
                     if (bunny) {
                         bunny.classList.remove('happy');
                         bunny.classList.add('very-happy');
-                        // Change mouth to big smile
                         const mouth = bunny.querySelector('.bunny-mouth');
                         if (mouth) {
                             mouth.setAttribute('d', 'M 26 29 Q 30 32 34 29');
                         }
                     }
                 });
-                
-                // Perfect weather - bright sun, rainbow, no clouds
-                if (sun) {
-                    sun.style.opacity = '1';
-                    sun.style.transform = 'scale(1.2)';
-                }
-                if (cloud1) cloud1.style.opacity = '0';
-                if (cloud2) cloud2.style.opacity = '0';
-                if (rainbow) rainbow.style.opacity = '1';
-                
-                // Sky gradient - perfect blue
-                if (farmContainer) {
-                    farmContainer.style.background = 'linear-gradient(to bottom, #87CEEB 0%, #ADD8E6 40%, #90EE90 40%, #98FB98 100%)';
-                }
-                
-                // Add maximum flowers
-                this._addFlowers(7);
-                
-                // Trigger celebration
-                this._triggerCelebration();
-                
-            } else if (absTotal < 50) {
-                // Very good - happy bunnies
-                [bunny1, bunny2, bunny3].forEach(bunny => {
-                    if (bunny) {
-                        bunny.classList.add('happy');
-                        bunny.classList.remove('very-happy');
-                        // Happy mouth
-                        const mouth = bunny.querySelector('.bunny-mouth');
-                        if (mouth) {
-                            mouth.setAttribute('d', 'M 28 29 Q 30 31 32 29');
-                        }
-                    }
-                });
-                
-                // Good weather - some sun, few clouds
-                if (sun) {
-                    sun.style.opacity = '0.8';
-                    sun.style.transform = 'scale(1)';
-                }
-                if (cloud1) cloud1.style.opacity = '0.2';
-                if (cloud2) cloud2.style.opacity = '0.2';
-                if (rainbow) rainbow.style.opacity = '0';
-                
-                // Nice sky
-                if (farmContainer) {
-                    farmContainer.style.background = 'linear-gradient(to bottom, #87CEEB 0%, #87CEEB 40%, #90EE90 40%, #90EE90 100%)';
-                }
-                
-                // Add some flowers
-                this._addFlowers(4);
-                
-            } else if (absTotal < 100) {
-                // Okay - neutral bunnies
-                [bunny1, bunny2, bunny3].forEach(bunny => {
-                    if (bunny) {
-                        bunny.classList.remove('happy', 'very-happy');
-                        // Neutral mouth
-                        const mouth = bunny.querySelector('.bunny-mouth');
-                        if (mouth) {
-                            mouth.setAttribute('d', 'M 28 29 Q 30 30 32 29');
-                        }
-                    }
-                });
-                
-                // Cloudy weather
-                if (sun) {
-                    sun.style.opacity = '0.5';
-                    sun.style.transform = 'scale(0.9)';
-                }
-                if (cloud1) cloud1.style.opacity = '0.5';
-                if (cloud2) cloud2.style.opacity = '0.5';
-                if (rainbow) rainbow.style.opacity = '0';
-                
-                // Slightly gray sky
-                if (farmContainer) {
-                    farmContainer.style.background = 'linear-gradient(to bottom, #B0C4DE 0%, #B0C4DE 40%, #90EE90 40%, #8FBC8F 100%)';
-                }
-                
-                // Few flowers
-                this._addFlowers(2);
-                
             } else {
-                // Bad - sad bunnies
-                [bunny1, bunny2, bunny3].forEach(bunny => {
-                    if (bunny) {
-                        bunny.classList.remove('happy', 'very-happy');
-                        // Sad mouth
-                        const mouth = bunny.querySelector('.bunny-mouth');
-                        if (mouth) {
-                            mouth.setAttribute('d', 'M 28 31 Q 30 29 32 31');
+                // Rainbow fades quickly after perfection
+                if (rainbow) {
+                    const rainbowOpacity = Math.max(0, 1 - (absTotal / 10)); // Fades within error of 10
+                    rainbow.style.opacity = rainbowOpacity.toFixed(2);
+                }
+                
+                // Bunny mood states (still somewhat discrete but with more gradations)
+                if (absTotal < 30) {
+                    // Very happy
+                    [bunny1, bunny2, bunny3].forEach(bunny => {
+                        if (bunny) {
+                            bunny.classList.add('very-happy');
+                            bunny.classList.remove('happy');
+                            const mouth = bunny.querySelector('.bunny-mouth');
+                            if (mouth) {
+                                mouth.setAttribute('d', 'M 26 29 Q 30 32 34 29');
+                            }
                         }
-                    }
-                });
-                
-                // Overcast weather
-                if (sun) {
-                    sun.style.opacity = '0.2';
-                    sun.style.transform = 'scale(0.8)';
-                }
-                if (cloud1) {
-                    cloud1.style.opacity = '0.8';
-                    cloud1.style.animation = 'cloudDrift 8s infinite alternate';
-                }
-                if (cloud2) {
-                    cloud2.style.opacity = '0.8';
-                    cloud2.style.animation = 'cloudDrift 10s infinite alternate-reverse';
-                }
-                if (rainbow) rainbow.style.opacity = '0';
-                
-                // Gray sky
-                if (farmContainer) {
-                    farmContainer.style.background = 'linear-gradient(to bottom, #778899 0%, #778899 40%, #808080 40%, #696969 100%)';
-                }
-                
-                // No flowers
-                if (flowersContainer) {
-                    flowersContainer.innerHTML = '';
+                    });
+                } else if (absTotal < 60) {
+                    // Happy
+                    [bunny1, bunny2, bunny3].forEach(bunny => {
+                        if (bunny) {
+                            bunny.classList.add('happy');
+                            bunny.classList.remove('very-happy');
+                            const mouth = bunny.querySelector('.bunny-mouth');
+                            if (mouth) {
+                                mouth.setAttribute('d', 'M 28 29 Q 30 31 32 29');
+                            }
+                        }
+                    });
+                } else if (absTotal < 120) {
+                    // Neutral
+                    [bunny1, bunny2, bunny3].forEach(bunny => {
+                        if (bunny) {
+                            bunny.classList.remove('happy', 'very-happy');
+                            const mouth = bunny.querySelector('.bunny-mouth');
+                            if (mouth) {
+                                mouth.setAttribute('d', 'M 28 29 Q 30 30 32 29');
+                            }
+                        }
+                    });
+                } else {
+                    // Sad
+                    [bunny1, bunny2, bunny3].forEach(bunny => {
+                        if (bunny) {
+                            bunny.classList.remove('happy', 'very-happy');
+                            const mouth = bunny.querySelector('.bunny-mouth');
+                            if (mouth) {
+                                mouth.setAttribute('d', 'M 28 31 Q 30 29 32 31');
+                            }
+                        }
+                    });
                 }
             }
+            
+            // DISCRETE: Add more bunnies as error decreases (new feature)
+            this._updateBunnyCount(absTotal);
         }
         
         _addFlowers(count) {
@@ -1161,18 +1179,22 @@ window.createPizzaProduction = function() {
             // Clear existing flowers
             flowersContainer.innerHTML = '';
             
-            // Add new flowers
+            // Add new flowers with varying sizes based on count
             for (let i = 0; i < count; i++) {
                 const flower = document.createElement('div');
+                // Vary flower size slightly for more natural look
+                const size = 20 + Math.random() * 10; // 20-30px
+                const delay = i * 0.08; // Slightly faster growth
+                
                 flower.style.cssText = `
                     position: absolute;
                     bottom: ${Math.random() * 40}px;
-                    left: ${10 + Math.random() * 80}%;
-                    animation: flowerGrow 1s ease-out ${i * 0.1}s both;
+                    left: ${5 + Math.random() * 90}%;
+                    animation: flowerGrow 0.8s ease-out ${delay}s both;
                 `;
                 
                 flower.innerHTML = `
-                    <svg width="25" height="25" viewBox="0 0 30 30">
+                    <svg width="${size}" height="${size}" viewBox="0 0 30 30">
                         <circle cx="15" cy="15" r="8" fill="${this._getRandomFlowerColor()}" opacity="0.8"/>
                         <circle cx="10" cy="10" r="3" fill="#FFE4B5"/>
                         <circle cx="20" cy="10" r="3" fill="#FFE4B5"/>
@@ -1187,9 +1209,289 @@ window.createPizzaProduction = function() {
             }
         }
         
+        _updateBunnyCount(absTotal) {
+            // Add extra bunnies as error decreases (discrete effect)
+            // Show additional bunnies at specific error thresholds
+            const bunnyContainer = document.querySelector('#bunny-farm-container > div:last-child');
+            if (!bunnyContainer) return;
+            
+            // Remove any extra bunnies first
+            const extraBunnies = bunnyContainer.querySelectorAll('.extra-bunny');
+            extraBunnies.forEach(bunny => bunny.remove());
+            
+            // Determine how many extra bunnies to show (up to 27 extra + 3 original = 30 total)
+            // Starting error is around 285, so we spread thresholds more widely
+            let extraBunnyCount = 0;
+            if (absTotal <= 2) {
+                extraBunnyCount = 27; // Maximum bunnies at error <= 2!
+                // Trigger disco effect
+                this._startDiscoEffect();
+            } else if (absTotal <= 10) {
+                extraBunnyCount = 20;
+            } else if (absTotal <= 20) {
+                extraBunnyCount = 15;
+            } else if (absTotal <= 40) {
+                extraBunnyCount = 12;
+            } else if (absTotal <= 60) {
+                extraBunnyCount = 10;
+            } else if (absTotal <= 80) {
+                extraBunnyCount = 8;
+            } else if (absTotal <= 100) {
+                extraBunnyCount = 6;
+            } else if (absTotal <= 130) {
+                extraBunnyCount = 4;
+            } else if (absTotal <= 160) {
+                extraBunnyCount = 3;
+            } else if (absTotal <= 200) {
+                extraBunnyCount = 2;
+            } else if (absTotal <= 250) {
+                extraBunnyCount = 1;
+            }
+            
+            // Add extra bunnies
+            for (let i = 0; i < extraBunnyCount; i++) {
+                const extraBunny = document.createElement('div');
+                extraBunny.className = 'farm-bunny extra-bunny';
+                
+                // Generate more varied positions scattered throughout the farm
+                // Farm container is ~420px wide (450px - padding) and ~220px tall usable area
+                // Keep bunnies away from edges to prevent cutoff
+                const gridSize = Math.ceil(Math.sqrt(extraBunnyCount));
+                const cellWidth = 340 / gridSize; // Reduced from 380 to add margin
+                const cellHeight = 70 / Math.ceil(gridSize / 2); // Reduced from 90
+                
+                // Add randomness within grid cells for natural scatter
+                const gridX = i % gridSize;
+                const gridY = Math.floor(i / gridSize);
+                const baseLeft = 40 + (gridX * cellWidth) + (Math.random() * cellWidth * 0.6); // Increased from 20 to 40
+                const baseBottom = 20 + (gridY * cellHeight * 0.5) + (Math.random() * 25); // Increased from 10 to 20
+                
+                // Add some completely random ones for more natural feel (30% chance)
+                const useRandom = Math.random() < 0.3;
+                const randomLeft = useRandom ? (40 + Math.random() * 340) : baseLeft; // 40-380 range (was 10-390)
+                const randomBottom = useRandom ? (20 + Math.random() * 60) : baseBottom; // 20-80 range (was 10-90)
+                
+                const pos = { bottom: `${randomBottom}px`, left: `${randomLeft}px` };
+                extraBunny.style.cssText = `
+                    position: absolute;
+                    bottom: ${pos.bottom};
+                    left: ${pos.left};
+                    transition: all 0.5s ease;
+                    animation: flowerGrow 0.5s ease-out;
+                    z-index: ${Math.floor(randomBottom)};
+                `;
+                
+                // More varied bunny colors for larger populations
+                const colors = [
+                    { body: '#FFE4E1', stroke: '#FFA07A' },
+                    { body: '#F0E68C', stroke: '#DAA520' },
+                    { body: '#DDA0DD', stroke: '#BA55D3' },
+                    { body: '#FFB6C1', stroke: '#FF69B4' },
+                    { body: '#98FB98', stroke: '#228B22' },
+                    { body: '#87CEEB', stroke: '#4682B4' },
+                    { body: '#FFDAB9', stroke: '#CD853F' },
+                    { body: '#E0E0E0', stroke: '#808080' }
+                ];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Vary bunny sizes for depth
+                const scale = 0.7 + Math.random() * 0.6; // 0.7 to 1.3 scale
+                const width = Math.floor(40 * scale);
+                const height = Math.floor(40 * scale);
+                
+                extraBunny.innerHTML = `
+                    <svg width="${width}" height="${height}" viewBox="0 0 60 60" style="overflow: visible;">
+                        <g class="bunny-body" style="transform-origin: center bottom;">
+                            <!-- Shadow -->
+                            <ellipse cx="30" cy="55" rx="15" ry="3" fill="rgba(0,0,0,0.2)"/>
+                            <!-- Body -->
+                            <ellipse cx="30" cy="40" rx="18" ry="15" fill="${color.body}" stroke="${color.stroke}" stroke-width="1"/>
+                            <!-- Belly -->
+                            <ellipse cx="30" cy="42" rx="12" ry="10" fill="#FFF0F5"/>
+                            <!-- Head -->
+                            <circle cx="30" cy="25" r="12" fill="${color.body}" stroke="${color.stroke}" stroke-width="1"/>
+                            <!-- Ears -->
+                            <ellipse cx="24" cy="15" rx="4" ry="10" fill="${color.body}" stroke="${color.stroke}" stroke-width="1" transform="rotate(-15 24 15)"/>
+                            <ellipse cx="36" cy="15" rx="4" ry="10" fill="${color.body}" stroke="${color.stroke}" stroke-width="1" transform="rotate(15 36 15)"/>
+                            <!-- Eyes -->
+                            <circle cx="26" cy="24" r="2" fill="black" class="bunny-eye"/>
+                            <circle cx="34" cy="24" r="2" fill="black" class="bunny-eye"/>
+                            <circle cx="27" cy="23" r="1" fill="white"/>
+                            <circle cx="35" cy="23" r="1" fill="white"/>
+                            <!-- Nose -->
+                            <ellipse cx="30" cy="28" rx="2" ry="1.5" fill="#FF1493"/>
+                            <!-- Mouth -->
+                            <path class="bunny-mouth" d="M 28 29 Q 30 31 32 29" stroke="#FF1493" stroke-width="1.5" fill="none"/>
+                            <!-- Tail -->
+                            <circle cx="15" cy="40" r="5" fill="white"/>
+                            <!-- Paws -->
+                            <ellipse cx="22" cy="50" rx="4" ry="3" fill="${color.body}"/>
+                            <ellipse cx="38" cy="50" rx="4" ry="3" fill="${color.body}"/>
+                        </g>
+                    </svg>
+                `;
+                
+                bunnyContainer.appendChild(extraBunny);
+                
+                // Apply the same mood class as other bunnies
+                if (absTotal < 30) {
+                    extraBunny.classList.add('very-happy');
+                } else if (absTotal < 60) {
+                    extraBunny.classList.add('happy');
+                }
+            }
+        }
+        
         _getRandomFlowerColor() {
             const colors = ['#FF69B4', '#FF1493', '#DA70D6', '#BA55D3', '#9370DB', '#8A2BE2', '#FF6347', '#FF4500'];
             return colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        _startDiscoEffect() {
+            const farmContainer = document.getElementById('bunny-farm-container');
+            if (!farmContainer) return;
+            
+            // Add disco lights overlay
+            const existingDisco = document.getElementById('disco-overlay');
+            if (existingDisco) {
+                existingDisco.remove();
+            }
+            
+            const discoOverlay = document.createElement('div');
+            discoOverlay.id = 'disco-overlay';
+            discoOverlay.style.cssText = `
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                pointer-events: none;
+                z-index: 100;
+                mix-blend-mode: multiply;
+                animation: discoLights 0.5s infinite;
+            `;
+            
+            // Add "DISCO TIME" text
+            const discoText = document.createElement('div');
+            discoText.id = 'disco-text';
+            discoText.style.cssText = `
+                position: absolute;
+                top: 30px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-family: 'Impact', 'Arial Black', sans-serif;
+                font-size: 2rem;
+                font-style: italic;
+                font-weight: bold;
+                color: #9b59b6;
+                text-shadow: 
+                    2px 2px 0px #5a2d6f,
+                    0 0 5px #9b59b6,
+                    0 0 10px #ff69b4,
+                    0 0 15px #8e44ad,
+                    0 0 25px #ff1493,
+                    0 0 35px #8e44ad,
+                    0 0 50px #ff69b4;
+                animation: neonPulse 1s ease-in-out infinite;
+                z-index: 102;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+                white-space: nowrap;
+            `;
+            discoText.textContent = 'DISCO TIME';
+            
+            farmContainer.appendChild(discoText);
+            farmContainer.appendChild(discoOverlay);
+            
+            // Add dancing animation to all bunnies
+            const allBunnies = farmContainer.querySelectorAll('.farm-bunny');
+            allBunnies.forEach((bunny, index) => {
+                const delay = (index * 0.1) % 0.5;
+                bunny.style.animation = `bunnyDance ${0.5 + Math.random() * 0.5}s ${delay}s infinite alternate`;
+            });
+            
+            // Add style for animations if not exists
+            if (!document.getElementById('disco-styles')) {
+                const style = document.createElement('style');
+                style.id = 'disco-styles';
+                style.textContent = `
+                    @keyframes discoLights {
+                        0% { background: radial-gradient(circle at 20% 20%, rgba(255,0,255,0.3), transparent 40%); }
+                        25% { background: radial-gradient(circle at 80% 20%, rgba(0,255,255,0.3), transparent 40%); }
+                        50% { background: radial-gradient(circle at 80% 80%, rgba(255,255,0,0.3), transparent 40%); }
+                        75% { background: radial-gradient(circle at 20% 80%, rgba(0,255,0,0.3), transparent 40%); }
+                        100% { background: radial-gradient(circle at 50% 50%, rgba(255,0,0,0.3), transparent 40%); }
+                    }
+                    
+                    @keyframes bunnyDance {
+                        0% { transform: translateY(0px) rotate(-5deg) scale(1); }
+                        50% { transform: translateY(-10px) rotate(5deg) scale(1.1); }
+                        100% { transform: translateY(0px) rotate(-5deg) scale(1); }
+                    }
+                    
+                    @keyframes neonPulse {
+                        0%, 100% {
+                            text-shadow: 
+                                2px 2px 0px #5a2d6f,
+                                0 0 5px #9b59b6,
+                                0 0 10px #ff69b4,
+                                0 0 15px #8e44ad,
+                                0 0 25px #ff1493,
+                                0 0 35px #8e44ad,
+                                0 0 50px #ff69b4;
+                            transform: translateX(-50%) scale(1);
+                        }
+                        50% {
+                            text-shadow: 
+                                3px 3px 0px #5a2d6f,
+                                0 0 10px #9b59b6,
+                                0 0 20px #ff69b4,
+                                0 0 30px #ff1493,
+                                0 0 40px #8e44ad,
+                                0 0 60px #ff1493,
+                                0 0 80px #ff69b4;
+                            transform: translateX(-50%) scale(1.08);
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            // Stop disco after error increases
+            setTimeout(() => {
+                const currentError = Math.abs(this.totalError);
+                if (currentError > 2) {
+                    this._stopDiscoEffect();
+                }
+            }, 1000);
+        }
+        
+        _stopDiscoEffect() {
+            const discoOverlay = document.getElementById('disco-overlay');
+            const discoText = document.getElementById('disco-text');
+            
+            if (discoOverlay) discoOverlay.remove();
+            if (discoText) discoText.remove();
+            
+            // Reset bunny animations
+            const farmContainer = document.getElementById('bunny-farm-container');
+            if (farmContainer) {
+                const allBunnies = farmContainer.querySelectorAll('.farm-bunny');
+                allBunnies.forEach(bunny => {
+                    bunny.style.animation = '';
+                    // Reapply appropriate mood animation
+                    const bunnyBody = bunny.querySelector('.bunny-body');
+                    if (bunnyBody) {
+                        if (bunny.classList.contains('very-happy')) {
+                            bunnyBody.style.animation = 'bunnyJump 1.5s infinite ease-in-out';
+                        } else if (bunny.classList.contains('happy')) {
+                            bunnyBody.style.animation = 'bunnyHop 2s infinite ease-in-out';
+                        } else {
+                            bunnyBody.style.animation = 'bunnySad 3s infinite ease-in-out';
+                        }
+                    }
+                });
+            }
         }
         
         _triggerCelebration() {

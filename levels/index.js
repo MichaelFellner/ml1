@@ -233,7 +233,7 @@ if (typeof window !== 'undefined') {
                     id: 'training-data-interactive',
                     name: 'Interactive Weight Adjustment',
                     type: 'interactive',
-                    description: 'Adjust weights to minimize prediction error',
+                    description: '',
                     created: new Date().toISOString(),
                     version: '1.0.0'
                 }
