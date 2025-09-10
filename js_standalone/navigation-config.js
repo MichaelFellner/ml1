@@ -5,7 +5,7 @@
 
 const NAVIGATION_CONFIG = {
     config: {
-        showProgress: true,
+        showProgress: false,  // Disabled - using inline progress bar instead
         allowSkipping: false,
         saveProgress: true
     },

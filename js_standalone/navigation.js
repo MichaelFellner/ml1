@@ -246,24 +246,9 @@ function getLevelMetadata(item) {
  * @param {number} totalPages - Total number of pages
  */
 function updateNavigationProgress(currentIndex, totalPages) {
-    if (!NAVIGATION_CONFIG.config?.showProgress) return;
-    
+    // Progress bar updates disabled - using inline progress bar instead
+    // Only update browser title with progress
     const progress = Math.round(((currentIndex + 1) / totalPages) * 100);
-    
-    // Update progress bar if it exists
-    const progressBar = document.querySelector('.navigation-progress-bar');
-    if (progressBar) {
-        progressBar.style.width = `${progress}%`;
-        progressBar.setAttribute('aria-valuenow', progress);
-    }
-    
-    // Update progress text if it exists
-    const progressText = document.querySelector('.navigation-progress-text');
-    if (progressText) {
-        progressText.textContent = `${currentIndex + 1} of ${totalPages}`;
-    }
-    
-    // Update browser title with progress
     const currentItem = getFlattenedNavigation()[currentIndex];
     if (currentItem) {
         document.title = `${currentItem.name} (${progress}%) - MLTEACH`;
@@ -319,42 +304,8 @@ function showNavigationError(title, message) {
  * @returns {string} HTML for progress indicator
  */
 function createProgressIndicator() {
-    if (!NAVIGATION_CONFIG.config?.showProgress) return '';
-    
-    const pageInfo = getCurrentPageInfo();
-    
-    return `
-        <div class="navigation-progress" style="
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            z-index: 1000;
-        ">
-            <div class="navigation-progress-bar" style="
-                height: 100%;
-                background: linear-gradient(90deg, #667eea, #764ba2);
-                width: ${pageInfo.progress}%;
-                transition: width 0.3s ease;
-            " role="progressbar" aria-valuenow="${pageInfo.progress}" aria-valuemin="0" aria-valuemax="100"></div>
-        </div>
-        <div class="navigation-progress-info" style="
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            z-index: 1001;
-        ">
-            <span class="navigation-progress-text">${pageInfo.index + 1} of ${pageInfo.total}</span>
-            <span style="margin-left: 10px;">${pageInfo.progress}%</span>
-        </div>
-    `;
+    // Progress indicator disabled - using inline progress bar instead
+    return '';
 }
 
 /**
@@ -404,7 +355,8 @@ function initializeNavigation(pageId, functionName, first = false, last = false)
  * @function injectProgressIndicator
  */
 function injectProgressIndicator() {
-    // Remove existing progress indicator
+    // Progress indicator disabled - using inline progress bar instead
+    // Remove any existing progress indicators
     const existing = document.querySelector('.navigation-progress');
     if (existing) {
         existing.remove();
@@ -413,12 +365,6 @@ function injectProgressIndicator() {
     const existingInfo = document.querySelector('.navigation-progress-info');
     if (existingInfo) {
         existingInfo.remove();
-    }
-    
-    // Add new progress indicator
-    const progressHTML = createProgressIndicator();
-    if (progressHTML) {
-        document.body.insertAdjacentHTML('beforeend', progressHTML);
     }
 }
 

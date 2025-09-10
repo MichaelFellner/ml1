@@ -91,10 +91,23 @@ function setupNavigationEvents() {
             currentNavigationId = itemId;
             window.currentPageFunction = functionName;
             
+            // Update gameState if it exists
+            if (window.gameState) {
+                window.gameState.currentNavigationId = itemId;
+                window.gameState.currentPageFunction = functionName;
+            }
+            
             // Call the appropriate function
             if (window[functionName]) {
                 closeMenu();
                 window[functionName]();
+                
+                // Update inline progress bar if it exists
+                if (window.inlineProgressBar && window.inlineProgressBar.updateProgress) {
+                    setTimeout(() => {
+                        window.inlineProgressBar.updateProgress();
+                    }, 100);
+                }
             } else {
                 console.warn(`Function ${functionName} not found`);
             }
@@ -165,6 +178,11 @@ function injectNavigation(containerId = 'app') {
 function updateNavigationHighlight(newId) {
     currentNavigationId = newId;
     
+    // Update gameState if it exists
+    if (window.gameState) {
+        window.gameState.currentNavigationId = newId;
+    }
+    
     // Update the navigation if it exists
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
@@ -183,6 +201,13 @@ function updateNavigationHighlight(newId) {
     });
     
     updateProgressIndicator();
+    
+    // Update inline progress bar if it exists
+    if (window.inlineProgressBar && window.inlineProgressBar.updateProgress) {
+        setTimeout(() => {
+            window.inlineProgressBar.updateProgress();
+        }, 100);
+    }
 }
 
 // Helper function to create levels with navigation
@@ -199,11 +224,25 @@ function createLevelWithNav(levelId, contentHTML, setupFunction) {
     updateNavigationHighlight(levelId);
     
     // Store current page function for navigation
-    window.currentPageFunction = findFunctionNameById(levelId);
+    const functionName = findFunctionNameById(levelId);
+    window.currentPageFunction = functionName;
+    
+    // Update gameState if it exists
+    if (window.gameState) {
+        window.gameState.currentNavigationId = levelId;
+        window.gameState.currentPageFunction = functionName;
+    }
     
     // Run the setup function if provided
     if (setupFunction) {
         setupFunction();
+    }
+    
+    // Update inline progress bar if it exists
+    if (window.inlineProgressBar && window.inlineProgressBar.updateProgress) {
+        setTimeout(() => {
+            window.inlineProgressBar.updateProgress();
+        }, 100);
     }
 }
 
