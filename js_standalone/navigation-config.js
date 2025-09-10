@@ -11,7 +11,7 @@ const NAVIGATION_CONFIG = {
     },
     sections: [
         {
-            title: "Introduction",
+            title: "Intro",
             items: [
                 { id: "intro", name: "Welcome", func: "createIntroduction" },
                 { id: "core-concepts", name: "3 Core Concepts", func: "createCoreConcepts" },
@@ -20,7 +20,7 @@ const NAVIGATION_CONFIG = {
             ]
         },
         {
-            title: "Understanding Loss",
+            title: "Loss",
             items: [
                 { id: "ip1", name: "Core Concept 1: Loss", func: "createInstructionPart1" },
                 { id: "level1", name: "Level 1: Energy Control", func: "createLevel1" },
@@ -34,7 +34,7 @@ const NAVIGATION_CONFIG = {
             ]
         },
         {
-            title: "Gradient Descent - Single Parameter",
+            title: "What Gradient Descent Is",
             items: [
                 { id: "gradient-descent-intro", name: "Gradient Descent Introduction", func: "createGradientDescentPart1" },
                 { id: "balloon-inflation", name: "Balloon Inflation Challenge", func: "createBalloonInflationLevel" },
@@ -51,7 +51,7 @@ const NAVIGATION_CONFIG = {
         },
 
         {
-            title: "Deep Dive into Gradient Descent",
+            title: "How GD Works",
             items: [
                 { id: "gradient-descent-part2", name: "Core Concept 2: Gradient Descent (Part 2)", func: "createGradientDescentPart2" },
                 { id: "gradient-descent-overview", name: "How Gradient Descent Works", func: "createGradientDescentOverview" },
@@ -86,7 +86,7 @@ const NAVIGATION_CONFIG = {
             ]
         },
         {
-            title: "Completion",
+            title: "End",
             items: [
                 { id: "final-congrats", name: "Final Congratulations", func: "createFinalCongrats" },
                 { id: "beyond-linear-regression", name: "From Simple to Complex AI", func: "createBeyondLinearRegression" },

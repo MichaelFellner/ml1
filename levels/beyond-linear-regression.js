@@ -10,9 +10,9 @@ window.createBeyondLinearRegression = function() {
         constructor() {
             super({
                 id: 'beyond-linear-regression',
-                name: 'From Simple to Complex AI',
+                name: 'Recap & Larger Context',
                 type: 'tutorial',
-                description: 'Understanding how our simple examples relate to ChatGPT and self-driving cars',
+                description: '',
                 instructions: '',
                 concepts: ['Linear Regression', 'Neural Networks', 'Complex Functions', 'Scale'],
                 difficulty: 'intermediate',
@@ -33,12 +33,10 @@ window.createBeyondLinearRegression = function() {
         _generateMainContent() {
             return `
                 <!-- Title -->
-                <h2 style="text-align: center; color: #333; margin-bottom: 30px;">
-                    🚀 From Simple Functions to ChatGPT
-                </h2>
+               
                 
                 <!-- What we learned section -->
-                <div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                <div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: -30   px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
                     <h3 style="color: #667eea; margin: 0 0 20px 0; display: flex; align-items: center; gap: 10px;">
                         <span style="font-size: 1.5rem;">📐</span> What We Just Learned: Linear Regression
                     </h3>
@@ -58,7 +56,7 @@ window.createBeyondLinearRegression = function() {
                 </div>
                 
                 <!-- Complex AI section -->
-                <div style="background: linear-gradient(135deg, rgba(102,126,234,0.05), rgba(118,75,162,0.05)); border-radius: 15px; padding: 30px; margin-bottom: 25px; border: 2px solid #667eea;">
+                <div style="background: linear-gradient(135deg, rgba(102,126,234,0.05), rgba(118,75,162,0.05)); border-radius: 15px; padding: 30px; margin-bottom: -30px; border: 2px solid #667eea;">
                     <h3 style="color: #764ba2; margin: 0 0 20px 0; display: flex; align-items: center; gap: 10px;">
                         <span style="font-size: 1.5rem;">🤖</span> How ChatGPT & Self-Driving Cars Work
                     </h3>
@@ -69,7 +67,7 @@ window.createBeyondLinearRegression = function() {
                     </p>
                     
                     <!-- Difference 1 -->
-                    <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                    <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 0px;">
                         <h4 style="color: #667eea; margin: 0 0 10px 0;">
                             1. Much More Complex Functions
                         </h4>
@@ -87,7 +85,7 @@ window.createBeyondLinearRegression = function() {
                     </div>
                     
                     <!-- Difference 2 -->
-                    <div style="background: white; padding: 20px; border-radius: 10px;">
+                    <div style="background: white; padding: 20px; border-radius: 0px;">
                         <h4 style="color: #764ba2; margin: 0 0 10px 0;">
                             2. Vastly More Training Data
                         </h4>
@@ -103,7 +101,7 @@ window.createBeyondLinearRegression = function() {
                 </div>
                 
                 <!-- The fundamental similarity -->
-                <div style="background: linear-gradient(135deg, rgba(45,213,115,0.1), rgba(102,126,234,0.1)); border-radius: 15px; padding: 30px; margin-bottom: 25px; border: 2px solid #2dd573;">
+                <div style="background: linear-gradient(135deg, rgba(45,213,115,0.1), rgba(102,126,234,0.1)); border-radius: 15px; padding: 30px; margin-bottom: -30px; border: 2px solid #2dd573;">
                     <h3 style="color: #2dd573; margin: 0 0 20px 0; display: flex; align-items: center; gap: 10px;">
                         <span style="font-size: 1.5rem;">🎯</span> But It's Still Just Functions & Gradient Descent!
                     </h3>
@@ -120,7 +118,7 @@ window.createBeyondLinearRegression = function() {
                         <li>Update weights based on training data</li>
                     </ul>
                     
-                    <div style="background: rgba(255,255,255,0.8); padding: 15px; border-radius: 8px; margin-top: 20px;">
+                    <div style="background: rgba(255,255,255,0.8); padding: 15px; border-radius: 8px; margin-top: 15px;">
                         <p style="color: #666; margin: 0; font-style: italic;">
                             <strong>Note:</strong> The math for calculating gradients in neural networks is more complex 
                             (it uses something called "backpropagation"), but computers handle all those calculations 
@@ -130,7 +128,7 @@ window.createBeyondLinearRegression = function() {
                 </div>
                 
                 <!-- Visual comparison -->
-                <div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                <div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: -30px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
                     <h3 style="color: #333; margin: 0 0 25px 0; text-align: center;">
                         📊 The Spectrum of AI Complexity
                     </h3>

@@ -289,7 +289,7 @@ function setupBalloonLevel() {
     let currentBalloonSize = 1;
     let attempts = 0;
     let sessionStartTime = Date.now();
-    let currentW = 0;  // Start at 0
+    let currentW = 1;  // Always start at 1
     let isDragging = false;
     let dragStartY = 0;
     let pumpStartY = 0;
@@ -313,10 +313,11 @@ function setupBalloonLevel() {
     let hasStateManagement = false;
     if (typeof GameStateStore !== 'undefined') {
         try {
-            const savedParams = GameStateStore.getParameters(LEVEL_ID);
-            if (savedParams.w !== undefined) {
-                currentW = savedParams.w;
-            }
+            // Don't load saved w value - always start fresh at 1
+            // const savedParams = GameStateStore.getParameters(LEVEL_ID);
+            // if (savedParams.w !== undefined) {
+            //     currentW = savedParams.w;
+            // }
             hasStateManagement = true;
         } catch (error) {
             console.warn('Could not load saved parameters:', error);

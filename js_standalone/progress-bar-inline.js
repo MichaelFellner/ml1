@@ -260,7 +260,7 @@ class InlineProgressBar {
             <div class="indicator-inner" style="
                 width: 26px;
                 height: 26px;
-                background: rgba(255, 255, 255, 0.7);
+                background: white;
                 border: 3px solid #4285f4;
                 border-radius: 50%;
                 box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
@@ -329,14 +329,14 @@ class InlineProgressBar {
         indicator.addEventListener('mouseenter', () => {
             indicatorInner.style.width = '30px';
             indicatorInner.style.height = '30px';
-            indicatorInner.style.background = 'rgba(255, 255, 255, 0.9)';
+            indicatorInner.style.background = 'white';
             indicatorInner.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.5)';
         });
         
         indicator.addEventListener('mouseleave', () => {
             indicatorInner.style.width = '26px';
             indicatorInner.style.height = '26px';
-            indicatorInner.style.background = 'rgba(255, 255, 255, 0.7)';
+            indicatorInner.style.background = 'white';
             indicatorInner.style.boxShadow = '0 3px 12px rgba(0, 0, 0, 0.4)';
         });
     }
@@ -457,10 +457,10 @@ inlineStyles.textContent = `
     /* Animation for progress indicator */
     @keyframes pulse-inline {
         0%, 100% {
-            opacity: 0.7;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
         }
         50% {
-            opacity: 0.9;
+            box-shadow: 0 3px 20px rgba(66, 133, 244, 0.6);
         }
     }
     

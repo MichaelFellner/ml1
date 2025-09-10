@@ -12,7 +12,7 @@ window.createNextSteps = function() {
                 id: 'next-steps',
                 name: 'Your Learning Path Forward',
                 type: 'tutorial',
-                description: 'Recommendations for continuing your AI and machine learning journey',
+                description: '',
                 instructions: '',
                 concepts: ['Python', 'Decision Trees', 'Neural Networks', 'Learning Resources'],
                 difficulty: 'beginner',
@@ -32,18 +32,7 @@ window.createNextSteps = function() {
         
         _generateMainContent() {
             return `
-                <!-- Title -->
-                <h2 style="text-align: center; color: #333; margin-bottom: 30px;">
-                    🗺️ Your Learning Path Forward
-                </h2>
                 
-                <!-- Introduction -->
-                <div style="background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1)); border-radius: 15px; padding: 25px; margin-bottom: 30px; border: 2px solid #667eea; text-align: center;">
-                    <p style="font-size: 1.2rem; color: #555; line-height: 1.8; margin: 0;">
-                        Congratulations on building a <strong style="color: #667eea;">solid foundation</strong> in machine learning!<br>
-                        Here are three recommended paths to continue your journey:
-                    </p>
-                </div>
                 
                 <!-- Step 1: Python -->
                 <div style="background: white; border-radius: 15px; padding: 30px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-left: 5px solid #667eea;">
@@ -192,52 +181,9 @@ predictions = model.predict(X_test)</pre>
                         </div>
                     </div>
                 </div>
+             
                 
-                <!-- Resource recommendations -->
-                <div style="background: linear-gradient(135deg, rgba(255,243,224,0.8), rgba(255,255,255,0.8)); border-radius: 15px; padding: 25px; margin-bottom: 25px; border: 2px solid #ffdb58;">
-                    <h3 style="color: #333; margin: 0 0 20px 0; text-align: center;">
-                        📚 Recommended Learning Resources
-                    </h3>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
-                        <div style="background: white; padding: 15px; border-radius: 8px;">
-                            <h4 style="color: #667eea; margin: 0 0 8px 0; font-size: 1rem;">🎓 Online Courses</h4>
-                            <ul style="color: #666; font-size: 0.9rem; margin: 0; padding-left: 20px; line-height: 1.5;">
-                                <li>Andrew Ng's Machine Learning Course</li>
-                                <li>Fast.ai Practical Deep Learning</li>
-                                <li>Google's ML Crash Course</li>
-                            </ul>
-                        </div>
-                        
-                        <div style="background: white; padding: 15px; border-radius: 8px;">
-                            <h4 style="color: #eab308; margin: 0 0 8px 0; font-size: 1rem;">📖 Books</h4>
-                            <ul style="color: #666; font-size: 0.9rem; margin: 0; padding-left: 20px; line-height: 1.5;">
-                                <li>"Pattern Recognition and ML" - Bishop</li>
-                                <li>"The Elements of Statistical Learning"</li>
-                                <li>"Deep Learning" - Goodfellow et al.</li>
-                            </ul>
-                        </div>
-                        
-                        <div style="background: white; padding: 15px; border-radius: 8px;">
-                            <h4 style="color: #2dd573; margin: 0 0 8px 0; font-size: 1rem;">💻 Practice Platforms</h4>
-                            <ul style="color: #666; font-size: 0.9rem; margin: 0; padding-left: 20px; line-height: 1.5;">
-                                <li>Kaggle competitions</li>
-                                <li>Google Colab (free GPUs!)</li>
-                                <li>Papers with Code</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Closing motivation -->
-                <div style="background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1)); border-radius: 15px; padding: 25px; text-align: center; border: 2px solid #667eea;">
-                    <div style="font-size: 2rem; margin-bottom: 15px;">🚀</div>
-                    <p style="font-size: 1.1rem; color: #555; line-height: 1.8; margin: 0;">
-                        <strong style="color: #667eea;">Remember:</strong> You've already mastered the fundamentals!<br>
-                        Everything else builds on what you've learned here. Take it one step at a time,<br>
-                        and you'll be amazed at what you can create!
-                    </p>
-                </div>
+            
                 
                 ${typeof createStandardNavigation === 'function' ? createStandardNavigation() : ''}
             `;
